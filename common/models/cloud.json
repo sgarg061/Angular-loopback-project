@@ -28,12 +28,18 @@
       "required": true
     },
     "checkinInterval": {
-      "type": "string",
+      "type": "number",
       "required": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "resellers": {
+      "type": "hasMany",
+      "model": "Reseller",
+      "foreignKey": "cloudId"
+    }
+    },
   "acls": [],
   "methods": []
 }

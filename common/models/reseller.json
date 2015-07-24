@@ -12,7 +12,7 @@
       "required": true
     },
     "cloudId": {
-      "type": "string",
+      "type": "number",
       "required": true,
       "index": true
     }
@@ -22,6 +22,11 @@
     "cloud": {
       "type": "belongsTo",
       "model": "cloud"
+    },
+    "customers": {
+      "type": "hasMany",
+      "model": "Customer",
+      "foreignKey": "resellerId"
     }
   },
   "acls": [],

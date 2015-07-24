@@ -19,9 +19,10 @@
   },
   "validations": [],
   "relations": {
-    "reseller": {
-      "type": "belongsTo",
-      "model": "reseller"
+    "locations": {
+      "type": "hasMany",
+      "model": "Location",
+      "foreignKey": "customerId"
     }
   },
   "acls": [],

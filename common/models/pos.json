@@ -3,6 +3,7 @@
   "base": "PersistedModel",
   "strict": true,
   "idInjection": true,
+  "plural": "POSs",
   "options": {
     "validateUpsert": true
   },
@@ -16,7 +17,8 @@
       "required": true
     },
     "deviceId": {
-      "type": "string",
+      "type": "number",
+      "required": true,
       "index": true
     }
   },

@@ -14,13 +14,24 @@
     "locationId": {
       "type": "string",
       "index": true
+    },
+    "locationId": {
+      "type": "number",
+      "required": true,
+      "index": true
     }
   },
   "validations": [],
   "relations": {
-    "location": {
-      "type": "belongsTo",
-      "model": "location"
+    "cameras": {
+      "type": "hasMany",
+      "model": "Camera",
+      "foreignKey": "deviceId"
+    },
+    "poss": {
+      "type": "hasMany",
+      "model": "POS",
+      "foreignKey": "deviceId"
     }
   },
   "acls": [],

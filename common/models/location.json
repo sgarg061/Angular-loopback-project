@@ -25,13 +25,19 @@
       "type": "string",
       "required": true,
       "index": true
+    },
+    "customerId": {
+      "type": "number",
+      "required": true,
+      "index": true
     }
   },
   "validations": [],
   "relations": {
-    "customer": {
-      "type": "belongsTo",
-      "model": "customer"
+    "devices": {
+      "type": "hasMany",
+      "model": "Device",
+      "foreignKey": "locationId"
     }
   },
   "acls": [],
