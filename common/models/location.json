@@ -21,13 +21,8 @@
     "location": {
       "type": "geopoint"
     },
-    "resellerId": {
-      "type": "string",
-      "required": true,
-      "index": true
-    },
     "customerId": {
-      "type": "number",
+      "type": "string",
       "required": true,
       "index": true
     }

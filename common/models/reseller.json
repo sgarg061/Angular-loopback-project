@@ -12,7 +12,7 @@
       "required": true
     },
     "cloudId": {
-      "type": "number",
+      "type": "string",
       "required": true,
       "index": true
     }

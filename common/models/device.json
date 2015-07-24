@@ -14,11 +14,6 @@
     "locationId": {
       "type": "string",
       "index": true
-    },
-    "locationId": {
-      "type": "number",
-      "required": true,
-      "index": true
     }
   },
   "validations": [],
