@@ -1,0 +1,39 @@
+{
+  "name": "Cloud",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "serverUrl": {
+      "type": "string",
+      "required": true
+    },
+    "imageServerUrl": {
+      "type": "string",
+      "required": true
+    },
+    "signallingServerUrl": {
+      "type": "string",
+      "required": true
+    },
+    "updateUrl": {
+      "type": "string",
+      "required": true
+    },
+    "checkinInterval": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

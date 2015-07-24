@@ -1,0 +1,28 @@
+{
+  "name": "Camera",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "device": {
+          "model": "device",
+          "type": "belongsTo"
+        }
+    },
+  "acls": [],
+  "methods": []
+}

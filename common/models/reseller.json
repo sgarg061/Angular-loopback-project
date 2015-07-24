@@ -1,0 +1,29 @@
+{
+  "name": "Reseller",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "cloudId": {
+      "type": "string",
+      "required": true,
+      "index": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "cloud": {
+          "model": "cloud",
+          "type": "belongsTo"
+        }
+    },
+  "acls": [],
+  "methods": []
+}

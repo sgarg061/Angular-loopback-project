@@ -1,0 +1,39 @@
+{
+  "name": "Location",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "string",
+      "required": false
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "location": {
+      "type": "geopoint"
+    },
+    "resellerId": {
+      "type": "string",
+      "required": true,
+      "index": true
+    }
+  },
+  "validations": [],
+    "relations": {
+    "customer": {
+          "model": "customer",
+          "type": "belongsTo"
+        }
+    },
+  "acls": [],
+  "methods": []
+}

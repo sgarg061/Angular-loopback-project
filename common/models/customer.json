@@ -1,0 +1,29 @@
+{
+  "name": "Customer",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "resellerId": {
+      "type": "string",
+      "required": true,
+      "index": true
+    }
+  },
+  "validations": [],
+    "relations": {
+      "reseller": {
+            "model": "reseller",
+            "type": "belongsTo"
+          }
+    },
+  "acls": [],
+  "methods": []
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Device",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "locationId": {
+      "type": "string",
+      "index": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "location": {
+          "model": "location",
+          "type": "belongsTo"
+        }
+    },
+  "acls": [],
+  "methods": []
+}
