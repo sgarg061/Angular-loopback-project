@@ -20,10 +20,10 @@
   "validations": [],
   "relations": {
     "cloud": {
-          "model": "cloud",
-          "type": "belongsTo"
-        }
-    },
+      "type": "belongsTo",
+      "model": "cloud"
+    }
+  },
   "acls": [],
   "methods": []
 }

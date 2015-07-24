@@ -18,12 +18,12 @@
     }
   },
   "validations": [],
-    "relations": {
-      "reseller": {
-            "model": "reseller",
-            "type": "belongsTo"
-          }
-    },
+  "relations": {
+    "reseller": {
+      "type": "belongsTo",
+      "model": "reseller"
+    }
+  },
   "acls": [],
   "methods": []
 }

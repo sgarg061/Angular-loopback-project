@@ -23,10 +23,10 @@
   "validations": [],
   "relations": {
     "device": {
-          "model": "device",
-          "type": "belongsTo"
-        }
-    },
+      "type": "belongsTo",
+      "model": "device"
+    }
+  },
   "acls": [],
   "methods": []
 }

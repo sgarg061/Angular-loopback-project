@@ -28,12 +28,12 @@
     }
   },
   "validations": [],
-    "relations": {
+  "relations": {
     "customer": {
-          "model": "customer",
-          "type": "belongsTo"
-        }
-    },
+      "type": "belongsTo",
+      "model": "customer"
+    }
+  },
   "acls": [],
   "methods": []
 }

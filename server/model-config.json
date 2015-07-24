@@ -33,43 +33,43 @@
     "public": false
   },
   "Cloud": {
-    "dataSource": "db",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Reseller": {
-    "dataSource": "db",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Customer": {
-    "dataSource": "db",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Location": {
-    "dataSource": "db",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Device": {
-    "dataSource": null,
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Camera": {
-    "dataSource": "db",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "POS": {
-    "dataSource": "db",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true

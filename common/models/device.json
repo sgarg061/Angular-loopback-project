@@ -19,10 +19,10 @@
   "validations": [],
   "relations": {
     "location": {
-          "model": "location",
-          "type": "belongsTo"
-        }
-    },
+      "type": "belongsTo",
+      "model": "location"
+    }
+  },
   "acls": [],
   "methods": []
 }
