@@ -1,3 +1,3 @@
-module.exports = function(Pos) {
+module.exports = function(POS) {
 
 };

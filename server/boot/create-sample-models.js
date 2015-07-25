@@ -9,6 +9,10 @@ module.exports = function(app) {
       app.models.Cloud.destroyAll();
       app.models.Reseller.destroyAll();
       app.models.Customer.destroyAll();
+      app.models.Location.destroyAll();
+      app.models.Device.destroyAll();
+      app.models.Camera.destroyAll();
+      app.models.POS.destroyAll();
       cb(null);
     },
     clouds: ['destroy_all', function(cb, results) {
@@ -19,6 +23,18 @@ module.exports = function(app) {
     }],
     customers: ['resellers', function (cb, results) {
       createCustomers(cb, results);
+    }],
+    locations: ['customers', function (cb, results) {
+      createLocations(cb, results);
+    }],
+    devices: ['locations', function (cb, results) {
+      createDevices(cb, results);
+    }],
+    cameras: ['devices', function (cb, results) {
+      createCameras(cb, results);
+    }],
+    posConnectors: ['devices', function (cb, results) {
+      createPOSs(cb, results);
     }]
   });
 
@@ -57,13 +73,63 @@ module.exports = function(app) {
   
   function createCustomers(cb, results) {
     console.log('creating customers...');
-    mongoDs.automigrate('Reseller', function(err) {
+    mongoDs.automigrate('Customer', function(err) {
       if (err) return cb(err);
       app.models.Customer.create([
         {name: 'Customer 1', resellerId: results.resellers[0].id},
-        {name: 'Customer 2', cloudId: results.resellers[1].id},
-        {name: 'Customer 3', cloudId: results.resellers[2].id},
+        {name: 'Customer 2', resellerId: results.resellers[1].id},
+        {name: 'Customer 3', resellerId: results.resellers[2].id},
       ], cb);
     });
   }
+  
+  function createLocations(cb, results) {
+    console.log('creating locations...');
+    mongoDs.automigrate('Location', function(err) {
+      if (err) return cb(err);
+      app.models.Location.create([
+        {name: 'Location 1', address: '', customerId: results.customers[0].id},
+        {name: 'Location 2', address: '', customerId: results.customers[1].id},
+        {name: 'Location 3', address: '', customerId: results.customers[2].id},
+      ], cb);
+    });
+  }
+
+  function createDevices(cb, results) {
+    console.log('creating devices...');
+    mongoDs.automigrate('Device', function(err) {
+      if (err) return cb(err);
+      app.models.Device.create([
+        {name: 'Device 1', locationId: results.locations[0].id},
+        {name: 'Device 2', locationId: results.locations[1].id},
+        {name: 'Device 3', locationId: results.locations[2].id},
+      ], cb);
+    });
+  }
+
+  function createCameras(cb, results) {
+    console.log('creating cameras...');
+    mongoDs.automigrate('Camera', function(err) {
+      if (err) return cb(err);
+      app.models.Camera.create([
+        {name: 'Camera 1', status: 'on', deviceId: results.devices[0].id},
+        {name: 'Camera 2', status: 'on', deviceId: results.devices[1].id},
+        {name: 'Camera 3', status: 'on', deviceId: results.devices[2].id},
+      ], cb);
+    });
+  }
+
+  function createPOSs(cb, results) {
+    console.log('creating devices...');
+    mongoDs.automigrate('POS', function(err) {
+      if (err) return cb(err);
+      app.models.POS.create([
+        {name: 'POS 1', status: 'on', deviceId: results.devices[0].id},
+        {name: 'POS 2', status: 'on', deviceId: results.devices[1].id},
+        {name: 'POS 3', status: 'on', deviceId: results.devices[2].id},
+      ], cb);
+    });
+  }
+  
+
 };

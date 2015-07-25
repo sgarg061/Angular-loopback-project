@@ -2,11 +2,15 @@
   "name": "Device",
   "base": "PersistedModel",
   "strict": true,
-  "idInjection": true,
   "options": {
-    "validateUpsert": true
+    "validateUpsert": true,
+    "idInjection": true
   },
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
     "name": {
       "type": "string",
       "required": true
