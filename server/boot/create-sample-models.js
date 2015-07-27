@@ -1,7 +1,7 @@
 var async = require('async');
 module.exports = function(app) {
   
-  var mongoDs = app.dataSources.elasticsearch;
+  var mongoDs = app.dataSources.mongo;
   
   //create all models
   async.auto({
@@ -41,7 +41,10 @@ module.exports = function(app) {
   function createClouds(cb) {
     console.log('creating clouds...');
     mongoDs.automigrate('Cloud', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.Cloud.create([
         { name: 'Solink', 
           serverUrl: 'http://api.solinkcloud.net', 
@@ -62,7 +65,10 @@ module.exports = function(app) {
   function createResellers(cb, results) {
     console.log('creating resellers...');
     mongoDs.automigrate('Reseller', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.Reseller.create([
         {name: 'Reseller 1', cloudId: results.clouds[0].id},
         {name: 'Reseller 2', cloudId: results.clouds[0].id},
@@ -74,7 +80,10 @@ module.exports = function(app) {
   function createCustomers(cb, results) {
     console.log('creating customers...');
     mongoDs.automigrate('Customer', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.Customer.create([
         {name: 'Customer 1', resellerId: results.resellers[0].id},
         {name: 'Customer 2', resellerId: results.resellers[1].id},
@@ -86,7 +95,10 @@ module.exports = function(app) {
   function createLocations(cb, results) {
     console.log('creating locations...');
     mongoDs.automigrate('Location', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.Location.create([
         {name: 'Location 1', address: '', customerId: results.customers[0].id},
         {name: 'Location 2', address: '', customerId: results.customers[1].id},
@@ -98,7 +110,10 @@ module.exports = function(app) {
   function createDevices(cb, results) {
     console.log('creating devices...');
     mongoDs.automigrate('Device', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.Device.create([
         {name: 'Device 1', locationId: results.locations[0].id},
         {name: 'Device 2', locationId: results.locations[1].id},
@@ -110,7 +125,10 @@ module.exports = function(app) {
   function createCameras(cb, results) {
     console.log('creating cameras...');
     mongoDs.automigrate('Camera', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.Camera.create([
         {name: 'Camera 1', status: 'on', deviceId: results.devices[0].id},
         {name: 'Camera 2', status: 'on', deviceId: results.devices[1].id},
@@ -122,7 +140,10 @@ module.exports = function(app) {
   function createPOSs(cb, results) {
     console.log('creating devices...');
     mongoDs.automigrate('POS', function(err) {
-      if (err) return cb(err);
+      if (err) {
+        console.log(err);
+        return cb(err);
+      }
       app.models.POS.create([
         {name: 'POS 1', status: 'on', deviceId: results.devices[0].id},
         {name: 'POS 2', status: 'on', deviceId: results.devices[1].id},
