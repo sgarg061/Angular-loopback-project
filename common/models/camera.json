@@ -29,7 +29,8 @@
   "relations": {
     "device": {
       "type": "belongsTo",
-      "model": "device"
+      "model": "Device",
+      "foreignKey": "deviceId"
     }
   },
   "acls": [],
