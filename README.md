@@ -1,5 +1,6 @@
 # call-home-server
 
+## Setup
 ```
 $ git clone https://github.com/SolinkCorp/call-home-server.git
 $ cd call-home-server
@@ -8,3 +9,6 @@ $ bower install
 $ node . # then browse to localhost:3000
 ```
 
+## Design
+
+![](https://github.com/SolinkCorp/call-home-server/tree/master/doc/Call_Home_Domain_Model.png)
