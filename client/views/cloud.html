@@ -1,0 +1,23 @@
+<h1>Cloud list</h1>
+<hr>
+<form name="cloudForm" novalidate ng-submit="addCloud()">
+  <div class="form-group" ng-class="{'has-error': cloudForm.content.$invalid && cloudForm.content.$dirty}">
+    
+    <input type="text" class="form-control focus" name="name" placeholder="Name" autocomplete="off" required ng-model="newCloud.name">
+    <input type="text" class="form-control focus" name="serverUrl" placeholder="http://server.url" autocomplete="off" required ng-model="newCloud.serverUrl">
+    <input type="text" class="form-control focus" name="imageServerUrl" placeholder="http://image.server.url" autocomplete="off" required ng-model="newCloud.imageServerUrl">
+    <input type="text" class="form-control focus" name="signallingServerUrl" placeholder="http://signalling.server.url" autocomplete="off" required ng-model="newCloud.signallingServerUrl">
+    <input type="text" class="form-control focus" name="updateUrl" placeholder="http://update.url" autocomplete="off" required ng-model="newCloud.updateUrl">
+    <input type="text" class="form-control focus" name="checkinInterval" placeholder="Check-in Interval in seconds" autocomplete="off" required ng-model="newCloud.checkinInterval">
+
+    <span class="has-error control-label" ng-show="cloudForm.content.$invalid && cloudForm.content.$dirty">
+      Content is required.
+    </span>
+  </div>
+  <button class="btn btn-default" ng-disabled="cloudForm.$invalid">Add</button>
+</form>
+<hr>
+<div class="list-group">
+  <a class="list-group-item" ng-repeat="cloud in clouds">{{cloud.name}}&nbsp;
+    <i class="glyphicon glyphicon-remove pull-right" ng-click="removeCloud(cloud)"></i></a>
+</div>

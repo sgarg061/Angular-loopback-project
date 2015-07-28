@@ -1,0 +1,12 @@
+<div id="login-container">
+  <form ng-submit="signin()">
+    <fieldset>
+      <input type="text" name="username" ng-model="username" ng-disabled="loading" />
+      <br>
+      <input type="password" name="password" ng-model="password" ng-disabled="loading" />
+      <br>
+      <button type="submit" ng-disabled="loading">Login</button>
+    </fieldset>
+  </form>
+
+</div>
