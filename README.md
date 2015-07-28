@@ -9,6 +9,12 @@ $ bower install
 $ node . # then browse to localhost:3000
 ```
 
+## Create Sample Data
+```
+$ cd server
+$ node create-sample-data.js
+```
+
 ## Design
 
 ![](https://github.com/SolinkCorp/call-home-server/blob/master/doc/Call_Home_Domain_Model.png)
