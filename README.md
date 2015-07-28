@@ -11,4 +11,4 @@ $ node . # then browse to localhost:3000
 
 ## Design
 
-![](https://github.com/SolinkCorp/call-home-server/tree/master/doc/Call_Home_Domain_Model.png)
+![](https://github.com/SolinkCorp/call-home-server/blob/master/doc/Call_Home_Domain_Model.png)
