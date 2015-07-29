@@ -10,8 +10,8 @@ angular
     function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, jwtInterceptorProvider) {
 
     authProvider.init({
-      domain: 'tylercope.auth0.com',
-      clientID: 'qSxGuoCEtWuLcfkEk0Er3rRgnn6ZKJSm',
+      domain: 'solink.auth0.com',
+      clientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
       callbackURL: location.href,
       loginState: 'login' // matches login state
     });
