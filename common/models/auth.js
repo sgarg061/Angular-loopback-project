@@ -30,9 +30,9 @@ module.exports = function(Auth) {
 			accepts: [
 				{arg: 'username', type: 'string'},
 				{arg: 'password', type: 'string'}
-				],
-				http: {verb: 'get', status: 200, errorStatus: 500},
-				returns: {arg: 'response', type: 'string'}
+			],
+			http: {verb: 'get', status: 200, errorStatus: 500},
+			returns: {arg: 'response', type: 'string'}
 		}
 	);
 
