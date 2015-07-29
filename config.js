@@ -6,4 +6,6 @@ config.auth0Scope = 'openid email app_metadata';
 config.auth0AWSRole = 'arn:aws:iam::150303506660:role/s3-access-by-tenant';
 config.auth0AWSPrincipal = 'arn:aws:iam::150303506660:saml-provider/auth0-provider';
 
+config.jwtSecret = 'IkZnJr_T0M4I9bfNM-LBIITtJrWw1YoQrSe0FNWaOodRH6TJ5L3qig0NDKS_B4yi';
+
 module.exports = config;

@@ -1,11 +1,20 @@
 var request = require('request');
+var jwt = require('jsonwebtoken');
 var config = require('../../config');
 
 module.exports = function(Auth) {
 
 	Auth.validate = function(token, cb) {
-		console.log('Validating token: ' + token);
-		cb(null, 'Valid token');
+		var decoded = jwt.verify(token, new Buffer(config.jwtSecret, 'base64'), function(err, decoded) {
+			if (!err) {
+				console.log(decoded);
+				cb(null, 'valid token');
+			} else {
+				var e = new Error('Invalid authentication token');
+				e.statusCode = 401;
+				cb(e, 'invalid token');
+			}
+		});
 	}
 
 	Auth.login = function(username, password, cb) {
@@ -78,7 +87,7 @@ module.exports = function(Auth) {
 		'validate',
 		{
 			accepts: {arg: 'token', type: 'string', required: true},
-			http: {verb: 'get', status: 200, errorStatus: 500},
+			http: {verb: 'post', status: 200, errorStatus: 500},
 			returns: {arg: 'response', type: 'string'}
 		}
 	);
