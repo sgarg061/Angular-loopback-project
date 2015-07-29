@@ -1,7 +1,7 @@
 var async = require('async');
 module.exports = function(app) {
   
-  var mongoDs = app.dataSources.mongo;
+  var mongoDs = app.dataSources.elasticsearch;
   
   //create all models
   async.auto({
