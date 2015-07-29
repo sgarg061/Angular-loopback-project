@@ -1,14 +1,11 @@
 var request = require('request');
+var config = require('../../config');
 
 module.exports = function(Auth) {
 
 	Auth.validate = function(token, cb) {
 		console.log('Validating token: ' + token);
 		cb(null, 'Valid token');
-		//console.log("Invalid token! " + token);
-		//var err = new Error("Invalid token received.");
-		//err.statusCode = 400;
-		//cb(err, "Invalid token");
 	}
 
 	Auth.login = function(username, password, cb) {
@@ -18,15 +15,15 @@ module.exports = function(Auth) {
 
 	function authenticateWithAuth0(username, password, cb) {
 		request({
-			url: 'https://solink.auth0.com/oauth/ro', // TODO: don't hard-code this.
+			url: config.auth0URL + '/oauth/ro',
 			method: 'POST',
 			form: {
 				username: username,
 				password: password,
-				client_id: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih', // TODO: don't hard-code this
+				client_id: config.auth0ClientID,
 				connection: 'Username-Password-Authentication',
 				grant_type: 'password',
-				scope: 'openid email app_metadata'
+				scope: config.auth0Scope
 			}
 		}, function (err, res, body) {
 			if (!err && res.statusCode == 200) {
@@ -44,14 +41,14 @@ module.exports = function(Auth) {
 
 	function authenticateWithAWS(token, cb) {
 		request({
-			url: 'https://solink.auth0.com/delegation',
+			url: config.auth0URL + '/delegation',
 			method: 'POST',
 			form: {
 				grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
 				id_token: token,
-				client_id: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih', // TODO: don't hardcode this
-				role: 'arn:aws:iam::150303506660:role/s3-access-by-tenant',
-				principal: 'arn:aws:iam::150303506660:saml-provider/auth0-provider',
+				client_id: config.auth0ClientID,
+				role: config.auth0AWSRole,
+				principal: config.auth0AWSPrincipal,
 				api_type: 'aws'
 			}
 		}, function (err, res, body) {
