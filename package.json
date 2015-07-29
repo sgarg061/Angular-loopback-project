@@ -16,6 +16,7 @@
     "loopback-connector-mongodb": "^1.11.3",
     "loopback-datasource-juggler": "^2.19.0",
     "node-uuid": "^1.4.3",
+    "request": "^2.60.0",
     "serve-favicon": "^2.0.1"
   },
   "optionalDependencies": {
