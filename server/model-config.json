@@ -73,5 +73,10 @@
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "Auth": {
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }
