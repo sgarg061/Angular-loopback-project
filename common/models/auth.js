@@ -3,12 +3,23 @@ var jwt = require('jsonwebtoken');
 var config = require('../../config');
 var redis = require('redis');
 var crypto = require('crypto');
+var loopback = require('loopback');
 
 module.exports = function (Auth) {
     'use strict';
     Auth.validate = function (token, cb) {
         console.log('Validating token: ' + token);
-        validateToken(token, cb);
+        
+        callComesFromPlatform(function (err) {
+            if (err) {
+                console.log('validation request invalid');
+                err.statusCode = 401;
+                cb(err, 'Invalid authorization token');
+            } else {
+                console.log('validation request has come from solink. validating...');
+                validateToken(token, cb);
+            }
+        });
     }
 
     Auth.login = function (username, password, cb) {
@@ -36,8 +47,51 @@ module.exports = function (Auth) {
             returns: {arg: 'response', type: 'string'}
         }
     );
-
 };
+
+function callComesFromPlatform(cb) {
+    'use strict';
+    var ctx = loopback.getCurrentContext();
+    var authorization_header = ctx.get('http').req.headers.authorization;
+    var auth_parts = authorization_header.split(' ');
+
+    if (auth_parts.length !== 2) {
+        var invalid_format_error = new Error('Invalid authorization token format');
+        invalid_format_error.statusCode = 400;
+        cb(invalid_format_error);
+    } else {
+        var token = auth_parts[1];
+
+        // is the auth token even valid?
+        validateToken(token, function (err, msg) {
+            if (err) {
+                console.log('error validating auth token. ' + err + ' - ' + msg);
+                var invalid_token_error = new Error('Authorization token invalid');
+                invalid_token_error.statusCode = 401;
+                cb(invalid_token_error);
+            } else {
+                // ok, the auth token is valid.  is it 'solink'?
+                try {
+                    var unpacked_token = jwt.decode(token);
+                    console.log('User type: ' + unpacked_token.app_metadata.user_type);
+                    if (unpacked_token.app_metadata.user_type === 'solink') {
+                        // valid response!
+                        cb(null);
+                    } else {
+                        var unauthorized_error = new Error('Unauthorized');
+                        unauthorized_error.statusCode = 401;
+                        cb(unauthorized_error);
+                    }
+                } catch (error) {
+                    console.log(error);
+                    var exception = new Error('Exception when decoding auth token');
+                    exception.statusCode = 500;
+                    cb(exception);
+                }
+            }
+        });
+    }
+}
 
 function validateToken(token, cb) {
     'use strict';
