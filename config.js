@@ -8,4 +8,9 @@ config.auth0AWSPrincipal = 'arn:aws:iam::150303506660:saml-provider/auth0-provid
 
 config.jwtSecret = 'IkZnJr_T0M4I9bfNM-LBIITtJrWw1YoQrSe0FNWaOodRH6TJ5L3qig0NDKS_B4yi';
 
+config.validatedTokensRedisLocation = '127.0.0.1';
+config.validatedTokensRedisPort = '6379';
+config.revokedTokensRedisLocation = '127.0.0.1';
+config.revokedTokensRedisPort = '6380';
+
 module.exports = config;
