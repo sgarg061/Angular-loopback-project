@@ -29,7 +29,7 @@
       "index": true
     },
     "activated": {
-      "type": "string",
+      "type": "boolean",
       "required": true,
       "index": true
     },
