@@ -1,0 +1,43 @@
+{
+  "name": "License",
+  "base": "PersistedModel",
+  "strict": true,
+  "options": {
+    "validateUpsert": true,
+    "idInjection": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "key": {
+      "type": "string",
+      "required": true,
+      "index": true
+    },
+    "username": {
+      "type": "string",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "required": true
+    },
+    "customerId": {
+      "type": "string",
+      "index": true
+    },
+    "activated": {
+      "type": "string",
+      "required": true,
+      "index": true
+    },
+    "activationDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "acls": [],
+  "methods": []
+}
