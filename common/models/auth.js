@@ -8,21 +8,21 @@ var loopback = require('loopback');
 module.exports = function (Auth) {
     'use strict';
 
-    Auth.disableRemoteMethod("create", true);
-    Auth.disableRemoteMethod("upsert", true);
-    Auth.disableRemoteMethod("updateAll", true);
-    Auth.disableRemoteMethod("updateAttributes", false);
+    Auth.disableRemoteMethod('create', true);
+    Auth.disableRemoteMethod('upsert', true);
+    Auth.disableRemoteMethod('updateAll', true);
+    Auth.disableRemoteMethod('updateAttributes', false);
 
-    Auth.disableRemoteMethod("find", true);
-    Auth.disableRemoteMethod("findById", true);
-    Auth.disableRemoteMethod("findOne", true);
+    Auth.disableRemoteMethod('find', true);
+    Auth.disableRemoteMethod('findById', true);
+    Auth.disableRemoteMethod('findOne', true);
 
-    Auth.disableRemoteMethod("deleteById", true);
+    Auth.disableRemoteMethod('deleteById', true);
 
-    Auth.disableRemoteMethod("confirm", true);
-    Auth.disableRemoteMethod("count", true);
-    Auth.disableRemoteMethod("exists", true);
-    Auth.disableRemoteMethod("resetPassword", true);
+    Auth.disableRemoteMethod('confirm', true);
+    Auth.disableRemoteMethod('count', true);
+    Auth.disableRemoteMethod('exists', true);
+    Auth.disableRemoteMethod('resetPassword', true);
 
     Auth.disableRemoteMethod('__count__accessTokens', false);
     Auth.disableRemoteMethod('__create__accessTokens', false);
@@ -172,7 +172,7 @@ function addValidToken(token, tokenExp, currentTime, cb) {
     var client = redis.createClient(config.validatedTokensRedisPort, config.validatedTokensRedisLocation, {});
     client.on('error', function (error) {
         console.log(error);
-        var err = new Error("Error communicating with token cache");
+        var err = new Error('Error communicating with token cache');
         err.statusCode = 500;
         cb(err, 'Error communicating with token cache');
     });
