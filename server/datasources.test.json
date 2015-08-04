@@ -1,0 +1,10 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "elasticsearch": {
+    "name": "elasticsearch",
+    "connector": "memory"
+  }
+}
