@@ -38,6 +38,16 @@ Creating sample data
 
 	node create-sample-data.js
 
+## Testing
+
+To run the REST API test suite, execute:
+
+	npm test
+	
+If jshint detects problems, the tests will fail. They can be forced past the jshint check by running:
+
+	npm test --force
+	
 ## Production Deployment
 
 ### Amazon AWS AMI Creation
