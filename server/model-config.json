@@ -33,43 +33,43 @@
     "public": false
   },
   "Cloud": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Reseller": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Customer": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Location": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Device": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Camera": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "POS": {
-    "dataSource": "mongo",
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true
