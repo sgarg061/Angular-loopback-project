@@ -74,6 +74,12 @@
     "$promise": {},
     "$resolved": true
   },
+  "License": {
+    "dataSource": "elasticsearch",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
   "Auth": {
     "public": true,
     "$promise": {},
