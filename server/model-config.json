@@ -81,6 +81,7 @@
     "$resolved": true
   },
   "Auth": {
+    "dataSource": null,
     "public": true,
     "$promise": {},
     "$resolved": true
