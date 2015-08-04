@@ -68,7 +68,7 @@ describe('REST', function() {
             })
             .expect(200)
             .end(function(err, res) {
-              assert(res.body.response == 'Valid token');
+              assert(res.body.response === 'Valid token');
               done();
             });
         });
