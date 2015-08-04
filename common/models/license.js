@@ -2,9 +2,10 @@ module.exports = function(License) {
     'use strict';
     License.activate = function (key, cb) {
         console.log('Activating license key ' + key);
-        License.find({where: {key: key}}, function (err, res) {
+        License.find({where: {key: key}}, function activateLicense (err, res) {
             if (err) {
                 console.log('Error: ' + err);
+                cb(new Error('Error while activating license'), 'Error while activating license');
             } else {
                 if (res.length > 1) {
                     cb(new Error('Duplicate licenses'), 'Duplicate licences found');
@@ -19,7 +20,7 @@ module.exports = function(License) {
                         license.updateAttributes({
                             activated: true,
                             activationDate: new Date()
-                        }, function (err, res) {
+                        }, function createDevice (err, res) {
                             if (err) {
                                 console.log('Error updating attribute' + err);
                             } else {
@@ -27,14 +28,25 @@ module.exports = function(License) {
                                 // now, create a device to use this activated license
                                 var Device = License.app.models.Device;
                                 Device.create({
-                                    name: 'Activated Device', // should we take a name from the user?
-                                }, function (err, res) {
+                                    name: 'Activated Device'
+                                }, function sendResponse (err, res) {
                                     if (err) {
                                         // An error here would be bad.
                                         // This puts us in a bad state.
                                         // Activation flag is enabled, but device might not be created...
-                                        // TODO: I'm not even sure. 
-                                        cb(new Error('Unable to create device'), 'Unable to create device');
+                                        // re-set activation flag
+                                        console.log('WARNING: Unable to create device');
+                                        license.updateAttributes({
+                                            activated: false
+                                        }, function returnFromError (err, res) {
+                                            if (err) {
+                                                // Device not created AND error re-setting activation flag.  This is a bad case.
+                                                cb(new Error('Error creating device.  Check that the activation is set correctly.'), 'Error creating device');
+                                            } else {
+                                                // Device not created, but we successfully reset the activation flag.
+                                                cb(new Error('Error creating device.'), 'Error creating device');
+                                            }
+                                        });
                                     } else {
                                         var deviceId = res.id;
                                         var response = {
