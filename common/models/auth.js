@@ -47,12 +47,12 @@ module.exports = function (Auth) {
                 validateToken(token, cb);
             }
         });
-    }
+    };
 
     Auth.login = function (username, password, cb) {
         console.log('Logging in with creds ' + username + ':' + password);
         authenticateWithAuth0(username, password, cb);
-    }
+    };
 
     Auth.remoteMethod(
         'validate',

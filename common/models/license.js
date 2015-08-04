@@ -3,7 +3,7 @@ module.exports = function(License) {
     License.activate = function (key, cb) {
         console.log('Activating license key ' + key);
         activateLicense(License, key, cb);
-    }
+    };
 
     License.remoteMethod(
         'activate',
