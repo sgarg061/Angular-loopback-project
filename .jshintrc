@@ -26,5 +26,6 @@
   "unused": false,
   "trailing": true,
   "sub": true,
-  "maxlen": 80
+  "camelcase": false,
+  "maxlen": false
 }
