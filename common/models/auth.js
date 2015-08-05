@@ -7,21 +7,21 @@ var tokenValidator = require('../tokenValidator');
 module.exports = function (Auth) {
     'use strict';
 
-    Auth.disableRemoteMethod("create", true);
-    Auth.disableRemoteMethod("upsert", true);
-    Auth.disableRemoteMethod("updateAll", true);
-    Auth.disableRemoteMethod("updateAttributes", false);
+    Auth.disableRemoteMethod('create', true);
+    Auth.disableRemoteMethod('upsert', true);
+    Auth.disableRemoteMethod('updateAll', true);
+    Auth.disableRemoteMethod('updateAttributes', false);
 
-    Auth.disableRemoteMethod("find", true);
-    Auth.disableRemoteMethod("findById", true);
-    Auth.disableRemoteMethod("findOne", true);
+    Auth.disableRemoteMethod('find', true);
+    Auth.disableRemoteMethod('findById', true);
+    Auth.disableRemoteMethod('findOne', true);
 
-    Auth.disableRemoteMethod("deleteById", true);
+    Auth.disableRemoteMethod('deleteById', true);
 
-    Auth.disableRemoteMethod("confirm", true);
-    Auth.disableRemoteMethod("count", true);
-    Auth.disableRemoteMethod("exists", true);
-    Auth.disableRemoteMethod("resetPassword", true);
+    Auth.disableRemoteMethod('confirm', true);
+    Auth.disableRemoteMethod('count', true);
+    Auth.disableRemoteMethod('exists', true);
+    Auth.disableRemoteMethod('resetPassword', true);
 
     Auth.disableRemoteMethod('__count__accessTokens', false);
     Auth.disableRemoteMethod('__create__accessTokens', false);
@@ -42,7 +42,7 @@ module.exports = function (Auth) {
     Auth.login = function (username, password, cb) {
         console.log('Logging in with creds ' + username + ':' + password);
         authenticateWithAuth0(username, password, cb);
-    }
+    };
 
     Auth.remoteMethod(
         'validate',

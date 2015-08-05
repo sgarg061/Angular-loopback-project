@@ -57,7 +57,7 @@ function addValidToken(token, tokenExp, currentTime, cb) {
     var client = redis.createClient(config.validatedTokensRedisPort, config.validatedTokensRedisLocation, {});
     client.on('error', function (error) {
         console.log(error);
-        var err = new Error("Error communicating with token cache");
+        var err = new Error('Error communicating with token cache');
         err.statusCode = 500;
         cb(err, 'Error communicating with token cache');
     });

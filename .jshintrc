@@ -1,4 +1,13 @@
 {
+  "globals"   : {
+    /* MOCHA */
+    "describe"   : false,
+    "it"         : false,
+    "before"     : false,
+    "beforeEach" : false,
+    "after"      : false,
+    "afterEach"  : false
+  },
   "node": true,
   "esnext": true,
   "bitwise": true,
@@ -17,5 +26,6 @@
   "unused": false,
   "trailing": true,
   "sub": true,
-  "maxlen": 80
+  "camelcase": false,
+  "maxlen": false
 }

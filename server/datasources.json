@@ -14,7 +14,7 @@
           "port": 9200
         }
   	],
-    "log": "trace",
+    "log": "info",
     "index": "call-home"
   }
 }

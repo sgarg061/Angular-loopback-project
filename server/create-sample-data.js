@@ -1,11 +1,16 @@
 var async = require('async');
-module.exports = function(app) {
-  
-  var mongoDs = app.dataSources.elasticsearch;
-  
+
+module.exports = function(app, doneCallback) {
+
+  var datastore = app.dataSources.elasticsearch;
+  // var datastore = app.dataSources.mongo;
+
+  console.log('creating sample data...');
+
   //create all models
   async.auto({
-    destroy_all: function(cb) {
+    destroyAll: function(cb) {
+      console.log('destroying all existing data...');
       app.models.Cloud.destroyAll();
       app.models.Reseller.destroyAll();
       app.models.Customer.destroyAll();
@@ -15,7 +20,7 @@ module.exports = function(app) {
       app.models.POS.destroyAll();
       cb(null);
     },
-    clouds: ['destroy_all', function(cb, results) {
+    clouds: ['destroyAll', function(cb, results) {
       createClouds(cb);
     }],
     resellers: ['clouds', function (cb, results) {
@@ -35,12 +40,15 @@ module.exports = function(app) {
     }],
     posConnectors: ['devices', function (cb, results) {
       createPOSs(cb, results);
+    }],
+    result: ['posConnectors', function (cb, results) {
+      doneCallback();
     }]
   });
 
   function createClouds(cb) {
     console.log('creating clouds...');
-    mongoDs.automigrate('Cloud', function(err) {
+    datastore.automigrate('Cloud', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -64,7 +72,7 @@ module.exports = function(app) {
 
   function createResellers(cb, results) {
     console.log('creating resellers...');
-    mongoDs.automigrate('Reseller', function(err) {
+    datastore.automigrate('Reseller', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -76,10 +84,10 @@ module.exports = function(app) {
       ], cb);
     });
   }
-  
+
   function createCustomers(cb, results) {
     console.log('creating customers...');
-    mongoDs.automigrate('Customer', function(err) {
+    datastore.automigrate('Customer', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -91,10 +99,10 @@ module.exports = function(app) {
       ], cb);
     });
   }
-  
+
   function createLocations(cb, results) {
     console.log('creating locations...');
-    mongoDs.automigrate('Location', function(err) {
+    datastore.automigrate('Location', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -109,7 +117,7 @@ module.exports = function(app) {
 
   function createDevices(cb, results) {
     console.log('creating devices...');
-    mongoDs.automigrate('Device', function(err) {
+    datastore.automigrate('Device', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -124,7 +132,7 @@ module.exports = function(app) {
 
   function createCameras(cb, results) {
     console.log('creating cameras...');
-    mongoDs.automigrate('Camera', function(err) {
+    datastore.automigrate('Camera', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -139,7 +147,7 @@ module.exports = function(app) {
 
   function createPOSs(cb, results) {
     console.log('creating devices...');
-    mongoDs.automigrate('POS', function(err) {
+    datastore.automigrate('POS', function(err) {
       if (err) {
         console.log(err);
         return cb(err);
@@ -151,6 +159,18 @@ module.exports = function(app) {
       ], cb);
     });
   }
-  
-
 };
+
+if (require.main === module) {
+  
+  // Run the import
+  module.exports(require('./server'), function(err) {
+    if (err) {
+      console.error('Cannot import sample data - ', err);
+    } else {
+      console.log('Sample data was imported.');
+      
+    }
+  });
+}
+  

@@ -5,16 +5,17 @@
 
 ![](https://github.com/SolinkCorp/call-home-server/blob/master/doc/Call_Home_Domain_Model.png)
 
-
 ## Setup
 
 	git clone https://github.com/SolinkCorp/call-home-server.git
 	cd call-home-server
 	npm install
-	bower install
 
 
 ## Running in Development
+
+Ensure the Elasticsearch and Redis processes are running. See datasources.json and config.json for expected locations and ports.
+  
 Running as a single Node process:
 
 	node . # then browse to localhost:3000
@@ -35,7 +36,20 @@ Stopping the cluster
 	slc ctl stop call-home-server
 	slc ctl status
 
+Creating sample data
 
+	node create-sample-data.js
+
+## Testing
+
+To run the REST API test suite, execute:
+
+	npm test
+	
+If jshint detects problems, the tests will fail. They can be forced past the jshint check by running:
+
+	npm test --force
+	
 ## Production Deployment
 
 ### Amazon AWS AMI Creation

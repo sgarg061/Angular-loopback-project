@@ -2,8 +2,10 @@
   "name": "call-home-server",
   "version": "1.0.0",
   "main": "server/server.js",
+  "engine": "node 0.12.7",
   "scripts": {
     "pretest": "jshint .",
+    "test": "NODE_ENV=test mocha -R spec server/test",
     "build": "bower install"
   },
   "dependencies": {
@@ -26,7 +28,9 @@
     "loopback-explorer": "^1.1.0"
   },
   "devDependencies": {
-    "jshint": "^2.5.6"
+    "jshint": "^2.5.6",
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1"
   },
   "repository": {
     "type": "",
