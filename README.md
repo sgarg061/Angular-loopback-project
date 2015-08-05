@@ -10,10 +10,12 @@
 	git clone https://github.com/SolinkCorp/call-home-server.git
 	cd call-home-server
 	npm install
-	bower install
 
 
 ## Running in Development
+
+Ensure the Elasticsearch and Redis processes are running. See datasources.json and config.json for expected locations and ports.
+  
 Running as a single Node process:
 
 	node . # then browse to localhost:3000
