@@ -1,8 +1,6 @@
 var request = require('request');
 var jwt = require('jsonwebtoken');
 var config = require('../../config');
-var redis = require('redis');
-var crypto = require('crypto');
 var loopback = require('loopback');
 var tokenValidator = require('../tokenValidator');
 
@@ -37,17 +35,8 @@ module.exports = function (Auth) {
 
     Auth.validate = function (token, cb) {
         console.log('Validating token: ' + token);
-        
-        callComesFromPlatform(function (err) {
-            if (err) {
-                console.log('validation request invalid');
-                err.statusCode = 401;
-                cb(err, 'Invalid authorization token');
-            } else {
-                console.log('validation request has come from solink. validating...');
-                tokenValidator.validateToken(token, cb);
-            }
-        });
+        console.log('validation request has come from solink. validating...');
+        tokenValidator.validateToken(token, cb);
     }
 
     Auth.login = function (username, password, cb) {
