@@ -1,4 +1,3 @@
-var loopback = require('loopback');
 var jwt = require('jsonwebtoken');
 
 module.exports = function () {
@@ -24,11 +23,11 @@ module.exports = function () {
                 'tenant_id': unpacked_token.app_metadata.tenant_id
             };
             req.jwt = jwtToken;
-            
+
             return next();
         } catch (err) {
             console.log('Error processing jwt token. ' + err);
             return next();
         }
-    }
-}
+    };
+};
