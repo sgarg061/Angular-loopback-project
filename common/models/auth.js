@@ -37,7 +37,7 @@ module.exports = function (Auth) {
         console.log('Validating token: ' + token);
         console.log('validation request has come from solink. validating...');
         tokenValidator.validateToken(token, cb);
-    }
+    };
 
     Auth.login = function (username, password, cb) {
         console.log('Logging in with creds ' + username + ':' + password);

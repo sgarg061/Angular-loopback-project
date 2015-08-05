@@ -50,7 +50,7 @@ module.exports =  {
             }
         });
     }
-}
+};
 
 function addValidToken(token, tokenExp, currentTime, cb) {
     'use strict';
