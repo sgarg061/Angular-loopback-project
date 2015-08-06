@@ -12,7 +12,7 @@ module.exports = function(License) {
                 {arg: 'key', type: 'string'},
             ],
             http: {verb: 'post', status: 200, errorStatus: 500},
-            returns: {arg: 'response', type: 'string'}
+            returns: {arg: 'device', root: true}
         }
     );
 };
@@ -20,7 +20,6 @@ module.exports = function(License) {
 function activateLicense (License, key, cb) {
     License.find({where: {key: key}}, function activateLicense (err, res) {
         if (err) {
-            console.log('Error: ' + err);
             cb(new Error('Error while retrieving license for activation'), 'Error while retrieving license for activation');
         } else {
             if (res.length > 1) {
@@ -48,18 +47,18 @@ function performActivationTasks (License, licenseInstance, cb) {
         if (err) {
             console.log('Error updating attribute' + err);
         } else {
-            console.log('Succesfully updated attribute! ' + res[0]);
             // now, create a device to use this activated license
             var Device = License.app.models.Device;
             Device.create({
-                name: 'Activated Device'
+                name: 'Activated Device',
+                customerId: licenseInstance.customerId
             }, function sendResponse (err, res) {
                 if (err) {
                     // An error here would be bad.
                     // This puts us in a bad state.
                     // Activation flag is enabled, but device might not be created...
                     // re-set activation flag
-                    console.log('WARNING: Unable to create device');
+                    console.log('WARNING: Unable to create device: ' + err);
                     licenseInstance.updateAttributes({
                         activated: false
                     }, function returnFromError (err, res) {

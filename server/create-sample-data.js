@@ -1,4 +1,5 @@
 var async = require('async');
+var uuid = require('node-uuid');
 
 module.exports = function(app, doneCallback) {
 
@@ -14,10 +15,10 @@ module.exports = function(app, doneCallback) {
       app.models.Cloud.destroyAll();
       app.models.Reseller.destroyAll();
       app.models.Customer.destroyAll();
-      app.models.Location.destroyAll();
       app.models.Device.destroyAll();
       app.models.Camera.destroyAll();
       app.models.POS.destroyAll();
+      app.models.License.destroyAll();
       cb(null);
     },
     clouds: ['destroyAll', function(cb, results) {
@@ -29,10 +30,10 @@ module.exports = function(app, doneCallback) {
     customers: ['resellers', function (cb, results) {
       createCustomers(cb, results);
     }],
-    locations: ['customers', function (cb, results) {
-      createLocations(cb, results);
+    licenses: ['customers', function (cb, results) {
+      createLicenses(cb, results);
     }],
-    devices: ['locations', function (cb, results) {
+    devices: ['customers', function (cb, results) {
       createDevices(cb, results);
     }],
     cameras: ['devices', function (cb, results) {
@@ -50,7 +51,7 @@ module.exports = function(app, doneCallback) {
     console.log('creating clouds...');
     datastore.automigrate('Cloud', function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
         return cb(err);
       }
       app.models.Cloud.create([
@@ -74,7 +75,7 @@ module.exports = function(app, doneCallback) {
     console.log('creating resellers...');
     datastore.automigrate('Reseller', function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
         return cb(err);
       }
       app.models.Reseller.create([
@@ -89,7 +90,7 @@ module.exports = function(app, doneCallback) {
     console.log('creating customers...');
     datastore.automigrate('Customer', function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
         return cb(err);
       }
       app.models.Customer.create([
@@ -100,32 +101,17 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function createLocations(cb, results) {
-    console.log('creating locations...');
-    datastore.automigrate('Location', function(err) {
-      if (err) {
-        console.log(err);
-        return cb(err);
-      }
-      app.models.Location.create([
-        {name: 'Location 1', address: '', customerId: results.customers[0].id},
-        {name: 'Location 2', address: '', customerId: results.customers[1].id},
-        {name: 'Location 3', address: '', customerId: results.customers[2].id},
-      ], cb);
-    });
-  }
-
   function createDevices(cb, results) {
     console.log('creating devices...');
     datastore.automigrate('Device', function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
         return cb(err);
       }
       app.models.Device.create([
-        {name: 'Device 1', locationId: results.locations[0].id},
-        {name: 'Device 2', locationId: results.locations[1].id},
-        {name: 'Device 3', locationId: results.locations[2].id},
+        {guid: uuid.v1(), name: 'Device 1', customerId: results.customers[0].id},
+        {guid: uuid.v1(), name: 'Device 2', customerId: results.customers[1].id},
+        {guid: uuid.v1(), name: 'Device 3', customerId: results.customers[2].id},
       ], cb);
     });
   }
@@ -134,7 +120,7 @@ module.exports = function(app, doneCallback) {
     console.log('creating cameras...');
     datastore.automigrate('Camera', function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
         return cb(err);
       }
       app.models.Camera.create([
@@ -146,10 +132,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createPOSs(cb, results) {
-    console.log('creating devices...');
+    console.log('creating POSs...');
     datastore.automigrate('POS', function(err) {
       if (err) {
-        console.log(err);
+        console.error(err);
         return cb(err);
       }
       app.models.POS.create([
@@ -159,7 +145,23 @@ module.exports = function(app, doneCallback) {
       ], cb);
     });
   }
+
+  function createLicenses(cb, results) {
+    console.log('creating licenses...');
+    datastore.automigrate('License', function(err) {
+      if (err) {
+        console.error(err);
+        return cb(err);
+      }
+      app.models.License.create([
+        {key: 'MAGN-ETSH-OWDO-THEY-WORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false}
+      ], cb);
+    });
+  }
+
 };
+
+
 
 if (require.main === module) {
   

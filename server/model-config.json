@@ -50,12 +50,6 @@
     "$promise": {},
     "$resolved": true
   },
-  "Location": {
-    "dataSource": "elasticsearch",
-    "public": true,
-    "$promise": {},
-    "$resolved": true
-  },
   "Device": {
     "dataSource": "elasticsearch",
     "public": true,
