@@ -13,9 +13,7 @@
     }
   },
   "session": {},
-  "auth": {
-    "./middleware/jwtMiddleware": {}  
-  },
+  "auth": {},
   "parse": {},
   "routes": {},
   "files": {
