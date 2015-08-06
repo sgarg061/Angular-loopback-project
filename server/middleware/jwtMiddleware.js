@@ -3,14 +3,14 @@ var jwt = require('jsonwebtoken');
 module.exports = function () {
     return function jwtMiddleware (req, res, next) {
         try {
-            var authorization_header = req.headers.authorization;
-            if (!authorization_header) {
+            var authorizationHeader = req.headers.authorization;
+            if (!authorizationHeader) {
                 return next();
             } 
 
-            var auth_parts = authorization_header.split(' ');
+            var authParts = authorizationHeader.split(' ');
 
-            if (auth_parts.length !== 2) {
+            if (authParts.length !== 2) {
                 return next(); // invalid token. nothing to attach.
             }
                 
