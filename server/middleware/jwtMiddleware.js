@@ -13,8 +13,8 @@ module.exports = function () {
             if (authParts.length !== 2) {
                 return next(); // invalid token. nothing to attach.
             }
-                
-            var token = auth_parts[1];
+            
+            var token = authParts[1];
             var unpacked_token = jwt.decode(token);
             
             var jwtToken = {

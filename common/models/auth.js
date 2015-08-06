@@ -66,50 +66,6 @@ module.exports = function (Auth) {
     );
 };
 
-function callComesFromPlatform(cb) {
-    'use strict';
-    var ctx = loopback.getCurrentContext();
-    var authorization_header = ctx.get('http').req.headers.authorization;
-    var auth_parts = authorization_header.split(' ');
-
-    if (auth_parts.length !== 2) {
-        var invalid_format_error = new Error('Invalid authorization token format');
-        invalid_format_error.statusCode = 400;
-        cb(invalid_format_error);
-    } else {
-        var token = auth_parts[1];
-
-        // is the auth token even valid?
-        tokenValidator.validateToken(token, function (err, msg) {
-            if (err) {
-                console.log('error validating auth token. ' + err + ' - ' + msg);
-                var invalid_token_error = new Error('Authorization token invalid');
-                invalid_token_error.statusCode = 401;
-                cb(invalid_token_error);
-            } else {
-                // ok, the auth token is valid.  is it 'solink'?
-                try {
-                    var unpacked_token = jwt.decode(token);
-                    console.log('User type: ' + unpacked_token.app_metadata.user_type);
-                    if (unpacked_token.app_metadata.user_type === 'solink') {
-                        // valid response!
-                        cb(null);
-                    } else {
-                        var unauthorized_error = new Error('Unauthorized');
-                        unauthorized_error.statusCode = 401;
-                        cb(unauthorized_error);
-                    }
-                } catch (error) {
-                    console.log(error);
-                    var exception = new Error('Exception when decoding auth token');
-                    exception.statusCode = 500;
-                    cb(exception);
-                }
-            }
-        });
-    }
-}
-
 function authenticateWithAuth0(username, password, cb) {
     'use strict';
     request({
