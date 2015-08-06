@@ -1,11 +1,13 @@
 var tokenValidator = require('../../common/tokenValidator');
+var loopback = require('loopback');
 
 module.exports = function (app) {
     'use strict';
     var Role = app.models.Role;
 
     Role.registerResolver('isValidated', function (role, context, cb) {
-        var jwt = context.remotingContext.req.jwt;
+        var ctx = loopback.getCurrentContext();
+        var jwt = ctx.jwt;
         if (!jwt) {
             return reject(cb);
         }
@@ -16,7 +18,8 @@ module.exports = function (app) {
     });
 
     Role.registerResolver('isSolink', function (role, context, cb) {
-        var jwt = context.remotingContext.req.jwt;
+        var ctx = loopback.getCurrentContext();
+        var jwt = ctx.jwt;
         if (!jwt) {
             return reject(cb);
         }

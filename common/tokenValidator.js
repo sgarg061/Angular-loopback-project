@@ -18,7 +18,7 @@ module.exports =  {
                 }
 
                 // ensure the token isn't revoked
-                var client = redis.createClient(config.revokedTokensRedisPort, config.revokedTokensRedisLocation, {});
+                var client = redis.createClient(config.revokedTokensRedisPort, config.revokedTokensRedisLocation, {'max_attempts': 1});
                 client.on('error', function (error) {
                     console.log(error);
                     cb(error, 'Error communicating with token cache');
