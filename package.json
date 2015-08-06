@@ -17,7 +17,6 @@
     "loopback": "^2.14.0",
     "loopback-boot": "^2.6.5",
     "loopback-connector-es": "^1.0.0",
-    "loopback-connector-mongodb": "^1.11.3",
     "loopback-datasource-juggler": "^2.19.0",
     "node-uuid": "^1.4.3",
     "redis": "^0.12.1",
