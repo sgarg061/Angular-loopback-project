@@ -1,14 +1,11 @@
-//var redis = require('redis');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 var redisAccessor = require('../server/redisAccessor');
-var loopback = require('loopback');
 
-module.exports =  {
+module.exports = {
     validateToken: function (token, cb) {
         'use strict';
-        var ctx = loopback.getCurrentContext();
         jwt.verify(token, new Buffer(config.jwtSecret, 'base64'), function (err, decoded) {
             if (!err) {
                 // ensure the token hasn't expired

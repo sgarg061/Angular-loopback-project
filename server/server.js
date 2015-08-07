@@ -8,11 +8,12 @@ var app = module.exports = loopback();
 
 app.use(loopback.context());
 app.use(function jwtMiddleware (req, res, next) {
+    'use strict';
     try {
         var authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
             return next();
-        } 
+        }
 
         var authParts = authorizationHeader.split(' ');
 
@@ -22,11 +23,10 @@ app.use(function jwtMiddleware (req, res, next) {
         
         var token = authParts[1];
         var unpacked_token = jwt.decode(token);
-        
         var jwtToken = {
-            'token': token,
-            'userType': unpacked_token.app_metadata.user_type,
-            'tenantId': unpacked_token.app_metadata.tenant_id
+            token: token,
+            userType: unpacked_token.app_metadata.user_type,
+            tenantId: unpacked_token.app_metadata.tenant_id
         };
         var ctx = loopback.getCurrentContext();
         ctx.set('jwt', jwtToken);
@@ -39,12 +39,13 @@ app.use(function jwtMiddleware (req, res, next) {
 });
 
 function initializeRedis() {
+    'use strict';
     redisAccessor.initialize([
     {
         name: 'revoked',
         port: config.revokedTokensRedisPort,
         address: config.revokedTokensRedisLocation
-    }, 
+    },
     {
         name: 'validated',
         port: config.validatedTokensRedisPort,
@@ -53,6 +54,7 @@ function initializeRedis() {
 }
 
 app.start = function() {
+    'use strict';
     initializeRedis();
   // start the web server
   return app.listen(function() {

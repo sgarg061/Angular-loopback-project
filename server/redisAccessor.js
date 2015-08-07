@@ -3,6 +3,7 @@ var redis = require('redis');
 var redisConnections = {};
 
 var RedisConnection = function (name, port, address) {
+    'use strict';
     this.name = name;
     this.port = port;
     this.address = address;
@@ -20,13 +21,15 @@ var RedisConnection = function (name, port, address) {
 
 module.exports = {
     initialize: function (connections) {
-        connections.forEach(function(connection) {
+        'use strict';
+        connections.forEach(function (connection) {
             var newConnection = new RedisConnection(connection.name, connection.port, connection.address);
             redisConnections[connection.name] = newConnection;
         });
     },
 
-    getConnection: function(name) {
+    getConnection: function (name) {
+        'use strict';
         return redisConnections[name];
     }
 };
