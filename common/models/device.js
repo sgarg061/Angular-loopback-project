@@ -1,6 +1,8 @@
+var loopback = require('loopback');
 var uuid = require('node-uuid');
 
 module.exports = function(Device) {
+	'use strict';
 	Device.observe('before save', function addId(ctx, next) {
 		if (ctx.instance && !ctx.instance.id) {
 			ctx.instance.id = uuid.v1();
@@ -15,10 +17,26 @@ module.exports = function(Device) {
 		],
 		returns: {arg: 'result', type: 'string'},
 		http: {path: '/:id/checkin', verb: 'post'}
-		
 	});
 
-	Device.checkin = function(id, data, cb) {
+    Device.observe('access', function limitToTenant(ctx, next) {
+        var context = loopback.getCurrentContext();
+        var tenantId = 0;
+        if (context && context.get('jwt') && context.get('jwt').tenantId) {
+            tenantId = context.get('jwt').tenantId;
+        }
+
+        if (ctx.query.where) {
+            ctx.query.where.customerId = tenantId;
+        } else {
+            ctx.query.where = {
+                customerId: tenantId
+            };
+        }
+        next();
+    });
+
+	Device.checkin = function (id, data, cb) {
 
 		// TODO: get the customerId from the current jwt token and use it in the device query
 		// tod ensure that you can only update a device that belongs to you.
@@ -54,11 +72,11 @@ module.exports = function(Device) {
             locationName: deviceData.locationName,
             address: deviceData.address
         }, function(err, res) {
-        	if (err) {
+            if (err) {
                 cb(new Error('Error checking in device: %s', err));
             } else {
-				updateCameras(device, deviceData, cb);
-			}
+                updateCameras(device, deviceData, cb);
+            }
         });
 	}
 
@@ -84,7 +102,7 @@ module.exports = function(Device) {
 		cb(null, 'Checkin Successful');
 	}
 
-	// Update a devices attached components. A component can be a Camera or POS.
+	// Update a device's attached components. A component can be a Camera or POS.
 	function updateDeviceComponent (componentType, component, deviceId) {
 		
 		var componentIdName = componentType.toLowerCase() + 'Id';

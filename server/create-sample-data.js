@@ -94,9 +94,9 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Customer.create([
-        {name: 'Customer 1', resellerId: results.resellers[0].id},
-        {name: 'Customer 2', resellerId: results.resellers[1].id},
-        {name: 'Customer 3', resellerId: results.resellers[2].id},
+        {name: 'Customer 1', resellerId: results.resellers[0].id, id: 1},
+        {name: 'Customer 2', resellerId: results.resellers[1].id, id: 2},
+        {name: 'Customer 3', resellerId: results.resellers[2].id, id: 3},
       ], cb);
     });
   }
