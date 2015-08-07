@@ -21,9 +21,9 @@ module.exports = function(Device) {
 
     Device.observe('access', function limitToTenant(ctx, next) {
         var context = loopback.getCurrentContext();
-        var tenantId = -1;
-        if (context.jwt) {
-            tenant_id = context.jwt.tenant_id;
+        var tenantId = 0;
+        if (context && context.get('jwt') && context.get('jwt').tenantId) {
+            tenantId = context.get('jwt').tenantId;
         }
 
         if (ctx.query.where) {

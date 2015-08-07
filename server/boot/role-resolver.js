@@ -7,7 +7,7 @@ module.exports = function (app) {
 
     Role.registerResolver('isValidated', function (role, context, cb) {
         var ctx = loopback.getCurrentContext();
-        var jwt = ctx.jwt;
+        var jwt = ctx.get('jwt');
         if (!jwt) {
             return reject(cb);
         }
@@ -19,13 +19,13 @@ module.exports = function (app) {
 
     Role.registerResolver('isSolink', function (role, context, cb) {
         var ctx = loopback.getCurrentContext();
-        var jwt = ctx.jwt;
+        var jwt = ctx.get('jwt');
         if (!jwt) {
             return reject(cb);
         }
 
         tokenValidator.validateToken(jwt.token, function (err, msg) {
-            return cb(null, (!err && jwt.user_type === 'solink'));
+            return cb(null, (!err && jwt.userType === 'solink'));
         });
     });
 };
