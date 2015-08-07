@@ -12,6 +12,12 @@
       "type": "string",
       "id": true
     },
+    "posId": {
+      "type": "string",
+      "id": true,
+      "required": true,
+      "index": true
+    },
     "name": {
       "type": "string",
       "required": true

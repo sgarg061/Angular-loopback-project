@@ -11,6 +11,12 @@
       "type": "string",
       "id": true
     },
+    "cameraId": {
+      "type": "string",
+      "id": true,
+      "required": true,
+      "index": true
+    },
     "name": {
       "type": "string",
       "required": true

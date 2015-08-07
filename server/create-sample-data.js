@@ -124,9 +124,9 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Camera.create([
-        {name: 'Camera 1', status: 'on', deviceId: results.devices[0].id},
-        {name: 'Camera 2', status: 'on', deviceId: results.devices[1].id},
-        {name: 'Camera 3', status: 'on', deviceId: results.devices[2].id},
+        {cameraId: 'bb5357a6-5ac2-488b-817a-687c4ad637d6', name: 'Camera 1', status: 'on', deviceId: results.devices[0].id},
+        {cameraId: '08996ceb-5e08-4ca2-8dd7-387d3041b4a7', name: 'Camera 2', status: 'on', deviceId: results.devices[1].id},
+        {cameraId: '8978428b-3865-4602-be09-97502a4997ed', name: 'Camera 3', status: 'on', deviceId: results.devices[2].id},
       ], cb);
     });
   }
@@ -139,9 +139,9 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.POS.create([
-        {name: 'POS 1', status: 'on', deviceId: results.devices[0].id},
-        {name: 'POS 2', status: 'on', deviceId: results.devices[1].id},
-        {name: 'POS 3', status: 'on', deviceId: results.devices[2].id},
+        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS 1', status: 'on', deviceId: results.devices[0].id},
+        {posId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', name: 'POS 2', status: 'on', deviceId: results.devices[1].id},
+        {posId: '943fc52b-e378-4dc8-9fff-c94f4990a789', name: 'POS 3', status: 'on', deviceId: results.devices[2].id},
       ], cb);
     });
   }
