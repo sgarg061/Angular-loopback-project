@@ -1,6 +1,8 @@
 var loopback = require('loopback');
 var jwt = require('jsonwebtoken');
 var boot = require('loopback-boot');
+var redisAccessor = require('./redisAccessor');
+var config = require('../config');
 
 var app = module.exports = loopback();
 
@@ -23,12 +25,11 @@ app.use(function jwtMiddleware (req, res, next) {
         
         var jwtToken = {
             'token': token,
-            'user_type': unpacked_token.app_metadata.user_type,
-            'tenant_id': unpacked_token.app_metadata.tenant_id
+            'userType': unpacked_token.app_metadata.user_type,
+            'tenantId': unpacked_token.app_metadata.tenant_id
         };
-
         var ctx = loopback.getCurrentContext();
-        ctx.jwt = jwtToken;
+        ctx.set('jwt', jwtToken);
 
         return next();
     } catch (err) {
@@ -37,7 +38,22 @@ app.use(function jwtMiddleware (req, res, next) {
     }
 });
 
+function initializeRedis() {
+    redisAccessor.initialize([
+    {
+        name: 'revoked',
+        port: config.revokedTokensRedisPort,
+        address: config.revokedTokensRedisLocation
+    }, 
+    {
+        name: 'validated',
+        port: config.validatedTokensRedisPort,
+        address: config.validatedTokensRedisLocation
+    }]);
+}
+
 app.start = function() {
+    initializeRedis();
   // start the web server
   return app.listen(function() {
     app.emit('started');
