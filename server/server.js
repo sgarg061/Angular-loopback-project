@@ -1,9 +1,12 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var Auth0Accessor = require('./dependencyAccessors/auth0Accessor');
+var authService = require('./services/authService');
 
 var app = module.exports = loopback();
 
 app.start = function() {
+  authService.initialize(new Auth0Accessor());
   // start the web server
   return app.listen(function() {
     app.emit('started');

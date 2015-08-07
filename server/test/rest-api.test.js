@@ -1,6 +1,8 @@
 var request = require('supertest');
 var app = require('../server');
 var assert = require('assert');
+var authService = require('../services/authService');
+var authAccessor = require('../dependencyAccessors/fakeAuth0Accessor');
 
 
 var sampleData = require('../create-sample-data');
@@ -12,6 +14,7 @@ const SOLINK_USER_PASSWORD = 'test';
 
 before(function(done) {
   sampleData(app, function() {
+    authService.initialize(new authAccessor());
     done();
   });
 });
@@ -49,7 +52,8 @@ describe('REST', function() {
             .end(function(err, res) {
               if (err) throw err;
               var response = JSON.parse(res.body.response);
-
+              console.log('response: ');
+              console.log(response);
               assert(typeof response === 'object');
               assert(response.auth_token, 'must have an auth_token');
 
