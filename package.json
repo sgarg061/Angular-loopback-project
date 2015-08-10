@@ -6,7 +6,8 @@
   "scripts": {
     "pretest": "jshint .",
     "test": "NODE_ENV=test mocha -R spec server/test",
-    "build": "bower install"
+    "build": "bower install",
+    "console": "$(npm bin)/loopback-console ."
   },
   "dependencies": {
     "async": "^1.4.0",
@@ -17,6 +18,7 @@
     "loopback": "^2.14.0",
     "loopback-boot": "^2.6.5",
     "loopback-connector-es": "^1.0.0",
+    "loopback-console": "^0.1.0",
     "loopback-datasource-juggler": "^2.19.0",
     "node-uuid": "^1.4.3",
     "rand-token": "^0.2.1",

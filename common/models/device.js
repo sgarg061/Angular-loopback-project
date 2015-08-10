@@ -22,6 +22,11 @@ module.exports = function(Device) {
     Device.observe('access', function limitToTenant(ctx, next) {
         var context = loopback.getCurrentContext();
         var tenantId = 0;
+
+        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+            return next();
+        }
+
         if (context && context.get('jwt') && context.get('jwt').tenantId) {
             tenantId = context.get('jwt').tenantId;
         }

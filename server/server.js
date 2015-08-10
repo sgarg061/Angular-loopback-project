@@ -6,6 +6,7 @@ var RedisAccessor = require('./dependencyAccessors/redisAccessor');
 var authService = require('./services/authService');
 var cacheService = require('./services/cacheService');
 var config = require('../config');
+var loopbackConsole = require('loopback-console');
 
 var app = module.exports = loopback();
 
@@ -54,7 +55,7 @@ function initializeRedis() {
         port: config.validatedTokensRedisPort,
         address: config.validatedTokensRedisLocation
     }]);
-}
+};
 
 app.start = function() {
     'use strict';
@@ -74,6 +75,13 @@ boot(app, __dirname, function(err) {
     if (err) throw err;
 
     // start the server if `$ node server.js`
-   if (require.main === module)
+  if (loopbackConsole.activated()) {
+  loopbackConsole.start(app,
+    // loopback-console config
+    {
+      prompt: 'call-home-server # ',
+      // ...
+    });
+} else if (require.main === module)
       app.start();
 });
