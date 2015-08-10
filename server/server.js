@@ -74,7 +74,7 @@ boot(app, __dirname, function(err) {
   loopbackConsole.start(app,
     // loopback-console config
     {
-      prompt: "call-home-server # ",
+      prompt: 'call-home-server # ',
       // ...
     });
 } else if (require.main === module)
