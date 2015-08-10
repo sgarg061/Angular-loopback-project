@@ -2,8 +2,10 @@ var request = require('supertest');
 var app = require('../server');
 var assert = require('assert');
 var authService = require('../services/authService');
-var authAccessor = require('../dependencyAccessors/fakeAuth0Accessor');
-
+var AuthAccessor = require('../dependencyAccessors/fakeAuth0Accessor');
+var RedisAccessor = require('../dependencyAccessors/redisAccessor');
+var cacheService = require('../services/cacheService');
+var config = require('../../config');
 
 var sampleData = require('../create-sample-data');
 
@@ -14,8 +16,21 @@ const SOLINK_USER_PASSWORD = 'test';
 
 before(function(done) {
   sampleData(app, function() {
-    authService.initialize(new authAccessor());
-    app.start();
+    authService.initialize(new AuthAccessor());
+
+    RedisAccessor.initialize([
+    {
+        name: 'revoked',
+        port: config.revokedTokensRedisPort,
+        address: config.revokedTokensRedisLocation
+    },
+    {
+        name: 'validated',
+        port: config.validatedTokensRedisPort,
+        address: config.validatedTokensRedisLocation
+    }]);
+
+    cacheService.initialize(RedisAccessor);
     done();
   });
 });

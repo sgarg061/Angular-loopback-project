@@ -2,8 +2,9 @@ var loopback = require('loopback');
 var jwt = require('jsonwebtoken');
 var boot = require('loopback-boot');
 var Auth0Accessor = require('./dependencyAccessors/auth0Accessor');
+var RedisAccessor = require('./dependencyAccessors/redisAccessor');
 var authService = require('./services/authService');
-var redisAccessor = require('./redisAccessor');
+var cacheService = require('./services/cacheService');
 var config = require('../config');
 
 var app = module.exports = loopback();
@@ -42,7 +43,7 @@ app.use(function jwtMiddleware (req, res, next) {
 
 function initializeRedis() {
     'use strict';
-    redisAccessor.initialize([
+    RedisAccessor.initialize([
     {
         name: 'revoked',
         port: config.revokedTokensRedisPort,
@@ -57,21 +58,22 @@ function initializeRedis() {
 
 app.start = function() {
     'use strict';
-  authService.initialize(new Auth0Accessor());
+    authService.initialize(new Auth0Accessor());
     initializeRedis();
-  // start the web server
-  return app.listen(function() {
-    app.emit('started');
-    console.log('Web server listening at: %s', app.get('url'));
-  });
+    cacheService.initialize(RedisAccessor);
+    // start the web server
+    return app.listen(function() {
+       app.emit('started');
+       console.log('Web server listening at: %s', app.get('url'));
+    });
 };
 
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function(err) {
-  if (err) throw err;
+    if (err) throw err;
 
-  // start the server if `$ node server.js`
-  if (require.main === module)
-    app.start();
+    // start the server if `$ node server.js`
+   if (require.main === module)
+      app.start();
 });
