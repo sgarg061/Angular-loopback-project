@@ -12,7 +12,7 @@ const SOLINK_USER_PASSWORD = 'test';
 
 before(function(done) {
   sampleData(app, function() {
-    app.start();
+    app.initializeRedis();
     done();
   });
 });

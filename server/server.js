@@ -39,7 +39,7 @@ app.use(function jwtMiddleware (req, res, next) {
     }
 });
 
-function initializeRedis() {
+app.initializeRedis = function() {
     'use strict';
     redisAccessor.initialize([
     {
@@ -52,11 +52,11 @@ function initializeRedis() {
         port: config.validatedTokensRedisPort,
         address: config.validatedTokensRedisLocation
     }]);
-}
+};
 
 app.start = function() {
     'use strict';
-    initializeRedis();
+    app.initializeRedis();
   // start the web server
   return app.listen(function() {
     app.emit('started');
