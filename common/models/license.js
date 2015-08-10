@@ -1,3 +1,4 @@
+// TODO: Add create method.  Limit acl to solink users.  Add remote hook to remove everything except for tenant ID
 module.exports = function(License) {
     'use strict';
     License.activate = function (key, cb) {

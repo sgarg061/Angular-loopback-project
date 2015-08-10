@@ -19,6 +19,7 @@
     "loopback-connector-es": "^1.0.0",
     "loopback-datasource-juggler": "^2.19.0",
     "node-uuid": "^1.4.3",
+    "rand-token": "^0.2.1",
     "redis": "^0.12.1",
     "request": "^2.60.0",
     "serve-favicon": "^2.0.1"
