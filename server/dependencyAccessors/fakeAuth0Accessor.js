@@ -28,7 +28,7 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
         }
     };
     cb(null, JSON.stringify(response));
-}
+};
 
 function createValidToken (userType) {
     var payload = {

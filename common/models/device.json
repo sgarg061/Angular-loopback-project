@@ -35,6 +35,30 @@
       "type": "geopoint",
       "required": false
     },
+    "osVersion": {
+      "type": "string",
+      "required": false
+    },
+    "softwareVersion": {
+      "type": "string",
+      "required": false
+    },
+    "model": {
+      "type": "string",
+      "required": false
+    },
+    "modelName": {
+      "type": "string",
+      "required": false
+    },
+    "deviceCapacity": {
+      "type": "number",
+      "required": false
+    },
+    "availableCapacity": {
+      "type": "number",
+      "required": false
+    },
     "customerId": {
       "type": "string",
       "required": true,
