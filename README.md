@@ -40,6 +40,16 @@ Creating sample data
 
 	node create-sample-data.js
 
+## Interactive Console
+
+The application can be run as an interactive console in order to test out code with the app context loaded or to query server data. To run the console, execute: 
+
+	node . --console
+	
+Information about the context will be printed out and you'll be able to write code interactively. For example, try:
+
+	Cloud.find({}, function(err, res) { console.log(res); });
+
 ## Testing
 
 To run the REST API test suite, execute:
