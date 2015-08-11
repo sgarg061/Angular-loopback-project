@@ -15,13 +15,18 @@ module.exports = function(Device) {
             {arg: 'id', type: 'string'},
             {arg: 'data', type: 'object'}
         ],
-        returns: {arg: 'result', type: 'string'},
-        http: {path: '/:id/checkin', verb: 'post'}
+        returns: {root: true},
+        http: {path: '/:id/checkin', verb: 'post', status: 200, errorStatus: 500}
     });
 
     Device.observe('access', function limitToTenant(ctx, next) {
         var context = loopback.getCurrentContext();
         var tenantId = 0;
+
+        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+            return next();
+        }
+
         if (context && context.get('jwt') && context.get('jwt').tenantId) {
             tenantId = context.get('jwt').tenantId;
         }
@@ -41,7 +46,7 @@ module.exports = function(Device) {
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
 
-        Device.find({where: {id: id}}, function(err, res) {
+        Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
             
             var error; 
 
@@ -99,7 +104,38 @@ module.exports = function(Device) {
             updateDeviceComponent('POS', posConnectors[i], device.id);
         }
 
-        cb(null, 'Checkin Successful');
+        generateConfigurationResponse(device, cb);
+    }
+
+
+    function generateConfigurationResponse(device, cb) {
+        var errorPrefix = 'Configuration parameters unavailable:';
+        
+        var customer = device.customer();
+        if (!customer) {
+            return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
+        }
+
+        Device.app.models['Reseller'].findOne({where: {id: customer.resellerId}, include: 'cloud'}, function(err, reseller) {
+            if (err) {
+                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+            }
+            
+            var cloud = reseller.cloud();
+            if (!cloud) {
+                return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+            }
+            
+            var result = {
+                serverUrl: cloud.serverUrl,
+                imageServerUrl: cloud.imageServerUrl,
+                signallingServerUrl: cloud.signallingServerUrl,
+                updateUrl: cloud.updateUrl,
+                checkinInterval: cloud.checkinInterval
+            };
+
+            cb(null, result);
+        });
     }
 
     // Update a device's attached components. A component can be a Camera or POS.

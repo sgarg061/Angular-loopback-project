@@ -25,7 +25,7 @@
   "relations": {
     "cloud": {
       "type": "belongsTo",
-      "model": "cloud"
+      "model": "Cloud"
     },
     "customers": {
       "type": "hasMany",

@@ -194,7 +194,14 @@ describe('REST', function() {
           .send({data: deviceCheckinData})
           .expect(200)
           .end(function(err, res) {
-             if (err) throw err;
+            if (err) throw err;
+
+            assert(res.body.serverUrl, 'must have a serverUrl');
+            assert(res.body.imageServerUrl, 'must have a imageServerUrl');
+            assert(res.body.signallingServerUrl, 'must have a signallingServerUrl');
+            assert(res.body.updateUrl, 'must have a updateUrl');
+            assert(res.body.checkinInterval, 'must have a checkinInterval');
+
             done();
           });
       });

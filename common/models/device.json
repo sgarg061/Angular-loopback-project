@@ -67,6 +67,11 @@
   },
   "validations": [],
   "relations": {
+    "customer": {
+      "type": "belongsTo",
+      "model": "Customer",
+      "foreignKey": ""
+    },
     "cameras": {
       "type": "hasMany",
       "model": "Camera",

@@ -23,6 +23,10 @@
   },
   "validations": [],
   "relations": {
+    "reseller": {
+      "type": "belongsTo",
+      "model": "Reseller"
+    },
     "locations": {
       "type": "hasMany",
       "model": "Device",
