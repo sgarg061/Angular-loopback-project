@@ -1,3 +1,4 @@
+var logger = require('../server/logger');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var config = require('../config');
@@ -50,7 +51,7 @@ function addValidToken(token, tokenExp, currentTime, cb) {
     var validatedClient = redisAccessor.getConnection('validated').client;
     validatedClient.exists(token, function (err, reply) {
         if (err) {
-            console.log(err);
+            logger.error(err);
             var e = new Error('Error validating token');
             e.statusCode = 500;
             cb(e, 'Error validating token');

@@ -1,3 +1,4 @@
+var logger = require('./logger');
 var redis = require('redis');
 
 var redisConnections = {};
@@ -7,15 +8,15 @@ var RedisConnection = function (name, port, address) {
     this.name = name;
     this.port = port;
     this.address = address;
-    console.log('Creating connection ' + name + ' at ' + address + ':' + port);
+    logger.debug('Creating connection ' + name + ' at ' + address + ':' + port);
     this.client = redis.createClient(port, address, {});
 
     this.client.on('error', function (error) {
-        console.log('WARNING: Unable to create redis connection ' + name + ': ' + error);
+        logger.error('WARNING: Unable to create redis connection ' + name + ': ' + error);
     });
 
     this.client.on('connect', function () {
-        console.log('Connection established: ' + name);
+        logger.debug('Connection established: ' + name);
     });
 };
 

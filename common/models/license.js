@@ -1,7 +1,9 @@
+var logger = require('../../server/logger');
+
 module.exports = function(License) {
     'use strict';
     License.activate = function (key, cb) {
-        console.log('Activating license key ' + key);
+        logger.info('Activating license key ' + key);
         activateLicense(License, key, cb);
     };
 
@@ -45,7 +47,7 @@ function performActivationTasks (License, licenseInstance, cb) {
         activationDate: new Date()
     }, function createDevice (err, res) {
         if (err) {
-            console.log('Error updating attribute' + err);
+            logger.error('Error updating attribute' + err);
         } else {
             // now, create a device to use this activated license
             var Device = License.app.models.Device;
@@ -58,7 +60,7 @@ function performActivationTasks (License, licenseInstance, cb) {
                     // This puts us in a bad state.
                     // Activation flag is enabled, but device might not be created...
                     // re-set activation flag
-                    console.log('WARNING: Unable to create device: ' + err);
+                    logger.error('WARNING: Unable to create device: ' + err);
                     licenseInstance.updateAttributes({
                         activated: false
                     }, function returnFromError (err, res) {
