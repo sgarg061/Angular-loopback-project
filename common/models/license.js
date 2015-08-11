@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var authService = require('../../server/services/authService');
+var loopback = require('loopback');
 
 // TODO: Add create method.  Limit acl to solink users.  Add remote hook to remove everything except for tenant ID
 module.exports = function (License) {
@@ -10,10 +11,15 @@ module.exports = function (License) {
     };
 
     License.beforeCreate = function (next, modelInstance) {
-        modelInstance.username = null;
-        modelInstance.password = null;
-        modelInstance.activated = false;
-        modelInstance.key = false;
+        var ctx = loopback.getCurrentContext();
+        // filter out these values if they are coming from an authenticated API request.
+        // Otherwise, the request must be a back-end call where we want more control
+        if (ctx && ctx.get('jwt')) {
+            modelInstance.username = null;
+            modelInstance.password = null;
+            modelInstance.activated = false;
+            modelInstance.key = false;
+        } 
         next();
     };
 
@@ -39,14 +45,17 @@ function addUniqueLicense(License, license, next) {
         source: crypto.randomBytes
     });
 
-    var licenseKey = randToken.generate(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+    var licenseKey = license.key;
+    if (!licenseKey) {
+        licenseKey = randToken.generate(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+    }
 
     License.find({where: {key: licenseKey}}, function checkIfLicenseExists(err, res) {
         if (err) {
             console.log('Error while checking if license exists: ' + err);
             next(err);
         } else {
-            if (res.length > 0) {
+            if (res.length > 0 && !license.key) {
                 console.log('WARNING: license already exists');
                 addUniqueLicense(License, license, next);
             } else {
@@ -62,27 +71,20 @@ function addUniqueLicense(License, license, next) {
                     } else {
                         var deviceId = res.id;
                         // device is created, now create corresponding user
-                        var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, "") + '@solinkcorp.com';
+                        var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
                         var password = randToken.generate(16);
-                        console.log('username: ' + username);
                         authService.createUser(username, password, function (err, res) {
-                            console.log('create user has called back!');
-                            console.log('err: ' + err);
-                            console.log('res: ' + res);
                             if (err) {
                                 console.log('Error while creating user: ' + err);
                                 next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK
                             } else {
                                 // device is created, now just update the attributes.
-                                console.log('device id: ' + deviceId);
                                 license.updateAttributes({
                                     key: licenseKey,
                                     username: username,
                                     password: password,
                                     deviceId: deviceId
                                 }, function (err, instance) {
-                                    console.log('instance time:');
-                                    console.log(instance);
                                     if (err) {
                                         console.log('error updating license! ' + err);
                                         next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK

@@ -45,7 +45,6 @@ module.exports = function(Device) {
 
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
-
         Device.find({where: {id: id}}, function(err, res) {
             
             var error; 

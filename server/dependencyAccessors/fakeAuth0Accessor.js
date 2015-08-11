@@ -30,6 +30,12 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
     cb(null, JSON.stringify(response));
 };
 
+
+FakeAuth0Accessor.prototype.createUser = function (email, password, cb) {
+    'use strict';
+    cb(null, '');
+};
+
 function createValidToken (userType) {
     var payload = {
         email: 'cwhiten@solinkcorp.com',

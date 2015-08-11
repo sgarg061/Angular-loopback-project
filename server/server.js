@@ -55,7 +55,7 @@ function initializeRedis() {
         port: config.validatedTokensRedisPort,
         address: config.validatedTokensRedisLocation
     }]);
-};
+}
 
 app.start = function() {
     'use strict';

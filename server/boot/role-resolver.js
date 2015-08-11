@@ -13,6 +13,7 @@ module.exports = function (app) {
         }
 
         tokenValidator.validateToken(jwt.token, function (err, msg) {
+            console.log('validation error: ' + err);
             return cb(null, !err); // if no err, we are happy.
         });
     });

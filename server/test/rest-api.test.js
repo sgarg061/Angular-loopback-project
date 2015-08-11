@@ -15,9 +15,7 @@ const SOLINK_USER_USERNAME = 'cwhiten+1@solinkcorp.com';
 const SOLINK_USER_PASSWORD = 'test';
 
 before(function(done) {
-  sampleData(app, function() {
     authService.initialize(new AuthAccessor());
-
     RedisAccessor.initialize([
     {
         name: 'revoked',
@@ -25,14 +23,16 @@ before(function(done) {
         address: config.revokedTokensRedisLocation
     },
     {
-        name: 'validated',
-        port: config.validatedTokensRedisPort,
-        address: config.validatedTokensRedisLocation
+      name: 'validated',
+      port: config.validatedTokensRedisPort,
+      address: config.validatedTokensRedisLocation
     }]);
 
     cacheService.initialize(RedisAccessor);
-    done();
-  });
+
+    sampleData(app, function() {
+      done();
+    });
 });
 
 function json(verb, url, token) {
@@ -68,8 +68,6 @@ describe('REST', function() {
             .end(function(err, res) {
               if (err) throw err;
               var response = JSON.parse(res.body.response);
-              console.log('response: ');
-              console.log(response);
               assert(typeof response === 'object');
               assert(response.auth_token, 'must have an auth_token');
 
@@ -152,10 +150,13 @@ describe('REST', function() {
       var device;
       it('should activate license and return a new device', function(done) {
         json('post', '/api/licenses/activate', authToken)
-          .send({key: 'MAGN-ETSH-OWDO-THEY-WORK'})
+          .send({key: 'ETSHOWDOTHEYWORK'})
           .expect(200)
           .end(function(err, res) {
-            if (err) throw err;
+            if (err) {
+              console.log('error! ' + err);
+              throw err;
+            }
             device = JSON.parse(res.body);
             assert(device.deviceId, 'must have a deviceId');
             
