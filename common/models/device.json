@@ -67,14 +67,24 @@
   },
   "validations": [],
   "relations": {
+    "customer": {
+      "type": "belongsTo",
+      "model": "Customer",
+      "foreignKey": ""
+    },
     "cameras": {
       "type": "hasMany",
       "model": "Camera",
       "foreignKey": "deviceId"
     },
-    "poss": {
+    "posDevices": {
       "type": "hasMany",
-      "model": "POS",
+      "model": "POSDevice",
+      "foreignKey": "deviceId"
+    },
+    "logEntries": {
+      "type": "hasMany",
+      "model": "DeviceLogEntry",
       "foreignKey": "deviceId"
     }
   },

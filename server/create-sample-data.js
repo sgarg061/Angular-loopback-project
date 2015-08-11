@@ -1,23 +1,23 @@
+var logger = require('./logger');
 var async = require('async');
 var uuid = require('node-uuid');
 
 module.exports = function(app, doneCallback) {
 
   var datastore = app.dataSources.elasticsearch;
-  // var datastore = app.dataSources.mongo;
 
-  console.log('creating sample data...');
+  logger.log('info', 'creating sample data...');
 
   //create all models
   async.auto({
     destroyAll: function(cb) {
-      console.log('destroying all existing data...');
+      logger.debug('destroying all existing data...');
       app.models.Cloud.destroyAll();
       app.models.Reseller.destroyAll();
       app.models.Customer.destroyAll();
       app.models.Device.destroyAll();
       app.models.Camera.destroyAll();
-      app.models.POS.destroyAll();
+      app.models.POSDevice.destroyAll();
       app.models.License.destroyAll();
       cb(null);
     },
@@ -40,7 +40,7 @@ module.exports = function(app, doneCallback) {
       createCameras(cb, results);
     }],
     posConnectors: ['devices', function (cb, results) {
-      createPOSs(cb, results);
+      createPOSDevices(cb, results);
     }],
     result: ['posConnectors', function (cb, results) {
       doneCallback();
@@ -48,10 +48,10 @@ module.exports = function(app, doneCallback) {
   });
 
   function createClouds(cb) {
-    console.log('creating clouds...');
+    logger.debug('creating clouds...');
     datastore.automigrate('Cloud', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Cloud.create([
@@ -72,10 +72,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createResellers(cb, results) {
-    console.log('creating resellers...');
+    logger.debug('creating resellers...');
     datastore.automigrate('Reseller', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Reseller.create([
@@ -87,10 +87,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createCustomers(cb, results) {
-    console.log('creating customers...');
+    logger.debug('creating customers...');
     datastore.automigrate('Customer', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Customer.create([
@@ -102,10 +102,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createDevices(cb, results) {
-    console.log('creating devices...');
+    logger.debug('creating devices...');
     datastore.automigrate('Device', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Device.create([
@@ -117,10 +117,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createCameras(cb, results) {
-    console.log('creating cameras...');
+    logger.debug('creating cameras...');
     datastore.automigrate('Camera', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Camera.create([
@@ -131,26 +131,26 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function createPOSs(cb, results) {
-    console.log('creating POSs...');
-    datastore.automigrate('POS', function(err) {
+  function createPOSDevices(cb, results) {
+    logger.debug('creating POS devices...');
+    datastore.automigrate('POSDevice', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
-      app.models.POS.create([
-        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS 1', status: 'on', deviceId: results.devices[0].id},
-        {posId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', name: 'POS 2', status: 'on', deviceId: results.devices[1].id},
-        {posId: '943fc52b-e378-4dc8-9fff-c94f4990a789', name: 'POS 3', status: 'on', deviceId: results.devices[2].id},
+      app.models.POSDevice.create([
+        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS Device 1', status: 'on', deviceId: results.devices[0].id},
+        {posId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', name: 'POS Device 2', status: 'on', deviceId: results.devices[1].id},
+        {posId: '943fc52b-e378-4dc8-9fff-c94f4990a789', name: 'POS Device 3', status: 'on', deviceId: results.devices[2].id},
       ], cb);
     });
   }
 
   function createLicenses(cb, results) {
-    console.log('creating licenses...');
+    logger.debug('creating licenses...');
     datastore.automigrate('License', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.License.create([
@@ -168,9 +168,9 @@ if (require.main === module) {
   // Run the import
   module.exports(require('./server'), function(err) {
     if (err) {
-      console.error('Cannot import sample data - ', err);
+      logger.error('Cannot import sample data - ', err);
     } else {
-      console.log('Sample data was imported.');
+      logger.info('Sample data was imported.');
       
     }
   });

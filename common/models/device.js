@@ -1,5 +1,7 @@
+var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
+var _ = require('underscore');
 
 module.exports = function(Device) {
     'use strict';
@@ -15,8 +17,8 @@ module.exports = function(Device) {
             {arg: 'id', type: 'string'},
             {arg: 'data', type: 'object'}
         ],
-        returns: {arg: 'result', type: 'string'},
-        http: {path: '/:id/checkin', verb: 'post'}
+        returns: {root: true},
+        http: {path: '/:id/checkin', verb: 'post', status: 200, errorStatus: 500}
     });
 
     Device.observe('access', function limitToTenant(ctx, next) {
@@ -43,9 +45,12 @@ module.exports = function(Device) {
 
     Device.checkin = function (id, data, cb) {
 
+        // before doing anything else, log the checkin data 
+        logCheckin(data);
+
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
-        Device.find({where: {id: id}}, function(err, res) {
+        Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
             
             var error; 
 
@@ -67,6 +72,29 @@ module.exports = function(Device) {
         });
     };
 
+    function logCheckin(data) {
+        var deviceLogEntry = _.clone(data);
+        if (deviceLogEntry.id) {
+            
+            // swap the id for deviceId attribute
+            deviceLogEntry.deviceId = deviceLogEntry.id;
+            delete deviceLogEntry.id;
+
+            // add a timestamp field
+            deviceLogEntry.timestamp = Date.now();
+
+            Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
+                if (err) {
+                    logger.err('Failed to insert logEntry for device checkin: %s', err);
+                } else {
+                    logger.debug('logEntry for device stored successfully');
+                }
+            });
+        } else {
+            logger.error('Unable to checkin: data does not include device id: %s', data);
+        }
+    }
+
     function checkinDevice (device, deviceData, cb) {
         
         // update general metadata about the device
@@ -85,37 +113,67 @@ module.exports = function(Device) {
     }
 
     function updateCameras (device, deviceData, cb) {
-        console.log('updating cameras');
+        logger.debug('updating cameras');
         var cameras = deviceData.cameraInformation;
 
         for (var i=0; i<cameras.length; i++) {
-            updateDeviceComponent('Camera', cameras[i], device.id);
+            updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
         }
 
-        updatePOSConnectors(device, deviceData, cb);
+        updatePOSDevices(device, deviceData, cb);
     }
 
-    function updatePOSConnectors (device, deviceData, cb) {
-        console.log('updating pos connectors');
-        var posConnectors = deviceData.posInformation;
+    function updatePOSDevices (device, deviceData, cb) {
+        logger.debug('updating pos devices');
+        var posDevices = deviceData.posInformation;
 
-        for (var i=0; i<posConnectors.length; i++) {
-            updateDeviceComponent('POS', posConnectors[i], device.id);
+        for (var i=0; i<posDevices.length; i++) {
+            updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
         }
 
-        cb(null, 'Checkin Successful');
+        generateConfigurationResponse(device, cb);
+    }
+
+
+    function generateConfigurationResponse(device, cb) {
+        var errorPrefix = 'Configuration parameters unavailable:';
+        
+        var customer = device.customer();
+        if (!customer) {
+            return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
+        }
+
+        Device.app.models['Reseller'].findOne({where: {id: customer.resellerId}, include: 'cloud'}, function(err, reseller) {
+            if (err) {
+                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+            }
+            
+            var cloud = reseller.cloud();
+            if (!cloud) {
+                return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+            }
+            
+            var result = {
+                serverUrl: cloud.serverUrl,
+                imageServerUrl: cloud.imageServerUrl,
+                signallingServerUrl: cloud.signallingServerUrl,
+                updateUrl: cloud.updateUrl,
+                checkinInterval: cloud.checkinInterval
+            };
+
+            cb(null, result);
+        });
     }
 
     // Update a device's attached components. A component can be a Camera or POS.
-    function updateDeviceComponent (componentType, component, deviceId) {
+    function updateDeviceComponent (componentType, component, componentIdName, deviceId) {
         
-        var componentIdName = componentType.toLowerCase() + 'Id';
         var componentId = component[componentIdName];
 
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
         if (!componentId) {
             // TODO: this should go in the customer log
-            console.error('Cannot register %s - missing %s: %s', componentType, componentIdName, JSON.stringify(component));
+            logger.error('Cannot register %s - missing %s: %s', componentType, componentIdName, JSON.stringify(component));
             return;
         }
 
@@ -128,34 +186,34 @@ module.exports = function(Device) {
         Device.app.models[componentType].find({where: where}, function(err, res) {
             if (err) {
                 // TODO: this should go in the customer log
-                console.error('Cannot register %s - Failed while trying to find %s: %s', componentType, componentType, err);        
+                logger.error('Cannot register %s - Failed while trying to find %s: %s', componentType, componentType, err);        
             } else {
                 if (res.length > 1) {
                     // TODO: this should go in the customer log
-                    console.error('Cannot register %s - Found more than one matching %s with %s: %s deviceId: %s', componentType, componentType, componentIdName, componentId, deviceId);
+                    logger.error('Cannot register %s - Found more than one matching %s with %s: %s deviceId: %s', componentType, componentType, componentIdName, componentId, deviceId);
                 } else if (res.length < 1) {
-                    console.log('%s not found - registering %s: %s', componentType, componentType, componentId);
+                    logger.debug('%s not found - registering %s: %s', componentType, componentType, componentId);
                     Device.app.models[componentType].create(component, function(err, res) {
                         if (err) {
-                            console.error('Cannot register %s - Failed while trying to create %s record: %s', componentType, componentType, err);
+                            logger.error('Cannot register %s - Failed while trying to create %s record: %s', componentType, componentType, err);
                         } else {
-                            console.log('%s registered successully: %s', componentType, componentId);
+                            logger.debug('%s registered successully: %s', componentType, componentId);
                         }
                     });
                 } else {
-                    console.log('%s was found. updating attributes: %s', componentType, componentId);
+                    logger.debug('%s was found. updating attributes: %s', componentType, componentId);
                     res[0].updateAttributes(component, function(err, res) {
                         if (err) {
-                            console.error('Cannot register %s - Failed while trying to update %s record: %s', componentType, componentType, err);
+                            logger.error('Cannot register %s - Failed while trying to update %s record: %s', componentType, componentType, err);
                         } else {
-                            console.log('%s updated successully: %s', componentType, componentId);
+                            logger.debug('%s updated successully: %s', componentType, componentId);
                         }
                     });
                 }
             }
         });
 
-        // TODO: consider how to handle cameras and POSs that weren't part of the payload? delete them? 
+        // TODO: consider how to handle cameras and POS devices that weren't part of the payload? delete them? 
         // mark  them as 'offline' or a 'removed' state?
     }
 

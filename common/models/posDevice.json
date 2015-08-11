@@ -1,8 +1,7 @@
 {
-  "name": "POS",
+  "name": "POSDevice",
   "base": "PersistedModel",
   "strict": true,
-  "plural": "POSs",
   "options": {
     "validateUpsert": true,
     "idInjection": true

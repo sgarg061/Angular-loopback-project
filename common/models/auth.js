@@ -1,3 +1,4 @@
+var logger = require('../../server/logger');
 var jwt = require('jsonwebtoken');
 var loopback = require('loopback');
 var tokenValidator = require('../tokenValidator');
@@ -33,13 +34,13 @@ module.exports = function (Auth) {
     Auth.disableRemoteMethod('createChangeStream', true);
 
     Auth.validate = function (token, cb) {
-        console.log('Validating token: ' + token);
-        console.log('validation request has come from solink. validating...');
+        logger.debug('Validating token: ' + token);
+        logger.debug('validation request has come from solink. validating...');
         tokenValidator.validateToken(token, cb);
     };
 
     Auth.login = function (username, password, cb) {
-        console.log('Logging in with creds ' + username + ':' + password);
+        logger.debug('Logging in with username ' + username);
         authService.login(username, password, cb);
     };
 

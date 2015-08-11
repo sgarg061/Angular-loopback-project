@@ -62,7 +62,7 @@
     "$promise": {},
     "$resolved": true
   },
-  "POS": {
+  "POSDevice": {
     "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
@@ -76,6 +76,12 @@
   },
   "Auth": {
     "dataSource": null,
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "DeviceLogEntry": {
+    "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},
     "$resolved": true

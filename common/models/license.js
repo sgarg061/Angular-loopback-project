@@ -1,12 +1,14 @@
 var crypto = require('crypto');
 var authService = require('../../server/services/authService');
+var logger = require('../../server/logger');
+
 var loopback = require('loopback');
 
 // TODO: Add create method.  Limit acl to solink users.  Add remote hook to remove everything except for tenant ID
 module.exports = function (License) {
     'use strict';
     License.activate = function (key, cb) {
-        console.log('Activating license key ' + key);
+        logger.info('Activating license key ' + key);
         activateLicense(License, key, cb);
     };
 
