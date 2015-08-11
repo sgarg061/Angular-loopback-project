@@ -1,3 +1,4 @@
+var logger = require('../../server/logger').system();
 var loopback = require('loopback');
 var uuid = require('node-uuid');
 
@@ -86,7 +87,7 @@ module.exports = function(Device) {
     }
 
     function updateCameras (device, deviceData, cb) {
-        console.log('updating cameras');
+        logger.debug('updating cameras');
         var cameras = deviceData.cameraInformation;
 
         for (var i=0; i<cameras.length; i++) {
@@ -97,7 +98,7 @@ module.exports = function(Device) {
     }
 
     function updatePOSConnectors (device, deviceData, cb) {
-        console.log('updating pos connectors');
+        logger.debug('updating pos connectors');
         var posConnectors = deviceData.posInformation;
 
         for (var i=0; i<posConnectors.length; i++) {
@@ -147,7 +148,7 @@ module.exports = function(Device) {
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
         if (!componentId) {
             // TODO: this should go in the customer log
-            console.error('Cannot register %s - missing %s: %s', componentType, componentIdName, JSON.stringify(component));
+            logger.error('Cannot register %s - missing %s: %s', componentType, componentIdName, JSON.stringify(component));
             return;
         }
 
@@ -160,27 +161,27 @@ module.exports = function(Device) {
         Device.app.models[componentType].find({where: where}, function(err, res) {
             if (err) {
                 // TODO: this should go in the customer log
-                console.error('Cannot register %s - Failed while trying to find %s: %s', componentType, componentType, err);        
+                logger.error('Cannot register %s - Failed while trying to find %s: %s', componentType, componentType, err);        
             } else {
                 if (res.length > 1) {
                     // TODO: this should go in the customer log
-                    console.error('Cannot register %s - Found more than one matching %s with %s: %s deviceId: %s', componentType, componentType, componentIdName, componentId, deviceId);
+                    logger.error('Cannot register %s - Found more than one matching %s with %s: %s deviceId: %s', componentType, componentType, componentIdName, componentId, deviceId);
                 } else if (res.length < 1) {
-                    console.log('%s not found - registering %s: %s', componentType, componentType, componentId);
+                    logger.debug('%s not found - registering %s: %s', componentType, componentType, componentId);
                     Device.app.models[componentType].create(component, function(err, res) {
                         if (err) {
-                            console.error('Cannot register %s - Failed while trying to create %s record: %s', componentType, componentType, err);
+                            logger.error('Cannot register %s - Failed while trying to create %s record: %s', componentType, componentType, err);
                         } else {
-                            console.log('%s registered successully: %s', componentType, componentId);
+                            logger.debug('%s registered successully: %s', componentType, componentId);
                         }
                     });
                 } else {
-                    console.log('%s was found. updating attributes: %s', componentType, componentId);
+                    logger.debug('%s was found. updating attributes: %s', componentType, componentId);
                     res[0].updateAttributes(component, function(err, res) {
                         if (err) {
-                            console.error('Cannot register %s - Failed while trying to update %s record: %s', componentType, componentType, err);
+                            logger.error('Cannot register %s - Failed while trying to update %s record: %s', componentType, componentType, err);
                         } else {
-                            console.log('%s updated successully: %s', componentType, componentId);
+                            logger.debug('%s updated successully: %s', componentType, componentId);
                         }
                     });
                 }

@@ -13,4 +13,16 @@ config.validatedTokensRedisPort = '6379';
 config.revokedTokensRedisLocation = '127.0.0.1';
 config.revokedTokensRedisPort = '6380';
 
+// LOGGING 
+// Note: standard winston log levels include: silly, debug, verbose, info, warn, error
+config.log = {'system': {}, 'customer': {}};
+
+config.log.system.filename = 'call-home-system.log';
+config.log.system.level = 'debug'; 
+config.log.system.label = 'system';
+
+config.log.customer.filename = 'call-home-customer.log';
+config.log.customer.level = 'info'; 
+config.log.customer.label = 'customer';
+
 module.exports = config;

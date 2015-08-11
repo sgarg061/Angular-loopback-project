@@ -1,17 +1,17 @@
+var logger = require('./logger').system();
 var async = require('async');
 var uuid = require('node-uuid');
 
 module.exports = function(app, doneCallback) {
 
   var datastore = app.dataSources.elasticsearch;
-  // var datastore = app.dataSources.mongo;
 
-  console.log('creating sample data...');
+  logger.log('info', 'creating sample data...');
 
   //create all models
   async.auto({
     destroyAll: function(cb) {
-      console.log('destroying all existing data...');
+      logger.debug('destroying all existing data...');
       app.models.Cloud.destroyAll();
       app.models.Reseller.destroyAll();
       app.models.Customer.destroyAll();
@@ -48,10 +48,10 @@ module.exports = function(app, doneCallback) {
   });
 
   function createClouds(cb) {
-    console.log('creating clouds...');
+    logger.debug('creating clouds...');
     datastore.automigrate('Cloud', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Cloud.create([
@@ -72,10 +72,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createResellers(cb, results) {
-    console.log('creating resellers...');
+    logger.debug('creating resellers...');
     datastore.automigrate('Reseller', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Reseller.create([
@@ -87,10 +87,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createCustomers(cb, results) {
-    console.log('creating customers...');
+    logger.debug('creating customers...');
     datastore.automigrate('Customer', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Customer.create([
@@ -102,10 +102,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createDevices(cb, results) {
-    console.log('creating devices...');
+    logger.debug('creating devices...');
     datastore.automigrate('Device', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Device.create([
@@ -117,10 +117,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createCameras(cb, results) {
-    console.log('creating cameras...');
+    logger.debug('creating cameras...');
     datastore.automigrate('Camera', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.Camera.create([
@@ -132,10 +132,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createPOSs(cb, results) {
-    console.log('creating POSs...');
+    logger.debug('creating POSs...');
     datastore.automigrate('POS', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.POS.create([
@@ -147,10 +147,10 @@ module.exports = function(app, doneCallback) {
   }
 
   function createLicenses(cb, results) {
-    console.log('creating licenses...');
+    logger.debug('creating licenses...');
     datastore.automigrate('License', function(err) {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return cb(err);
       }
       app.models.License.create([
@@ -168,9 +168,9 @@ if (require.main === module) {
   // Run the import
   module.exports(require('./server'), function(err) {
     if (err) {
-      console.error('Cannot import sample data - ', err);
+      logger.error('Cannot import sample data - ', err);
     } else {
-      console.log('Sample data was imported.');
+      logger.info('Sample data was imported.');
       
     }
   });
