@@ -118,18 +118,18 @@ module.exports = function(Device) {
         var cameras = deviceData.cameraInformation;
 
         for (var i=0; i<cameras.length; i++) {
-            updateDeviceComponent('Camera', cameras[i], device.id);
+            updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
         }
 
-        updatePOSConnectors(device, deviceData, cb);
+        updatePOSDevices(device, deviceData, cb);
     }
 
-    function updatePOSConnectors (device, deviceData, cb) {
-        logger.debug('updating pos connectors');
-        var posConnectors = deviceData.posInformation;
+    function updatePOSDevices (device, deviceData, cb) {
+        logger.debug('updating pos devices');
+        var posDevices = deviceData.posInformation;
 
-        for (var i=0; i<posConnectors.length; i++) {
-            updateDeviceComponent('POS', posConnectors[i], device.id);
+        for (var i=0; i<posDevices.length; i++) {
+            updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
         }
 
         generateConfigurationResponse(device, cb);
@@ -167,9 +167,8 @@ module.exports = function(Device) {
     }
 
     // Update a device's attached components. A component can be a Camera or POS.
-    function updateDeviceComponent (componentType, component, deviceId) {
+    function updateDeviceComponent (componentType, component, componentIdName, deviceId) {
         
-        var componentIdName = componentType.toLowerCase() + 'Id';
         var componentId = component[componentIdName];
 
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
@@ -215,7 +214,7 @@ module.exports = function(Device) {
             }
         });
 
-        // TODO: consider how to handle cameras and POSs that weren't part of the payload? delete them? 
+        // TODO: consider how to handle cameras and POS devices that weren't part of the payload? delete them? 
         // mark  them as 'offline' or a 'removed' state?
     }
 

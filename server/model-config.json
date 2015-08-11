@@ -62,7 +62,7 @@
     "$promise": {},
     "$resolved": true
   },
-  "POS": {
+  "POSDevice": {
     "dataSource": "elasticsearch",
     "public": true,
     "$promise": {},

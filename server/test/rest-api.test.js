@@ -206,15 +206,15 @@ describe('REST', function() {
           });
       });
 
-      it('device, cameras, POSs and deviceLogEntry should have been created after initial checkin', function(done) {
-        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=poss&filter[include]=logEntries', authToken)
+      it('device, cameras, POS devices and deviceLogEntry should have been created after initial checkin', function(done) {
+        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', authToken)
           .send({})
           .expect(200)
           .end(function(err, res) {
             if (err) throw err;
             assert(typeof res.body === 'object');
             assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
-            assert.equal(res.body.poss.length, 1,'must have 1 POS associated');
+            assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
             assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
 
             done();
@@ -239,14 +239,14 @@ describe('REST', function() {
       });
 
       it('device, cameras and POS count should remain the same after subsequent checkin but new record values should be reflected', function(done) {
-        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=poss', authToken)
+        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices', authToken)
           .send({})
           .expect(200)
           .end(function(err, res) {
             if (err) throw err;
             assert(typeof res.body === 'object');
             assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
-            assert.equal(res.body.poss.length, 1,'must have 1 POS associated');
+            assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
             assert.equal(res.body.cameras[1].status, 'offline', 'camera 2 status must be offline');
 
             done();

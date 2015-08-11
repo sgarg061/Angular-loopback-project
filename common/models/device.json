@@ -77,9 +77,9 @@
       "model": "Camera",
       "foreignKey": "deviceId"
     },
-    "poss": {
+    "posDevices": {
       "type": "hasMany",
-      "model": "POS",
+      "model": "POSDevice",
       "foreignKey": "deviceId"
     },
     "logEntries": {

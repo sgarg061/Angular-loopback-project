@@ -17,7 +17,7 @@ module.exports = function(app, doneCallback) {
       app.models.Customer.destroyAll();
       app.models.Device.destroyAll();
       app.models.Camera.destroyAll();
-      app.models.POS.destroyAll();
+      app.models.POSDevice.destroyAll();
       app.models.License.destroyAll();
       cb(null);
     },
@@ -40,7 +40,7 @@ module.exports = function(app, doneCallback) {
       createCameras(cb, results);
     }],
     posConnectors: ['devices', function (cb, results) {
-      createPOSs(cb, results);
+      createPOSDevices(cb, results);
     }],
     result: ['posConnectors', function (cb, results) {
       doneCallback();
@@ -131,17 +131,17 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function createPOSs(cb, results) {
-    logger.debug('creating POSs...');
-    datastore.automigrate('POS', function(err) {
+  function createPOSDevices(cb, results) {
+    logger.debug('creating POS devices...');
+    datastore.automigrate('POSDevice', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
       }
-      app.models.POS.create([
-        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS 1', status: 'on', deviceId: results.devices[0].id},
-        {posId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', name: 'POS 2', status: 'on', deviceId: results.devices[1].id},
-        {posId: '943fc52b-e378-4dc8-9fff-c94f4990a789', name: 'POS 3', status: 'on', deviceId: results.devices[2].id},
+      app.models.POSDevice.create([
+        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS Device 1', status: 'on', deviceId: results.devices[0].id},
+        {posId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', name: 'POS Device 2', status: 'on', deviceId: results.devices[1].id},
+        {posId: '943fc52b-e378-4dc8-9fff-c94f4990a789', name: 'POS Device 3', status: 'on', deviceId: results.devices[2].id},
       ], cb);
     });
   }
