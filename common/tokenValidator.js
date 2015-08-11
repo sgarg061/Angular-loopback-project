@@ -19,7 +19,6 @@ module.exports = {
 
                 // ensure the token isn't revoked
                 var revokedClient = cacheService.getCacheClient('revoked');
-                //var revokedClient = redisAccessor.getConnection('revoked').client;
                 var hashed_token = crypto.createHash('md5').update(token).digest('hex');
                 revokedClient.exists(hashed_token, function (err, reply) {
                     if (err) {
@@ -49,7 +48,6 @@ module.exports = {
 function addValidToken(token, tokenExp, currentTime, cb) {
     'use strict';
     var validatedClient = cacheService.getCacheClient('validated');
-    //var validatedClient = redisAccessor.getConnection('validated').client;
     validatedClient.exists(token, function (err, reply) {
         if (err) {
             console.log(err);

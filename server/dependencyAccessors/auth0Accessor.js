@@ -31,6 +31,37 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
     });
 };
 
+Auth0Accessor.prototype.createUser = function (email, password, cb) {
+    'use strict';
+    request({
+        url: config.auth0URL + '/api/v2/users',
+        method: 'POST',
+        form: {
+            email: email,
+            password: password,
+            connection: 'Username-Password-Authentication',
+            app_metadata: {
+                tenant_id: 15,
+                user_type: 'solink'
+            }
+        },
+        auth: {
+            bearer: config.createUserToken
+        }
+    }, function (error, response, body) {
+        if (error) {
+            cb(error, '');
+        } else if (response.statusCode !== 201) {
+            console.log(body);
+            var e = new Error('Unable to create user');
+            e.statusCode = response.statusCode;
+            cb(e, '');
+        } else {
+            cb(null, body);
+        }
+    });
+};
+
 function authenticateWithAWS(token, cb) {
     'use strict';
     request({

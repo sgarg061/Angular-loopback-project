@@ -13,24 +13,21 @@
     },
     "key": {
       "type": "string",
-      "required": true,
       "index": true
     },
     "username": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "password": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "customerId": {
       "type": "string",
-      "index": true
+      "index": true,
+      "required": true
     },
     "activated": {
       "type": "boolean",
-      "required": true,
       "index": true
     },
     "activationDate": {
@@ -38,6 +35,13 @@
     }
   },
   "validations": [],
+  "relations": {
+    "device": {
+      "type": "belongsTo",
+      "model": "Device",
+      "foreignKey": "id"
+    }
+  },
   "acls": [],
   "methods": []
 }
