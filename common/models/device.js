@@ -1,7 +1,7 @@
-var logger = require('../../server/logger').system();
-var customerLogger = require('../../server/logger').customer();
+var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
+var _ = require('underscore');
 
 module.exports = function(Device) {
     'use strict';
@@ -45,7 +45,8 @@ module.exports = function(Device) {
 
     Device.checkin = function (id, data, cb) {
 
-        customerLogger.info('checkin', data);
+        // before doing anything else, log the checkin data 
+        logCheckin(data);
 
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
@@ -71,6 +72,29 @@ module.exports = function(Device) {
             }
         });
     };
+
+    function logCheckin(data) {
+        var deviceLogEntry = _.clone(data);
+        if (deviceLogEntry.id) {
+            
+            // swap the id for deviceId attribute
+            deviceLogEntry.deviceId = deviceLogEntry.id;
+            delete deviceLogEntry.id;
+
+            // add a timestamp field
+            deviceLogEntry.timestamp = Date.now();
+
+            Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
+                if (err) {
+                    logger.err('Failed to insert logEntry for device checkin: %s', err);
+                } else {
+                    logger.debug('logEntry for device stored successfully');
+                }
+            });
+        } else {
+            logger.error('Unable to checkin: data does not include device id: %s', data);
+        }
+    }
 
     function checkinDevice (device, deviceData, cb) {
         

@@ -50,6 +50,14 @@ Information about the context will be printed out and you'll be able to write co
 
 	Cloud.find({}, function(err, res) { console.log(res); });
 
+## Logging
+
+The Call Home Server uses Winston as an asynchronous logging framework. Multiple transports are used for logging to support writing to the console in development as well as the file system and or a distributed logging service in production.
+
+Logging can be configured by changing parameters in the [config.js](config.js) file. Note that this file only includes a handful of the available configuration settings. Logging transport can be further adjusted by adding to the configuration json in the [server/logger.js](server/logger.js) file.
+
+See [https://github.com/winstonjs/winston](https://github.com/winstonjs/winston) for full configuration details.
+
 ## Testing
 
 To run the REST API test suite, execute:

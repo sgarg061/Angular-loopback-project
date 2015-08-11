@@ -1,4 +1,4 @@
-var logger = require('./logger').system();
+var logger = require('./logger');
 var async = require('async');
 var uuid = require('node-uuid');
 

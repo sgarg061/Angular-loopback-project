@@ -206,8 +206,8 @@ describe('REST', function() {
           });
       });
 
-      it('device, cameras and POSs should have been created after initial checkin', function(done) {
-        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=poss', authToken)
+      it('device, cameras, POSs and deviceLogEntry should have been created after initial checkin', function(done) {
+        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=poss&filter[include]=logEntries', authToken)
           .send({})
           .expect(200)
           .end(function(err, res) {
@@ -215,7 +215,8 @@ describe('REST', function() {
             assert(typeof res.body === 'object');
             assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
             assert.equal(res.body.poss.length, 1,'must have 1 POS associated');
-            
+            assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+
             done();
           });
       });

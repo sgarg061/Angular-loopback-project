@@ -81,6 +81,11 @@
       "type": "hasMany",
       "model": "POS",
       "foreignKey": "deviceId"
+    },
+    "logEntries": {
+      "type": "hasMany",
+      "model": "DeviceLogEntry",
+      "foreignKey": "deviceId"
     }
   },
   "acls": [

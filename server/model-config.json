@@ -79,5 +79,11 @@
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "DeviceLogEntry": {
+    "dataSource": "elasticsearch",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }
