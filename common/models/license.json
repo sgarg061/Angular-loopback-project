@@ -39,7 +39,7 @@
     "device": {
       "type": "belongsTo",
       "model": "Device",
-      "foreignKey": "id"
+      "foreignKey": "deviceId"
     }
   },
   "acls": [],

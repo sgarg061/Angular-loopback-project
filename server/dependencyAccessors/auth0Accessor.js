@@ -49,6 +49,7 @@ Auth0Accessor.prototype.createUser = function (email, password, cb) {
             bearer: config.createUserToken
         }
     }, function (error, response, body) {
+        console.log('user creation!');
         if (error) {
             cb(error, '');
         } else if (response.statusCode !== 201) {

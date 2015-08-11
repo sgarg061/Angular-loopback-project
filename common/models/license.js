@@ -65,7 +65,7 @@ function addUniqueLicense(License, license, next) {
                         var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, "") + '@solinkcorp.com';
                         var password = randToken.generate(16);
                         console.log('username: ' + username);
-                        authService.createUser(username, username, password, function (err, res) {
+                        authService.createUser(username, password, function (err, res) {
                             console.log('create user has called back!');
                             console.log('err: ' + err);
                             console.log('res: ' + res);
@@ -74,12 +74,15 @@ function addUniqueLicense(License, license, next) {
                                 next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK
                             } else {
                                 // device is created, now just update the attributes.
+                                console.log('device id: ' + deviceId);
                                 license.updateAttributes({
                                     key: licenseKey,
                                     username: username,
                                     password: password,
-                                    device: deviceId
+                                    deviceId: deviceId
                                 }, function (err, instance) {
+                                    console.log('instance time:');
+                                    console.log(instance);
                                     if (err) {
                                         console.log('error updating license! ' + err);
                                         next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK
@@ -124,44 +127,13 @@ function performActivationTasks(License, licenseInstance, cb) {
     licenseInstance.updateAttributes({
         activated: true,
         activationDate: new Date()
-    }, function createDevice(err, res) {
-        if (err) {
-            console.log('Error updating attribute' + err);
-        } else {
-            // now, create a device to use this activated license
-            var Device = License.app.models.Device;
-            Device.create({
-                name: 'Activated Device',
-                customerId: licenseInstance.customerId
-            }, function sendResponse(err, res) {
-                if (err) {
-                    // An error here would be bad.
-                    // This puts us in a bad state.
-                    // Activation flag is enabled, but device might not be created...
-                    // re-set activation flag
-                    console.log('WARNING: Unable to create device: ' + err);
-                    licenseInstance.updateAttributes({
-                        activated: false
-                    }, function returnFromError(err, res) {
-                        if (err) {
-                            // Device not created AND error re-setting activation flag.  This is a bad case.
-                            cb(new Error('Error creating device.  Check that the activation is set correctly.'), 'Error creating device');
-                        } else {
-                            // Device not created, but we successfully reset the activation flag.
-                            cb(new Error('Error creating device.'), 'Error creating device');
-                        }
-                    });
-                } else {
-                    var deviceId = res.id;
-                    var response = {
-                        username: licenseInstance.username,
-                        password: licenseInstance.password,
-                        deviceId: deviceId
-                    };
+    }, function sendActivationResponse(err, res) {
+        var response = {
+            username: licenseInstance.username,
+            password: licenseInstance.password,
+            deviceId: licenseInstance.deviceId
+        };
 
-                    cb(null, JSON.stringify(response));
-                }
-            });
-        }
+        cb(null, JSON.stringify(response));
     });
 }
