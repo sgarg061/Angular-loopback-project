@@ -15,14 +15,19 @@ config.revokedTokensRedisPort = '6380';
 
 // LOGGING 
 // Note: standard winston log levels include: silly, debug, verbose, info, warn, error
-config.log = {'system': {}, 'customer': {}};
+config.log = {'system': {'console': {}, 'file': {}}, 'customer': {'console': {}, 'file': {}}};
 
-config.log.system.filename = 'call-home-system.log';
-config.log.system.level = 'debug'; 
-config.log.system.label = 'system';
+config.log.system.console.colorize = true;
+config.log.system.console.level = 'debug'; 
+config.log.system.console.label = 'system';
+config.log.system.file.filename = 'call-home-system.log';
+config.log.system.file.level = 'debug'; 
 
-config.log.customer.filename = 'call-home-customer.log';
-config.log.customer.level = 'info'; 
-config.log.customer.label = 'customer';
+config.log.customer.console.colorize = true;
+config.log.customer.console.level = 'warn';
+config.log.customer.console.label = 'customer';
+config.log.customer.file.filename = 'call-home-customer.log';
+config.log.customer.file.level = 'info'; 
+
 
 module.exports = config;
