@@ -1,4 +1,5 @@
 var logger = require('../../server/logger').system();
+var customerLogger = require('../../server/logger').customer();
 var loopback = require('loopback');
 var uuid = require('node-uuid');
 
@@ -43,6 +44,8 @@ module.exports = function(Device) {
     });
 
     Device.checkin = function (id, data, cb) {
+
+        customerLogger.info('checkin', data);
 
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
