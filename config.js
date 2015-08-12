@@ -7,6 +7,7 @@ config.auth0AWSRole = 'arn:aws:iam::150303506660:role/s3-access-by-tenant';
 config.auth0AWSPrincipal = 'arn:aws:iam::150303506660:saml-provider/auth0-provider';
 
 config.jwtSecret = 'IkZnJr_T0M4I9bfNM-LBIITtJrWw1YoQrSe0FNWaOodRH6TJ5L3qig0NDKS_B4yi';
+config.createUserToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJwcHRsUENjQVFUSlVVOE5Eb05YNTlYUDlScXQ1cEpteiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQzOTIzNjMzNSwianRpIjoiMTAwMGQ1MzVjYTAzMzY0YTNhYTFlZWVlNTY0MjYxY2UifQ._eDHftt98ozdqy9Z9d9-NITVQOEBAplRAjN2EvrZ9po';
 
 config.validatedTokensRedisLocation = '127.0.0.1';
 config.validatedTokensRedisPort = '6379';

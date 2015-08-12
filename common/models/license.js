@@ -1,17 +1,47 @@
+var crypto = require('crypto');
+var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
 
-module.exports = function(License) {
+var loopback = require('loopback');
+
+module.exports = function (License) {
     'use strict';
     License.activate = function (key, cb) {
         logger.info('Activating license key ' + key);
         activateLicense(License, key, cb);
     };
 
+    License.observe('before save', function clearLicense(ctx, next) {
+        if (ctx.isNewInstance) {
+            var loopbackContext = loopback.getCurrentContext();
+            // filter out these values if they are coming from an authenticated API request.
+            // Otherwise, the request must be a back-end call where we want more control
+            if (loopbackContext && loopbackContext.get('jwt')) {
+                ctx.instance.username = null;
+                ctx.instance.password = null;
+                ctx.instance.activated = false;
+                ctx.instance.key = null;
+            } 
+            next();
+        } else {
+            // if we want to do something before license updates, do it here.
+            next();
+        }
+    });
+
+    License.observe('after save', function (ctx, next) {
+        if (ctx.isNewInstance) {
+            addUniqueLicense(License, ctx.instance, next);
+        } else {
+            next();
+        }
+    });
+
     License.remoteMethod(
         'activate',
         {
             accepts: [
-                {arg: 'key', type: 'string'},
+                {arg: 'key', type: 'string'}
             ],
             http: {verb: 'post', status: 200, errorStatus: 500},
             returns: {arg: 'device', root: true}
@@ -19,15 +49,80 @@ module.exports = function(License) {
     );
 };
 
-function activateLicense (License, key, cb) {
-    License.find({where: {key: key}}, function activateLicense (err, res) {
+function addUniqueLicense(License, license, next) {
+    'use strict';
+    var randToken = require('rand-token').generator({
+        source: crypto.randomBytes
+    });
+
+    var licenseKey = license.key;
+    if (!licenseKey) {
+        licenseKey = randToken.generate(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+    }
+
+    License.find({where: {key: licenseKey}}, function checkIfLicenseExists(err, res) {
+        if (err) {
+            console.log('Error while checking if license exists: ' + err);
+            next(err);
+        } else {
+            if (res.length > 0 && !license.key) {
+                console.log('WARNING: license already exists');
+                addUniqueLicense(License, license, next);
+            } else {
+                // the license is unique.
+                var Device = License.app.models.Device;
+                Device.create({
+                    name: 'Unactivated Device',
+                    customerId: license.customerId
+                }, function sendResponse(err, res) {
+                    if (err) {
+                        console.log('WARNING: Unable to create device: ' + err);
+                        next(err);
+                    } else {
+                        var deviceId = res.id;
+                        // device is created, now create corresponding user
+                        var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
+                        var password = randToken.generate(16);
+                        authService.createUser(username, password, function (err, res) {
+                            if (err) {
+                                console.log('Error while creating user: ' + err);
+                                next(err);
+                            } else {
+                                // device is created, now just update the attributes.
+                                license.updateAttributes({
+                                    key: licenseKey,
+                                    username: username,
+                                    password: password,
+                                    deviceId: deviceId
+                                }, function (err, instance) {
+                                    if (err) {
+                                        console.log('error updating license! ' + err);
+                                        next(err);
+                                    } else {
+                                        next();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
+function activateLicense(License, key, cb) {
+    'use strict';
+    License.find({where: {key: key}}, function activateLicense(err, res) {
         if (err) {
             cb(new Error('Error while retrieving license for activation'), 'Error while retrieving license for activation');
         } else {
             if (res.length > 1) {
                 cb(new Error('Duplicate licenses'), 'Duplicate licences found');
             } else if (res.length < 1) {
-                cb(new Error('No license found'), 'No license found');
+                var e = new Error('Invalid license.');
+                e.statusCode = 400;
+                cb(e, 'No license found');
             } else {
                 var license = res[0];
                 if (license.activated) {
@@ -41,48 +136,18 @@ function activateLicense (License, key, cb) {
     });
 }
 
-function performActivationTasks (License, licenseInstance, cb) {
+function performActivationTasks(License, licenseInstance, cb) {
+    'use strict';
     licenseInstance.updateAttributes({
         activated: true,
         activationDate: new Date()
-    }, function createDevice (err, res) {
-        if (err) {
-            logger.error('Error updating attribute' + err);
-        } else {
-            // now, create a device to use this activated license
-            var Device = License.app.models.Device;
-            Device.create({
-                name: 'Activated Device',
-                customerId: licenseInstance.customerId
-            }, function sendResponse (err, res) {
-                if (err) {
-                    // An error here would be bad.
-                    // This puts us in a bad state.
-                    // Activation flag is enabled, but device might not be created...
-                    // re-set activation flag
-                    logger.error('WARNING: Unable to create device: ' + err);
-                    licenseInstance.updateAttributes({
-                        activated: false
-                    }, function returnFromError (err, res) {
-                        if (err) {
-                            // Device not created AND error re-setting activation flag.  This is a bad case.
-                            cb(new Error('Error creating device.  Check that the activation is set correctly.'), 'Error creating device');
-                        } else {
-                            // Device not created, but we successfully reset the activation flag.
-                            cb(new Error('Error creating device.'), 'Error creating device');
-                        }
-                    });
-                } else {
-                    var deviceId = res.id;
-                    var response = {
-                        username: licenseInstance.username,
-                        password: licenseInstance.password,
-                        deviceId: deviceId
-                    };
+    }, function sendActivationResponse(err, res) {
+        var response = {
+            username: licenseInstance.username,
+            password: licenseInstance.password,
+            deviceId: licenseInstance.deviceId
+        };
 
-                    cb(null, JSON.stringify(response));
-                }
-            });
-        }
+        cb(null, JSON.stringify(response));
     });
 }

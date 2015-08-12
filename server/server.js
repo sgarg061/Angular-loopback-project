@@ -1,7 +1,10 @@
 var loopback = require('loopback');
 var jwt = require('jsonwebtoken');
 var boot = require('loopback-boot');
-var redisAccessor = require('./redisAccessor');
+var Auth0Accessor = require('./dependencyAccessors/auth0Accessor');
+var RedisAccessor = require('./dependencyAccessors/redisAccessor');
+var authService = require('./services/authService');
+var cacheService = require('./services/cacheService');
 var config = require('../config');
 var loopbackConsole = require('loopback-console');
 
@@ -15,7 +18,6 @@ app.use(function jwtMiddleware (req, res, next) {
         if (!authorizationHeader) {
             return next();
         }
-
         var authParts = authorizationHeader.split(' ');
 
         if (authParts.length !== 2) {
@@ -39,9 +41,9 @@ app.use(function jwtMiddleware (req, res, next) {
     }
 });
 
-app.initializeRedis = function() {
+function initializeRedis() {
     'use strict';
-    redisAccessor.initialize([
+    RedisAccessor.initialize([
     {
         name: 'revoked',
         port: config.revokedTokensRedisPort,
@@ -52,24 +54,26 @@ app.initializeRedis = function() {
         port: config.validatedTokensRedisPort,
         address: config.validatedTokensRedisLocation
     }]);
-};
+}
 
 app.start = function() {
     'use strict';
-    app.initializeRedis();
-  // start the web server
-  return app.listen(function() {
-    app.emit('started');
-    console.log('Web server listening at: %s', app.get('url'));
-  });
+    authService.initialize(new Auth0Accessor());
+    initializeRedis();
+    cacheService.initialize(RedisAccessor);
+    // start the web server
+    return app.listen(function() {
+       app.emit('started');
+       console.log('Web server listening at: %s', app.get('url'));
+    });
 };
 
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function(err) {
-  if (err) throw err;
+    if (err) throw err;
 
-  // start the server if `$ node server.js`
+    // start the server if `$ node server.js`
   if (loopbackConsole.activated()) {
   loopbackConsole.start(app,
     // loopback-console config
@@ -78,5 +82,5 @@ boot(app, __dirname, function(err) {
       // ...
     });
 } else if (require.main === module)
-    app.start();
+      app.start();
 });
