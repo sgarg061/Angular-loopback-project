@@ -31,7 +31,7 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
     });
 };
 
-Auth0Accessor.prototype.createUser = function (email, password, cb) {
+Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
     request({
         url: config.auth0URL + '/api/v2/users',
@@ -41,8 +41,10 @@ Auth0Accessor.prototype.createUser = function (email, password, cb) {
             password: password,
             connection: 'Username-Password-Authentication',
             app_metadata: {
-                tenant_id: 15,
-                user_type: 'solink'
+                tenant_id: userData.customerId,
+                reseller_id: userData.resellerId,
+                cloud_id: userData.cloudId,
+                user_type: userData.userType,
             }
         },
         auth: {

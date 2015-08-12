@@ -82,24 +82,35 @@ function addUniqueLicense(License, license, next) {
                         var deviceId = res.id;
                         // device is created, now create corresponding user
                         var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
+                        console.log('username is ' + username);
                         var password = randToken.generate(16);
-                        authService.createUser(username, password, function (err, res) {
+                        License.app.models.Customer.getOwnership(license.customerId, function (err, res) {
                             if (err) {
-                                console.log('Error while creating user: ' + err);
+                                console.log('error getting customer ownership! ' + err);
                                 next(err);
                             } else {
-                                // device is created, now just update the attributes.
-                                license.updateAttributes({
-                                    key: licenseKey,
-                                    username: username,
-                                    password: password,
-                                    deviceId: deviceId
-                                }, function (err, instance) {
+                                var userData = res;
+                                userData.deviceId = deviceId;
+                                userData.usertype = 'connect';
+                                authService.createUser(username, password, userData, function (err, res) {
                                     if (err) {
-                                        console.log('error updating license! ' + err);
+                                        console.log('Error while creating user: ' + err);
                                         next(err);
                                     } else {
-                                        next();
+                                        // device is created, now just update the attributes.
+                                        license.updateAttributes({
+                                            key: licenseKey,
+                                            username: username,
+                                            password: password,
+                                            deviceId: deviceId
+                                        }, function (err, instance) {
+                                            if (err) {
+                                                console.log('error updating license! ' + err);
+                                                next(err);
+                                            } else {
+                                                next();
+                                            }
+                                        });
                                     }
                                 });
                             }

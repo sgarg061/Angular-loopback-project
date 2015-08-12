@@ -33,7 +33,7 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
 };
 
 
-FakeAuth0Accessor.prototype.createUser = function (email, password, cb) {
+FakeAuth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
     cb(null, '');
 };

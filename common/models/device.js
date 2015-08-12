@@ -21,6 +21,11 @@ module.exports = function(Device) {
         http: {path: '/:id/checkin', verb: 'post', status: 200, errorStatus: 500}
     });
 
+    Device.remoteMethod('getOwnership', {
+        accepts: {arg: 'id', type: 'string', required: true},
+        returns: {arg: 'ownershipProperties', type: 'Object'}
+    });
+
     Device.observe('access', function limitToTenant(ctx, next) {
         var context = loopback.getCurrentContext();
         var tenantId = 0;
@@ -42,6 +47,36 @@ module.exports = function(Device) {
         }
         next();
     });
+
+    Device.getOwnership = function (id, cb) {
+        var error;
+
+        Device.find({where: {id: id}}, function (err, res) {
+            if (err) {
+                cb(new Error('Error while retrieving device ownership'));
+            } else {
+                if (res.length < 0) {
+                    error = new Error('Unable to find device ' + id);
+                    error.statusCode = 404;
+                    cb(error);
+                } else if (res.length > 1) {
+                    error = new Error('Duplicate devices found with id ' + id);
+                    error.statusCode = 422;
+                    cb(error);
+                } else {
+                    Device.app.models.Customer.getOwnership(res[0].customerId, function (err, res) {
+                        if (err) {
+                            cb(new Error('Error while retrieving customer ownership'));
+                        } else {
+                            var ownershipProperties = res;
+                            ownershipProperties.deviceId = id;
+                            cb(null, ownershipProperties);
+                        }
+                    });
+                }
+            }
+        });
+    };
 
     Device.checkin = function (id, data, cb) {
 
