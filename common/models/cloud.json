@@ -44,6 +44,18 @@
       "foreignKey": "cloudId"
     }
     },
-  "acls": [],
+  "acls": [
+  {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+  },
+  {
+    "principalType": "ROLE",
+    "principalId": "isSolink",
+    "permission": "ALLOW",
+    "property": "*"
+  }
+  ],
   "methods": []
 }
