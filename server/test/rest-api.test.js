@@ -1,51 +1,12 @@
-var request = require('supertest');
-var app = require('../server');
 var assert = require('assert');
-var authService = require('../services/authService');
-var AuthAccessor = require('../dependencyAccessors/fakeAuth0Accessor');
-var RedisAccessor = require('../dependencyAccessors/redisAccessor');
-var cacheService = require('../services/cacheService');
-var config = require('../../config');
-
-var sampleData = require('../create-sample-data');
+var common = require('./common');
 
 const SOLINK_ADMIN_USERNAME = 'cwhiten@solinkcorp.com';
 const SOLINK_ADMIN_PASSWORD = 'test';
 const SOLINK_USER_USERNAME = 'cwhiten+1@solinkcorp.com';
 const SOLINK_USER_PASSWORD = 'test';
 
-before(function(done) {
-    authService.initialize(new AuthAccessor());
-    RedisAccessor.initialize([
-    {
-        name: 'revoked',
-        port: config.revokedTokensRedisPort,
-        address: config.revokedTokensRedisLocation
-    },
-    {
-      name: 'validated',
-      port: config.validatedTokensRedisPort,
-      address: config.validatedTokensRedisLocation
-    }]);
 
-    cacheService.initialize(RedisAccessor);
-
-    sampleData(app, function() {
-      done();
-    });
-});
-
-function json(verb, url, token) {
-    var jsonRequest = request(app)[verb](url)
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/);
-
-    if (token) {
-      jsonRequest.set('Authorization', 'Bearer ' + token);
-    }
-    return jsonRequest;
-}
 
 describe('REST', function() {
 
@@ -59,7 +20,7 @@ describe('REST', function() {
     describe('Login', function() {
 
         it('should login with a valid username/password combination and return a token', function(done) {
-          json('post', '/api/auth/login')
+          common.json('post', '/api/auth/login')
             .send({
               username: SOLINK_ADMIN_USERNAME,
               password: SOLINK_ADMIN_PASSWORD
@@ -79,7 +40,7 @@ describe('REST', function() {
 
     describe('Invalid Login', function() {
       it('should not log in with an invalid username/password combination', function(done) {
-        json('post', '/api/auth/login')
+        common.json('post', '/api/auth/login')
           .send({
             username: SOLINK_ADMIN_USERNAME,
             password: 'wrong password'
@@ -99,7 +60,7 @@ describe('REST', function() {
 
         // log the user in order to get a token
         it('should login with a valid username/password combination and return a token', function(done) {
-          json('post', '/api/auth/login')
+          common.json('post', '/api/auth/login')
             .send({
               username: SOLINK_USER_USERNAME,
               password: SOLINK_USER_PASSWORD
@@ -119,7 +80,7 @@ describe('REST', function() {
 
         // now validate the user token. Note we are using the authToken to make the call
         it('should validate a valid token successfully', function(done) {
-          json('post', '/api/auth/validate', authToken)
+          common.json('post', '/api/auth/validate', authToken)
             .send({
               token: userToken
             })
@@ -132,7 +93,7 @@ describe('REST', function() {
         });
 
         it('should not validate with a non-solink token', function(done) {
-          json('post', '/api/auth/validate', userToken)
+          common.json('post', '/api/auth/validate', userToken)
             .send({
               token: userToken
             })
@@ -149,7 +110,7 @@ describe('REST', function() {
 
       var device;
       it('should activate license and return a new device', function(done) {
-        json('post', '/api/licenses/activate', authToken)
+        common.json('post', '/api/licenses/activate', authToken)
           .send({key: 'ETSHOWDOTHEYWORK'})
           .expect(200)
           .end(function(err, res) {
@@ -210,7 +171,7 @@ describe('REST', function() {
         
         deviceCheckinData.id = device.deviceId;
 
-        json('post', '/api/devices/' + device.deviceId + '/checkin', authToken)
+        common.json('post', '/api/devices/' + device.deviceId + '/checkin', authToken)
           .send({data: deviceCheckinData})
           .expect(200)
           .end(function(err, res) {
@@ -227,7 +188,7 @@ describe('REST', function() {
       });
 
       it('device, cameras, POS devices and deviceLogEntry should have been created after initial checkin', function(done) {
-        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', authToken)
+        common.json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', authToken)
           .send({})
           .expect(200)
           .end(function(err, res) {
@@ -249,7 +210,7 @@ describe('REST', function() {
         // console.log('deviceCheckinData.cameraInformation: ' + deviceCheckinData.cameraInformation);
         deviceCheckinData.cameraInformation[1].status = 'offline';
 
-        json('post', '/api/devices/' + device.deviceId + '/checkin', authToken)
+        common.json('post', '/api/devices/' + device.deviceId + '/checkin', authToken)
           .send({data: deviceCheckinData})
           .expect(200)
           .end(function(err, res) {
@@ -259,7 +220,7 @@ describe('REST', function() {
       });
 
       it('device, cameras and POS count should remain the same after subsequent checkin but new record values should be reflected', function(done) {
-        json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices', authToken)
+        common.json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices', authToken)
           .send({})
           .expect(200)
           .end(function(err, res) {
@@ -279,7 +240,7 @@ describe('REST', function() {
 
     // log the user in order to get a token
     it('should login with a valid username/password combination and return a token', function(done) {
-      json('post', '/api/auth/login')
+      common.json('post', '/api/auth/login')
         .send({
           username: SOLINK_USER_USERNAME,
           password: SOLINK_USER_PASSWORD
@@ -298,7 +259,7 @@ describe('REST', function() {
     });
 
     it('should allow device listing with an authenticated token', function(done) {
-      json('get', '/api/devices', userToken)
+      common.json('get', '/api/devices', userToken)
         .send({})
         .expect(200)
         .end(function(err, res) {
@@ -310,7 +271,7 @@ describe('REST', function() {
     });
 
     it('should disallow device listing without a token', function(done) {
-      json('get', '/api/devices')
+      common.json('get', '/api/devices')
         .send({})
         .expect(401)
         .end(function(err, res) {

@@ -4,17 +4,16 @@
     "connector": "memory"
   },
   "elasticsearch": {
-    "connector": "es",
     "name": "elasticsearch",
+    "connector": "es",
     "index": "call-home",
     "hosts": [
-        {
-          "protocol": "http",
-          "host": "127.0.0.1",
-          "port": 9200
-        }
-  	],
-    "log": "info",
-    "index": "call-home"
+      {
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 9200
+      }
+    ],
+    "log": "info"
   }
 }

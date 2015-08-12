@@ -23,8 +23,8 @@
     },
     "customerId": {
       "type": "string",
-      "index": true,
-      "required": true
+      "required": true,
+      "index": true
     },
     "activated": {
       "type": "boolean",
@@ -42,6 +42,21 @@
       "foreignKey": "deviceId"
     }
   },
-  "acls": [],
-  "methods": []
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY",
+      "property": "create"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "create"
+    }
+  ],
+  "methods": {}
 }

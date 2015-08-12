@@ -12,6 +12,8 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
         token = createValidToken('solink');
     } else if (username === 'cwhiten+1@solinkcorp.com' && password === 'test') {
         token = createValidToken('admin');
+    } else if (username === 'cwhiten+user@solinkcorp.com' && password === 'test') {
+        token = createValidToken('user');
     } else {
         var e = new Error('Unable to login');
         e.statusCode = 401;

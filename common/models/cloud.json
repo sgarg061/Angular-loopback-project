@@ -43,7 +43,7 @@
       "model": "Reseller",
       "foreignKey": "cloudId"
     }
-    },
+  },
   "acls": [],
-  "methods": []
+  "methods": {}
 }

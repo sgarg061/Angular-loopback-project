@@ -18,7 +18,6 @@ app.use(function jwtMiddleware (req, res, next) {
         if (!authorizationHeader) {
             return next();
         }
-
         var authParts = authorizationHeader.split(' ');
 
         if (authParts.length !== 2) {

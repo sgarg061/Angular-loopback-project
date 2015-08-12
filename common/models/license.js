@@ -12,22 +12,31 @@ module.exports = function (License) {
         activateLicense(License, key, cb);
     };
 
-    License.beforeCreate = function (next, modelInstance) {
-        var ctx = loopback.getCurrentContext();
-        // filter out these values if they are coming from an authenticated API request.
-        // Otherwise, the request must be a back-end call where we want more control
-        if (ctx && ctx.get('jwt')) {
-            modelInstance.username = null;
-            modelInstance.password = null;
-            modelInstance.activated = false;
-            modelInstance.key = false;
-        } 
-        next();
-    };
+    License.observe('before save', function clearLicense(ctx, next) {
+        if (ctx.isNewInstance) {
+            var loopbackContext = loopback.getCurrentContext();
+            // filter out these values if they are coming from an authenticated API request.
+            // Otherwise, the request must be a back-end call where we want more control
+            if (loopbackContext && loopbackContext.get('jwt')) {
+                ctx.instance.username = null;
+                ctx.instance.password = null;
+                ctx.instance.activated = false;
+                ctx.instance.key = null;
+            } 
+            next();
+        } else {
+            // if we want to do something before license updates, do it here.
+            next();
+        }
+    });
 
-    License.afterCreate = function (next) {
-        addUniqueLicense(License, this, next);
-    };
+    License.observe('after save', function (ctx, next) {
+        if (ctx.isNewInstance) {
+            addUniqueLicense(License, ctx.instance, next);
+        } else {
+            next();
+        }
+    });
 
     License.remoteMethod(
         'activate',
@@ -112,7 +121,9 @@ function activateLicense(License, key, cb) {
             if (res.length > 1) {
                 cb(new Error('Duplicate licenses'), 'Duplicate licences found');
             } else if (res.length < 1) {
-                cb(new Error('No license found'), 'No license found');
+                var e = new Error('Invalid license.');
+                e.statusCode = 400;
+                cb(e, 'No license found');
             } else {
                 var license = res[0];
                 if (license.activated) {

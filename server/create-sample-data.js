@@ -154,7 +154,8 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.License.create([
-        {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false}
+        {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false},
+        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false}
       ], cb);
     });
   }
