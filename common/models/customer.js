@@ -19,7 +19,7 @@ module.exports = function(Customer) {
             if (err) {
                 cb(new Error('Error while retrieving customer ownership'));
             } else {
-                if (res.length < 0) {
+                if (res.length < 1) {
                     error = new Error('Unable to find customer ' + id);
                     error.statusCode = 404;
                     cb(error);
