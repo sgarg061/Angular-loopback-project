@@ -4,7 +4,6 @@ var logger = require('../../server/logger');
 
 var loopback = require('loopback');
 
-// TODO: Add create method.  Limit acl to solink users.  Add remote hook to remove everything except for tenant ID
 module.exports = function (License) {
     'use strict';
     License.activate = function (key, cb) {
@@ -78,7 +77,7 @@ function addUniqueLicense(License, license, next) {
                 }, function sendResponse(err, res) {
                     if (err) {
                         console.log('WARNING: Unable to create device: ' + err);
-                        next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK
+                        next(err);
                     } else {
                         var deviceId = res.id;
                         // device is created, now create corresponding user
@@ -87,7 +86,7 @@ function addUniqueLicense(License, license, next) {
                         authService.createUser(username, password, function (err, res) {
                             if (err) {
                                 console.log('Error while creating user: ' + err);
-                                next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK
+                                next(err);
                             } else {
                                 // device is created, now just update the attributes.
                                 license.updateAttributes({
@@ -98,7 +97,7 @@ function addUniqueLicense(License, license, next) {
                                 }, function (err, instance) {
                                     if (err) {
                                         console.log('error updating license! ' + err);
-                                        next(err); // TODO: this doesn't actually appear to work... I'm still getting a 200 OK
+                                        next(err);
                                     } else {
                                         next();
                                     }
