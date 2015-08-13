@@ -60,13 +60,19 @@ module.exports = function(app, doneCallback) {
           imageServerUrl: 'http://images.solinkcloud.net', 
           signallingServerUrl: 'http://signaller.solinkcloud.net', 
           updateUrl: 'http://update.solinkcloud.net', 
-          checkinInterval: 3600},
+          checkinInterval: 3600,
+          email: 'cwhiten+c1@solinkcorp.com',
+          password: 'test'
+        },
         { name: 'Solink APAC', 
           serverUrl: 'http://api.apac.solinkcloud.net', 
           imageServerUrl: 'http://images.apac.solinkcloud.net', 
           signallingServerUrl: 'http://signaller.apac.solinkcloud.net', 
           updateUrl: 'http://update.solinkcloud.net', 
-          checkinInterval: 3600},
+          checkinInterval: 3600,
+          email: 'cwhiten+c2@solinkcorp.com',
+          password: 'test'
+        },
       ], cb);
     });
   }
@@ -79,9 +85,21 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Reseller.create([
-        {name: 'Reseller 1', cloudId: results.clouds[0].id},
-        {name: 'Reseller 2', cloudId: results.clouds[0].id},
-        {name: 'Australian Reseller 1', cloudId: results.clouds[1].id},
+        { name: 'Reseller 1', 
+          cloudId: results.clouds[0].id,
+          email: 'cwhiten+r1@solinkcorp.com',
+          password: 'test'
+        },
+        { name: 'Reseller 2', 
+          cloudId: results.clouds[0].id,
+          email: 'cwhiten+r2@solinkcorp.com',
+          password: 'test'
+        },
+        { name: 'Australian Reseller 1', 
+          cloudId: results.clouds[1].id,
+          email: 'cwhiten+r3@solinkcorp.com',
+          password: 'test'
+        },
       ], cb);
     });
   }

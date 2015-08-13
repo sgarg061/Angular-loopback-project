@@ -14,6 +14,10 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
         token = createValidToken('admin');
     } else if (username === 'cwhiten+user@solinkcorp.com' && password === 'test') {
         token = createValidToken('user');
+    } else if (username === 'cwhiten+cloud@solinkcorp.com' && password === 'test') {
+        token = createValidToken('cloud');
+    } else if (username === 'cwhiten+reseller@solinkcorp.com' && password === 'test') {
+        token = createValidToken('reseller');
     } else {
         var e = new Error('Unable to login');
         e.statusCode = 401;
@@ -39,13 +43,22 @@ FakeAuth0Accessor.prototype.createUser = function (email, password, userData, cb
 };
 
 function createValidToken (userType) {
+    var appMetadata = {
+        user_type: userType
+    };
+
+    if (userType === 'cloud') {
+        appMetadata.cloud_id = '1';
+    } else if (userType === 'reseller') {
+        appMetadata.reseller_id = '1';
+    } else {
+        appMetadata.tenant_id = '1';
+    }
+
     var payload = {
         email: 'cwhiten@solinkcorp.com',
         email_verified: true,
-        app_metadata: {
-            tenant_id: '1',
-            user_type: userType
-        },
+        app_metadata: appMetadata,
         iss: 'https://solink.auth0.com/',
         sub: 'auth0|55a55f4186416215610a2e22',
         aud: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',

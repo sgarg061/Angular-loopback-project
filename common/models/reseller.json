@@ -19,6 +19,12 @@
       "type": "string",
       "required": true,
       "index": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
     }
   },
   "validations": [],
