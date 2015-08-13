@@ -9,8 +9,8 @@
   "properties": {
     "deviceId": {
       "type": "string",
-      "index": true,
-      "required": true
+      "required": true,
+      "index": true
     }
   },
   "validations": [],
@@ -22,5 +22,5 @@
     }
   },
   "acls": [],
-  "methods": []
+  "methods": {}
 }

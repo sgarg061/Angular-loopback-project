@@ -13,24 +13,21 @@
     },
     "key": {
       "type": "string",
-      "required": true,
       "index": true
     },
     "username": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "password": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "customerId": {
       "type": "string",
+      "required": true,
       "index": true
     },
     "activated": {
       "type": "boolean",
-      "required": true,
       "index": true
     },
     "activationDate": {
@@ -38,6 +35,28 @@
     }
   },
   "validations": [],
-  "acls": [],
-  "methods": []
+  "relations": {
+    "device": {
+      "type": "belongsTo",
+      "model": "Device",
+      "foreignKey": "deviceId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY",
+      "property": "create"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "create"
+    }
+  ],
+  "methods": {}
 }
