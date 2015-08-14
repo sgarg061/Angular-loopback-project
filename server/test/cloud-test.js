@@ -3,7 +3,7 @@ var common = require('./common');
 var async = require('async');
 var app = require('../server');
 
-describe('License tests', function() {
+describe('Cloud tests', function() {
   'use strict';
   this.timeout(5000);
 

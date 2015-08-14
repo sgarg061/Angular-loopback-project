@@ -22,24 +22,30 @@ module.exports = function(Cloud) {
 
     Cloud.observe('access', function cloudPermissions(ctx, next) {
         var context = loopback.getCurrentContext();
-        var cloudId = 0;
 
-        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
-            return next();
-        }
-
-        if (context && context.get('jwt') && context.get('jwt').cloudId) {
-            cloudId = context.get('jwt').cloudId;
-        }
-
-        if (ctx.query.where) {
-            ctx.query.where.id = cloudId;
+        if (context && context.get('jwt')) {
+            var cloudId = context.get('jwt').cloudId;
+            
+            if (context.get('jwt').userType === 'solink') {
+                next();
+            } else if (cloudId) {
+                if (ctx.query.where) {
+                    ctx.query.where.id = cloudId;
+                } else {
+                    ctx.query.where = {
+                        cloudId: cloudId
+                    };
+                }
+                next();
+            } else {
+                var error = new Error('Unauthorized');
+                error.statusCode = 401;
+                next(error);
+            }
         } else {
-            ctx.query.where = {
-                cloudId: cloudId
-            };
+            next();
         }
-        next();
+
     });
 
     function createCloudUser(cloud, next) {

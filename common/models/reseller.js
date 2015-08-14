@@ -6,50 +6,74 @@ var loopback = require('loopback');
 module.exports = function(Reseller) {
 
     Reseller.observe('before save', function addId(ctx, next) {
-        if (ctx.instance && !ctx.instance.id) {
-            ctx.instance.id = uuid.v1();
-            if (!ctx.instance.password) {
-                var error = new Error('Password not provided for reseller account');
-                error.statusCode = 400;
+        resellerAccessPermissions(ctx, function permissionsGranted(err) {
+            if (err) {
+                var error = new Error('Unauthorized');
+                error.statusCode = 401;
                 next(error);
             } else {
-                createResellerUser(ctx.instance, next);
+                if (ctx.instance && !ctx.instance.id) {
+                    ctx.instance.id = uuid.v1();
+                    if (!ctx.instance.password) {
+                        var e = new Error('Password not provided for reseller account');
+                        e.statusCode = 400;
+                        next(e);
+                    } else {
+                        createResellerUser(ctx.instance, next);
+                    }
+                } else {
+                    next();
+                }
+            }
+        });
+        
+    });
+
+    Reseller.observe('access', function resellerPermissions(ctx, next) {
+        resellerAccessPermissions(ctx, next);
+    });
+
+    function resellerAccessPermissions(ctx, next) {
+        var context = loopback.getCurrentContext();
+
+        if (context && context.get('jwt')) {
+            var resellerId = context.get('jwt').resellerId;
+            var cloudId = context.get('jwt').cloudId;
+
+            if (context.get('jwt').userType === 'solink') {
+                next();
+            } else if (resellerId) {
+                if (ctx.isNewInstance) { // TODO: should we limit updates here too?
+                    var e = new Error('Unauthorized');
+                    e.statusCode = 401;
+                    next(e);
+                } else if (ctx.query.where) {
+                    ctx.query.where.id = resellerId;
+                } else {
+                    ctx.query.where = {
+                        resellerId: resellerId
+                    };
+                }
+                next();
+            } else if (cloudId) {
+                // resellerId must be in list of this cloud's
+                if (ctx.query.where) {
+                    ctx.query.where.cloudId = cloudId;
+                } else {
+                    ctx.query.where = {
+                        cloudId: cloudId
+                    };
+                }
+                next();
+            } else {
+                var error = new Error('Unauthorized');
+                error.statusCode = 401;
+                next(error);
             }
         } else {
             next();
         }
-    });
-
-    Reseller.observe('access', function resellerPermissions(ctx, next) {
-        var context = loopback.getCurrentContext();
-
-        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
-            return next();
-        } else if (context && context.get('jwt') && context.get('jwt').resellerId) {
-            var resellerId = context.get('jwt').resellerId;
-
-            if (ctx.query.where) {
-                ctx.query.where.id = resellerId;
-            } else {
-                ctx.query.where = {
-                    resellerId: resellerId
-                };
-            }
-            next();
-        } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
-            // resellerId must be in list of this cloud's
-            var cloudId = context.get('jwt').cloudId;
-
-            if (ctx.query.where) {
-                ctx.query.where.cloudId = cloudId;
-            } else {
-                ctx.query.where = {
-                    cloudId: cloudId
-                };
-            }
-            next();
-        }
-    });
+    }
 
     function createResellerUser(reseller, next) {
         var userData = {
