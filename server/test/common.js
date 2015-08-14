@@ -14,6 +14,10 @@ const ADMIN_USERNAME = 'cwhiten+1@solinkcorp.com';
 const ADMIN_PASSWORD = 'test';
 const USER_USERNAME = 'cwhiten+user@solinkcorp.com';
 const USER_PASSWORD = 'test';
+const CLOUD_USERNAME = 'cwhiten+cloud@solinkcorp.com';
+const CLOUD_PASSWORD = 'test';
+const RESELLER_USERNAME = 'cwhiten+reseller@solinkcorp.com';
+const RESELLER_PASSWORD = 'test';
 
 module.exports = {
     json: function (verb, url, token) {
@@ -40,6 +44,12 @@ module.exports = {
         } else if (loginType === 'user') {
             username = USER_USERNAME;
             password = USER_PASSWORD;
+        } else if (loginType === 'cloud') {
+            username = CLOUD_USERNAME;
+            password = CLOUD_PASSWORD;
+        } else if (loginType === 'reseller') {
+            username = RESELLER_USERNAME;
+            password = RESELLER_PASSWORD;
         }
         this.json('post', '/api/auth/login')
             .send({
