@@ -79,7 +79,6 @@ module.exports = function(Device) {
     });
 
     function cloudPermissions(Device, ctx, cloudId, next) {
-        console.log('my cloud id is ' + cloudId);
         var Reseller = Device.app.models.Reseller;
         var Customer = Device.app.models.Customer;
         var ids = [];
