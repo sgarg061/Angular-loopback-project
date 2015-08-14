@@ -31,51 +31,55 @@ module.exports = function(Device) {
         var context = loopback.getCurrentContext();
         var Customer = Device.app.models.Customer;
 
-        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
-            // querying as a test or as solink
-            next();
-        } else if (context && context.get('jwt') && context.get('jwt').tenantId) {
-            // querying with a customer's credentials
+        if (context && context.get('jwt')) {
+            var resellerId = context.get('jwt').resellerId;
             var tenantId = context.get('jwt').tenantId;
-            if (ctx.query.where) {
-                ctx.query.where.customerId = tenantId;
-            } else {
-                ctx.query.where = {
-                    customerId: tenantId
-                };
-            }
-            next();
-        } else if (context && context.get('jwt') && context.get('jwt').resellerId) {
-            // querying as a reseller
-            // tenant ID must be in list of this reseller's
-            Customer.find({where: {resellerId: context.get('jwt').resellerId}}, function (err, res) {
-                if (err) {
-                    logger.error('Error querying customers with reseller id ' + context.get('jwt').resellerId);
-                    logger.error(err);
-                    next(err);
-                } else {
-                    var ids = [];
-                    for (var i = 0; i < res.length; i++) {
-                        ids.push(res[i].id);
-                    }
+            var cloudId = context.get('jwt').cloudId;
+            var userType = context.get('jwt').userType;
 
-                    if (ctx.query.where) {
-                        ctx.query.where.customerId = {inq: ids};
-                    } else {
-                        ctx.query.where = {
-                            customerId: {
-                                inq: ids
-                            }
-                        };
-                    }
-                    next();
+            if (userType === 'solink') {
+                next();
+            } else if (tenantId) {
+                if (ctx.query.where) {
+                    ctx.query.where.customerId = tenantId;
+                } else {
+                    ctx.query.where = {
+                        customerId: tenantId
+                    };
                 }
-            });
-        } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
-            // querying as a cloud admin
-            // tenant ID must be in the list of resellers belonging to this cloud
-            cloudPermissions(Device, ctx, context.get('jwt').cloudId, next);
+                next();
+            } else if (resellerId) {
+                Customer.find({where: {resellerId: resellerId}}, function (err, res) {
+                    if (err) {
+                        logger.error('Error querying customers with reseller id ' + resellerId);
+                        logger.error(err);
+                        next(err);
+                    } else {
+                        var ids = [];
+                        for (var i = 0; i < res.length; i++) {
+                            ids.push(res[i].id);
+                        }
+
+                        if (ctx.query.where) {
+                            ctx.query.where.customerId = {inq: ids};
+                        } else {
+                            ctx.query.where = {
+                                customerId: {
+                                    inq: ids
+                                }
+                            };
+                        }
+                        next();
+                    }
+                });
+            } else if (cloudId) {
+                cloudPermissions(Device, ctx, cloudId, next);
+            }
+        } else {
+            next();
         }
+
+        
     });
 
     function cloudPermissions(Device, ctx, cloudId, next) {
