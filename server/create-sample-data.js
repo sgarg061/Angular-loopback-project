@@ -30,11 +30,11 @@ module.exports = function(app, doneCallback) {
     customers: ['resellers', function (cb, results) {
       createCustomers(cb, results);
     }],
-    licenses: ['customers', function (cb, results) {
-      createLicenses(cb, results);
-    }],
     devices: ['customers', function (cb, results) {
       createDevices(cb, results);
+    }],
+    licenses: ['devices', function (cb, results) {
+      createLicenses(cb, results);
     }],
     cameras: ['devices', function (cb, results) {
       createCameras(cb, results);
@@ -172,8 +172,8 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.License.create([
-        {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false},
-        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false}
+        {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[0].id},
+        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[1].id}
       ], cb);
     });
   }
