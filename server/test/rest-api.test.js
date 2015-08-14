@@ -127,7 +127,7 @@ describe('REST', function() {
 
       var deviceCheckinData = {
         guid: '7DB02DCF-4EA9-4177-A256-42BCFD511E90',
-        locationName: 'Tim Hortons',
+        organizationPath: '/Canada/Ontario/Ottawa/TH-1582',
         address: '479 March Road, Kanata, ON, K2K',
         location: {
             longitude: -75.9087814,
@@ -177,7 +177,7 @@ describe('REST', function() {
           .end(function(err, res) {
             if (err) throw err;
 
-            assert(res.body.serverUrl, 'must have a serverUrl');
+            assert(res.body.eventServerUrl, 'must have an eventServerUrl');
             assert(res.body.imageServerUrl, 'must have a imageServerUrl');
             assert(res.body.signallingServerUrl, 'must have a signallingServerUrl');
             assert(res.body.updateUrl, 'must have a updateUrl');

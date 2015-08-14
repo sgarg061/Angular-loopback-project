@@ -12,6 +12,9 @@ module.exports = function(app, doneCallback) {
   async.auto({
     destroyAll: function(cb) {
       logger.debug('destroying all existing data...');
+      app.models.SoftwareVersion.destroyAll();
+      app.models.POSConnector.destroyAll();
+      app.models.POSConnectorOwnership.destroyAll();
       app.models.Cloud.destroyAll();
       app.models.Reseller.destroyAll();
       app.models.Customer.destroyAll();
@@ -21,13 +24,23 @@ module.exports = function(app, doneCallback) {
       app.models.License.destroyAll();
       cb(null);
     },
-    clouds: ['destroyAll', function(cb, results) {
-      createClouds(cb);
+    softwareVersions: ['destroyAll', function(cb, results) {
+      createSoftwareVersions(cb);
+    }],
+    clouds: ['softwareVersions', function(cb, results) {
+      createClouds(cb, results);
     }],
     resellers: ['clouds', function (cb, results) {
       createResellers(cb, results);
     }],
-    customers: ['resellers', function (cb, results) {
+    posConnectors: ['resellers', function(cb, results) {
+      createPOSConnectors(cb, results);
+    }],
+    posConnectorsOwnerships: ['posConnectors', function(cb, results) {
+      associatePOSConnectors(cb, results);
+    }],
+    // customers: ['resellers', function (cb, results) {
+    customers: ['posConnectorsOwnerships', function (cb, results) {
       createCustomers(cb, results);
     }],
     licenses: ['customers', function (cb, results) {
@@ -39,16 +52,41 @@ module.exports = function(app, doneCallback) {
     cameras: ['devices', function (cb, results) {
       createCameras(cb, results);
     }],
-    posConnectors: ['devices', function (cb, results) {
+    posDevices: ['devices', function (cb, results) {
       createPOSDevices(cb, results);
     }],
-    result: ['posConnectors', function (cb, results) {
+    result: ['posDevices', function (cb, results) {
       doneCallback();
     }]
   });
 
-  function createClouds(cb) {
+  function createSoftwareVersions(cb) {
+    logger.debug('creating software versions...');
+    datastore.automigrate('SoftwareVersion', function(err) {
+      if (err) {
+        logger.error(err);
+        return cb(err);
+      }
+      app.models.SoftwareVersion.create([
+        { name: 'Version 1.0', 
+          code: 1, 
+          url: 'http://update.solinkcloud.net/version-1.0'},
+        { name: 'Version 1.1 RC1', 
+          code: 2, 
+          url: 'http://update.solinkcloud.net/version-1.1-RC1'},
+        { name: 'Version 1.1 RC2', 
+          code: 3, 
+          url: 'http://update.solinkcloud.net/version-1.1-RC2'},
+        { name: 'Version 1.2 Test', 
+          code: 4, 
+          url: 'http://update.solinkcloud.net/version-1.2-Test'}
+      ], cb);
+    });
+  }
+
+  function createClouds(cb, results) {
     logger.debug('creating clouds...');
+
     datastore.automigrate('Cloud', function(err) {
       if (err) {
         logger.error(err);
@@ -56,17 +94,21 @@ module.exports = function(app, doneCallback) {
       }
       app.models.Cloud.create([
         { name: 'Solink', 
-          serverUrl: 'http://api.solinkcloud.net', 
+          eventServerUrl: 'http://api.solinkcloud.net', 
           imageServerUrl: 'http://images.solinkcloud.net', 
           signallingServerUrl: 'http://signaller.solinkcloud.net', 
           updateUrl: 'http://update.solinkcloud.net', 
-          checkinInterval: 3600},
+          checkinInterval: 3600,
+          softwareVersionId: results.softwareVersions[0].id,
+
+        },
         { name: 'Solink APAC', 
-          serverUrl: 'http://api.apac.solinkcloud.net', 
+          eventServerUrl: 'http://api.apac.solinkcloud.net', 
           imageServerUrl: 'http://images.apac.solinkcloud.net', 
           signallingServerUrl: 'http://signaller.apac.solinkcloud.net', 
           updateUrl: 'http://update.solinkcloud.net', 
-          checkinInterval: 3600},
+          checkinInterval: 3600,
+          softwareVersionId: results.softwareVersions[0].id},
       ], cb);
     });
   }
@@ -79,9 +121,54 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Reseller.create([
-        {name: 'Reseller 1', cloudId: results.clouds[0].id},
-        {name: 'Reseller 2', cloudId: results.clouds[0].id},
+        {name: 'Reseller 1', cloudId: results.clouds[0].id, softwareVersionId: results.softwareVersions[1].id},
+        {name: 'Reseller 2', cloudId: results.clouds[0].id, checkinInterval: 3000},
         {name: 'Australian Reseller 1', cloudId: results.clouds[1].id},
+      ], cb);
+    });
+  }
+
+  function createPOSConnectors(cb, results) {
+    logger.debug('creating POS connectors...');
+    datastore.automigrate('POSConnector', function(err) {
+      if (err) {
+        logger.error(err);
+        return cb(err);
+      }
+      app.models.POSConnector.create([
+        { name: 'POS Brew Connector', 
+          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));'},
+        { name: 'POS MoBrew Connector`', 
+          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));'},
+        { name: 'POS 2MuchBrew Connector', 
+          script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));'}
+      ], cb);
+    });
+  }
+
+  function associatePOSConnectors(cb, results) {
+    logger.debug('associating POS connectors...');
+    datastore.automigrate('POSConnectorOwnership', function(err) {
+      if (err) {
+        logger.error(err);
+        return cb(err);
+      }
+      app.models.POSConnectorOwnership.create([
+        { ownerId: results.clouds[0].id, 
+          ownerType: 'Cloud',
+          posConnectorId: results.posConnectors[0].id},
+        { ownerId: results.clouds[1].id, 
+          ownerType: 'Cloud',
+          posConnectorId: results.posConnectors[0].id},
+        { ownerId: results.resellers[0].id, 
+          ownerType: 'Reseller',
+          posConnectorId: results.posConnectors[1].id},
+        { ownerId: results.resellers[1].id, 
+          ownerType: 'Reseller',
+          posConnectorId: results.posConnectors[2].id},
+        { ownerId: results.resellers[2].id, 
+          ownerType: 'Reseller',
+          posConnectorId: results.posConnectors[2].id}
       ], cb);
     });
   }
@@ -94,8 +181,8 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Customer.create([
-        {name: 'Customer 1', resellerId: results.resellers[0].id, id: 1},
-        {name: 'Customer 2', resellerId: results.resellers[1].id, id: 2},
+        {name: 'Customer 1', resellerId: results.resellers[0].id, id: 1, softwareVersionId: results.softwareVersions[2].id},
+        {name: 'Customer 2', resellerId: results.resellers[1].id, id: 2, checkinInterval: 2400},
         {name: 'Customer 3', resellerId: results.resellers[2].id, id: 3},
       ], cb);
     });
@@ -109,8 +196,8 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Device.create([
-        {guid: uuid.v1(), name: 'Device 1', customerId: results.customers[0].id},
-        {guid: uuid.v1(), name: 'Device 2', customerId: results.customers[1].id},
+        {guid: uuid.v1(), name: 'Device 1', customerId: results.customers[0].id, softwareVersionId: results.softwareVersions[3].id},
+        {guid: uuid.v1(), name: 'Device 2', customerId: results.customers[1].id, checkinInterval: 2000},
         {guid: uuid.v1(), name: 'Device 3', customerId: results.customers[2].id},
       ], cb);
     });

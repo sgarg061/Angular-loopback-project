@@ -26,6 +26,11 @@
       "required": true,
       "index": true
     },
+    "deviceId": {
+      "type": "string",
+      "required": false,
+      "index": true
+    },
     "activated": {
       "type": "boolean",
       "index": true
@@ -40,6 +45,11 @@
       "type": "belongsTo",
       "model": "Device",
       "foreignKey": "deviceId"
+    },
+    "customer": {
+      "type": "belongsTo",
+      "model": "Customer",
+      "foreignKey": "customerId"
     }
   },
   "acls": [
@@ -58,5 +68,5 @@
       "property": "create"
     }
   ],
-  "methods": {}
+  "methods": []
 }

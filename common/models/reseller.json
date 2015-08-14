@@ -15,10 +15,26 @@
       "type": "string",
       "required": true
     },
+    "eventServerUrl": {
+      "type": "string",
+      "required": false
+    },
+    "imageServerUrl": {
+      "type": "string",
+      "required": false
+    },
+    "checkinInterval": {
+      "type": "number",
+      "required": false
+    },
     "cloudId": {
       "type": "string",
       "required": true,
       "index": true
+    },
+    "softwareVersionId": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
@@ -31,8 +47,19 @@
       "type": "hasMany",
       "model": "Customer",
       "foreignKey": "resellerId"
+    },
+    "softwareVersion": {
+      "type": "hasOne",
+      "model": "SoftwareVersion",
+      "foreignKey": "id"
+    },
+    "posConnectors": {
+      "type": "hasMany",
+      "model": "POSConnector",
+      "polymorphic": "owner",
+      "through": "POSConnectorOwnership"
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": []
 }

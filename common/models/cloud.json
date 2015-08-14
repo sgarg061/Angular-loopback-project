@@ -15,7 +15,7 @@
       "type": "string",
       "required": true
     },
-    "serverUrl": {
+    "eventServerUrl": {
       "type": "string",
       "required": true
     },
@@ -34,6 +34,10 @@
     "checkinInterval": {
       "type": "number",
       "required": true
+    },
+    "softwareVersionId": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
@@ -42,8 +46,19 @@
       "type": "hasMany",
       "model": "Reseller",
       "foreignKey": "cloudId"
+    },
+    "softwareVersion": {
+      "type": "hasOne",
+      "model": "SoftwareVersion",
+      "foreignKey": "id"
+    },
+    "posConnectors": {
+      "type": "hasMany",
+      "model": "POSConnector",
+      "polymorphic": "owner",
+      "through": "POSConnectorOwnership"
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": []
 }

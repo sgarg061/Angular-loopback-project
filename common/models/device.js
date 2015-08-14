@@ -101,7 +101,7 @@ module.exports = function(Device) {
         device.updateAttributes({
             id: deviceData.id,
             guid: deviceData.guid,
-            locationName: deviceData.locationName,
+            organizationPath: deviceData.organizationPath,
             address: deviceData.address
         }, function(err, res) {
             if (err) {
@@ -154,7 +154,7 @@ module.exports = function(Device) {
             }
             
             var result = {
-                serverUrl: cloud.serverUrl,
+                eventServerUrl: cloud.eventServerUrl,
                 imageServerUrl: cloud.imageServerUrl,
                 signallingServerUrl: cloud.signallingServerUrl,
                 updateUrl: cloud.updateUrl,

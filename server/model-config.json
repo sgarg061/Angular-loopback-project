@@ -32,6 +32,24 @@
     "dataSource": "db",
     "public": false
   },
+  "SoftwareVersion": {
+    "dataSource": "elasticsearch",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "POSConnector": {
+    "dataSource": "elasticsearch",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "POSConnectorOwnership": {
+    "dataSource": "elasticsearch",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
   "Cloud": {
     "dataSource": "elasticsearch",
     "public": true,
