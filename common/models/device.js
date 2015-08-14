@@ -153,15 +153,30 @@ module.exports = function(Device) {
                 return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
             }
             
+            // handle inherited attributes
+            var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
+            var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
+            var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
+            var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
+
             var result = {
-                eventServerUrl: cloud.eventServerUrl,
-                imageServerUrl: cloud.imageServerUrl,
+                eventServerUrl: eventServerUrl,
+                imageServerUrl: imageServerUrl,
                 signallingServerUrl: cloud.signallingServerUrl,
-                updateUrl: cloud.updateUrl,
-                checkinInterval: cloud.checkinInterval
+                checkinInterval: checkinInterval
             };
 
-            cb(null, result);
+            Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
+                if (err) {
+                    logger.error('Failed to find software version by id: %s', softwareVersionId);
+                } else {
+                    result.updateUrl = softwareVersion.url;
+                }
+
+                logger.debug('returning configuration: ', result);
+                cb(null, result);
+            });
+            
         });
     }
 
