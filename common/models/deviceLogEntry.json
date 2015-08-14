@@ -9,8 +9,7 @@
   "properties": {
     "deviceId": {
       "type": "string",
-      "required": true,
-      "index": true
+      "required": true
     }
   },
   "validations": [],

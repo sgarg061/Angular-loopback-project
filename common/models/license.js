@@ -66,7 +66,7 @@ function addUniqueLicense(License, license, next) {
             next(err);
         } else {
             if (res.length > 0 && !license.key) {
-                console.log('WARNING: license already exists');
+                logger.error('WARNING: license already exists');
                 addUniqueLicense(License, license, next);
             } else {
                 // the license is unique.
@@ -76,17 +76,16 @@ function addUniqueLicense(License, license, next) {
                     customerId: license.customerId
                 }, function sendResponse(err, res) {
                     if (err) {
-                        console.log('WARNING: Unable to create device: ' + err);
+                        logger.error('WARNING: Unable to create device: ' + err);
                         next(err);
                     } else {
                         var deviceId = res.id;
                         // device is created, now create corresponding user
                         var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
-                        console.log('username is ' + username);
                         var password = randToken.generate(16);
                         License.app.models.Customer.getOwnership(license.customerId, function (err, res) {
                             if (err) {
-                                console.log('error getting customer ownership! ' + err);
+                                logger.error('error getting customer ownership! ' + err);
                                 next(err);
                             } else {
                                 var userData = res;
@@ -94,7 +93,7 @@ function addUniqueLicense(License, license, next) {
                                 userData.usertype = 'connect';
                                 authService.createUser(username, password, userData, function (err, res) {
                                     if (err) {
-                                        console.log('Error while creating user: ' + err);
+                                        logger.error('Error while creating user: ' + err);
                                         next(err);
                                     } else {
                                         // device is created, now just update the attributes.
@@ -105,7 +104,7 @@ function addUniqueLicense(License, license, next) {
                                             deviceId: deviceId
                                         }, function (err, instance) {
                                             if (err) {
-                                                console.log('error updating license! ' + err);
+                                                logger.error('error updating license! ' + err);
                                                 next(err);
                                             } else {
                                                 next();

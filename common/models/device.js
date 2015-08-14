@@ -2,6 +2,7 @@ var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
 var _ = require('underscore');
+var async = require('async');
 
 module.exports = function(Device) {
     'use strict';
@@ -28,25 +29,105 @@ module.exports = function(Device) {
 
     Device.observe('access', function limitToTenant(ctx, next) {
         var context = loopback.getCurrentContext();
-        var tenantId = 0;
+        var Customer = Device.app.models.Customer;
 
         if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
-            return next();
-        }
+            // querying as a test or as solink
+            next();
+        } else if (context && context.get('jwt') && context.get('jwt').tenantId) {
+            // querying with a customer's credentials
+            var tenantId = context.get('jwt').tenantId;
+            if (ctx.query.where) {
+                ctx.query.where.customerId = tenantId;
+            } else {
+                ctx.query.where = {
+                    customerId: tenantId
+                };
+            }
+            next();
+        } else if (context && context.get('jwt') && context.get('jwt').resellerId) {
+            // querying as a reseller
+            // tenant ID must be in list of this reseller's
+            Customer.find({where: {resellerId: context.get('jwt').resellerId}}, function (err, res) {
+                if (err) {
+                    logger.error('Error querying customers with reseller id ' + context.get('jwt').resellerId);
+                    logger.error(err);
+                    next(err);
+                } else {
+                    var ids = [];
+                    for (var i = 0; i < res.length; i++) {
+                        ids.push(res[i].id);
+                    }
 
-        if (context && context.get('jwt') && context.get('jwt').tenantId) {
-            tenantId = context.get('jwt').tenantId;
+                    if (ctx.query.where) {
+                        ctx.query.where.customerId = {inq: ids};
+                    } else {
+                        ctx.query.where = {
+                            customerId: {
+                                inq: ids
+                            }
+                        };
+                    }
+                    next();
+                }
+            });
+        } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
+            // querying as a cloud admin
+            // tenant ID must be in the list of resellers belonging to this cloud
+            cloudPermissions(Device, ctx, context.get('jwt').cloudId, next);
         }
-
-        if (ctx.query.where) {
-            ctx.query.where.customerId = tenantId;
-        } else {
-            ctx.query.where = {
-                customerId: tenantId
-            };
-        }
-        next();
     });
+
+    function cloudPermissions(Device, ctx, cloudId, next) {
+        console.log('my cloud id is ' + cloudId);
+        var Reseller = Device.app.models.Reseller;
+        var Customer = Device.app.models.Customer;
+        var ids = [];
+        
+        Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
+            if (err) {
+                logger.error('Error querying resellers with cloud id ' + cloudId);
+                logger.error(err);
+                next(err);
+            } else {
+                var resellerIds = [];
+                for (var i = 0; i < res.length; i++) {
+                    resellerIds.push(res[i].id);
+                }
+
+                var customerIds = [];
+                async.each(resellerIds, function getCustomerIds(resellerId, cb) {
+                    Customer.find({where: {resellerId: resellerId}}, function (err, res) {
+                        if (err) {
+                            logger.error('Error querying customers with reseller id ' + resellerId);
+                            logger.error(err);
+                            cb(err);
+                        } else {
+                            for (var i = 0; i < res.length; i++) {
+                                customerIds.push(res[i].id);
+                            }
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if (err) {
+                        next(err);
+                    } else {
+                        if (ctx.query.where) {
+                            ctx.query.where.customerId = {inq: customerIds};
+                        } else {
+                            ctx.query.where = {
+                                customerId: {
+                                    inq: customerIds
+                                }
+                            };
+                        }
+                        next();
+                    }
+                });
+            }
+        });
+    }
 
     Device.getOwnership = function (id, cb) {
         var error;

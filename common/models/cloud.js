@@ -1,6 +1,7 @@
 var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
+var loopback = require('loopback');
 
 module.exports = function(Cloud) {
 
@@ -17,6 +18,28 @@ module.exports = function(Cloud) {
         } else {
             next();
         }
+    });
+
+    Cloud.observe('access', function cloudPermissions(ctx, next) {
+        var context = loopback.getCurrentContext();
+        var cloudId = 0;
+
+        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+            return next();
+        }
+
+        if (context && context.get('jwt') && context.get('jwt').cloudId) {
+            cloudId = context.get('jwt').cloudId;
+        }
+
+        if (ctx.query.where) {
+            ctx.query.where.id = cloudId;
+        } else {
+            ctx.query.where = {
+                cloudId: cloudId
+            };
+        }
+        next();
     });
 
     function createCloudUser(cloud, next) {

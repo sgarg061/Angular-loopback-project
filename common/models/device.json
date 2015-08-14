@@ -12,8 +12,7 @@
       "id": true
     },
     "guid": {
-      "type": "string",
-      "index": true
+      "type": "string"
     },
     "name": {
       "type": "string",
@@ -61,8 +60,7 @@
     },
     "customerId": {
       "type": "string",
-      "required": true,
-      "index": true
+      "required": true
     }
   },
   "validations": [],

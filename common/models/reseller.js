@@ -1,6 +1,7 @@
 var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
+var loopback = require('loopback');
 
 module.exports = function(Reseller) {
 
@@ -15,6 +16,37 @@ module.exports = function(Reseller) {
                 createResellerUser(ctx.instance, next);
             }
         } else {
+            next();
+        }
+    });
+
+    Reseller.observe('access', function resellerPermissions(ctx, next) {
+        var context = loopback.getCurrentContext();
+
+        if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+            return next();
+        } else if (context && context.get('jwt') && context.get('jwt').resellerId) {
+            var resellerId = context.get('jwt').resellerId;
+
+            if (ctx.query.where) {
+                ctx.query.where.id = resellerId;
+            } else {
+                ctx.query.where = {
+                    resellerId: resellerId
+                };
+            }
+            next();
+        } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
+            // resellerId must be in list of this cloud's
+            var cloudId = context.get('jwt').cloudId;
+
+            if (ctx.query.where) {
+                ctx.query.where.cloudId = cloudId;
+            } else {
+                ctx.query.where = {
+                    cloudId: cloudId
+                };
+            }
             next();
         }
     });
@@ -51,9 +83,11 @@ module.exports = function(Reseller) {
 
         Reseller.find({where: {id: id}}, function (err, res) {
             if (err) {
+                logger.log('Error retrieving reseller with id ' + id);
+                logger.error(err);
                 cb(new Error('Error while retrieving reseller ownership'));
             } else {
-                if (res.length < 0) {
+                if (res.length < 1) {
                     error = new Error('Unable to find reseller ' + id);
                     error.statusCode = 404;
                     cb(error);

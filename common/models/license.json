@@ -23,8 +23,7 @@
     },
     "customerId": {
       "type": "string",
-      "required": true,
-      "index": true
+      "required": true
     },
     "activated": {
       "type": "boolean",
