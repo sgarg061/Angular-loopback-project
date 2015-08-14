@@ -1,5 +1,5 @@
 {
-  "name": "Camera",
+  "name": "POSConnectorOwnership",
   "base": "PersistedModel",
   "strict": true,
   "options": {
@@ -7,35 +7,21 @@
     "idInjection": true
   },
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
-    "cameraId": {
-      "type": "string",
-      "id": true,
-      "required": true
-    },
-    "name": {
+    "ownerId": {
       "type": "string",
       "required": true
     },
-    "status": {
+    "ownerType": {
       "type": "string",
       "required": true
     },
-    "deviceId": {
+    "posConnectorId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "device": {
-      "type": "belongsTo",
-      "model": "Device",
-      "foreignKey": "deviceId"
-    }
   },
   "acls": [],
   "methods": []

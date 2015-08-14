@@ -15,9 +15,17 @@
       "type": "string",
       "required": true
     },
+    "checkinInterval": {
+      "type": "number",
+      "required": false
+    },
     "resellerId": {
       "type": "string",
       "required": true
+    },
+    "softwareVersionId": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
@@ -30,8 +38,18 @@
       "type": "hasMany",
       "model": "Device",
       "foreignKey": "customerId"
+    },
+    "licenses": {
+      "type": "hasMany",
+      "model": "License",
+      "foreignKey": "customerId"
+    },
+    "softwareVersion": {
+      "type": "hasOne",
+      "model": "SoftwareVersion",
+      "foreignKey": "id"
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": []
 }

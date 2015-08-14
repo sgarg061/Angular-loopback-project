@@ -1,5 +1,5 @@
 {
-  "name": "Camera",
+  "name": "SoftwareVersion",
   "base": "PersistedModel",
   "strict": true,
   "options": {
@@ -11,32 +11,21 @@
       "type": "string",
       "id": true
     },
-    "cameraId": {
-      "type": "string",
-      "id": true,
-      "required": true
-    },
     "name": {
       "type": "string",
       "required": true
     },
-    "status": {
-      "type": "string",
+    "code": {
+      "type": "number",
       "required": true
     },
-    "deviceId": {
+    "url": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
-  "relations": {
-    "device": {
-      "type": "belongsTo",
-      "model": "Device",
-      "foreignKey": "deviceId"
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": []
 }

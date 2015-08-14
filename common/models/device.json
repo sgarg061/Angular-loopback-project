@@ -26,7 +26,7 @@
       "type": "string",
       "required": false
     },
-    "locationName": {
+    "organizationPath": {
       "type": "string",
       "required": false
     },
@@ -38,7 +38,7 @@
       "type": "string",
       "required": false
     },
-    "softwareVersion": {
+    "currentSoftwareVersion": {
       "type": "string",
       "required": false
     },
@@ -58,9 +58,21 @@
       "type": "number",
       "required": false
     },
+    "checkinInterval": {
+      "type": "number",
+      "required": false
+    },
+    "lastCheckIn": {
+      "type": "date",
+      "required": false
+    },
     "customerId": {
       "type": "string",
       "required": true
+    },
+    "softwareVersionId": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
@@ -84,6 +96,11 @@
       "type": "hasMany",
       "model": "DeviceLogEntry",
       "foreignKey": "deviceId"
+    },
+    "softwareVersion": {
+      "type": "hasOne",
+      "model": "SoftwareVersion",
+      "foreignKey": "id"
     }
   },
   "acls": [
@@ -101,5 +118,5 @@
       "property": "*"
     }
   ],
-  "methods": {}
+  "methods": []
 }
