@@ -106,26 +106,7 @@ describe('REST', function() {
 
       });
 
-    describe('Initial Device Activation', function() {
-
-      var device;
-      it('should activate license and return a new device', function(done) {
-        common.json('post', '/api/licenses/activate', authToken)
-          .send({key: 'ETSHOWDOTHEYWORK'})
-          .expect(200)
-          .end(function(err, res) {
-            if (err) {
-              console.log('error! ' + err);
-              throw err;
-            }
-            device = JSON.parse(res.body);
-            assert(device.deviceId, 'must have a deviceId');
-            
-            done();
-          });
-      });
-
-      var deviceCheckinData = {
+    var deviceCheckinData = {
         guid: '7DB02DCF-4EA9-4177-A256-42BCFD511E90',
         organizationPath: '/Canada/Ontario/Ottawa/TH-1582',
         address: '479 March Road, Kanata, ON, K2K',
@@ -167,6 +148,27 @@ describe('REST', function() {
         ]
       };
 
+    describe('Initial Device Activation', function() {
+
+      var device;
+      it('should activate license and return a new device', function(done) {
+        common.json('post', '/api/licenses/activate', authToken)
+          .send({key: 'ETSHOWDOTHEYWORK'})
+          .expect(200)
+          .end(function(err, res) {
+            if (err) {
+              console.log('error! ' + err);
+              throw err;
+            }
+            device = JSON.parse(res.body);
+            assert(device.deviceId, 'must have a deviceId');
+            
+            done();
+          });
+      });
+
+      var checkin;
+
       it('should checkin a new device', function(done) {
         
         deviceCheckinData.id = device.deviceId;
@@ -194,9 +196,13 @@ describe('REST', function() {
           .end(function(err, res) {
             if (err) throw err;
             assert(typeof res.body === 'object');
+
             assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
             assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
             assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+            assert(res.body.lastCheckin, 'must have a lastCheckin');
+
+            checkin = res.body.lastCheckin;
 
             done();
           });
@@ -229,6 +235,9 @@ describe('REST', function() {
             assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
             assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
             assert.equal(res.body.cameras[1].status, 'offline', 'camera 2 status must be offline');
+            
+            var latestCheckin = res.body.lastCheckin;
+            assert(latestCheckin > checkin, 'latest checkin must be later than previous checkin');
 
             done();
           });

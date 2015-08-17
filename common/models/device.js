@@ -102,12 +102,13 @@ module.exports = function(Device) {
             id: deviceData.id,
             guid: deviceData.guid,
             organizationPath: deviceData.organizationPath,
-            address: deviceData.address
-        }, function(err, res) {
+            address: deviceData.address,
+            lastCheckin: new Date()
+        }, function(err, updatedDevice) {
             if (err) {
                 cb(new Error('Error checking in device: %s', err));
             } else {
-                updateCameras(device, deviceData, cb);
+                updateCameras(updatedDevice, deviceData, cb);
             }
         });
     }
@@ -173,7 +174,9 @@ module.exports = function(Device) {
                     result.updateUrl = softwareVersion.url;
                 }
 
-                logger.debug('returning configuration: ', result);
+                logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
+
+
                 cb(null, result);
             });
             
