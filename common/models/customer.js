@@ -45,6 +45,7 @@ module.exports = function(Customer) {
         } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
             var cloudId = context.get('jwt').cloudId;
             var Reseller = Customer.app.models.Reseller;
+
             Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
                 if (err) {
                     logger.error('Error querying resellers with cloud id ' + cloudId);
@@ -70,6 +71,84 @@ module.exports = function(Customer) {
             });
         }
     });
+
+    Customer.getCloud = function (id, cb) {
+        var error;
+
+        var Cloud = Customer.app.models.Cloud;
+        Customer.getReseller(id, function (err, res) {
+            if (err) {
+                cb(err, -1);
+            } else {
+                if (res.length < 0) {
+                    error = new Error('Unable to find reseller for customer ' + id);
+                    error.statusCode = 404;
+                    cb(error, -1);
+                } else if (res.length > 1) {
+                    error = new Error('Duplicate resellers found for customer ' + id);
+                    error.statusCode = 422;
+                    cb(error, -1);
+                } else {
+                    Cloud.find({where: {id: res.cloudId}}, function (err, res) {
+                        if (err) {
+                            cb(new Error('Error while retrieving cloud for customer ' + id), -1);
+                        } else {
+                            if (res.length < 1) {
+                                error = new Error('Unable to find cloud for customer' + id);
+                                error.statusCode = 404;
+                                cb(error, -1);
+                            } else if (res.length > 1) {
+                                error = new Error('Duplicate clouds found for customer ' + id);
+                                error.statusCode = 422;
+                                cb(error, -1);
+                            } else {
+                                cb(null, res);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    Customer.getReseller = function(id, cb) {
+        var error;
+        var Reseller = Customer.app.models.Reseller;
+
+        Customer.find({where: {id: id}}, function (err, res) {
+            if (err) {
+                cb(new Error('Error while retrieving customer ownership'));
+            } else {
+                if (res.length < 1) {
+                    error = new Error('Unable to find customer ' + id);
+                    error.statusCode = 404;
+                    cb(error);
+                } else if (res.length > 1) {
+                    error = new Error('Duplicate customers found with id ' + id);
+                    error.statusCode = 422;
+                    cb(error);
+                } else {
+                    var resellerId = res[0].resellerId;
+                    Reseller.find({where: {id: resellerId}}, function (err, res) {
+                        if (err) {
+                            logger.error(err);
+                            cb(new Error('Error while retrieving reseller for customer ' + id));
+                        } else if (res.length < 1) {
+                            error = new Error('Unable to find reseller for customer ' + id);
+                            error.statusCode = 404;
+                            cb(error, -1);
+                        } else if (res.length > 1) {
+                            error = new Error('Duplicate resellers for customer ' + id);
+                            error.statusCode = 422;
+                            cb(error, -1);
+                        } else {
+                            cb(null, res);
+                        }
+                    });
+                }
+            }
+        });
+    };
 
     Customer.getOwnership = function (id, cb) {
         var error;

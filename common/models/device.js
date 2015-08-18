@@ -132,6 +132,105 @@ module.exports = function(Device) {
         });
     }
 
+    Device.getCloud = function (id, cb) {
+        var error;
+        var Cloud = Device.app.models.Cloud;
+
+        Device.getReseller(id, function (err, res) {
+            if (err) {
+                cb(err, -1);
+            } else {
+                if (res.length < 0) {
+                    error = new Error('Unable to find reseller for device ' + id);
+                    error.statusCode = 422;
+                    cb(error, -1);
+                } else if (res.length > 1) {
+                    error = new Error('Duplicate resellers found for device ' + id);
+                    error.statusCode = 422;
+                    cb(error, -1);
+                } else {
+                    Cloud.find({where: {id: res.cloudId}}, function (err, res) {
+                        if (err) {
+                            cb(new Error('Error while retrieving cloud for device ' + id), -1);
+                        } else {
+                            if (res.length < 1) {
+                                error = new Error('Unable to find cloud for device' + id);
+                                error.statusCode = 422;
+                                cb(error, -1);
+                            } else if (res.length > 1) {
+                                error = new Error('Duplicate clouds found for device ' + id);
+                                error.statusCode = 422;
+                                cb(error, -1);
+                            } else {
+                                cb(null, res);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    Device.getReseller = function(id, cb) {
+        var error;
+        var Reseller = Device.app.models.Reseller;
+
+        Device.getCustomer(id, function (err, res) {
+            if (err) {
+                cb(err, -1);
+            } else {
+                Reseller.find({where: {id: res[0].resellerId}}, function (err, res) {
+                    if (res.length < 1) {
+                        error = new Error('Unable to find reseller for device ' + id);
+                        error.statusCode = 404;
+                        cb(error, -1);
+                    } else if (res.length > 1) {
+                        error = new Error('Duplicate resellers for device ' + id);
+                        error.statusCode = 422;
+                        cb(error, -1);
+                    } else {
+                        cb(null, res);
+                    }
+                });
+            }
+        });
+    };
+
+    Device.getCustomer = function(id, cb) {
+        var error;
+        var Customer = Device.app.models.Customer;
+
+        Device.find({where: {id: id}}, function (err, res) {
+            if (err) {
+                cb(new Error('Error while retrieving device customer id'), -1);
+            } else {
+                if (res.length < 0) {
+                    error = new Error('Unable to find device ' + id);
+                    error.statusCode = 404;
+                    cb(error, -1);
+                } else if (res.length > 1) {
+                    error = new Error('Duplicate devices found with id ' + id);
+                    error.statusCode = 422;
+                    cb(error, -1);
+                } else {
+                    Customer.find({where: {id: res[0].customerId}}, function (err, res) {
+                        if (res.length < 1) {
+                            error = new Error('Unable to find customer for device ' + id, -1);
+                            error.statusCode = 404;
+                            cb(error, -1);
+                        } else if (res.length > 1) {
+                            error = new Error('Duplicate customers found for device ' + id, -1);
+                            error.statusCode = 422;
+                            cb(error, -1);
+                        } else {
+                            cb(null, res);
+                        }
+                    });
+                }
+            }
+        });
+    };
+
     Device.getOwnership = function (id, cb) {
         var error;
 

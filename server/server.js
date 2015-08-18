@@ -26,6 +26,7 @@ app.use(function jwtMiddleware (req, res, next) {
         
         var token = authParts[1];
         var unpackedToken = jwt.decode(token);
+        
         var jwtToken = {
             token: token,
             userType: unpackedToken.app_metadata.user_type

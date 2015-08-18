@@ -65,6 +65,31 @@
       "through": "POSConnectorOwnership"
     }
   },
-  "acls": [],
+  "acls": [
+  {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+  },
+  {
+    "principalType": "ROLE",
+    "principalId": "isSolink",
+    "permission": "ALLOW",
+    "property": "*"
+  },
+  {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "*"
+  },
+  {
+    "principalType": "ROLE",
+    "principalId": "isValidated",
+    "permission": "ALLOW",
+    "accessType": "READ" 
+  }
+  ],
   "methods": []
 }

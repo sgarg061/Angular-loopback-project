@@ -26,7 +26,6 @@ module.exports = function(Reseller) {
                 }
             }
         });
-        
     });
 
     Reseller.observe('access', function resellerPermissions(ctx, next) {
@@ -34,8 +33,11 @@ module.exports = function(Reseller) {
     });
 
     function resellerAccessPermissions(ctx, next) {
-        var context = loopback.getCurrentContext();
+        if (!ctx.query) {
+            return next();
+        }
 
+        var context = loopback.getCurrentContext();
         if (context && context.get('jwt')) {
             var resellerId = context.get('jwt').resellerId;
             var cloudId = context.get('jwt').cloudId;

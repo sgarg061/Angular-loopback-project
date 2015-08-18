@@ -76,6 +76,13 @@
     "principalId": "isSolink",
     "permission": "ALLOW",
     "property": "*"
-  }
+  },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE",
+    "property": "*"
+    }
   ]
 }

@@ -111,6 +111,20 @@
       "permission": "DENY"
     },
     {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "*"
+    },
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "isValidated",
