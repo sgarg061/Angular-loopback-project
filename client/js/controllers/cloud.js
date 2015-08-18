@@ -1,16 +1,40 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', 'Cloud', function($scope, $state, Cloud) {
-    $scope.clouds = [];
+  .controller('CloudController', ['$scope', '$state', 'Cloud', 'Page', function($scope, $state, Cloud, Page) {
+
+    Page.setTitle('Clouds');
+    
+    var self = this;
+
+    $scope.clouds = [ ];
+    $scope.selected = null;
+
     function getClouds() {
       Cloud
-        .find()
+        .find({
+          filter: {
+            where: {},
+            include: ['resellers', 'softwareVersion', 'posConnectors']
+          }
+        })
         .$promise
-        .then(function(results) {
-          $scope.clouds = results;
+        .then(function(clouds) {
+          $scope.clouds    = [].concat(clouds);          
+          $scope.selected = clouds[0];
+
+          if ($scope.selected) {
+            Page.setNavPath($scope.selected.name);
+            console.log('resellers: ' + $scope.selected.resellers);
+          }
+          
+          $scope.resellers = [
+            {name: 'Reseller 1', cloudId: $scope.selected.id},
+            {name: 'Reseller 2', cloudId: $scope.selected.id, checkinInterval: 3000},
+          ];
         });
     }
     getClouds();
+
 
     $scope.addCloud = function() {
       Cloud

@@ -1,0 +1,62 @@
+
+
+<div class="container">
+
+<div class="row">
+  <div layout="column" class="col-md-4">
+
+    <md-input-container>
+      <label>Event Server URL</label>
+      <input required name="description" ng-model="cloud.eventServerURL">
+    </md-input-container>    
+                      
+    <md-input-container>
+      <label>Image Server URL</label>
+      <input type="text" class="form-control focus" name="imageServerUrl"  autocomplete="off" required ng-model="cloud.imageServerUrl">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Check-in Interval</label>
+      <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="cloud.checkinInterval">
+    </md-input-container>
+    
+    
+    <md-input-container>
+      <label>Software Version</label>
+      <input type="text" class="form-control focus" name="updateUrl" autocomplete="off" required ng-model="cloud.updateUrl">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Signalling Server</label>
+      <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="cloud.signallingServerUrl">
+    </md-input-container>
+
+    <md-input-container>
+      <label>POS Connectors</label>
+      <md-list>
+      <md-list-item ng-repeat="connector in cloud.posConnectors">
+          <md-button ng-click="selectConnector(connector)" ng-class="{'selected' : connector === cloudController.selected }">
+            {{connector.name}}
+          </md-button>
+      </md-list-item>
+    </md-list>
+    </md-input-container>
+      
+    <button class="btn btn-default">Add</button>
+
+  </div>
+
+  <div layout="column" class="col-md-12">
+    <md-list>
+      <md-list-item ng-repeat="it in cloudController.users">
+          <md-button ng-click="cloudController.selectUser(it)" ng-class="{'selected' : it === cloudController.selected }">
+            <md-icon md-svg-icon="{{it.avatar}}" class="avatar"></md-icon>
+            {{it.name}}
+          </md-button>
+      </md-list-item>
+    </md-list>
+  </div>
+</div>
+
+
+</div>

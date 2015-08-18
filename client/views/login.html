@@ -1,12 +1,13 @@
 <div id="login-container">
-  <form ng-submit="signin()">
-    <fieldset>
-      <input type="text" name="username" ng-model="username" ng-disabled="loading" />
-      <br>
-      <input type="password" name="password" ng-model="password" ng-disabled="loading" />
-      <br>
-      <button type="submit" ng-disabled="loading">Login</button>
-    </fieldset>
-  </form>
-
+	<form ng-submit="signin()">
+	  <div class="group">
+	    <input type="text" name="username" ng-model="username"><span class="highlight"></span><span class="bar"></span>
+	    <label>Username</label>
+	  </div>
+	  <div class="group">
+	    <input type="password" type="password" name="password"><span class="highlight"></span><span class="bar"></span>
+	    <label>Password</label>
+	  </div>
+	  <button type="submit" class="button buttonBlue">Login</button>
+	</form>
 </div>

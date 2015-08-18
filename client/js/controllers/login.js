@@ -15,7 +15,7 @@ angular.module('app').controller('LoginController', function($scope, $state, aut
       }
     }, function(profile, idToken, accessToken, state, refreshToken) {
       $scope.$parent.message = '';
-      $state.go('root');
+      $state.go('cloud');
       $scope.loading = false;
     }, function(err) {
       console.log("Error :(", err);

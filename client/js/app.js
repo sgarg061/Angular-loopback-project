@@ -4,10 +4,24 @@ angular
     'angular-storage', 
     'angular-jwt',
     'lbServices',
-    'ui.router'
+    'ui.router',
+    'ngMaterial'
   ])
-  .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', 'jwtInterceptorProvider', 
-    function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, jwtInterceptorProvider) {
+  .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', 'jwtInterceptorProvider', '$mdThemingProvider', '$mdIconProvider',
+    function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, jwtInterceptorProvider, $mdThemingProvider, $mdIconProvider) {
+
+      $mdIconProvider
+        .defaultIconSet("./assets/svg/avatars.svg", 128)
+        .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+        .icon("share"      , "./assets/svg/share.svg"       , 24)
+        .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
+        .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
+        .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+        .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+
+      $mdThemingProvider.theme('default')
+        .primaryPalette('blue')
+        .accentPalette('grey');
 
     authProvider.init({
       domain: 'solink.auth0.com',
@@ -58,6 +72,14 @@ angular
           requiresLogin: true
         }
       })
+      .state('reseller', {
+        url: '/reseller',
+        templateUrl: 'views/reseller.html',
+        controller: 'ResellerController',
+        data: {
+          requiresLogin: true
+        }
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html',
@@ -73,6 +95,7 @@ angular
 
 
   }])
+  
   .run(function($rootScope, auth, store, jwtHelper, $location) {
 
     // This hooks all auth events to check everything as soon as the app starts
