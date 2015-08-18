@@ -57,7 +57,6 @@ describe('Solink and cloud users can create new resellers', function() {
 
       async.each(invalidLoginTypes, function loginWithInvalidType(loginType, cb) {
         common.login(loginType, function (token) {
-          console.log('TIME TO TRY TO CREATE A USER UNSUCESSFULLY' + loginType);
           common.json('post', '/api/resellers', token)
             .send({
               name: 'Reseller 1',

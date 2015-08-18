@@ -10,7 +10,7 @@ module.exports = function (app) {
         var ctx = loopback.getCurrentContext();
         var jwt = ctx.get('jwt');
         if (!jwt) {
-            return cb(new Error('Unauthenticated'), false);
+            return unauthorized(cb);
         }
 
         tokenValidator.validateToken(jwt.token, function (err, msg) {
@@ -22,7 +22,7 @@ module.exports = function (app) {
         var ctx = loopback.getCurrentContext();
         var jwt = ctx.get('jwt');
         if (!jwt) {
-            return cb(new Error('Unauthenticated'), false);
+            return unauthorized(cb);
         }
 
         tokenValidator.validateToken(jwt.token, function (err, msg) {
@@ -34,21 +34,34 @@ module.exports = function (app) {
         var ctx = loopback.getCurrentContext();
         var jwt = ctx.get('jwt');
         if (!jwt) {
-            return cb(new Error('Unauthenticated'), false);
+            return unauthorized(cb);
         }
 
-        switch (context.modelName) {
-            case 'Reseller':
-                return isOwnerOfReseller(context, jwt, cb);
-            case 'Cloud':
-                return isOwnerOfCloud(context, jwt, cb);
-            case 'Device':
-                return isOwnerOfDevice(context, jwt, cb);
-            case 'Customer':
-                return isOwnerOfCustomer(context, jwt, cb);
-            default:
-                invalidMethod(cb);
-        }
+        tokenValidator.validateToken(jwt.token, function (err, msg) {
+            if (err) {
+                logger.error('Error validating token');
+                logger.error(err);
+                cb(err, false);
+            } else {
+                if (jwt.userType === 'solink') {
+                    cb(null, true);
+                } else {
+                    console.log(jwt);
+                    switch (context.modelName) {
+                    case 'Reseller':
+                        return isOwnerOfReseller(context, jwt, cb);
+                    case 'Cloud':
+                        return isOwnerOfCloud(context, jwt, cb);
+                    case 'Device':
+                        return isOwnerOfDevice(context, jwt, cb);
+                    case 'Customer':
+                        return isOwnerOfCustomer(context, jwt, cb);
+                    default:
+                        invalidMethod(cb);
+                    }
+                }
+            }
+        });
     });
 };
 

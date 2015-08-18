@@ -75,6 +75,7 @@
     "principalType": "ROLE",
     "principalId": "isSolink",
     "permission": "ALLOW",
+    "accessType": "*",
     "property": "*"
   },
   {
@@ -82,8 +83,15 @@
     "principalId": "isOwner",
     "permission": "ALLOW",
     "accessType": "WRITE" ,
-    "property": "*"
-  },
+    "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "updateAttributes"
+    },
   {
     "principalType": "ROLE",
     "principalId": "isValidated",

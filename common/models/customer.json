@@ -66,11 +66,18 @@
       "property": "create"
     },
     {
-      "principalType": "ROLE",
-      "principalId": "isOwner",
-      "permission": "ALLOW",
-      "accessType": "WRITE" ,
-      "property": "*"
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "updateAttributes"
     },
     {
       "accessType": "*",

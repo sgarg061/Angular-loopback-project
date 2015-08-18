@@ -19,7 +19,10 @@ module.exports = function(Reseller) {
                         e.statusCode = 400;
                         next(e);
                     } else {
-                        createResellerUser(ctx.instance, next);
+                        // TODO: Should probably create the user AFTER save.
+                        // ideally, we do them in transactional lockstep, 
+                        // so if the user creation fails we rollback on the save
+                        createResellerUser(ctx.instance, next); 
                     }
                 } else {
                     next();
@@ -41,30 +44,31 @@ module.exports = function(Reseller) {
         if (context && context.get('jwt')) {
             var resellerId = context.get('jwt').resellerId;
             var cloudId = context.get('jwt').cloudId;
+            var userType = context.get('jwt').userType;
 
-            if (context.get('jwt').userType === 'solink') {
+            if (userType === 'solink') {
                 next();
             } else if (resellerId) {
-                if (ctx.isNewInstance) { // TODO: should we limit updates here too?
+                if (ctx.isNewInstance) {
+                    // resellers cannot create new resellers
                     var e = new Error('Unauthorized');
                     e.statusCode = 401;
                     next(e);
-                } else if (ctx.query.where) {
-                    ctx.query.where.id = resellerId;
                 } else {
-                    ctx.query.where = {
-                        resellerId: resellerId
-                    };
+                    // resellers cannot change reseller or cloud IDs
+                    ctx.instance.unsetAttribute('cloudId');
+                    ctx.instance.unsetAttribute('id');
                 }
                 next();
             } else if (cloudId) {
-                // resellerId must be in list of this cloud's
-                if (ctx.query.where) {
-                    ctx.query.where.cloudId = cloudId;
+                if (ctx.isNewInstance) {
+                    // cloud users can only create resellers under their own domain
+                    ctx.instance.cloudId = cloudId;
+                    ctx.instance.unsetAttribute('id');
                 } else {
-                    ctx.query.where = {
-                        cloudId: cloudId
-                    };
+                    // cloud users cannot modify the reseller or cloud id
+                    ctx.instance.unsetAttribute('cloudId');
+                    ctx.instance.unsetAttribute('id');
                 }
                 next();
             } else {
