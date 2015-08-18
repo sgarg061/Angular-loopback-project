@@ -1,5 +1,5 @@
 {
-  "name": "POSConnectorOwnership",
+  "name": "ResellerPOSConnector",
   "base": "PersistedModel",
   "strict": true,
   "options": {
@@ -7,11 +7,7 @@
     "idInjection": true
   },
   "properties": {
-    "ownerId": {
-      "type": "string",
-      "required": true
-    },
-    "ownerType": {
+    "resellerId": {
       "type": "string",
       "required": true
     },
@@ -22,6 +18,16 @@
   },
   "validations": [],
   "relations": {
+    "cloud": {
+      "type": "belongsTo",
+      "model": "Reseller",
+      "foreignKey": "resellerId"
+    },
+    "pOSConnector": {
+      "type": "belongsTo",
+      "model": "POSConnector",
+      "foreignKey": "posConnectorId"
+    }
   },
   "acls": [],
   "methods": []

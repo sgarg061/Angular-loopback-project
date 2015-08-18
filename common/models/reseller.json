@@ -56,8 +56,7 @@
     "posConnectors": {
       "type": "hasMany",
       "model": "POSConnector",
-      "polymorphic": "owner",
-      "through": "POSConnectorOwnership"
+      "through": "ResellerPOSConnector"
     }
   },
   "acls": [],

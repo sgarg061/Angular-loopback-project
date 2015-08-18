@@ -8,57 +8,68 @@ module.exports = function(app, doneCallback) {
 
   logger.log('info', 'creating sample data...');
 
-  //create all models
-  async.auto({
-    destroyAll: function(cb) {
-      logger.debug('destroying all existing data...');
-      app.models.SoftwareVersion.destroyAll();
-      app.models.POSConnector.destroyAll();
-      app.models.POSConnectorOwnership.destroyAll();
-      app.models.Cloud.destroyAll();
-      app.models.Reseller.destroyAll();
-      app.models.Customer.destroyAll();
-      app.models.Device.destroyAll();
-      app.models.Camera.destroyAll();
-      app.models.POSDevice.destroyAll();
-      app.models.License.destroyAll();
-      cb(null);
-    },
-    softwareVersions: ['destroyAll', function(cb, results) {
-      createSoftwareVersions(cb);
-    }],
-    clouds: ['softwareVersions', function(cb, results) {
-      createClouds(cb, results);
-    }],
-    resellers: ['clouds', function (cb, results) {
-      createResellers(cb, results);
-    }],
-    posConnectors: ['resellers', function(cb, results) {
-      createPOSConnectors(cb, results);
-    }],
-    posConnectorsOwnerships: ['posConnectors', function(cb, results) {
-      associatePOSConnectors(cb, results);
-    }],
-    // customers: ['resellers', function (cb, results) {
-    customers: ['posConnectorsOwnerships', function (cb, results) {
-      createCustomers(cb, results);
-    }],
-    licenses: ['customers', function (cb, results) {
-      createLicenses(cb, results);
-    }],
-    devices: ['customers', function (cb, results) {
-      createDevices(cb, results);
-    }],
-    cameras: ['devices', function (cb, results) {
-      createCameras(cb, results);
-    }],
-    posDevices: ['devices', function (cb, results) {
-      createPOSDevices(cb, results);
-    }],
-    result: ['posDevices', function (cb, results) {
-      doneCallback();
-    }]
-  });
+  if(datastore.connected) {
+    createModels();
+  } else {
+    // if not connected yet, wait. this prevents "possible EventEmitter memory leak detected" warnings.
+    // see https://github.com/strongloop/loopback/issues/1186
+    datastore.once('connected', function() {
+      createModels();
+    });
+  }
+
+  function createModels() {
+    //create all models
+    async.auto({
+      destroyAll: function(cb) {
+        logger.debug('destroying all existing data...');
+        app.models.SoftwareVersion.destroyAll();
+        app.models.POSConnector.destroyAll();
+        app.models.CloudPOSConnector.destroyAll();
+        app.models.Cloud.destroyAll();
+        app.models.Reseller.destroyAll();
+        app.models.Customer.destroyAll();
+        app.models.Device.destroyAll();
+        app.models.Camera.destroyAll();
+        app.models.POSDevice.destroyAll();
+        app.models.License.destroyAll();
+        cb(null);
+      },
+      softwareVersions: ['destroyAll', function(cb, results) {
+        createSoftwareVersions(cb);
+      }],
+      clouds: ['softwareVersions', function(cb, results) {
+        createClouds(cb, results);
+      }],
+      resellers: ['clouds', function (cb, results) {
+        createResellers(cb, results);
+      }],
+      cloudPOSConnectors: ['resellers', function(cb, results) {
+        createCloudPOSConnectors(cb, results);
+      }],
+      resellerPOSConnectors: ['cloudPOSConnectors', function(cb, results) {
+        createResellerPOSConnectors(cb, results);
+      }],
+      customers: ['resellerPOSConnectors', function (cb, results) {
+        createCustomers(cb, results);
+      }],
+      licenses: ['customers', function (cb, results) {
+        createLicenses(cb, results);
+      }],
+      devices: ['customers', function (cb, results) {
+        createDevices(cb, results);
+      }],
+      cameras: ['devices', function (cb, results) {
+        createCameras(cb, results);
+      }],
+      posDevices: ['devices', function (cb, results) {
+        createPOSDevices(cb, results);
+      }],
+      result: ['posDevices', function (cb, results) {
+        doneCallback();
+      }]
+    });
+  }
 
   function createSoftwareVersions(cb) {
     logger.debug('creating software versions...');
@@ -124,14 +135,14 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function createPOSConnectors(cb, results) {
-    logger.debug('creating POS connectors...');
-    datastore.automigrate('POSConnector', function(err) {
+  function createCloudPOSConnectors(cb, results) {
+    logger.debug('creating Cloud POS connectors...');
+    datastore.automigrate('CloudPOSConnector', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
       }
-      app.models.POSConnector.create([
+      results.clouds[0].posConnectors.create([
         { name: 'POS Brew Connector', 
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));'},
         { name: 'POS MoBrew Connector`', 
@@ -142,30 +153,22 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function associatePOSConnectors(cb, results) {
-    logger.debug('associating POS connectors...');
-    datastore.automigrate('POSConnectorOwnership', function(err) {
+  function createResellerPOSConnectors(cb, results) {
+    logger.debug('creating Reseller POS connectors...');
+    datastore.automigrate('ResellerPOSConnector', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
       }
-      app.models.POSConnectorOwnership.create([
-        { ownerId: results.clouds[0].id, 
-          ownerType: 'Cloud',
-          posConnectorId: results.posConnectors[0].id},
-        { ownerId: results.clouds[1].id, 
-          ownerType: 'Cloud',
-          posConnectorId: results.posConnectors[0].id},
-        { ownerId: results.resellers[0].id, 
-          ownerType: 'Reseller',
-          posConnectorId: results.posConnectors[1].id},
-        { ownerId: results.resellers[1].id, 
-          ownerType: 'Reseller',
-          posConnectorId: results.posConnectors[2].id},
-        { ownerId: results.resellers[2].id, 
-          ownerType: 'Reseller',
-          posConnectorId: results.posConnectors[2].id}
-      ], cb);
+      results.resellers[0].posConnectors.create([
+        { name: 'Connector 1', 
+          script: 'console.log(\'Connector 1\');'}
+        ], function (err, res) { 
+          if (err) {
+            console.log('error creating reseller pos connectors: ' + err);
+          }
+          cb(err, res);
+        });
     });
   }
 

@@ -21,7 +21,20 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "clouds": {
+      "type": "hasMany",
+      "model": "Cloud",
+      "foreignKey": "posConnectorId",
+      "through": "CloudPOSConnector"
+    },
+    "resellers": {
+      "type": "hasMany",
+      "model": "Reseller",
+      "foreignKey": "posConnectorId",
+      "through": "ResellerPOSConnector"
+    }
+  },
   "acls": [],
   "methods": []
 }
