@@ -4,8 +4,6 @@ angular
 
     Page.setTitle('Clouds');
     
-    var self = this;
-
     $scope.clouds = [ ];
     $scope.selected = null;
 
@@ -24,17 +22,20 @@ angular
 
           if ($scope.selected) {
             Page.setNavPath($scope.selected.name);
-            console.log('resellers: ' + $scope.selected.resellers);
+            console.log('selected: ' + JSON.stringify($scope.selected));
           }
           
-          $scope.resellers = [
-            {name: 'Reseller 1', cloudId: $scope.selected.id},
-            {name: 'Reseller 2', cloudId: $scope.selected.id, checkinInterval: 3000},
+          $scope.selected.posConnectors = [
+            {name: 'POS Connector 1', cloudId: $scope.selected.id},
+            {name: 'POS Connector 2', cloudId: $scope.selected.id, checkinInterval: 3000},
           ];
         });
     }
     getClouds();
 
+    $scope.selectReseller = function(reseller) {
+      $state.go('reseller', {resellerId: reseller.id});
+    }
 
     $scope.addCloud = function() {
       Cloud

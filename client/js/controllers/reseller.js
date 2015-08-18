@@ -1,48 +1,33 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', 'Cloud', 'Page', function($scope, $state, Cloud, Page) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Reseller', 'Page', function($scope, $state, $stateParams, Reseller, Page) {
 
     Page.setTitle('Resellers');
     Page.setNavPath('Resellers');
 
-    var self = this;
+    $scope.reseller = {};
 
-    self.cloud        = {};
-    self.selectCloud  = selectCloud;
-
-    function getClouds() {
-      Cloud
-        .find()
+    function getReseller() {
+      Reseller
+        .find({
+          filter: {
+            where: {id: $stateParams.resellerId},
+            include: ['customers', 'softwareVersion', 'posConnectors']
+          }
+        })
         .$promise
-        .then(function(clouds) {
-          self.cloud = clouds[0];
+        .then(function(resellers) {
+          $scope.reseller = resellers[0];
+
+          Page.setNavPath($scope.reseller.name);
+
+          console.log('$scope.reseller: ' + JSON.stringify($scope.reseller));
         });
     }
-    getClouds();
+    getReseller();
 
-
-    function selectCloud ( cloud ) {
-      self.selected = angular.isNumber(cloud) ? $scope.clouds[cloud] : cloud;
+    $scope.selectCustomer = function(customer) {
+      $state.go('customer', {customerId: customer.id});
     }
-
-    $scope.addCloud = function() {
-      Cloud
-        .create($scope.newCloud)
-        .$promise
-        .then(function(cloud) {
-          $scope.newCloud = '';
-          $scope.cloudForm.name.$setPristine();
-          $('.focus').focus();
-          getClouds();
-        });
-    };
-
-    $scope.removeCloud = function(item) {
-      Cloud
-        .deleteById(item)
-        .$promise
-        .then(function() {
-          getClouds();
-        });
-    };
+   
   }]);

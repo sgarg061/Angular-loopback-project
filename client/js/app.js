@@ -7,8 +7,8 @@ angular
     'ui.router',
     'ngMaterial'
   ])
-  .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', 'jwtInterceptorProvider', '$mdThemingProvider', '$mdIconProvider',
-    function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, jwtInterceptorProvider, $mdThemingProvider, $mdIconProvider) {
+  .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', 'jwtInterceptorProvider', '$mdThemingProvider', '$mdIconProvider',
+    function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, jwtInterceptorProvider, $mdThemingProvider, $mdIconProvider) {
 
       $mdIconProvider
         .defaultIconSet("./assets/svg/avatars.svg", 128)
@@ -23,77 +23,93 @@ angular
         .primaryPalette('blue')
         .accentPalette('grey');
 
-    authProvider.init({
-      domain: 'solink.auth0.com',
-      clientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
-      callbackURL: location.href,
-      loginState: 'login' // matches login state
-    });
+      $locationProvider.html5Mode(true);
 
-    authProvider.on('loginSuccess', function($location, profilePromise, idToken, store) {
-      console.log("Login Success");
-      profilePromise.then(function(profile) {
-        store.set('profile', profile);
-        store.set('token', idToken);
+      authProvider.init({
+        domain: 'solink.auth0.com',
+        clientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
+        callbackURL: location.href,
+        loginState: 'login' // matches login state
       });
-      $location.path('/');
-    });
 
-    authProvider.on('authenticated', function($location) {
-      console.log("Authenticated");
-    });
+      authProvider.on('loginSuccess', function($location, profilePromise, idToken, store) {
+        console.log("Login Success");
+        profilePromise.then(function(profile) {
+          store.set('profile', profile);
+          store.set('token', idToken);
+        });
+        $location.path('/');
+      });
 
-    authProvider.on('logout', function() {
-      console.log("Logged out");
-    })
+      authProvider.on('authenticated', function($location) {
+        console.log("Authenticated");
+      });
 
-    // We're annotating this function so that the `store` is injected correctly when this file is minified
-    jwtInterceptorProvider.tokenGetter = ['store', function(store) {
-      // Return the saved token
-      return store.get('token');
-    }];
-
-    $httpProvider.interceptors.push('jwtInterceptor');
-
-    $stateProvider
-      .state('root', {
-        url: '/',
-        templateUrl: 'views/root.html',
-        controller: 'RootController',
-        data: {
-          requiresLogin: true
-        }
+      authProvider.on('logout', function() {
+        console.log("Logged out");
       })
-      .state('cloud', {
-        url: '/cloud',
-        templateUrl: 'views/cloud.html',
-        controller: 'CloudController',
-        data: {
-          requiresLogin: true
-        }
-      })
-      .state('reseller', {
-        url: '/reseller',
-        templateUrl: 'views/reseller.html',
-        controller: 'ResellerController',
-        data: {
-          requiresLogin: true
-        }
-      })
-      .state('login', {
-        url: '/login',
-        templateUrl: 'views/login.html',
-        controller: 'LoginController'
-      })
-      .state('logout', {
-        url: '/logout',
-        templateUrl: 'views/logout.html',
-        controller: 'LogoutController'
-      });    
 
-    $urlRouterProvider.otherwise('cloud');
+      // We're annotating this function so that the `store` is injected correctly when this file is minified
+      jwtInterceptorProvider.tokenGetter = ['store', function(store) {
+        // Return the saved token
+        return store.get('token');
+      }];
 
+      $httpProvider.interceptors.push('jwtInterceptor');
 
+      $stateProvider
+        // .state('root', {
+        //   url: '/',
+        //   templateUrl: 'views/root.html',
+        //   controller: 'RootController',
+        //   data: {
+        //     requiresLogin: true
+        //   }
+        // })
+        .state('cloud', {
+          url: '/',
+          templateUrl: 'views/cloud.html',
+          controller: 'CloudController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('reseller', {
+          url: '/reseller/:resellerId',
+          templateUrl: 'views/reseller.html',
+          controller: 'ResellerController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('customer', {
+          url: '/customer/:customerId',
+          templateUrl: 'views/customer.html',
+          controller: 'CustomerController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('device', {
+          url: '/device/:deviceId',
+          templateUrl: 'views/device.html',
+          controller: 'DeviceController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('login', {
+          url: '/login',
+          templateUrl: 'views/login.html',
+          controller: 'LoginController'
+        })
+        .state('logout', {
+          url: '/logout',
+          templateUrl: 'views/logout.html',
+          controller: 'LogoutController'
+        });    
+
+      $urlRouterProvider.otherwise('cloud');
   }])
   
   .run(function($rootScope, auth, store, jwtHelper, $location) {
