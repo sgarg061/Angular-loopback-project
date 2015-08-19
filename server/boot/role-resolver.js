@@ -106,7 +106,7 @@ function isOwnerOfDevice(context, token, cb) {
 function isOwnerOfCustomer(context, token, cb) {
     switch (context.remotingContext.req.method) {
         case 'POST':
-            console.log('posting');
+            cb(null, true);
             break;
         case 'PUT':
             if (token.userType === 'cloud') {

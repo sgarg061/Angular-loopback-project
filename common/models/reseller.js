@@ -35,72 +35,6 @@ module.exports = function(Reseller) {
         resellerAccessPermissions(ctx, next);
     });
 
-    function resellerAccessPermissions(ctx, next) {
-        if (!ctx.query) {
-            return next();
-        }
-
-        var context = loopback.getCurrentContext();
-        if (context && context.get('jwt')) {
-            var resellerId = context.get('jwt').resellerId;
-            var cloudId = context.get('jwt').cloudId;
-            var userType = context.get('jwt').userType;
-
-            if (userType === 'solink') {
-                next();
-            } else if (resellerId) {
-                if (ctx.isNewInstance) {
-                    // resellers cannot create new resellers
-                    var e = new Error('Unauthorized');
-                    e.statusCode = 401;
-                    next(e);
-                } else {
-                    // resellers cannot change reseller or cloud IDs
-                    ctx.instance.unsetAttribute('cloudId');
-                    ctx.instance.unsetAttribute('id');
-                }
-                next();
-            } else if (cloudId) {
-                if (ctx.isNewInstance) {
-                    // cloud users can only create resellers under their own domain
-                    ctx.instance.cloudId = cloudId;
-                    ctx.instance.unsetAttribute('id');
-                } else {
-                    // cloud users cannot modify the reseller or cloud id
-                    ctx.instance.unsetAttribute('cloudId');
-                    ctx.instance.unsetAttribute('id');
-                }
-                next();
-            } else {
-                var error = new Error('Unauthorized');
-                error.statusCode = 401;
-                next(error);
-            }
-        } else {
-            next();
-        }
-    }
-
-    function createResellerUser(reseller, next) {
-        var userData = {
-            userType: 'reseller',
-            resellerId: reseller.id
-        };
-
-        authService.createUser(reseller.email, reseller.password, userData, function (err, res) {
-            if (err) {
-                logger.error('Could not create reseller user');
-                logger.error(err);
-                next(err);
-            } else {
-                logger.info('Created new reseller user ' + reseller.email);
-                logger.info(res);
-                reseller.unsetAttribute('password');
-                next();
-            }
-        });
-    }
-
     Reseller.validatesPresenceOf('email', {message: 'Please provide an email address for this reseller account'});
 
     Reseller.remoteMethod('getOwnership', {
@@ -152,3 +86,72 @@ module.exports = function(Reseller) {
         });
     };
 };
+
+function resellerAccessPermissions(ctx, next) {
+    var context = loopback.getCurrentContext();
+    if (context && context.get('jwt')) {
+        var resellerId = context.get('jwt').resellerId;
+        var cloudId = context.get('jwt').cloudId;
+        var userType = context.get('jwt').userType;
+
+        if (userType === 'solink') {
+            next();
+        } else if (resellerId) {
+            if (ctx.isNewInstance) {
+                // resellers cannot create new resellers
+                var e = new Error('Unauthorized');
+                e.statusCode = 401;
+                next(e);
+            } else {
+                // resellers cannot change reseller or cloud IDs
+                if (ctx.data && ctx.data.id) {
+                    delete ctx.data.id;
+                }
+            }
+            next();
+        } else if (cloudId) {
+            if (ctx.isNewInstance) {
+                // cloud users can only create resellers under their own domain
+                if (ctx.data && ctx.data.id) {
+                    ctx.data.cloudId = cloudId;
+                    delete ctx.data.id;
+                }
+            } else {
+                // cloud users cannot modify the reseller or cloud id
+                if (ctx.data && ctx.data.cloudId) {
+                    delete ctx.data.cloudId;
+                }
+                if (ctx.data && ctx.data.id) {
+                    delete ctx.data.id;
+                }
+            }
+            next();
+        } else {
+            var error = new Error('Unauthorized');
+            error.statusCode = 401;
+            next(error);
+        }
+    } else {
+        next();
+    }
+}
+
+function createResellerUser(reseller, next) {
+    var userData = {
+        userType: 'reseller',
+        resellerId: reseller.id
+    };
+
+    authService.createUser(reseller.email, reseller.password, userData, function (err, res) {
+        if (err) {
+            logger.error('Could not create reseller user');
+            logger.error(err);
+            next(err);
+        } else {
+            logger.info('Created new reseller user ' + reseller.email);
+            logger.info(res);
+            reseller.unsetAttribute('password');
+            next();
+        }
+    });
+}
