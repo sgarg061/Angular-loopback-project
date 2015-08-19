@@ -5,7 +5,8 @@ angular
     'angular-jwt',
     'lbServices',
     'ui.router',
-    'ngMaterial'
+    'ngMaterial',
+    'ncy-angular-breadcrumb'
   ])
   .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', 'jwtInterceptorProvider', '$mdThemingProvider', '$mdIconProvider',
     function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, jwtInterceptorProvider, $mdThemingProvider, $mdIconProvider) {
@@ -70,6 +71,9 @@ angular
           url: '/',
           templateUrl: 'views/cloud.html',
           controller: 'CloudController',
+          ncyBreadcrumb: {
+            label: 'Cloud'
+          },
           data: {
             requiresLogin: true
           }
@@ -78,6 +82,10 @@ angular
           url: '/reseller/:resellerId',
           templateUrl: 'views/reseller.html',
           controller: 'ResellerController',
+          ncyBreadcrumb: {
+            label: '{{reseller.name}}',
+            parent: 'cloud'
+          },
           data: {
             requiresLogin: true
           }
@@ -86,6 +94,10 @@ angular
           url: '/customer/:customerId',
           templateUrl: 'views/customer.html',
           controller: 'CustomerController',
+          ncyBreadcrumb: {
+            label: 'Customer',
+            parent: 'reseller'
+          },
           data: {
             requiresLogin: true
           }
@@ -94,6 +106,10 @@ angular
           url: '/device/:deviceId',
           templateUrl: 'views/device.html',
           controller: 'DeviceController',
+          ncyBreadcrumb: {
+            label: 'Device',
+            parent: 'customer'
+          },
           data: {
             requiresLogin: true
           }
