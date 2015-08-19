@@ -1,62 +1,66 @@
+<div ng-include src="'views/breadcrumb.html'"></div>
 
+<md-content class="md-padding">
 
-<div layout="row" layout-margin layout-fill layout-padding>
-  <div class="col-md-3" layout-margin layout-padding>
-    <md-input-container>
-      <label>Event Server URL</label>
-      <input required name="description" ng-model="selected.eventServerUrl">
-    </md-input-container>    
-                      
-    <md-input-container>
-      <label>Image Server URL</label>
-      <input type="text" class="form-control focus" name="imageServerUrl"  autocomplete="off" required ng-model="selected.imageServerUrl">
-    </md-input-container>
+  <div layout="row" layout-margin layout-fill layout-padding>
+    <div class="col-md-3" layout-margin layout-padding>
+      <md-input-container>
+        <label>Event Server URL</label>
+        <input required name="description" ng-model="selected.eventServerUrl">
+      </md-input-container>    
+                        
+      <md-input-container>
+        <label>Image Server URL</label>
+        <input type="text" class="form-control focus" name="imageServerUrl"  autocomplete="off" required ng-model="selected.imageServerUrl">
+      </md-input-container>
 
-    <md-input-container>
-      <label>Check-in Interval</label>
-      <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="selected.checkinInterval">
-    </md-input-container>
-    
-    
-    <md-input-container>
-      <label>Software Version</label>
-      <input type="text" class="form-control focus" name="updateUrl" autocomplete="off" required ng-model="selected.updateUrl">
-    </md-input-container>
+      <md-input-container>
+        <label>Check-in Interval</label>
+        <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="selected.checkinInterval">
+      </md-input-container>
+      
+      
+      <md-input-container>
+        <label>Software Version</label>
+        <input type="text" class="form-control focus" name="updateUrl" autocomplete="off" required ng-model="selected.updateUrl">
+      </md-input-container>
 
-    <md-input-container>
-      <label>Signalling Server</label>
-      <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="selected.signallingServerUrl">
-    </md-input-container>
+      <md-input-container>
+        <label>Signalling Server</label>
+        <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="selected.signallingServerUrl">
+      </md-input-container>
 
-    <md-input-container>
-      <label>POS Connectors</label>
+      <md-input-container>
+        <label>POS Connectors</label>
+        <md-list>
+          <md-list-item ng-repeat="connector in selected.posConnectors">
+              <md-button ng-click="selectConnector(connector)" ng-class="{'selected' : connector === cloudController.selected }">
+                {{connector.name}}
+              </md-button>
+          </md-list-item>
+        </md-list>
+      </md-input-container>
+        
+      <button class="btn btn-default" flex>Add</button>
+    </div>
+
+    <div class="col-md-8" layout-margin layout-fill layout-padding>
+      <h2>Customers</h2>
       <md-list>
-        <md-list-item ng-repeat="connector in selected.posConnectors">
-            <md-button ng-click="selectConnector(connector)" ng-class="{'selected' : connector === cloudController.selected }">
-              {{connector.name}}
-            </md-button>
+        <md-list-item ng-repeat="customer in reseller.customers">
+
+          <md-card ng-click='selectCustomer(customer)'>
+            <md-card-content>
+              <h2 class="md-title">{{customer.name}}</h2>
+              <p>
+                
+              </p>
+            </md-card-content>
+          </md-card>
+
         </md-list-item>
       </md-list>
-    </md-input-container>
-      
-    <button class="btn btn-default" flex>Add</button>
+    </div>
   </div>
 
-  <div class="col-md-8" layout-margin layout-fill layout-padding>
-    <h2>Customers</h2>
-    <md-list>
-      <md-list-item ng-repeat="customer in reseller.customers">
-
-        <md-card ng-click='selectCustomer(customer)'>
-          <md-card-content>
-            <h2 class="md-title">{{customer.name}}</h2>
-            <p>
-              
-            </p>
-          </md-card-content>
-        </md-card>
-
-      </md-list-item>
-    </md-list>
-  </div>
-</div>
+</md-content>

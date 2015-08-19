@@ -10,6 +10,22 @@ html, body {
   display: none !important;
 }
 
+/* Breadcrumb */
+.breadcrumb { 
+  list-style: none; 
+  font: 18px Helvetica, Arial, Sans-Serif;
+}
+.breadcrumb li { 
+  display: inline;
+  list-style-type: none;
+  padding-right: 10px;
+}
+.breadcrumb li a, .breadcrumb:visited li a, .breadcrumb:hover li a, .breadcrumb:active li a {
+  text-decoration: none; 
+  color: #ffffff;
+}
+
+
 /* Toolbar area */
 
 .menu {

@@ -5,8 +5,7 @@ angular
     'angular-jwt',
     'lbServices',
     'ui.router',
-    'ngMaterial',
-    'ncy-angular-breadcrumb'
+    'ngMaterial'
   ])
   .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', 'jwtInterceptorProvider', '$mdThemingProvider', '$mdIconProvider',
     function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, jwtInterceptorProvider, $mdThemingProvider, $mdIconProvider) {
@@ -48,7 +47,7 @@ angular
 
       authProvider.on('logout', function() {
         console.log("Logged out");
-      })
+      });
 
       // We're annotating this function so that the `store` is injected correctly when this file is minified
       jwtInterceptorProvider.tokenGetter = ['store', function(store) {
@@ -69,11 +68,11 @@ angular
         // })
         .state('cloud', {
           url: '/',
+          params: {
+            cloudId: null,
+          },
           templateUrl: 'views/cloud.html',
           controller: 'CloudController',
-          ncyBreadcrumb: {
-            label: 'Cloud'
-          },
           data: {
             requiresLogin: true
           }
@@ -82,10 +81,6 @@ angular
           url: '/reseller/:resellerId',
           templateUrl: 'views/reseller.html',
           controller: 'ResellerController',
-          ncyBreadcrumb: {
-            label: '{{reseller.name}}',
-            parent: 'cloud'
-          },
           data: {
             requiresLogin: true
           }
@@ -94,10 +89,6 @@ angular
           url: '/customer/:customerId',
           templateUrl: 'views/customer.html',
           controller: 'CustomerController',
-          ncyBreadcrumb: {
-            label: 'Customer',
-            parent: 'reseller'
-          },
           data: {
             requiresLogin: true
           }
@@ -106,10 +97,6 @@ angular
           url: '/device/:deviceId',
           templateUrl: 'views/device.html',
           controller: 'DeviceController',
-          ncyBreadcrumb: {
-            label: 'Device',
-            parent: 'customer'
-          },
           data: {
             requiresLogin: true
           }
