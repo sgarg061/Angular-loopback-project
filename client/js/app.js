@@ -114,7 +114,16 @@ angular
 
       $urlRouterProvider.otherwise('cloud');
   }])
-  
+  .directive('sidebar', function() {
+    var directive = {};
+
+    directive.restrict = 'E'; 
+    directive.templateUrl = "/views/sidebar.html";
+    directive.scope = {
+      model : "=model"
+    }
+    return directive;
+  })
   .run(function($rootScope, auth, store, jwtHelper, $location) {
 
     // This hooks all auth events to check everything as soon as the app starts
