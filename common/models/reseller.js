@@ -112,10 +112,8 @@ function resellerAccessPermissions(ctx, next) {
         } else if (cloudId) {
             if (ctx.isNewInstance) {
                 // cloud users can only create resellers under their own domain
-                if (ctx.data && ctx.data.id) {
-                    ctx.data.cloudId = cloudId;
-                    delete ctx.data.id;
-                }
+                ctx.instance.cloudId = cloudId;
+                ctx.instance.id = null;
             } else {
                 // cloud users cannot modify the reseller or cloud id
                 if (ctx.data && ctx.data.cloudId) {

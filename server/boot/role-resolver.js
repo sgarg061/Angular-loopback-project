@@ -46,7 +46,6 @@ module.exports = function (app) {
                 if (jwt.userType === 'solink') {
                     cb(null, true);
                 } else {
-                    console.log(jwt);
                     switch (context.modelName) {
                     case 'Reseller':
                         return isOwnerOfReseller(context, jwt, cb);
@@ -159,7 +158,6 @@ function isOwnerOfReseller(context, token, cb) {
             if (token.userType !== 'cloud') {
                 unauthorized(cb);
             } else {
-                console.log((context.model.cloudId));
                 context.model.cloudId = token.cloudId;
                 cb(null, true);
             }

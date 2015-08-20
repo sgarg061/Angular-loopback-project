@@ -190,6 +190,7 @@ module.exports = function(Customer) {
 };
 
 function customerAccessPermissions(ctx, next) {
+    var error;
     var context = loopback.getCurrentContext();
     if (context && context.get('jwt')) {
         var resellerId = context.get('jwt').resellerId;
@@ -205,7 +206,7 @@ function customerAccessPermissions(ctx, next) {
                     ctx.instance.id = null;
                 }
             } else {
-                // resellers cannot change reseller or cloud IDs
+                // resellers cannot change reseller IDs
                 if (ctx.data.resellerId) {
                     delete ctx.data.resellerId;
                 }
@@ -225,7 +226,7 @@ function customerAccessPermissions(ctx, next) {
                         next(err);
                     } else {
                         if (res.length < 1) {
-                            var error = new Error('Reseller not found');
+                            error = new Error('Reseller not found');
                             error.statusCode = 404;
                             next(error);
                         } else {
@@ -235,7 +236,7 @@ function customerAccessPermissions(ctx, next) {
                                 }
                                 next();
                             } else {
-                                var error = new Error('Not authorized to attach this customer to this reseller');
+                                error = new Error('Not authorized to attach this customer to this reseller');
                                 error.statusCode = 401;
                                 next(error);
                             }
@@ -247,13 +248,14 @@ function customerAccessPermissions(ctx, next) {
                 if (ctx.data.resellerId) {
                     delete ctx.data.resellerId;
                 }
+
                 if (ctx.data.id) {
                     delete ctx.data.id;
                 }
                 next();
             }
         } else {
-            var error = new Error('Unauthorized');
+            error = new Error('Unauthorized');
             error.statusCode = 401;
             next(error);
         }

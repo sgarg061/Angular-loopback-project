@@ -48,6 +48,7 @@ describe('REST', function() {
           .expect(401)
           .end(function(err, res) {
             if (err) throw err;
+
             done();
           });
       });
@@ -114,10 +115,8 @@ describe('REST', function() {
           .send({key: 'ETSHOWDOTHEYWORK'})
           .expect(200)
           .end(function(err, res) {
-            if (err) {
-              console.log('error! ' + err);
-              throw err;
-            }
+            if (err) throw err;
+            
             device = JSON.parse(res.body);
             assert(device.deviceId, 'must have a deviceId');
             
@@ -236,8 +235,6 @@ describe('REST', function() {
     });
 
   describe('List Devices', function() {
-    var userToken;
-
     it('should allow device listing with an authenticated solink token', function(done) {
       common.login('solink', function (token) {
         common.json('get', '/api/devices', token)
