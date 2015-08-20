@@ -134,7 +134,6 @@ module.exports = function(app, doneCallback) {
       app.models.Reseller.create([
         { name: 'Reseller 1', 
           cloudId: results.clouds[0].id, 
-          softwareVersionId: results.softwareVersions[1].id,
           email: 'cwhiten+r1@solinkcorp.com',
           password: 'test'
         },

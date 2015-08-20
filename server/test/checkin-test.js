@@ -59,7 +59,6 @@ describe('Checkin after initial device activation', function() {
         }
         device = JSON.parse(res.body);
         assert(device.deviceId, 'must have a deviceId');
-        
         done();
       });
   });
@@ -69,7 +68,6 @@ describe('Checkin after initial device activation', function() {
   it('should checkin a new device and receive configuration information', function(done) {
     
     deviceCheckinData.id = device.deviceId;
-
     common.login('solink', function (token) {
       common.json('post', '/api/devices/' + device.deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
@@ -82,14 +80,13 @@ describe('Checkin after initial device activation', function() {
           assert(res.body.signallingServerUrl, 'must have a signallingServerUrl');
           assert(res.body.updateUrl, 'must have a updateUrl');
           assert(res.body.checkinInterval, 'must have a checkinInterval');
-
           done();
         });
       });
   });
 
   it('should update device and create cameras, POS devices and deviceLogEntry', function(done) {
-    common.login('user', function (token) {
+    common.login('solink', function (token) {
       common.json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
         .send({})
         .expect(200)
@@ -118,7 +115,7 @@ describe('Checkin of existing device', function() {
     // set the back camera to an offline state
     deviceCheckinData.cameraInformation[1].status = 'offline';
 
-    common.login('user', function (token) {
+    common.login('solink', function (token) {
       common.json('post', '/api/devices/' + device.deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
@@ -130,7 +127,7 @@ describe('Checkin of existing device', function() {
   });
 
   it('should result in new values, an updated checkin time and another log entry', function(done) {
-    common.login('user', function (token) {
+    common.login('solink', function (token) {
       common.json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
         .send({})
         .expect(200)
@@ -157,7 +154,7 @@ describe('Modification of inherited values at various locations in the object tr
 
   it('should return attributes from device when device has overriden value', function(done) {
     
-    common.login('user', function (token) {
+    common.login('solink', function (token) {
       common.json('get', '/api/SoftwareVersions/', token).send().end(function (err, res) {
         var versions = res.body;
         console.log('software versions: ' + JSON.stringify(versions));
@@ -174,6 +171,7 @@ describe('Modification of inherited values at various locations in the object tr
               var cloud = res.body[0];
 
               /*****************/
+              
               common.json('put', '/api/clouds/' + cloud.id, token).send(
                 {softwareVersionId: versions[7].id, checkinInterval:7000, eventServerUrl:'7000', imageServerUrl:'7000'}).end(function (err, res) {
                 common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
@@ -182,7 +180,7 @@ describe('Modification of inherited values at various locations in the object tr
                   assert.equal(res.body.imageServerUrl, '7000', 'imageServerUrl must be inherited from cloud');
                   assert.equal(res.body.updateUrl, versions[7].url, 'updateUrl must be inherited from cloud');
                   assert.equal(res.body.checkinInterval, 7000, 'checkinInterval must be inherited from cloud');
-
+                  
                   common.json('put', '/api/resellers/' + reseller.id, token).send(
                     {softwareVersionId: versions[6].id, checkinInterval:6000, eventServerUrl:'6000', imageServerUrl:'6000'}).end(function (err, res) {
                     common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
@@ -230,5 +228,6 @@ describe('Modification of inherited values at various locations in the object tr
   });
 
 });
+
 
 

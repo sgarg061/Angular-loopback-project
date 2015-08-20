@@ -130,6 +130,20 @@
     "permission": "ALLOW",
     "accessType": "WRITE" ,
     "property": "updateAttributes"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "EXECUTE",
+    "property": "checkin"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isValidated",
+      "permission": "ALLOW",
+      "property": "*"
     }
   ],
   "methods": []
