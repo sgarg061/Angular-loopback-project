@@ -12,8 +12,7 @@
       "id": true
     },
     "guid": {
-      "type": "string",
-      "index": true
+      "type": "string"
     },
     "name": {
       "type": "string",
@@ -69,8 +68,7 @@
     },
     "customerId": {
       "type": "string",
-      "required": true,
-      "index": true
+      "required": true
     },
     "softwareVersionId": {
       "type": "string",
@@ -105,8 +103,48 @@
       "foreignKey": "id"
     }
   },
-  "acls": [
-   
+  "acls": 
+  [
+   {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "updateAttributes"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "EXECUTE",
+    "property": "checkin"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isValidated",
+      "permission": "ALLOW",
+      "property": "*"
+    }
   ],
   "methods": []
 }

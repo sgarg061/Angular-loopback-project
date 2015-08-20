@@ -95,7 +95,7 @@ describe('License tests', function() {
             var countBeforeLicenseCreation = res.body.count;
             common.json('post', '/api/licenses', token)
               .send({
-                customerId: '12',
+                customerId: '1',
                 key: 'ABCDABCDABCD'
               })
               .expect(200) // TODO: this should really be 201... why is loopback returning 200?

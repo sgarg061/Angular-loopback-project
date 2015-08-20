@@ -53,12 +53,12 @@ module.exports = function(app, doneCallback) {
       customers: ['resellerPOSConnectors', function (cb, results) {
         createCustomers(cb, results);
       }],
-      licenses: ['customers', function (cb, results) {
-        createLicenses(cb, results);
-      }],
       devices: ['customers', function (cb, results) {
         createDevices(cb, results);
       }],
+    licenses: ['devices', function (cb, results) {
+      createLicenses(cb, results);
+    }],
       cameras: ['devices', function (cb, results) {
         createCameras(cb, results);
       }],
@@ -107,7 +107,8 @@ module.exports = function(app, doneCallback) {
           updateUrl: 'http://update.solinkcloud.net', 
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
-
+          email: 'cwhiten+c1@solinkcorp.com',
+          password: 'test'
         },
         { name: 'Solink APAC', 
           eventServerUrl: 'http://api.apac.solinkcloud.net', 
@@ -115,7 +116,10 @@ module.exports = function(app, doneCallback) {
           signallingServerUrl: 'http://signaller.apac.solinkcloud.net', 
           updateUrl: 'http://update.solinkcloud.net', 
           checkinInterval: 3600,
-          softwareVersionId: results.softwareVersions[0].id},
+          softwareVersionId: results.softwareVersions[0].id,
+          email: 'cwhiten+c2@solinkcorp.com',
+          password: 'test'
+        },
       ], cb);
     });
   }
@@ -128,9 +132,23 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Reseller.create([
-        {name: 'Reseller 1', cloudId: results.clouds[0].id},
-        {name: 'Reseller 2', cloudId: results.clouds[0].id, checkinInterval: 3000},
-        {name: 'Australian Reseller 1', cloudId: results.clouds[1].id},
+        { name: 'Reseller 1', 
+          cloudId: results.clouds[0].id, 
+          email: 'cwhiten+r1@solinkcorp.com',
+          password: 'test'
+        },
+        { name: 'Reseller 2', 
+          cloudId: results.clouds[0].id, 
+          checkinInterval: 3000,
+          email: 'cwhiten+r2@solinkcorp.com',
+          password: 'test'
+        },
+        { name: 'Reseller 3', 
+          cloudId: results.clouds[1].id, 
+          checkinInterval: 3000,
+          email: 'cwhiten+r3@solinkcorp.com',
+          password: 'test'
+        }
       ], cb);
     });
   }
@@ -210,7 +228,7 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Camera.create([
-        {cameraId: 'bb5357a6-5ac2-488b-817a-687c4ad637d6', name: 'Camera 1', status: 'on', deviceId: results.devices[0].id},
+        {cameraId: 'bb5357a6-5ac2-488b-817a-687c4ad637d6', name: 'Camera 1', status: 'on', deviceId: results.devices[1].id},
         {cameraId: '08996ceb-5e08-4ca2-8dd7-387d3041b4a7', name: 'Camera 2', status: 'on', deviceId: results.devices[1].id},
         {cameraId: '8978428b-3865-4602-be09-97502a4997ed', name: 'Camera 3', status: 'on', deviceId: results.devices[2].id},
       ], cb);
@@ -225,7 +243,7 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.POSDevice.create([
-        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS Device 1', status: 'on', deviceId: results.devices[0].id},
+        {posId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', name: 'POS Device 1', status: 'on', deviceId: results.devices[1].id},
         {posId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', name: 'POS Device 2', status: 'on', deviceId: results.devices[1].id},
         {posId: '943fc52b-e378-4dc8-9fff-c94f4990a789', name: 'POS Device 3', status: 'on', deviceId: results.devices[2].id},
       ], cb);
@@ -240,8 +258,8 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.License.create([
-        {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false},
-        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false}
+        {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[0].id},
+        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[1].id}
       ], cb);
     });
   }

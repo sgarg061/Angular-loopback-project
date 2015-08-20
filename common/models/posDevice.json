@@ -14,8 +14,7 @@
     "posId": {
       "type": "string",
       "id": true,
-      "required": true,
-      "index": true
+      "required": true
     },
     "name": {
       "type": "string",
@@ -27,8 +26,7 @@
     },
     "deviceId": {
       "type": "string",
-      "required": true,
-      "index": true
+      "required": true
     }
   },
   "validations": [],

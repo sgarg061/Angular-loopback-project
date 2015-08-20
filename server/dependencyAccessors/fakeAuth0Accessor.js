@@ -1,25 +1,55 @@
 var config = require('../../config');
 var jwt = require('jsonwebtoken');
 
+var users = [
+    {
+        username: 'cwhiten@solinkcorp.com',
+        password: 'test',
+        userType: 'solink'
+    }, 
+    {
+        username: 'cwhiten+1@solinkcorp.com',
+        password: 'test',
+        userType: 'admin',
+        tenantId: '1'
+    },
+    {
+        username: 'cwhiten+user@solinkcorp.com',
+        password: 'test',
+        userType: 'user',
+        tenantId: '1'
+    },
+    {
+        username: 'cwhiten+cloud@solinkcorp.com',
+        password: 'test',
+        userType: 'cloud',
+        cloudId: '1'
+    },
+    {
+        username: 'cwhiten+reseller@solinkcorp.com',
+        password: 'test',
+        userType: 'reseller',
+        resellerId: '1'
+    }
+];
 var FakeAuth0Accessor = function () {
 };
 
 FakeAuth0Accessor.prototype.login = function (username, password, cb) {
     'use strict';
 
-    var token = null;
-    if (username === 'cwhiten@solinkcorp.com' && password === 'test') {
-        token = createValidToken('solink');
-    } else if (username === 'cwhiten+1@solinkcorp.com' && password === 'test') {
-        token = createValidToken('admin');
-    } else if (username === 'cwhiten+user@solinkcorp.com' && password === 'test') {
-        token = createValidToken('user');
-    } else {
+    var matchingUser = users.filter(function (user) {
+        return user.username === username && user.password === password;
+    });
+
+    if (matchingUser.length < 1) {
         var e = new Error('Unable to login');
-        e.statusCode = 401;
+        e.statusCode(401);
         cb(e, 'Failed login');
         return;
     }
+
+    var token = createValidToken(matchingUser[0]);
 
     var response = {
         auth_token: token,
@@ -33,19 +63,35 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
 };
 
 
-FakeAuth0Accessor.prototype.createUser = function (email, password, cb) {
+FakeAuth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
-    cb(null, '');
+
+    var newUser = userData;
+    newUser.username = email;
+    newUser.password = password;
+
+    users.push(newUser);
+    cb(null, newUser);
 };
 
-function createValidToken (userType) {
+function createValidToken (user) {
+    'use strict';
+    var appMetadata = {
+        user_type: user.userType
+    };
+
+    if (user.userType === 'cloud') {
+        appMetadata.cloud_id = user.cloudId;
+    } else if (user.userType === 'reseller') {
+        appMetadata.reseller_id = user.resellerId;
+    } else if (user.tenantId) {
+        appMetadata.tenant_id = user.tenantId;
+    }
+
     var payload = {
-        email: 'cwhiten@solinkcorp.com',
+        email: user.username,
         email_verified: true,
-        app_metadata: {
-            tenant_id: '1',
-            user_type: userType
-        },
+        app_metadata: appMetadata,
         iss: 'https://solink.auth0.com/',
         sub: 'auth0|55a55f4186416215610a2e22',
         aud: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',

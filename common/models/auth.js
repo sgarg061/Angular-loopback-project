@@ -60,7 +60,7 @@ module.exports = function (Auth) {
                 {arg: 'username', type: 'string'},
                 {arg: 'password', type: 'string'}
             ],
-            http: {verb: 'post', status: 200, errorStatus: 500},
+            http: {verb: 'post', status: 200, errorStatus: 401},
             returns: {arg: 'response', type: 'string'}
         }
     );

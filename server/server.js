@@ -25,12 +25,24 @@ app.use(function jwtMiddleware (req, res, next) {
         }
         
         var token = authParts[1];
-        var unpacked_token = jwt.decode(token);
+        var unpackedToken = jwt.decode(token);
+        
         var jwtToken = {
             token: token,
-            userType: unpacked_token.app_metadata.user_type,
-            tenantId: unpacked_token.app_metadata.tenant_id
+            userType: unpackedToken.app_metadata.user_type
         };
+        if (unpackedToken.app_metadata.tenant_id) {
+            jwtToken.tenantId = unpackedToken.app_metadata.tenant_id;
+        }
+
+        if (unpackedToken.app_metadata.reseller_id) {
+            jwtToken.resellerId = unpackedToken.app_metadata.reseller_id;
+        }
+
+        if (unpackedToken.app_metadata.cloud_id) {
+            jwtToken.cloudId = unpackedToken.app_metadata.cloud_id;
+        }
+
         var ctx = loopback.getCurrentContext();
         ctx.set('jwt', jwtToken);
 

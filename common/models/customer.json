@@ -21,8 +21,7 @@
     },
     "resellerId": {
       "type": "string",
-      "required": true,
-      "index": true
+      "required": true
     },
     "softwareVersionId": {
       "type": "string",
@@ -51,6 +50,42 @@
       "foreignKey": "id"
     }
   },
-  "acls": [],
+  "acls": 
+  [
+  {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "create"
+    },
+    {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "WRITE" ,
+    "property": "updateAttributes"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isValidated",
+      "permission": "ALLOW",
+      "property": "*"
+    }
+  ],
   "methods": []
 }
