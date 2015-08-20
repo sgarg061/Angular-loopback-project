@@ -46,7 +46,7 @@ module.exports = function (Auth) {
 
     Auth.refresh = function(token, cb) {
         authService.refresh(token, cb);
-    }
+    };
 
     Auth.remoteMethod(
         'validate',

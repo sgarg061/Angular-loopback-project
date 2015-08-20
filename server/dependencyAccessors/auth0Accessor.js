@@ -55,7 +55,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
             cb(e, 'Failed refresh');
         }
     });
-}
+};
 
 Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
