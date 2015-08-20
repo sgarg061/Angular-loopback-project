@@ -71,6 +71,7 @@ angular
     }
 
     $scope.selectCloud = function(cloud) {
+      console.log('select cloud: ' + cloud.name);
       $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
     }
 
