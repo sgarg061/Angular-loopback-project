@@ -15,14 +15,16 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
             client_id: config.auth0ClientID,
             connection: 'Username-Password-Authentication',
             grant_type: 'password',
-            scope: config.auth0Scope
+            scope: config.auth0Scope,
+            device: 'call-home'
         }
     }, function (err, res, body) {
         if (!err && res.statusCode === 200) {
-            var token_info = JSON.parse(body);
-            var token = token_info.id_token;
+            var tokenInfo = JSON.parse(body);
+            var token = tokenInfo.id_token;
+            var refreshToken = tokenInfo.refresh_token;
 
-            authenticateWithAWS(token, cb);
+            authenticateWithAWS(token, refreshToken, cb);
         } else {
             var e = new Error('Unable to login');
             e.statusCode = res.statusCode;
@@ -65,7 +67,7 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     });
 };
 
-function authenticateWithAWS(token, cb) {
+function authenticateWithAWS(token, refreshToken, cb) {
     'use strict';
     request({
         url: config.auth0URL + '/delegation',
@@ -84,6 +86,7 @@ function authenticateWithAWS(token, cb) {
             var creds = token_info.Credentials;
             var response = {
                 auth_token: token,
+                refresh_token: refreshToken,
                 aws: {
                     AccessKeyId: creds.AccessKeyId,
                     SecretAccessKey: creds.SecretAccessKey,
