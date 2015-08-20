@@ -33,6 +33,30 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
     });
 };
 
+Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
+    'use strict';
+    request({
+        url: config.auth0URL + '/delegation',
+        method: 'POST',
+        form: {
+            client_id: config.auth0ClientID,
+            grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            refresh_token: refreshToken,
+            api_type: 'app'
+        }
+    }, function (err, res, body) {
+        if (!err && res.statusCode === 200) {
+            var tokenInfo = JSON.parse(body);
+            var token = tokenInfo.id_token;
+            cb(null, token);
+        } else {
+            var e = new Error('Unable to use refresh token');
+            e.statusCode = res.statusCode;
+            cb(e, 'Failed refresh');
+        }
+    });
+}
+
 Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
     request({
