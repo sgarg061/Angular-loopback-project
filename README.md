@@ -68,6 +68,10 @@ If jshint detects problems, the tests will fail. They can be forced past the jsh
 
 	npm test --force
 	
+To run a single test: 
+
+	NODE_ENV=test ./node_modules/mocha/bin/mocha -R spec server/test/checkin-test.js
+	
 ## Production Deployment
 
 ### Amazon AWS AMI Creation

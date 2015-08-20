@@ -62,7 +62,7 @@
       "type": "number",
       "required": false
     },
-    "lastCheckIn": {
+    "lastCheckin": {
       "type": "date",
       "required": false
     },
@@ -103,8 +103,9 @@
       "foreignKey": "id"
     }
   },
-  "acls": [
-    {
+  "acls": 
+  [
+   {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
@@ -129,13 +130,6 @@
     "permission": "ALLOW",
     "accessType": "WRITE" ,
     "property": "updateAttributes"
-    },
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "isValidated",
-      "permission": "ALLOW",
-      "property": "*"
     }
   ],
   "methods": []

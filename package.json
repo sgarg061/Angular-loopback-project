@@ -4,6 +4,8 @@
   "main": "server/server.js",
   "engine": "node 0.12.7",
   "scripts": {
+    "postinstall": "bower update",
+    "prestart": "npm update",
     "pretest": "jshint .",
     "test": "NODE_ENV=test mocha -R spec server/test",
     "build": "bower install",

@@ -34,7 +34,7 @@
       "type": "belongsTo",
       "model": "Reseller"
     },
-    "locations": {
+    "devices": {
       "type": "hasMany",
       "model": "Device",
       "foreignKey": "customerId"

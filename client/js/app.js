@@ -4,75 +4,127 @@ angular
     'angular-storage', 
     'angular-jwt',
     'lbServices',
-    'ui.router'
+    'ui.router',
+    'ngMaterial'
   ])
-  .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', 'jwtInterceptorProvider', 
-    function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, jwtInterceptorProvider) {
+  .config(['authProvider', '$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', 'jwtInterceptorProvider', '$mdThemingProvider', '$mdIconProvider',
+    function(authProvider, $stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, jwtInterceptorProvider, $mdThemingProvider, $mdIconProvider) {
 
-    authProvider.init({
-      domain: 'solink.auth0.com',
-      clientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
-      callbackURL: location.href,
-      loginState: 'login' // matches login state
-    });
+      $mdIconProvider
+        .defaultIconSet("./assets/svg/avatars.svg", 128)
+        .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+        .icon("share"      , "./assets/svg/share.svg"       , 24)
+        .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
+        .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
+        .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+        .icon("phone"      , "./assets/svg/phone.svg"       , 512);
 
-    authProvider.on('loginSuccess', function($location, profilePromise, idToken, store) {
-      console.log("Login Success");
-      profilePromise.then(function(profile) {
-        store.set('profile', profile);
-        store.set('token', idToken);
+      $mdThemingProvider.theme('default')
+        .primaryPalette('blue')
+        .accentPalette('grey');
+
+      $locationProvider.html5Mode(true);
+
+      authProvider.init({
+        domain: 'solink.auth0.com',
+        clientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
+        callbackURL: location.href,
+        loginState: 'login' // matches login state
       });
-      $location.path('/');
-    });
 
-    authProvider.on('authenticated', function($location) {
-      console.log("Authenticated");
-    });
+      authProvider.on('loginSuccess', function($location, profilePromise, idToken, store) {
+        console.log("Login Success");
+        profilePromise.then(function(profile) {
+          store.set('profile', profile);
+          store.set('token', idToken);
+        });
+        $location.path('/');
+      });
 
-    authProvider.on('logout', function() {
-      console.log("Logged out");
-    })
+      authProvider.on('authenticated', function($location) {
+        console.log("Authenticated");
+      });
 
-    // We're annotating this function so that the `store` is injected correctly when this file is minified
-    jwtInterceptorProvider.tokenGetter = ['store', function(store) {
-      // Return the saved token
-      return store.get('token');
-    }];
+      authProvider.on('logout', function() {
+        console.log("Logged out");
+      });
 
-    $httpProvider.interceptors.push('jwtInterceptor');
+      // We're annotating this function so that the `store` is injected correctly when this file is minified
+      jwtInterceptorProvider.tokenGetter = ['store', function(store) {
+        // Return the saved token
+        return store.get('token');
+      }];
 
-    $stateProvider
-      .state('root', {
-        url: '/',
-        templateUrl: 'views/root.html',
-        controller: 'RootController',
-        data: {
-          requiresLogin: true
-        }
-      })
-      .state('cloud', {
-        url: '/cloud',
-        templateUrl: 'views/cloud.html',
-        controller: 'CloudController',
-        data: {
-          requiresLogin: true
-        }
-      })
-      .state('login', {
-        url: '/login',
-        templateUrl: 'views/login.html',
-        controller: 'LoginController'
-      })
-      .state('logout', {
-        url: '/logout',
-        templateUrl: 'views/logout.html',
-        controller: 'LogoutController'
-      });    
+      $httpProvider.interceptors.push('jwtInterceptor');
 
-    $urlRouterProvider.otherwise('cloud');
+      $stateProvider
+        // .state('root', {
+        //   url: '/',
+        //   templateUrl: 'views/root.html',
+        //   controller: 'RootController',
+        //   data: {
+        //     requiresLogin: true
+        //   }
+        // })
+        .state('cloud', {
+          url: '/',
+          params: {
+            cloudId: null,
+          },
+          templateUrl: 'views/cloud.html',
+          controller: 'CloudController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('reseller', {
+          url: '/reseller/:resellerId',
+          templateUrl: 'views/reseller.html',
+          controller: 'ResellerController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('customer', {
+          url: '/customer/:customerId',
+          templateUrl: 'views/customer.html',
+          controller: 'CustomerController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('device', {
+          url: '/device/:deviceId',
+          templateUrl: 'views/device.html',
+          controller: 'DeviceController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('login', {
+          url: '/login',
+          templateUrl: 'views/login.html',
+          controller: 'LoginController'
+        })
+        .state('logout', {
+          url: '/logout',
+          templateUrl: 'views/logout.html',
+          controller: 'LogoutController'
+        });    
 
-
+      $urlRouterProvider.otherwise('cloud');
   }])
+  .directive('sidebar', function() {
+    var directive = {};
+
+    directive.restrict = 'E'; 
+    directive.templateUrl = "/views/sidebar.html";
+    directive.scope = {
+      model: "=model",
+      type: "=type"
+    }
+    return directive;
+  })
   .run(function($rootScope, auth, store, jwtHelper, $location) {
 
     // This hooks all auth events to check everything as soon as the app starts
