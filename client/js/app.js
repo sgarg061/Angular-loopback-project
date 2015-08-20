@@ -120,7 +120,8 @@ angular
     directive.restrict = 'E'; 
     directive.templateUrl = "/views/sidebar.html";
     directive.scope = {
-      model : "=model"
+      model: "=model",
+      type: "=type"
     }
     return directive;
   })

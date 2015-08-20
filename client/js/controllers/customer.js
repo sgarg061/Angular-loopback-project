@@ -12,6 +12,14 @@ angular
     $scope.resellerId = null;
     $scope.customerId = null;
 
+    // watch customer for updates and save them when they're found
+    $scope.$watch("customer", function(newValue, oldValue) {
+      if (newValue) {
+        Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
+          .$promise.then(function() {});
+      }
+    }, true);
+
     function getCustomer() {
       Customer
         .find({

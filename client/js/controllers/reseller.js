@@ -11,6 +11,14 @@ angular
     $scope.cloudId = null;
     $scope.resellerId = null;
 
+    // watch reseller for updates and save them when they're found
+    $scope.$watch("reseller", function(newValue, oldValue) {
+      if (newValue) {
+        Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
+          .$promise.then(function() {});
+      }
+    }, true);
+
     function getReseller() {
       Reseller
         .find({
@@ -29,7 +37,7 @@ angular
           Page.setNavPath($scope.reseller.name);
 
           getCloudResellers(resellers[0].cloud.id);
-          
+
           console.log('$scope.reseller: ' + JSON.stringify($scope.reseller));
         });
     }
