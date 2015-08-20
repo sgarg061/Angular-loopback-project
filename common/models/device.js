@@ -86,7 +86,7 @@ module.exports = function(Device) {
         var Reseller = Device.app.models.Reseller;
         var Customer = Device.app.models.Customer;
         var ids = [];
-        
+
         Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
             if (err) {
                 logger.error('Error querying resellers with cloud id ' + cloudId);
