@@ -1,4 +1,4 @@
-var config = require('../../config');
+var Config = require('../../config');
 var jwt = require('jsonwebtoken');
 
 var users = [
@@ -99,6 +99,7 @@ function createValidToken (user) {
         iat: Math.floor(new Date().getTime()/1000)
     };
 
+    var config = new Config();
     var token = jwt.sign(payload, new Buffer(config.jwtSecret, 'base64'));
     return token;
 }

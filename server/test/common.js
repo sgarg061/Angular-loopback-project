@@ -5,7 +5,7 @@ var authService = require('../services/authService');
 var AuthAccessor = require('../dependencyAccessors/fakeAuth0Accessor');
 var RedisAccessor = require('../dependencyAccessors/fakeRedisAccessor');
 var cacheService = require('../services/cacheService');
-var config = require('../../config');
+var Config = require('../../config');
 var sampleData = require('../create-sample-data');
 
 const SOLINK_USERNAME = 'cwhiten@solinkcorp.com';
@@ -75,6 +75,7 @@ module.exports = {
 };
 
 before(function(done) {
+    var config = new Config();
     authService.initialize(new AuthAccessor());
     RedisAccessor.initialize([
     {
