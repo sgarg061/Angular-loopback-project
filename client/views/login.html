@@ -1,13 +1,13 @@
 <div id="login-container">
-	<form ng-submit="signin()">
-	  <div class="group">
-	    <input type="text" name="username" ng-model="username"><span class="highlight"></span><span class="bar"></span>
-	    <label>Username</label>
-	  </div>
-	  <div class="group">
-	    <input type="password" type="password" name="password"><span class="highlight"></span><span class="bar"></span>
-	    <label>Password</label>
-	  </div>
-	  <button type="submit" class="button buttonBlue">Login</button>
+	<form ng-submit="login()">
+		<md-input-container>
+	  		<label>Username</label>
+	  		<input type="text" class="form-control focus" name="username" autocomplete="off" required ng-model="username">
+		</md-input-container>
+		<md-input-container>
+	  		<label>Password</label>
+	  		<input type="password" class="form-control focus" name="password" autocomplete="off" required ng-model="password">
+		</md-input-container>
+		<button type="submit" class="button buttonBlue">Login</button>
 	</form>
 </div>

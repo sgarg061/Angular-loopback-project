@@ -25,9 +25,12 @@ html, body {
   color: #ffffff;
 }
 
+.breadcrumb a, .breadcrumb:visited a, .breadcrumb:hover a, .breadcrumb:active a {
+  text-decoration: none; 
+  color: #ffffff;
+}
 
 /* Toolbar area */
-
 .menu {
   background-color: transparent;
   border: none;
@@ -151,10 +154,6 @@ span.name {
 
 * { box-sizing:border-box; }
 
-hgroup { 
-  text-align:center;
-  margin-top: 4em;
-}
 
 form {
   width: 380px;
@@ -163,11 +162,6 @@ form {
   background: #fafafa;
   border: 1px solid #ebebeb;
   box-shadow: rgba(0,0,0,0.14902) 0px 1px 1px 0px,rgba(0,0,0,0.09804) 0px 1px 2px 0px;
-}
-
-.group { 
-  position: relative; 
-  margin-bottom: 45px; 
 }
 
 input {
@@ -209,61 +203,6 @@ input:focus ~ label, input.used ~ label {
 }
 
 
-/* Underline */
-
-.bar {
-  position: relative;
-  display: block;
-  width: 100%;
-}
-
-.bar:before, .bar:after {
-  content: '';
-  height: 2px; 
-  width: 0;
-  bottom: 1px; 
-  position: absolute;
-  background: #4a89dc; 
-  transition: all 0.2s ease;
-}
-
-.bar:before { left: 50%; }
-
-.bar:after { right: 50%; }
-
-
-/* active */
-
-input:focus ~ .bar:before, input:focus ~ .bar:after { width: 50%; }
-
-
-/* Highlight */
-
-.highlight {
-  position: absolute;
-  height: 60%; 
-  width: 100px; 
-  top: 25%; 
-  left: 0;
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-
-/* active */
-
-input:focus ~ .highlight {
-  animation: inputHighlighter 0.3s ease;
-}
-
-
-/* Animations */
-
-@keyframes inputHighlighter {
-  from { background: #4a89dc; }
-  to  { width: 0; background: transparent; }
-}
-
 
 /* Button */
 
@@ -298,15 +237,3 @@ input:focus ~ .highlight {
 
 .buttonBlue:hover { background: #357bd8; }
 
-
-/* Ripples container */
-
-.ripples {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: transparent;
-}

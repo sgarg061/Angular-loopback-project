@@ -1,17 +1,23 @@
-<md-toolbar layout="row" layout-align="start center" layout-padding>
-  <md-select ng-model="cloudId" ng-change="selectCloud(cloudId)" aria-label="Cloud">
-    <md-option ng-repeat="aCloud in clouds" value="{{aCloud.id}}">{{aCloud.name}}</md-option>
-  </md-select>
-  <span ng-show="resellerId">&gt;</span>
-  <md-select ng-show="resellerId" ng-model="resellerId" ng-change="selectReseller(resellerId)" aria-label="Reseller">
-    <md-option ng-repeat="aReseller in resellers" value="{{aReseller.id}}">{{aReseller.name}}</md-option>
-  </md-select>
-  <span ng-show="customerId">&gt;</span>
-  <md-select ng-show="customerId" ng-model="customerId" ng-change="selectCustomer(customerId)" aria-label="Customer">
-    <md-option ng-repeat="aCustomer in customers" value="{{aCustomer.id}}">{{aCustomer.name}}</md-option>
-  </md-select>
-  <span ng-show="deviceId">&gt;</span>
-  <md-select ng-show="deviceId" ng-model="deviceId" ng-change="selectDevice(deviceId)" aria-label="Device">
-    <md-option ng-repeat="aDevice in devices" value="{{aDevice.id}}">{{aDevice.name}}</md-option>
-  </md-select>
+<md-toolbar layout="row" layout-padding class="breadcrumb">
+  
+  <div layout="row" layout-align="start center">
+    <md-select ng-model="cloudId" ng-change="selectCloud(cloudId)" aria-label="Cloud">
+      <md-option ng-repeat="aCloud in clouds" value="{{aCloud.id}}">{{aCloud.name}}</md-option>
+    </md-select>
+    <span ng-show="resellerId">&gt;</span>
+    <md-select ng-show="resellerId" ng-model="resellerId" ng-change="selectReseller(resellerId)" aria-label="Reseller">
+      <md-option ng-repeat="aReseller in resellers" value="{{aReseller.id}}">{{aReseller.name}}</md-option>
+    </md-select>
+    <span ng-show="customerId">&gt;</span>
+    <md-select ng-show="customerId" ng-model="customerId" ng-change="selectCustomer(customerId)" aria-label="Customer">
+      <md-option ng-repeat="aCustomer in customers" value="{{aCustomer.id}}">{{aCustomer.name}}</md-option>
+    </md-select>
+    <span ng-show="deviceId">&gt;</span>
+    <md-select ng-show="deviceId" ng-model="deviceId" ng-change="selectDevice(deviceId)" aria-label="Device">
+      <md-option ng-repeat="aDevice in devices" value="{{aDevice.id}}">{{aDevice.name}}</md-option>
+    </md-select>
+
+  </div>
+  <span flex=""></span>
+  <div layout="row" layout-align="end start"><a ui-sref="logout">Logout</a></div>
 </md-toolbar>

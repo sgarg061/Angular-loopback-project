@@ -1,27 +1,35 @@
-// LoginCtrl.js
-angular.module('app').controller('LoginController', function($scope, $state) {
+angular.module('app').controller('LoginController', function($scope, $state, Auth, $localStorage, toastr, blockUI) {
   
-  $scope.signin = function() {
-    $scope.$parent.message = 'loading...';
-    $scope.loading = true;
+  $scope.username = "cwhiten@solinkcorp.com";
+  $scope.password = "test";
 
-  //   auth.signin({
-  //     connection: 'Username-Password-Authentication',
-  //     popup: false,
-  //     username: $scope.username,
-  //     password: $scope.password,
-  //     authParams: {
-  //       scope: 'openid profile' // This is if you want the full JWT
-  //     }
-  //   }, function(profile, idToken, accessToken, state, refreshToken) {
-  //     $scope.$parent.message = '';
-  //     $state.go('cloud');
-  //     $scope.loading = false;
-  //   }, function(err) {
-  //     console.log("Error :(", err);
-  //     $scope.$parent.message = 'invalid credentials';
-  //     $scope.loading = false;
-  //   });
+  function successAuth(res, headers) {
+    blockUI.stop();
+    var result = JSON.parse(res.response);
+    $localStorage.token = result.auth_token;
+    $state.go('cloud');
   }
+
+  function errorAuth(res) {
+    blockUI.stop();
+    console.log('errorAuth res: ' + JSON.stringify(res));
+    toastr.error(res.data.error.status === 401 ? "Invalid username or password" : res.data.error.message, 'Error');
+  }
+
+  $scope.login = function () {
+    var formData = {
+      username: $scope.username,
+      password: $scope.password
+    };
+
+    console.log('login.js username: ' + $scope.username + ' password: ' + $scope.password);
+
+    // Block the user interface until the login succeeds or fails
+    blockUI.start('Logging in...');
+
+    Auth.login(formData, successAuth, errorAuth);
+    
+  };
+
 
 });

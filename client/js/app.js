@@ -2,16 +2,45 @@ angular
   .module('app', [
     'lbServices',
     'ui.router',
-    'ngMaterial'
+    'ngMaterial',
+    'ngStorage',
+    'ngAnimate',
+    'toastr',
+    'blockUI'
   ])
-  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider',
-    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider) {
+  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', 
+    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, toastr) {
       
       $mdThemingProvider.theme('default')
         .primaryPalette('blue')
         .accentPalette('grey');
 
       $locationProvider.html5Mode(true);
+
+      $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function ($q, $location, $localStorage) {
+        return {
+          'request': function (config) {
+            config.headers = config.headers || {};
+            if ($localStorage.token) {
+              config.headers.Authorization = 'Bearer ' + $localStorage.token;
+            }
+            return config;
+          },
+          'responseError': function (response) {
+            switch (response.status) {
+              case 401:
+              case 403: 
+                delete $localStorage.token;
+                $location.path('/login');
+                break;
+              case 500:
+              toastr.error(response.message, 'Error');
+                break;
+            }
+            return $q.reject(response);
+          }
+        };
+      }]);
 
       $stateProvider
         // .state('root', {
@@ -83,7 +112,7 @@ angular
   })
   .run(function($rootScope, $location) {
 
-    $rootScope.$on('$locationChangeStart', function() {
+    // $rootScope.$on('$locationChangeStart', function() {
       // if (!auth.isAuthenticated) {
       //   var token = store.get('token');
       //   if (token) {
@@ -94,5 +123,12 @@ angular
       //     }
       //   }
       // }
-  });
+
+    $rootScope.$on( "$routeChangeStart", function(event, next) {
+      if ($localStorage.token == null) {
+        $location.path('/login');
+      }
+    });
+  
+
 });
