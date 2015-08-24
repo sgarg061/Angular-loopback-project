@@ -231,7 +231,7 @@ function performActivationTasks(License, license, cb) {
                             var response = {
                                 username: username,
                                 password: password,
-                                deviceId: password
+                                deviceId: deviceId
                             };
 
                             cb(null, JSON.stringify(response));

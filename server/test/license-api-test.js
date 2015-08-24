@@ -105,24 +105,9 @@ describe('License tests', function() {
                   throw err;
                 }
                 assert(res.body.id, 'must have created a new id');
-                assert(res.body.username, 'must return a username');
-                assert(res.body.password, 'must return a password');
                 assert(res.body.customerId, 'must return a customer ID');
-                assert(res.body.deviceId, 'must return a device ID');
                 assert.notEqual(res.body.key, 'ABCDABCDABCD', 'the key must be randomly generated, not the one passed in');
 
-                // get device count afterwards, to ensure a new device was created.
-                common.json('get', '/api/devices/count', token)
-                  .send({})
-                  .expect(200)
-                  .end(function (err, res) {
-                    if (err) {
-                      console.log('error counting devices: ' + err);
-                      throw err;
-                    }
-                    var countAfterLicenseCreation = res.body.count;
-                    assert.equal(countAfterLicenseCreation, countBeforeLicenseCreation + 1, 'must have 1 new device');
-                  });
                 done();
               });
           });
