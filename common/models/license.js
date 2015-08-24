@@ -21,8 +21,10 @@ module.exports = function (License) {
                 ctx.instance.password = null;
                 ctx.instance.activated = false;
                 ctx.instance.key = null;
-            } 
-            next();
+                setUniqueLicenseKey(License, ctx.instance, next);
+            } else {
+                next();
+            }
         } else {
             // if we want to do something before license updates, do it here.
             next();
@@ -30,11 +32,13 @@ module.exports = function (License) {
     });
 
     License.observe('after save', function (ctx, next) {
+        next();
+        /*
         if (ctx.isNewInstance) {
             addUniqueLicense(License, ctx.instance, next);
         } else {
             next();
-        }
+        }*/
     });
 
     License.remoteMethod(
@@ -48,6 +52,36 @@ module.exports = function (License) {
         }
     );
 };
+
+function setUniqueLicenseKey(License, license, next) {
+    'use strict';
+    var randToken = require('rand-token').generator({
+        source: crypto.randomBytes
+    });
+
+    var licenseKey = license.key;
+    if (!licenseKey) {
+        licenseKey = randToken.generate(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+    }
+
+    License.find({where: {key: licenseKey}}, function checkIfLicenseExists(err, res) {
+        if (err) {
+            logger.error('Error while checking if new license is unique.');
+            logger.error(err);
+            next(err);
+        } else {
+            if (res.length > 0 && !license.key) {
+                logger.error('WARNING: license already exists');
+                var error = new Error('Duplicate license generated');
+                next(error);
+            } else {
+                // license is unique
+                license.key = licenseKey;
+                next();
+            }
+        }
+    });
+}
 
 function addUniqueLicense(License, license, next) {
     'use strict';
@@ -67,7 +101,7 @@ function addUniqueLicense(License, license, next) {
         } else {
             if (res.length > 0 && !license.key) {
                 logger.error('WARNING: license already exists');
-                addUniqueLicense(License, license, next);
+                return addUniqueLicense(License, license, next);
             } else {
                 // the license is unique.
                 var Device = License.app.models.Device;
@@ -146,18 +180,65 @@ function activateLicense(License, key, cb) {
     });
 }
 
-function performActivationTasks(License, licenseInstance, cb) {
+function performActivationTasks(License, license, cb) {
     'use strict';
-    licenseInstance.updateAttributes({
-        activated: true,
-        activationDate: new Date()
-    }, function sendActivationResponse(err, res) {
-        var response = {
-            username: licenseInstance.username,
-            password: licenseInstance.password,
-            deviceId: licenseInstance.deviceId
-        };
+    // TODO: Create auth0 user, create device, set username/password/deviceID on license object
+    var Device = License.app.models.Device;
 
-        cb(null, JSON.stringify(response));
+    Device.create({
+        name: 'Activated Device',
+        customerId: license.customerId
+    }, function createUser(err, res) {
+        if (err) {
+            logger.error('Error creating device at activation time');
+            logger.error(err);
+            cb(err);
+        }  else {
+            var randToken = require('rand-token').generator({
+                source: crypto.randomBytes
+            });
+
+            var deviceId = res.id;
+            var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
+            var password = randToken.generate(16);
+
+            // create user
+            // set activation flag
+            // return response
+            var userData = {
+                deviceId: deviceId,
+                usertype: 'connect',
+                custeromId: license.customerId
+            };
+            authService.createUser(username, password, userData, function (err, res) {
+                if (err) {
+                    logger.error('Error while creating user for new device');
+                    logger.error(err);
+                    cb(err);
+                } else {
+                    license.updateAttributes({
+                        activated: true,
+                        actiationDate: new Date(),
+                        username: username,
+                        password: password,
+                        deviceId: deviceId
+                    }, function sendActivationResponse(err, res) {
+                        if (err) {
+                            logger.error('Error while setting activated flag on new device');
+                            logger.error(err);
+                            cb(err);
+                        } else {
+                            var response = {
+                                username: username,
+                                password: password,
+                                deviceId: deviceId
+                            };
+
+                            cb(null, JSON.stringify(response));
+                        }
+                    });
+                }
+            });
+        }
     });
 }
