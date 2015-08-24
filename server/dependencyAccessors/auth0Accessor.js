@@ -1,11 +1,12 @@
 var request = require('request');
-var config = require('../../config');
+var Config = require('../../config');
 
 var Auth0Accessor = function () {
 };
 
 Auth0Accessor.prototype.login = function (username, password, cb) {
     'use strict';
+    var config = new Config();
     request({
         url: config.auth0URL + '/oauth/ro',
         method: 'POST',
@@ -35,6 +36,7 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
 
 Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
     'use strict';
+    var config = new Config();
     request({
         url: config.auth0URL + '/delegation',
         method: 'POST',
@@ -59,6 +61,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
 
 Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
+    var config = new Config();
     request({
         url: config.auth0URL + '/api/v2/users',
         method: 'POST',
@@ -93,6 +96,7 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
 
 function authenticateWithAWS(token, refreshToken, cb) {
     'use strict';
+    var config = new Config();
     request({
         url: config.auth0URL + '/delegation',
         method: 'POST',

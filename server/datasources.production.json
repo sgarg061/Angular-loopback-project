@@ -1,0 +1,13 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "elasticsearch": {
+    "name": "elasticsearch",
+    "connector": "mongodb",
+    "host": "http://internal-mongodb-2011656830.us-west-2.elb.amazonaws.com",
+    "database": "call-home",
+    "port": "80"
+  }
+}

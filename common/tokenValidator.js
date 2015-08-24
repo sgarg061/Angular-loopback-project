@@ -1,12 +1,13 @@
 var logger = require('../server/logger');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
-var config = require('../config');
+var Config = require('../config');
 var cacheService = require('../server/services/cacheService');
 
 module.exports = {
     validateToken: function (token, cb) {
         'use strict';
+        var config = new Config();
         jwt.verify(token, new Buffer(config.jwtSecret, 'base64'), function (err, decoded) {
             if (!err) {
                 // ensure the token hasn't expired
