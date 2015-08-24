@@ -11,14 +11,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular-resource": "~1.4.3",
-    "angular-ui-router": "~0.2.15",
-    "bootstrap": "~3.3.5",
+    "angular-block-ui": "~0.2.0",
+    "angular-breadcrumb": "~0.4.1",
     "angular-cookies": "~1.4.3",
     "angular-material": "~0.10.1",
-    "ngstorage": "~0.3.9",
+    "angular-resource": "~1.4.3",
     "angular-toastr": "~1.4.1",
-    "angular-block-ui": "~0.2.0"
+    "angular-ui-router": "~0.2.15",
+    "bootstrap": "~3.3.5",
+    "ngstorage": "~0.3.9"
   },
   "resolutions": {
     "angular": "1.4.4"
