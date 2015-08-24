@@ -21,20 +21,47 @@ describe('License tests', function() {
   });
 
   describe('Device activation succeeds with valid license', function() {
-    var device;
     it('should activate license and return a new device', function (done) {
-      common.json('post', '/api/licenses/activate')
-        .send({key: 'ABCDABCDABCD'})
-        .expect(200)
-        .end(function(err, res) {
-          if (err) {
-            console.log('error! ' + err);
-            throw err;
-          }
-          device = JSON.parse(res.body);
-          assert(device.deviceId, 'must have a deviceId');
-          
-          done();
+
+      common.login('solink', function(token) {
+
+        common.json('get', '/api/devices/count', token)
+          .send({})
+          .expect(200)
+          .end(function (err, res) {
+            if (err) {
+              console.log('error count devices: ' + err);
+              throw err;
+            }
+            var countBeforeLicenseCreation = res.body.count;
+
+            common.json('post', '/api/licenses/activate')
+              .send({key: 'ABCDABCDABCD'})
+              .expect(200)
+              .end(function(err, res) {
+                if (err) {
+                  console.log('error! ' + err);
+                  throw err;
+                }
+                var response = JSON.parse(res.body);
+                assert(response.deviceId, 'must have a deviceId');
+                assert(response.username, 'must return a username');
+                assert(response.password, 'must return a password');
+                
+                // ensure that the number of devices has grown
+                common.json('get', '/api/devices/count', token)
+                  .send({})
+                  .expect(200)
+                  .end(function (err, res) {
+                    if (err) throw err;
+
+                    var countAfterLicenseCreation = res.body.count;
+                    assert(countBeforeLicenseCreation === countAfterLicenseCreation - 1, 'one new device has been created');
+
+                    done();
+                  });
+              });
+          });
         });
     });
   });
@@ -81,36 +108,27 @@ describe('License tests', function() {
 
 
   describe('Creating a license succeeds with correct setup', function() {
-    it('should create a new license and device, plus use a new random license key', function(done) {
+    it('should create a new license, plus use a new random license key', function(done) {
       common.login('solink', function (token) {
         // first, count the number of devices so we can check that they increment later on.
-        common.json('get', '/api/devices/count', token)
-          .send({})
-          .expect(200)
-          .end(function (err, res) {
-            if (err) {
-              console.log('error count devices: ' + err);
-              throw err;
-            }
-            var countBeforeLicenseCreation = res.body.count;
-            common.json('post', '/api/licenses', token)
-              .send({
-                customerId: '1',
-                key: 'ABCDABCDABCD'
-              })
-              .expect(200) // TODO: this should really be 201... why is loopback returning 200?
-              .end(function (err, res) {
-                if (err) {
-                  console.log('error creating license: ' + err);
-                  throw err;
-                }
-                assert(res.body.id, 'must have created a new id');
-                assert(res.body.customerId, 'must return a customer ID');
-                assert.notEqual(res.body.key, 'ABCDABCDABCD', 'the key must be randomly generated, not the one passed in');
+        
+          common.json('post', '/api/licenses', token)
+            .send({
+              customerId: '1',
+              key: 'ABCDABCDABCD'
+            })
+            .expect(200) // TODO: this should really be 201... why is loopback returning 200?
+            .end(function (err, res) {
+              if (err) {
+                console.log('error creating license: ' + err);
+                throw err;
+              }
+              assert(res.body.id, 'must have created a new id');
+              assert(res.body.customerId, 'must return a customer ID');
+              assert.notEqual(res.body.key, 'ABCDABCDABCD', 'the key must be randomly generated, not the one passed in');
 
-                done();
-              });
-          });
+              done();
+            });
       });
     });
   });
