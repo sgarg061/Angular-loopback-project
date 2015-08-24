@@ -19,16 +19,21 @@ module.exports = function(Reseller) {
                         e.statusCode = 400;
                         next(e);
                     } else {
-                        // TODO: Should probably create the user AFTER save.
-                        // ideally, we do them in transactional lockstep, 
-                        // so if the user creation fails we rollback on the save
-                        createResellerUser(ctx.instance, next); 
+                        next();
                     }
                 } else {
                     next();
                 }
             }
         });
+    });
+
+    Reseller.observe('after save', function createUser(ctx, next) {
+        if (ctx.isNewInstance) {
+            createResellerUser(ctx.instance, next);
+        } else {
+            next();
+        }
     });
 
     Reseller.observe('access', function resellerPermissions(ctx, next) {
