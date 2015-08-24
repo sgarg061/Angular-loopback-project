@@ -8,12 +8,18 @@ angular
     'toastr',
     'blockUI'
   ])
-  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', 
-    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, toastr) {
+  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 
+    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr) {
       
       $mdThemingProvider.theme('default')
         .primaryPalette('blue')
         .accentPalette('grey');
+
+      $mdIconProvider
+                    .icon("indicator_red", "./assets/svg/indicator_red.svg", 24)
+                    .icon("indicator_yellow", "./assets/svg/indicator_yellow.svg", 24)
+                    .icon("indicator_green", "./assets/svg/indicator_green.svg", 24);
+
 
       $locationProvider.html5Mode(true);
 
