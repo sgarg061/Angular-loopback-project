@@ -265,11 +265,12 @@ module.exports = function(Device) {
 
         // before doing anything else, log the checkin data 
         logCheckin(data);
-
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
-        Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
-            
+        // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
+        // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
+        //Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
+        Device.find({where: {id: id}}, function (err, res) {
             var error; 
 
             if (err) {
@@ -284,7 +285,15 @@ module.exports = function(Device) {
                     error.statusCode = 404;
                     cb(error);
                 } else {
-                    checkinDevice(res[0], data, cb);
+                    var device = res[0];
+                    Device.app.models.Customer.findById(device.customerId, function (err, customer) {
+                        if (err) {
+                            cb(new Error('Failed to find customer with id : ' + device.customerId));
+                        } else {
+                            device._customer = customer;
+                            checkinDevice(device, data, cb);
+                        }
+                    });
                 }
             }
         });
@@ -357,47 +366,50 @@ module.exports = function(Device) {
     function generateConfigurationResponse(device, cb) {
         var errorPrefix = 'Configuration parameters unavailable:';
         
-        var customer = device.customer();
+        var customer = device._customer;
         if (!customer) {
             return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
         }
 
-        Device.app.models['Reseller'].findOne({where: {id: customer.resellerId}, include: 'cloud'}, function(err, reseller) {
+        // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
+        // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
+        //Device.app.models['Reseller'].findOne({where: {id: customer.resellerId}, include: 'cloud'}, function(err, reseller) {
+        Device.app.models.Reseller.findOne({where: {id: customer.resellerId}}, function (err, reseller) {
             if (err) {
-                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, customer.id, customer.resellerId));
             }
-            
-            var cloud = reseller.cloud();
-            if (!cloud) {
-                return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
-            }
-            
-            // handle inherited attributes
-            var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
-            var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
-            var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
-            var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
 
-            var result = {
-                eventServerUrl: eventServerUrl,
-                imageServerUrl: imageServerUrl,
-                signallingServerUrl: cloud.signallingServerUrl,
-                checkinInterval: checkinInterval
-            };
-
-            Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
+            Device.app.models.Cloud.findOne({where: {id: reseller.cloudId}}, function (err, cloud) {
                 if (err) {
-                    logger.error('Failed to find software version by id: %s', softwareVersionId);
-                } else {
-                    result.updateUrl = softwareVersion.url;
+                    return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
                 }
 
-                logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
+                // handle inherited attributes
+                var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
+                var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
+                var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
+                var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
+
+                var result = {
+                    eventServerUrl: eventServerUrl,
+                    imageServerUrl: imageServerUrl,
+                    signallingServerUrl: cloud.signallingServerUrl,
+                    checkinInterval: checkinInterval
+                };
+
+                Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
+                    if (err) {
+                        logger.error('Failed to find software version by id: %s', softwareVersionId);
+                    } else {
+                        result.updateUrl = softwareVersion.url;
+                    }
+
+                    logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
 
 
-                cb(null, result);
+                    cb(null, result);
+                });
             });
-            
         });
     }
 
