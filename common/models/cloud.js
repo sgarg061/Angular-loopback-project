@@ -13,8 +13,16 @@ module.exports = function(Cloud) {
                 error.statusCode = 400;
                 next(error);
             } else {
-                createCloudUser(ctx.instance, next);
+                next();
             }
+        } else {
+            next();
+        }
+    });
+
+    Cloud.observe('after save', function createUser(ctx, next) {
+        if (ctx.isNewInstance) {
+            createCloudUser(ctx.instance, next);
         } else {
             next();
         }

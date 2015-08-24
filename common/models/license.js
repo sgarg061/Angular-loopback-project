@@ -33,12 +33,6 @@ module.exports = function (License) {
 
     License.observe('after save', function (ctx, next) {
         next();
-        /*
-        if (ctx.isNewInstance) {
-            addUniqueLicense(License, ctx.instance, next);
-        } else {
-            next();
-        }*/
     });
 
     License.remoteMethod(
