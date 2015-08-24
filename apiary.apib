@@ -1,0 +1,350 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Call Home
+
+This is a mock API for the Call Home server so we can work as if it is already built
+
+# Application API Root [/]
+
+Not a requirement but as a convention it is now common that the root lists the top level api's
+
+## Group Devices
+
+## Get Devices [/devices/{id}]
+
+A device object has the following attributes:
+
++ cameras - An array of Camera objects.
++ name - The device's name
++ status - The current status of the device (ie. online, offline, ...)
++ address - The address of the device
++ lat - The latitude of the device's location
++ lon - The longitude of the device's location
++ location_path - The location path of the device (ie. Canada/Ontario/Kanata)
++ last_updated - The UTC timestamp of the most recent check-in (so we know how stale this data may be)
+
+
++ Parameters
+    + id: 5 (required, number) - The ID of the device
+    
+### Get Device [GET]
+
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "id": "5",
+                "name": "Amazing Connect #1",
+                "status": "offline",
+                "address": "221B Baker Street, London, England",
+                "lat": -31.42,
+                "lon": 41.99,
+                "location_path": "Canada/Ontario/Kanata",
+                "last_updated": 1437579325,
+                "cameras": [
+                    {
+                        "id":"3",
+                        "name":"axis camera",
+                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                    },
+                    {
+                        "id":"4",
+                        "name":" POS camera",
+                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                    },
+                    {
+                        "id":"5",
+                        "name":"Door camera",
+                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                    }
+                ]
+            }
+
+## List All Devices [/devices/{?offset,count}]
+
++ Parameters
+    + offset: 5 (optional, number) - The page of events to return
+    + count: 10 (optional, number) - The number of events events to return
+    
+### List all Devices [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Link: </devices?offset=5>; rel="next"
+
+    + Body
+    
+            {
+                "offset": 5,
+                "count": 10,
+                "total": 220,
+                "results": [
+                    {
+                        "id": "21",
+                        "name": "Amazing Connect #1",
+                        "status": "offline",
+                        "address": "221B Baker Street, London, England",
+                        "lat": -31.42,
+                        "lon": 41.99,
+                        "location_path": "Canada/Ontario/Kanata",
+                        "last_updated": 1437579325,
+                        "cameras": [
+                            {
+                                "id":"3",
+                                "name":"camera 1",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                            },
+                            {
+                                "id":"4",
+                                "name":"camera 2",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                            },
+                            {
+                                "id":"5",
+                                "name":"camera 3",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "22",
+                        "name": "Amazing Connect #2",
+                        "status": "online",
+                        "address": "221B Faker Street, London, England",
+                        "lat": -311.42,
+                        "lon": 411.99,
+                        "location_path": "Canada/Ontario/Kanata",
+                        "last_updated": 1437579311,
+                        "cameras": [
+                            {
+                                "id":"21",
+                                "name":"camera 1",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
+                            },
+                            {
+                                "id":"22",
+                                "name":"camera 2",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
+                            },
+                            {
+                                "id":"23",
+                                "name":"camera 3",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "23",
+                        "name": "Not So Amazing Connect #1",
+                        "status": "online",
+                        "address": "390 March Road, Ottawa, Ontario, Canada",
+                        "lat": 31.42,
+                        "lon": 41.99,
+                        "location_path": "Canada/Ontario/Kanata",
+                        "last_updated": 1437579325,
+                        "cameras": [
+                            {
+                                "id":"53",
+                                "name":"camera 1",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
+                            },
+                            {
+                                "id":"54",
+                                "name":"camera 2",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
+                            },
+                            {
+                                "id":"55",
+                                "name":"camera 3",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "24",
+                        "name": "Not So Amazing Connect #2",
+                        "status": "online",
+                        "address": "221B Baker Street, London, England",
+                        "lat": -31.142,
+                        "lon": 41.939,
+                        "location_path": "Canada/Ontario/Kanata",
+                        "last_updated": 1437579325,
+                        "cameras": [
+                            {
+                                "id":"43",
+                                "name":"camera 1",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello33.jpg"
+                            },
+                            {
+                                "id":"44",
+                                "name":"camera 2",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello44.jpg"
+                            },
+                            {
+                                "id":"45",
+                                "name":"camera 3",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello11.jpg"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "25",
+                        "name": "Not So Amazing Connect #3",
+                        "status": "offline",
+                        "address": "123 Sesame Street, Paris, France",
+                        "lat": -11.42,
+                        "lon": 11.99,
+                        "location_path": "Canada/Quebec/Nepean",
+                        "last_updated": 1437579325,
+                        "cameras": [
+                            {
+                                "id":"13",
+                                "name":"camera 1",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello5.jpg"
+                            },
+                            {
+                                "id":"14",
+                                "name":"camera 2",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello3.jpg"
+                            },
+                            {
+                                "id":"15",
+                                "name":"camera 3",
+                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello7.jpg"
+                            }
+                        ]
+                    },
+                ]
+            }
+            
+## List All Cameras on a Device [/devices/{id}/cameras]
+
++ Parameters
+    + id: 5 (required, number) - The id of the device
+    
+### List all cameras on a device [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "results": [
+                    {
+                        "id":"3",
+                        "name":"axis camera",
+                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                    },
+                    {
+                        "id":"4",
+                        "name":" POS camera",
+                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                    },
+                    {
+                        "id":"5",
+                        "name":"Door camera",
+                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                    }
+                ]
+            }
+            
+
+## Group Licenses
+
+## Activate [/licenses/activate]
+
+When installing a Connect device, a license key is provided.  Providing this license key will hit this endpoint, which activates the license for that device and adds it to our /devices repository.
+
+### Activate [POST]
++ Request (application/json)
+
+        {
+            "key": "161bc25962da8fed6d2f59922fb642aa"
+        }
+
++ Response 200 (application/json)
+
+        {
+            username: "device123@solinkcorp.com",
+            password: "test",
+            deviceId: "A4af23bij"
+        }
+
+## Group Authentication
+
+## Login [/auth/login]
+
+A user or connect device will post to the /auth/login endpoint to get a valid JWT token for future calls.
+
+### Login [POST]
++ Request (application/json)
+
+        {
+            "username": "cwhiten@solinkcorp.com",
+            "password": "test"
+        }
+
++ Response 201 (application/json)
+
+        {
+            auth_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
+            refresh_token: "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM",
+            aws: {
+                AccessKeyId: "ASIAIE3VWYBHAN32YG5Q",
+                SecretAccessKey: "UbILm6V9ip0gyUpw6kqDcet+PGFwrjBhmPa+Z6p2",
+                SessionToken: "AQoDYXdzENr//////////wEawALgJc/SxMUbsxgIL5CGQcoGQmxF5wpV8ZuWQtwDYGngPfrXCHxoknbwxjwQOJPaK6N2rFtKoPw4ojJon1K9BQlNZnUQ4NSuPmTqDLZdltS+nrlUdZ/U8RWdFhoDtrJLL/aBsHBlymLPIR//JcuiCMnWZDtPpOIZVK92wZKllMunfnnpVz9LN/X6jkeX2NhMYRK+Q2dTH0Z7UuOgK+UMTW1/ayFECDGrVCctkmdR1Rr/cVA0yq8zF4k/SYar5WZIWQ1YLvSHT57/jD/lAUBOuBQ64gMwvXw8ptsRpl1c0xjWZn4azrMBz+FJAs2OTbcrl/arUF3YVLttH+aEIxHMamGYbUxqq3e7LOjKvnJbWFVWfdsrRaWMyaEIPYbVKOodRtlcsD+9p2qXtBr0eB48hBggxoir+P9yGNFeprgG7s/e/SCZ3cmtBQ=="
+            }-
+        }
+        
+## Validate [/auth/validate]
+
+Validate whether a given JWT token is valid (not expired, matches secret, not revoked).
+Returns a 200 if valid.  Otherwise, returns a 401.
+
+### Validate [POST]
++ Request (application/json)
+
+        {
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
+        }
+
++ Response 200 (application/json)
+
+        {
+        }
+
+## Refresh [/auth/refresh]
+
+Generate a new authentication token from a user's refresh token.
+
+### Refresh [POST]
++ Request (application/json)
+
+        {
+            "token": "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "auth_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY"
+        }
+        
+## Set password [/auth/setpassword]
+
+A request from the platform is sent out with user's current email and new password
+
+### Change Password [POST]
++ Request (application/json)
+
+        {
+            "email": "isharif@solinkcorp.com",
+            "password": "new password"
+        }
+
++ Response 202

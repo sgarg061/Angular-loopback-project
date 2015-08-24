@@ -10,5 +10,8 @@ module.exports = {
     },
     createUser: function (email, password, userData, cb) {
     	authAccessor.createUser(email, password, userData, cb);
+    },
+    refresh: function (token, cb) {
+    	authAccessor.refresh(token, cb);
     }
 };

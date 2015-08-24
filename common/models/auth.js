@@ -44,6 +44,10 @@ module.exports = function (Auth) {
         authService.login(username, password, cb);
     };
 
+    Auth.refresh = function(token, cb) {
+        authService.refresh(token, cb);
+    };
+
     Auth.remoteMethod(
         'validate',
         {
@@ -62,6 +66,14 @@ module.exports = function (Auth) {
             ],
             http: {verb: 'post', status: 200, errorStatus: 401},
             returns: {arg: 'response', type: 'string'}
+        }
+    );
+
+    Auth.remoteMethod(
+        'refresh',
+        {
+            accepts: {arg: 'token', type: 'string'},
+            returns: {arg: 'auth_token', type: 'string'}
         }
     );
 };
