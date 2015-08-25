@@ -265,6 +265,7 @@ module.exports = function(Device) {
 
         // before doing anything else, log the checkin data 
         logCheckin(data);
+
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
         // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
@@ -323,15 +324,9 @@ module.exports = function(Device) {
     }
 
     function checkinDevice (device, deviceData, cb) {
-        
         // update general metadata about the device
-        device.updateAttributes({
-            id: deviceData.id,
-            guid: deviceData.guid,
-            organizationPath: deviceData.organizationPath,
-            address: deviceData.address,
-            lastCheckin: new Date()
-        }, function(err, updatedDevice) {
+        var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
+        device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
             if (err) {
                 cb(new Error('Error checking in device: %s', err));
             } else {
@@ -340,9 +335,39 @@ module.exports = function(Device) {
         });
     }
 
+    function generateCheckedInPropertiesObject(deviceData) {
+        var checkedInProperties = {
+            lastCheckin: new Date()
+        };
+
+        if (deviceData.guid) {
+            checkedInProperties.guid = deviceData.guid;
+        }
+
+        if (deviceData.organizationPath) {
+            checkedInProperties.organizationPath = deviceData.organizationPath;
+        }
+
+        if (deviceData.address) {
+            checkedInProperties.address = deviceData.address;
+        }
+
+        var deviceInfo = deviceData.deviceInformation;
+        if (deviceData.deviceInformation && deviceData.deviceInformation.name) {
+            checkedInProperties.name = deviceData.deviceInformation.name;
+        }
+
+        return checkedInProperties;
+    }
+
     function updateCameras (device, deviceData, cb) {
         logger.debug('updating cameras');
         var cameras = deviceData.cameraInformation;
+        if (!cameras) {
+            var error = new Error('Cameras not included in checkin');
+            error.statusCode = 400;
+            return cb(error);
+        }
 
         for (var i=0; i<cameras.length; i++) {
             updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
@@ -354,6 +379,11 @@ module.exports = function(Device) {
     function updatePOSDevices (device, deviceData, cb) {
         logger.debug('updating pos devices');
         var posDevices = deviceData.posInformation;
+        if (!posDevices) {
+            var error = new Error('POS information not included in checkin');
+            error.statusCode = 400;
+            return cb(error);
+        }
 
         for (var i=0; i<posDevices.length; i++) {
             updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
