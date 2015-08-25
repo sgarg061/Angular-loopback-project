@@ -59,7 +59,7 @@ angular
           $scope.clouds    = [].concat(clouds);          
           
           // select the first by default
-          if (!$stateParams.cloudId) {
+          if (!$stateParams.cloudId && clouds.length > 0) {
             $scope.selectCloud(clouds[0]);
           }
         });
