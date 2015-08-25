@@ -325,17 +325,35 @@ module.exports = function(Device) {
 
     function checkinDevice (device, deviceData, cb) {
         // update general metadata about the device
-        device.updateAttributes({
-            organizationPath: deviceData.organizationPath,
-            address: deviceData.address,
-            lastCheckin: new Date()
-        }, function(err, updatedDevice) {
+        var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
+        device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
             if (err) {
                 cb(new Error('Error checking in device: %s', err));
             } else {
                 updateCameras(updatedDevice, deviceData, cb);
             }
         });
+    }
+
+    function generateCheckedInPropertiesObject(deviceData) {
+        var checkedInProperties = {
+            lastCheckin: new Date()
+        };
+
+        if (deviceData.organizationPath) {
+            checkedInProperties.organizationPath = deviceData.organizationPath;
+        }
+
+        if (deviceData.address) {
+            checkedInProperties.address = deviceData.address;
+        }
+
+        var deviceInfo = deviceData.deviceInformation;
+        if (deviceData.deviceInformation && deviceData.deviceInformation.name) {
+            checkedInProperties.name = deviceData.deviceInformation.name;
+        }
+
+        return checkedInProperties;
     }
 
     function updateCameras (device, deviceData, cb) {
