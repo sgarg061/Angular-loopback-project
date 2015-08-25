@@ -1,10 +1,13 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Page', function($scope, $state, $stateParams, Cloud, Page) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr',
+    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr) {
 
-    Page.setTitle('Clouds');
-    
-    $scope.clouds = [ ];
+    $scope.currentResellerPage = 0;
+    $scope.resellersPerPage = 1000; // FIXME
+    $scope.totalResellers = 0;
+
+    $scope.clouds = [];
     $scope.cloud = null;
     $scope.cloudId = null;
 
@@ -13,7 +16,9 @@ angular
       $scope.$watch("cloud", function(newValue, oldValue) {
         if (newValue) {
           Cloud.prototype$updateAttributes({ id: $scope.cloud.id }, $scope.cloud)
-            .$promise.then(function() {});
+            .$promise.then(function(cloud) {}, function (res) {
+              toastr.error(res.data.error.message, 'Error');
+          });
         }
       }, true);
     }
@@ -24,7 +29,14 @@ angular
         .find({
           filter: {
             where: {id: $stateParams.cloudId},
-            include: ['resellers', 'softwareVersion', 'posConnectors']
+            include: ['softwareVersion', 'posConnectors', {
+              relation: 'resellers',
+              scope: {
+                order: 'name ASC',
+                limit: $scope.currentResellerPage,
+                skip: $scope.currentResellerPage * $scope.resellersPerPage
+              }
+            }]
           }
         })
         .$promise
@@ -35,16 +47,21 @@ angular
           watchForChanges();
           
           if ($scope.cloud) {
-            Page.setNavPath($scope.cloud.name);
-            console.log('cloud: ' + JSON.stringify($scope.cloud));
 
             $scope.cloud.posConnectors = [
               {name: 'POS Connector 1', cloudId: $scope.cloud.id},
               {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
             ];
           }
-          
         });
+    }
+
+    function getCloudResellerCount() {
+      Reseller.count({filter: {where: {id: $stateParams.cloudId}}})
+      .$promise
+      .then(function(res) {
+        $scope.totalResellers = res.count;
+      });
     }
 
     function getClouds() {
@@ -67,8 +84,13 @@ angular
 
     if ($stateParams.cloudId) {
       getCloud();
+      getCloudResellerCount();
     }
     getClouds();
+
+    $scope.pageChanged = function() {
+      $log.log('Page changed to: ' + $scope.currentPage);
+    };
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
@@ -107,4 +129,41 @@ angular
           getClouds();
         });
     };
+
+    $scope.openResellerForm = function(event, cloud) {
+      $mdDialog.show({
+        controller: function DialogController($scope, $mdDialog) {
+                      $scope.newReseller = {
+                        cloudId: cloud.id,
+                        email: '',
+                        password: ''
+                      };
+                      $scope.create = function() {
+                        $scope.newReseller['cloudId'] = cloud.id;
+                        Reseller.create($scope.newReseller)
+                        .$promise
+                        .then(function(reseller) {
+                          getCloud();
+                        }, function (res) {
+                          toastr.error(res.data.error.message, 'Error');
+                        });
+                        $mdDialog.cancel();
+                      };
+                      $scope.cancel = function() {
+                        $mdDialog.cancel();
+                      };
+        },
+        templateUrl: 'views/resellerForm.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:true
+      })
+      .then(function(result) {
+        $scope.status = 'You said the information was "' + answer + '".';
+      }, function() {
+        $scope.status = 'You cancelled the dialog.';
+      });
+    }
+
+    
   }]);

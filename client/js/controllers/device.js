@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'Page', function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, Page) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device) {
 
     $scope.customer = {};
 
@@ -14,7 +14,9 @@ angular
       $scope.$watch("device", function(newValue, oldValue) {
         if (newValue) {
           Device.prototype$updateAttributes({ id: $scope.device.id }, $scope.device)
-            .$promise.then(function() {});
+            .$promise.then(function(device) {}, function (res) {
+              toastr.error(res.data.error.message, 'Error');
+          });
         }
       }, true);
     }
@@ -53,9 +55,6 @@ angular
           getCloudResellers($scope.cloudId);
           getResellerCustomers($scope.resellerId);
           getCustomerDevices($scope.customerId);
-
-          Page.setTitle($scope.device.name);
-          Page.setNavPath($scope.device.name);
 
           console.log('$scope.device: ' + JSON.stringify($scope.device));
         });

@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Page', function($scope, $state, $stateParams, Cloud, Reseller, Customer, Page) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', function($scope, $state, $stateParams, Cloud, Reseller, Customer) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -19,7 +19,9 @@ angular
       $scope.$watch("customer", function(newValue, oldValue) {
         if (newValue) {
           Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
-            .$promise.then(function() {});
+            .$promise.then(function(customer) {}, function (res) {
+              toastr.error(res.data.error.message, 'Error');
+          });
         }
       }, true);
     }
@@ -61,9 +63,6 @@ angular
 
           getCloudResellers(customers[0].reseller.cloud.id);
           getResellerCustomers(customers[0].reseller.id)
-
-          Page.setTitle($scope.customer.name);
-          Page.setNavPath($scope.customer.name);
 
           watchForChanges();
 

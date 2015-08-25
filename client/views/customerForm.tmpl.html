@@ -1,0 +1,29 @@
+<md-dialog aria-label="New Reseller">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>New Customer</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="max-width:800px;max-height:810px; ">
+    <div>
+      <md-input-container>
+        <label>Name</label>
+        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newCustomer.name">
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="cancel()">
+     Cancel
+    </md-button>
+    <md-button ng-click="create()" style="margin-right:20px;">
+      Create
+    </md-button>
+  </div>
+  
+</md-dialog>

@@ -1,9 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Page', function($scope, $state, $stateParams, Cloud, Reseller, Page) {
-
-    Page.setTitle('Resellers');
-    Page.setNavPath('Resellers');
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', '$mdDialog', 'toastr',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, $mdDialog, toastr) {
 
     $scope.clouds = [ ];
     $scope.reseller = {};
@@ -16,7 +14,9 @@ angular
       $scope.$watch("reseller", function(newValue, oldValue) {
         if (newValue) {
           Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
-            .$promise.then(function() {});
+            .$promise.then(function(reseller) {}, function (res) {
+              toastr.error(res.data.error.message, 'Error');
+          });
         }
       }, true);
     }
@@ -26,7 +26,12 @@ angular
         .find({
           filter: {
             where: {id: $stateParams.resellerId},
-            include: ['cloud', 'customers', 'softwareVersion', 'posConnectors']
+            include: ['cloud', 'softwareVersion', 'posConnectors', {
+              relation: 'customers',
+              scope: {
+                order: 'name ASC'
+              }
+            }]
           }
         })
         .$promise
@@ -37,8 +42,6 @@ angular
           $scope.resellerId = resellers[0].id;
 
           watchForChanges();
-
-          Page.setNavPath($scope.reseller.name);
 
           getCloudResellers(resellers[0].cloud.id);
 
@@ -102,4 +105,36 @@ angular
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
    
+    $scope.openCustomerForm = function(event, reseller) {
+      $mdDialog.show({
+        controller: function DialogController($scope, $mdDialog) {
+                      $scope.newCustomer = {
+                        resellerId: reseller.id,
+                        name: '',
+                      };
+                      $scope.create = function() {
+                        $scope.newCustomer['resellerId'] = reseller.id;
+                        Customer.create($scope.newCustomer)
+                        .$promise
+                        .then(function(customer) {
+                          getReseller();
+                        }, function (res) {
+                          toastr.error(res.data.error.message, 'Error');
+                        });
+                        $mdDialog.cancel();
+                      };
+                      $scope.cancel = function() {
+                        $mdDialog.cancel();
+                      };
+        },
+        templateUrl: 'views/customerForm.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+      });
+    }
+
   }]);

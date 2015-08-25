@@ -6,7 +6,8 @@ angular
     'ngStorage',
     'ngAnimate',
     'toastr',
-    'blockUI'
+    'blockUI',
+    'ui.bootstrap'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 
     function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr) {
@@ -16,6 +17,7 @@ angular
         .accentPalette('grey');
 
       $mdIconProvider
+                    .icon("close", "./assets/svg/close.svg", 24)
                     .icon("indicator_red", "./assets/svg/indicator_red.svg", 24)
                     .icon("indicator_yellow", "./assets/svg/indicator_yellow.svg", 24)
                     .icon("indicator_green", "./assets/svg/indicator_green.svg", 24);
