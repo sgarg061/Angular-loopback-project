@@ -65,7 +65,7 @@ module.exports = function (Auth) {
                 {arg: 'password', type: 'string'}
             ],
             http: {verb: 'post', status: 200, errorStatus: 401},
-            returns: {arg: 'response', type: 'string'}
+            returns: {arg: 'response', type: 'Array'}
         }
     );
 
