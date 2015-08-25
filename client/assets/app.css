@@ -10,6 +10,19 @@ html, body {
   display: none !important;
 }
 
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
+  height:100vh;
+  margin: -10px 0px 0px -10px !important;
+  background-color: #ffffff;
+}
+
+.main-content {
+  background-color: #f0f0f0;
+}
+
 /* Breadcrumb */
 .breadcrumb { 
   list-style: none; 
@@ -51,13 +64,21 @@ md-list .md-button {
   text-align: left;
   width: 100%;
 }
-  md-list .md-button.selected {
-    color: #03a9f4;
-  }
+md-list .md-button.selected {
+  color: #03a9f4;
+}
 
-  md-sidenav  md-list {
-    padding: 0px 0px 8px 0px;
-  }
+md-sidenav  md-list {
+  padding: 0px 0px 8px 0px;
+}
+
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
+}
 
 
 /* Primary content area */

@@ -1,29 +1,25 @@
 <div ng-include src="'views/breadcrumb.html'"></div>
 
-<md-content class="md-padding">
+<md-content>
   
-  <div layout="row" layout-margin layout-fill layout-padding>
+  <div layout="row" style="background-color: #f0f0f0;">
 
-    <div class="col-md-3" layout-margin layout-padding>
+    <div class="col-md-3" layout-margin>
       <sidebar model="cloud" type="'cloud'"/>
     </div>
 
-    <div class="col-md-8" layout-margin layout-fill layout-padding>
+    <div class="col-md-8" class="main-content" style="background-color: #f0f0f0; height:100vh;" layout-fill layout-padding>
       <h2>Resellers</h2>
-      <md-list layout-fill>
-        <md-list-item ng-repeat="reseller in cloud.resellers" layout-padding>
+      <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
 
-          <md-card ng-click='selectReseller(reseller)' layout-fill layout-margin>
-            <md-card-content>
-              <h2 class="md-title">{{reseller.name}}</h2>
-              <p>
-                
-              </p>
-            </md-card-content>
-          </md-card>
+        <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card" ng-click='selectReseller(reseller)' md-rowspan="0" md-colspan="1">
+          <div layout-fill layout-align="start center" layout-padding>
+            <span class="md-title" style="vertical-align: middle; height:50px;">{{reseller.name}}</span>
+          </div>
+        </md-grid-tile>
 
-        </md-list-item>
-      </md-list>
+      </md-grid-list>
+        
     </div>
   </div>
 </md-content> 

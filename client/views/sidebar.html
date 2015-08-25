@@ -1,39 +1,47 @@
-
-<md-input-container ng-show="type=='cloud'||type=='reseller'">
-  <label>Event Server URL</label>
-  <input required name="description" ng-model="model.eventServerUrl">
-</md-input-container>    
-            
-<md-input-container ng-show="type=='cloud'||type=='reseller'">
-  <label>Image Server URL</label>
-  <input type="text" class="form-control focus" name="imageServerUrl"  autocomplete="off" required ng-model="model.imageServerUrl">
-</md-input-container>
-
-<md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
-  <label>Check-in Interval</label>
-  <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval">
-</md-input-container>
-
-<md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
-  <label>Software Version</label>
-  <input type="text" class="form-control focus" name="updateUrl" autocomplete="off" required ng-model="model.updateUrl">
-</md-input-container>
-
-<md-input-container ng-show="type=='cloud'">
-  <label>Signalling Server</label>
-  <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="model.signallingServerUrl">
-</md-input-container>
-
-<md-input-container ng-show="type=='cloud'||type=='reseller'">
-  <label>POS Connectors</label>
-  <md-list>
-    <md-list-item ng-repeat="connector in model.posConnectors">
-        <md-button ng-click="selectConnector(connector)" ng-class="{'cloud' : connector === cloudController.cloud }">
-          {{connector.name}}
-        </md-button>
-    </md-list-item>
-  </md-list>
-</md-input-container>
+<div class="sidebar">
   
-<button class="btn btn-default" flex>Add</button>
+  <div layout-padding>
+    <h2>{{model.name}}</h2>
+  </div>
+  
+  <md-divider></md-divider>
+  <div layout-padding>
+    <md-input-container ng-show="type=='cloud'||type=='reseller'">
+      <label>Event Server URL</label>
+      <input required name="description" ng-model="model.eventServerUrl">
+    </md-input-container>    
+                
+    <md-input-container ng-show="type=='cloud'||type=='reseller'">
+      <label>Image Server URL</label>
+      <input type="text" class="form-control focus" name="imageServerUrl"  autocomplete="off" required ng-model="model.imageServerUrl">
+    </md-input-container>
 
+    <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
+      <label>Check-in Interval</label>
+      <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval">
+    </md-input-container>
+
+    <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
+      <label>Software Version</label>
+      <input type="text" class="form-control focus" name="updateUrl" autocomplete="off" required ng-model="model.updateUrl">
+    </md-input-container>
+
+    <md-input-container ng-show="type=='cloud'">
+      <label>Signalling Server</label>
+      <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="model.signallingServerUrl">
+    </md-input-container>
+
+    <md-input-container ng-show="type=='cloud'||type=='reseller'">
+      <label>POS Connectors</label>
+      <md-list>
+        <md-list-item ng-repeat="connector in model.posConnectors">
+            <md-button ng-click="selectConnector(connector)" ng-class="{'cloud' : connector === cloudController.cloud }">
+              {{connector.name}}
+            </md-button>
+        </md-list-item>
+      </md-list>
+    </md-input-container>
+      
+    <button class="btn btn-default" flex>Add</button>
+  </div>
+</div>
