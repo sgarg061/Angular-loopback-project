@@ -58,6 +58,7 @@ angular
               relation: 'resellers',
               scope: {
                 fields: {id: true, name: true},
+                order: 'name ASC'
               }
             }
           }
@@ -75,7 +76,8 @@ angular
         .find({
           filter: {
             fields: {id: true, name: true},
-            where: {cloudId: cloudId}
+            where: {cloudId: cloudId},
+            order: 'name ASC'
           }
         })
         .$promise

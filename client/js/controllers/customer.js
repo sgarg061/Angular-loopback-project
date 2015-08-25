@@ -37,7 +37,8 @@ angular
                   include: {
                     relation: 'cloud',
                     scope: {
-                      fields: {id: true, name: true}
+                      fields: {id: true, name: true},
+                      order: 'name ASC'
                     }
                   }
                 }
@@ -45,7 +46,8 @@ angular
               {
                 relation: 'devices',
                 scope: {
-                  include: ['cameras', 'posDevices']
+                  include: ['cameras', 'posDevices'],
+                  order: 'name ASC'
                 }
               }
             ]
@@ -116,6 +118,7 @@ angular
               relation: 'resellers',
               scope: {
                 fields: {id: true, name: true},
+                order: 'name ASC'
               }
             }
           }
@@ -132,7 +135,8 @@ angular
         .find({
           filter: {
             fields: {id: true, name: true},
-            where: {cloudId: cloudId}
+            where: {cloudId: cloudId},
+            order: 'name ASC'
           }
         })
         .$promise
@@ -148,7 +152,8 @@ angular
         .find({
           filter: {
             fields: {id: true, name: true},
-            where: {resellerId: resellerId}
+            where: {resellerId: resellerId},
+            order: 'name ASC'
           }
         })
         .$promise

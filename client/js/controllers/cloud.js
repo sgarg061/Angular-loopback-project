@@ -68,7 +68,8 @@ angular
       Cloud
         .find({
           filter: {
-            fields: {id: true, name: true}
+            fields: {id: true, name: true},
+            order: 'name ASC'
           }
         })
         .$promise
