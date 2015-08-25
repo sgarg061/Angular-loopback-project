@@ -1,0 +1,78 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "elasticsearch": {
+    "name": "elasticsearch",
+    "connector": "es",
+    "index": "call-home",
+    "hosts": [
+      {
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 9200
+      }
+    ],
+    "mappings": [
+      {
+        "name": "Reseller",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"},
+          "cloudId": {"type": "string", "index": "not_analyzed"}
+        }  
+      },
+      {
+        "name": "POSDevice",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"},
+          "posId": {"type": "string", "index": "not_analyzed"},
+          "deviceId": {"type": "string", "index": "not_analyzed"}
+        }
+      },
+      {
+        "name": "License",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"},
+          "customerId": {"type": "string", "index": "not_analyzed"}
+        }
+      },
+      {
+        "name": "DeviceLogEntry",
+        "properties": {
+          "deviceId": {"type": "string", "index": "not_analyzed"}
+        }
+      },
+      {
+        "name": "Device",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"},
+          "guid": {"type": "string", "index": "not_analyzed"},
+          "customerId": {"type": "string", "index": "not_analyzed"}
+        }
+      },
+      {
+        "name": "Customer",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"},
+          "resellerId": {"type": "string", "index": "not_analyzed"}
+        }
+      },
+      {
+        "name": "Cloud",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"}
+        }
+      },
+      {
+        "name": "Camera",
+        "properties": {
+          "id": {"type": "string", "index": "not_analyzed"},
+          "cameraId": {"type": "string", "index": "not_analyzed"},
+          "deviceId": {"type": "string", "index": "not_analyzed"}
+        }
+      }
+    ],
+    "log": "info"
+  }
+}

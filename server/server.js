@@ -5,7 +5,7 @@ var Auth0Accessor = require('./dependencyAccessors/auth0Accessor');
 var RedisAccessor = require('./dependencyAccessors/redisAccessor');
 var authService = require('./services/authService');
 var cacheService = require('./services/cacheService');
-var config = require('../config');
+var Config = require('../config');
 var loopbackConsole = require('loopback-console');
 
 var app = module.exports = loopback();
@@ -55,6 +55,7 @@ app.use(function jwtMiddleware (req, res, next) {
 
 function initializeRedis() {
     'use strict';
+    var config = new Config();
     RedisAccessor.initialize([
     {
         name: 'revoked',

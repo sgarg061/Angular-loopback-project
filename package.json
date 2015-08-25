@@ -20,6 +20,7 @@
     "loopback": "^2.14.0",
     "loopback-boot": "^2.6.5",
     "loopback-connector-es": "^1.0.0",
+    "loopback-connector-mongodb": "^1.13.0",
     "loopback-console": "^0.1.0",
     "loopback-datasource-juggler": "^2.19.0",
     "mocha-teamcity-reporter": "0.0.4",
