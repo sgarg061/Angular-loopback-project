@@ -48,21 +48,22 @@
 
     <div ng-show="type=='customer'">
       <div style="margin:30px 0px 5px 0px;">Licenses</div>
-      <md-input-container>
-        
-        <md-list style="box-shadow: 1px 1px 2px 0px rgba(163,163,163,1);">
-          <md-list-item ng-repeat="license in model.licenses">
-              <md-button ng-click="selectLicense(license)">
-                <div layout="row" layout-align="start center">
-                  <div>{{license.key}}</div>
-                  <div flex></div>
-                  <div>{{license.activated ? "In Use" : "Available"}}</div>
-                </div>
-              </md-button>
-          </md-list-item>
-        </md-list>
-      </md-input-container>
-      <button class="btn btn-default" flex>Add</button>
+      
+        <md-content layout-padding style="height: 200px;padding: 0px;">  
+          <md-list style="box-shadow: 1px 1px 2px 0px rgba(163,163,163,1);">
+            <md-list-item ng-repeat="license in model.licenses">
+                <md-button ng-click='showLicense(license)'>
+                  <div layout="row" layout-align="start center">
+                    <div>{{license.key}}</div>
+                    <div flex></div>
+                    <div>{{license.activated ? "In Use" : "Available"}}</div>
+                  </div>
+                </md-button>
+            </md-list-item>
+          </md-list>
+        </md-content>
+      
+      <button class="btn btn-default" flex ng-click="addLicense(model.id)">Add Licenses</button>
     </div>
 
   </div>

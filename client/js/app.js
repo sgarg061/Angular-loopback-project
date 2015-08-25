@@ -107,17 +107,6 @@ angular
 
       $urlRouterProvider.otherwise('cloud');
   }])
-  .directive('sidebar', function() {
-    var directive = {};
-
-    directive.restrict = 'E'; 
-    directive.templateUrl = "/views/sidebar.html";
-    directive.scope = {
-      model: "=model",
-      type: "=type"
-    }
-    return directive;
-  })
   .run(function($rootScope, $location) {
 
     // $rootScope.$on('$locationChangeStart', function() {

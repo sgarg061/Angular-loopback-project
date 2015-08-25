@@ -1,6 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', function($scope, $state, $stateParams, Cloud, Reseller, Customer) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -31,7 +32,13 @@ angular
         .find({
           filter: {
             where: {id: $stateParams.customerId},
-            include: ['licenses', 'softwareVersion', {
+            include: ['softwareVersion', {
+                relation: 'licenses',
+                scope: {
+                  order: 'activated ASC, key ASC'
+                }
+            },
+            {
                 relation: 'reseller',
                 scope: {
                   include: {
@@ -182,20 +189,18 @@ angular
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
    
-    function selectLicense($event) {
+    function showLicense(license) {
+      console.log('show license: ' + JSON.stringify(license));
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         parent: parentEl,
-        targetEvent: $event,
         template:
           '<md-dialog aria-label="List dialog">' +
           '  <md-dialog-content>'+
-          '  <pre>{{JSON.stringify(license)}}</pre>' +
+          '  {{JSON.stringify(license)}}' +
           '  </md-dialog-content>' +
           '  <div class="md-actions">' +
-          '    <md-button ng-click="closeDialog()" class="md-primary">' +
-          '      Close Dialog' +
-          '    </md-button>' +
+          '    <md-button ng-click="closeDialog()" class="md-primary">Close</md-button>' +
           '  </div>' +
           '</md-dialog>',
         locals: { license: $scope.license },
@@ -209,6 +214,45 @@ angular
         }
       }
     }
-    $scope.selectLicense = selectLicense;
 
-  }]);
+    function addLicense(customerId) {
+      console.log('add license for customer id: ' + customerId);
+
+      $mdDialog.show({
+        controller: function DialogController($scope, $mdDialog) {
+          $scope.quantity = 0;
+          $scope.create = function() {
+            
+            async.times($scope.quantity, function(n, next){
+              License.create({customerId: customerId})
+                .$promise
+                .then(function(license) {
+                  next(undefined, license)
+                }, function(err) {
+                  next(err);
+                })    
+              }, function(err, users) {
+                $mdDialog.cancel();
+            });
+
+          };
+
+          $scope.cancel = function() {
+            $mdDialog.cancel();
+          };
+
+        },
+        templateUrl: 'views/licenseForm.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+      });
+    }
+
+  $scope.showLicense = showLicense;
+  $scope.addLicense = addLicense;
+
+}]);
