@@ -14,13 +14,15 @@ angular
 
     $scope.deviceData = {};
 
-    // watch customer for updates and save them when they're found
-    $scope.$watch("customer", function(newValue, oldValue) {
-      if (newValue) {
-        Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
-          .$promise.then(function() {});
-      }
-    }, true);
+    function watchForChanges() {
+      // watch customer for updates and save them when they're found
+      $scope.$watch("customer", function(newValue, oldValue) {
+        if (newValue) {
+          Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
+            .$promise.then(function() {});
+        }
+      }, true);
+    }
 
     function getCustomer() {
       Customer
@@ -63,6 +65,8 @@ angular
           Page.setTitle($scope.customer.name);
           Page.setNavPath($scope.customer.name);
 
+          watchForChanges();
+
           for (var i=0; i<$scope.devices.length; i++) {
             var device = $scope.devices[i];
 
@@ -71,7 +75,6 @@ angular
                                             posStatus: {online: 0, offline: 0, unreachable: 0, total: 0}
                                           };
 
-            console.log('device: ' + device.name);
             var online = true;
             for (var j=0; j<device.cameras.length; j++) {
               var camera = device.cameras[j];
@@ -98,10 +101,10 @@ angular
               $scope.deviceData[device.id].posStatus.total++;
             }
             $scope.deviceData[device.id].posStatus.color = ($scope.deviceData[device.id].posStatus.offline>0 ? 'red' : $scope.deviceData[device.id].posStatus.unreachable>0 ? 'yellow' : 'green');
-            console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
+            // console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
           }
           
-          console.log('$scope.customer: ' + JSON.stringify($scope.customer));
+          // console.log('$scope.customer: ' + JSON.stringify($scope.customer));
         });
     }
 

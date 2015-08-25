@@ -11,13 +11,15 @@ angular
     $scope.cloudId = null;
     $scope.resellerId = null;
 
-    // watch reseller for updates and save them when they're found
-    $scope.$watch("reseller", function(newValue, oldValue) {
-      if (newValue) {
-        Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
-          .$promise.then(function() {});
-      }
-    }, true);
+    function watchForChanges() {
+      // watch reseller for updates and save them when they're found
+      $scope.$watch("reseller", function(newValue, oldValue) {
+        if (newValue) {
+          Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
+            .$promise.then(function() {});
+        }
+      }, true);
+    }
 
     function getReseller() {
       Reseller
@@ -34,11 +36,13 @@ angular
           $scope.cloudId = resellers[0].cloud.id;
           $scope.resellerId = resellers[0].id;
 
+          watchForChanges();
+
           Page.setNavPath($scope.reseller.name);
 
           getCloudResellers(resellers[0].cloud.id);
 
-          console.log('$scope.reseller: ' + JSON.stringify($scope.reseller));
+          // console.log('$scope.reseller: ' + JSON.stringify($scope.reseller));
         });
     }
 
@@ -58,12 +62,12 @@ angular
         .$promise
         .then(function(clouds) {
           $scope.clouds = clouds;
-          console.log('$scope.clouds: ' + JSON.stringify($scope.clouds));
+          // console.log('$scope.clouds: ' + JSON.stringify($scope.clouds));
         });
     }
 
     function getCloudResellers(cloudId) {
-      console.log('*** finding resellers for cloud: ' + cloudId); 
+      // console.log('*** finding resellers for cloud: ' + cloudId); 
       Reseller
         .find({
           filter: {
@@ -74,7 +78,7 @@ angular
         .$promise
         .then(function(resellers) {
           $scope.resellers = resellers;
-          console.log('*** $scope.resellers: ' + JSON.stringify($scope.resellers));
+          // console.log('*** $scope.resellers: ' + JSON.stringify($scope.resellers));
         });
     }
 

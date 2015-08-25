@@ -9,13 +9,15 @@ angular
     $scope.customerId = null;
     $scope.deviceId = null;
 
-    // watch device for updates and save them when they're found
-    $scope.$watch("device", function(newValue, oldValue) {
-      if (newValue) {
-        Device.prototype$updateAttributes({ id: $scope.device.id }, $scope.device)
-          .$promise.then(function() {});
-      }
-    }, true);
+    function watchForChanges() {
+      // watch device for updates and save them when they're found
+      $scope.$watch("device", function(newValue, oldValue) {
+        if (newValue) {
+          Device.prototype$updateAttributes({ id: $scope.device.id }, $scope.device)
+            .$promise.then(function() {});
+        }
+      }, true);
+    }
 
     function getDevice() {
       Device
@@ -46,6 +48,8 @@ angular
           $scope.resellerId = devices[0].customer.reseller.id;
           $scope.cloudId = devices[0].customer.reseller.cloud.id;
 
+          watchForChanges();
+          
           getCloudResellers($scope.cloudId);
           getResellerCustomers($scope.resellerId);
           getCustomerDevices($scope.customerId);

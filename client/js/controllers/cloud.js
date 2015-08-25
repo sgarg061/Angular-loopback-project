@@ -8,13 +8,15 @@ angular
     $scope.cloud = null;
     $scope.cloudId = null;
 
-    // watch cloud for updates and save them when they're found
-    $scope.$watch("cloud", function(newValue, oldValue) {
-      if (newValue) {
-        Cloud.prototype$updateAttributes({ id: $scope.cloud.id }, $scope.cloud)
-          .$promise.then(function() {});
-      }
-    }, true);
+    function watchForChanges() {
+      // watch cloud for updates and save them when they're found
+      $scope.$watch("cloud", function(newValue, oldValue) {
+        if (newValue) {
+          Cloud.prototype$updateAttributes({ id: $scope.cloud.id }, $scope.cloud)
+            .$promise.then(function() {});
+        }
+      }, true);
+    }
 
     function getCloud() {
       console.log('changing to cloud: ' + $stateParams.cloudId);
@@ -30,6 +32,8 @@ angular
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
 
+          watchForChanges();
+          
           if ($scope.cloud) {
             Page.setNavPath($scope.cloud.name);
             console.log('cloud: ' + JSON.stringify($scope.cloud));
