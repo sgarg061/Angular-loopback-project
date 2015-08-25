@@ -340,6 +340,10 @@ module.exports = function(Device) {
             lastCheckin: new Date()
         };
 
+        if (deviceData.guid) {
+            checkedInProperties.guid = deviceData.guid;
+        }
+
         if (deviceData.organizationPath) {
             checkedInProperties.organizationPath = deviceData.organizationPath;
         }
