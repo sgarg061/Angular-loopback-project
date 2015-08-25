@@ -265,6 +265,7 @@ module.exports = function(Device) {
 
         // before doing anything else, log the checkin data 
         logCheckin(data);
+
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
         // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
@@ -323,11 +324,8 @@ module.exports = function(Device) {
     }
 
     function checkinDevice (device, deviceData, cb) {
-        
         // update general metadata about the device
         device.updateAttributes({
-            id: deviceData.id,
-            guid: deviceData.guid,
             organizationPath: deviceData.organizationPath,
             address: deviceData.address,
             lastCheckin: new Date()
@@ -343,6 +341,11 @@ module.exports = function(Device) {
     function updateCameras (device, deviceData, cb) {
         logger.debug('updating cameras');
         var cameras = deviceData.cameraInformation;
+        if (!cameras) {
+            var error = new Error('Cameras not included in checkin');
+            error.statusCode = 400;
+            return cb(error);
+        }
 
         for (var i=0; i<cameras.length; i++) {
             updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
@@ -354,6 +357,11 @@ module.exports = function(Device) {
     function updatePOSDevices (device, deviceData, cb) {
         logger.debug('updating pos devices');
         var posDevices = deviceData.posInformation;
+        if (!posDevices) {
+            var error = new Error('POS information not included in checkin');
+            error.statusCode = 400;
+            return cb(error);
+        }
 
         for (var i=0; i<posDevices.length; i++) {
             updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
