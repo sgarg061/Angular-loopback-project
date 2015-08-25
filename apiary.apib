@@ -5,13 +5,9 @@ HOST: http://polls.apiblueprint.org/
 
 This is a mock API for the Call Home server so we can work as if it is already built
 
-# Application API Root [/]
-
-Not a requirement but as a convention it is now common that the root lists the top level api's
-
 ## Group Devices
 
-## Get Devices [/devices/{id}]
+## Get Devices [/api/devices/{id}]
 
 A device object has the following attributes:
 
@@ -63,7 +59,7 @@ A device object has the following attributes:
                 ]
             }
 
-## List All Devices [/devices/{?offset,count}]
+## List All Devices [/api/devices/{?offset,count}]
 
 + Parameters
     + offset: 5 (optional, number) - The page of events to return
@@ -222,7 +218,7 @@ A device object has the following attributes:
                 ]
             }
             
-## List All Cameras on a Device [/devices/{id}/cameras]
+## List All Cameras on a Device [/api/devices/{id}/cameras]
 
 + Parameters
     + id: 5 (required, number) - The id of the device
@@ -256,7 +252,7 @@ A device object has the following attributes:
 
 ## Group Licenses
 
-## Activate [/licenses/activate]
+## Activate [/api/licenses/activate]
 
 When installing a Connect device, a license key is provided.  Providing this license key will hit this endpoint, which activates the license for that device and adds it to our /devices repository.
 
@@ -277,7 +273,7 @@ When installing a Connect device, a license key is provided.  Providing this lic
 
 ## Group Authentication
 
-## Login [/auth/login]
+## Login [/api/auth/login]
 
 A user or connect device will post to the /auth/login endpoint to get a valid JWT token for future calls.
 
@@ -301,7 +297,7 @@ A user or connect device will post to the /auth/login endpoint to get a valid JW
             }-
         }
         
-## Validate [/auth/validate]
+## Validate [/api/auth/validate]
 
 Validate whether a given JWT token is valid (not expired, matches secret, not revoked).
 Returns a 200 if valid.  Otherwise, returns a 401.
@@ -318,7 +314,7 @@ Returns a 200 if valid.  Otherwise, returns a 401.
         {
         }
 
-## Refresh [/auth/refresh]
+## Refresh [/api/auth/refresh]
 
 Generate a new authentication token from a user's refresh token.
 
@@ -335,7 +331,7 @@ Generate a new authentication token from a user's refresh token.
             "auth_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY"
         }
         
-## Set password [/auth/setpassword]
+## Set password [/api/auth/setpassword]
 
 A request from the platform is sent out with user's current email and new password
 
