@@ -31,17 +31,39 @@
       <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="model.signallingServerUrl">
     </md-input-container>
 
-    <md-input-container ng-show="type=='cloud'||type=='reseller'">
-      <label>POS Connectors</label>
-      <md-list>
-        <md-list-item ng-repeat="connector in model.posConnectors">
-            <md-button ng-click="selectConnector(connector)" ng-class="{'cloud' : connector === cloudController.cloud }">
-              {{connector.name}}
-            </md-button>
-        </md-list-item>
-      </md-list>
-    </md-input-container>
-      
-    <button class="btn btn-default" flex>Add</button>
+    <div ng-show="type=='cloud'||type=='reseller'">
+      <md-input-container >
+        <label>POS Connectors</label>
+        <md-list>
+          <md-list-item ng-repeat="connector in model.posConnectors">
+              <md-button ng-click="selectConnector(connector)" ng-class="{'cloud' : connector === cloudController.cloud }">
+                {{connector.name}}
+              </md-button>
+          </md-list-item>
+        </md-list>
+      </md-input-container>
+        
+      <button class="btn btn-default" flex>Add</button>
+    </div>
+
+    <div ng-show="type=='customer'">
+      <div style="margin:30px 0px 5px 0px;">Licenses</div>
+      <md-input-container>
+        
+        <md-list style="box-shadow: 1px 1px 2px 0px rgba(163,163,163,1);">
+          <md-list-item ng-repeat="license in model.licenses">
+              <md-button ng-click="selectLicense(license)">
+                <div layout="row" layout-align="start center">
+                  <div>{{license.key}}</div>
+                  <div flex></div>
+                  <div>{{license.activated ? "In Use" : "Available"}}</div>
+                </div>
+              </md-button>
+          </md-list-item>
+        </md-list>
+      </md-input-container>
+      <button class="btn btn-default" flex>Add</button>
+    </div>
+
   </div>
 </div>

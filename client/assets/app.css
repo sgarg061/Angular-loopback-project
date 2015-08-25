@@ -12,7 +12,7 @@ html, body {
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
+  width: 300px;
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
   height:100vh;
   margin: -10px 0px 0px -10px !important;
@@ -79,7 +79,6 @@ md-sidenav  md-list {
   border-radius: 2px;
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
 }
-
 
 /* Primary content area */
 

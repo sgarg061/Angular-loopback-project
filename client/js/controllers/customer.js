@@ -178,4 +178,33 @@ angular
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
    
+    function selectLicense($event) {
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        parent: parentEl,
+        targetEvent: $event,
+        template:
+          '<md-dialog aria-label="List dialog">' +
+          '  <md-dialog-content>'+
+          '  <pre>{{JSON.stringify(license)}}</pre>' +
+          '  </md-dialog-content>' +
+          '  <div class="md-actions">' +
+          '    <md-button ng-click="closeDialog()" class="md-primary">' +
+          '      Close Dialog' +
+          '    </md-button>' +
+          '  </div>' +
+          '</md-dialog>',
+        locals: { license: $scope.license },
+        controller: DialogController
+      });
+
+      function DialogController($scope, $mdDialog, license) {
+        $scope.license = license;
+        $scope.closeDialog = function() {
+          $mdDialog.hide();
+        }
+      }
+    }
+    $scope.selectLicense = selectLicense;
+
   }]);
