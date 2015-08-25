@@ -65,7 +65,7 @@ module.exports = {
         .expect(200)
         .end(function(err, res) {
             if (err) throw err;
-            var response = JSON.parse(res.body.response);
+            var response = res.body.response;
             assert(typeof response === 'object');
             assert(response.auth_token, 'must have an auth_token');
 
