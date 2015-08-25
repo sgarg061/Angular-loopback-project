@@ -269,9 +269,14 @@ module.exports = function(app, doneCallback) {
 
 
 if (require.main === module) {
+  // called directly from command line  
+  var app = require('./server');
   
+  // start the app in order to get system components like auth, redis and cache accessors started up 
+  app.start();
+
   // Run the import
-  module.exports(require('./server'), function(err) {
+  module.exports(app, function(err) {
     if (err) {
       logger.error('Cannot import sample data - ', err);
     } else {
