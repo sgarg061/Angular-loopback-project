@@ -6,9 +6,21 @@ var loopback = require('loopback');
 
 module.exports = function (License) {
     'use strict';
-    License.activate = function (key, cb) {
+    License.activate = function (key, address, name, username, password, req, cb) {
         logger.info('Activating license key ' + key);
-        activateLicense(License, key, cb);
+
+        var ipAddress = 'no ip detected';
+        if (req) {
+            ipAddress = req.connection.remoteAddress;
+        }
+        var deviceInfo = {
+            address: address,
+            name: name,
+            username: username,
+            password: password,
+            ipAddress: ipAddress
+        };
+        activateLicense(License, key, deviceInfo, cb);
     };
 
     License.observe('before save', function clearLicense(ctx, next) {
@@ -39,7 +51,12 @@ module.exports = function (License) {
         'activate',
         {
             accepts: [
-                {arg: 'key', type: 'string'}
+                {arg: 'key', type: 'string', required: true},
+                {arg: 'address', type: 'string', required: false},
+                {arg: 'name', type: 'string', required: false},
+                {arg: 'username', type: 'string', required: false},
+                {arg: 'password', type: 'string', required: false},
+                {arg: 'req', type: 'object', http: {source: 'req'}},
             ],
             http: {verb: 'post', status: 200, errorStatus: 500},
             returns: {arg: 'device', root: true}
@@ -77,7 +94,7 @@ function setUniqueLicenseKey(License, license, next) {
     });
 }
 
-function activateLicense(License, key, cb) {
+function activateLicense(License, key, deviceInfo, cb) {
     'use strict';
     License.find({where: {key: key}}, function activateLicense(err, res) {
         if (err) {
@@ -95,21 +112,30 @@ function activateLicense(License, key, cb) {
                     cb(new Error('License already activated'), 'License already activated');
                 } else {
                     // license is available.   now, activate it.
-                    performActivationTasks(License, license, cb);
+                    performActivationTasks(License, license, deviceInfo, cb);
                 }
             }
         }
     });
 }
 
-function performActivationTasks(License, license, cb) {
+function performActivationTasks(License, license, deviceInfo, cb) {
     'use strict';
-    // TODO: Create auth0 user, create device, set username/password/deviceID on license object
     var Device = License.app.models.Device;
 
+    var ipAddress = deviceInfo.ipAddress;
+    var name = deviceInfo.name ? deviceInfo.name : 'Activated Device';
+    var address = deviceInfo.address ? deviceInfo.address : '390 March Road, Kanata, ON, Canada';
+    var deviceUsername = deviceInfo.username ? deviceInfo.username : 'admin';
+    var devicePassword = deviceInfo.password ? deviceInfo.password : 'password';
+
     Device.create({
-        name: 'Activated Device',
-        customerId: license.customerId
+        name: name,
+        customerId: license.customerId,
+        address: address,
+        username: deviceUsername,
+        password: devicePassword,
+        ipAddress: ipAddress
     }, function createUser(err, res) {
         if (err) {
             logger.error('Error creating device at activation time');
@@ -124,9 +150,6 @@ function performActivationTasks(License, license, cb) {
             var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
             var password = randToken.generate(16);
 
-            // create user
-            // set activation flag
-            // return response
             var userData = {
                 deviceId: deviceId,
                 usertype: 'connect',
