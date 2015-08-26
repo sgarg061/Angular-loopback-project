@@ -113,6 +113,10 @@
       "type": "hasOne",
       "model": "SoftwareVersion",
       "foreignKey": "id"
+    },
+    "license": {
+      "type": "hasOne",
+      "model": "License"
     }
   },
   "acls": 
