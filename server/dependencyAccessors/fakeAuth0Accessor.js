@@ -57,7 +57,8 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
             AccessKeyId: 'fakeaccesskey',
             SecretAccessKey: 'fakesecretaccesskey',
             SessionToken: 'fakesessiontoken'
-        }
+        },
+        refresh_token: 'a refresh token'
     };
     cb(null, response);
 };

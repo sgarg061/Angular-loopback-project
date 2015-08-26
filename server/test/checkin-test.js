@@ -44,7 +44,7 @@ var deviceCheckinData = {
     ]
 };
 
-var device;
+var deviceId;
 
 describe('Checkin after initial device activation', function() {
 
@@ -57,8 +57,11 @@ describe('Checkin after initial device activation', function() {
           console.log('error! ' + err);
           throw err;
         }
-        device = JSON.parse(res.body);
-        assert(device.deviceId, 'must have a deviceId');
+        var activationResponse = res.body;
+        deviceId = activationResponse.deviceId;
+        assert(deviceId, 'must have a deviceId');
+        assert(activationResponse.refreshToken, 'must return a refresh token');
+        assert(activationResponse.authToken, 'must return an auth token');
         done();
       });
   });
@@ -67,9 +70,9 @@ describe('Checkin after initial device activation', function() {
 
   it('should checkin a new device and receive configuration information', function(done) {
     
-    deviceCheckinData.id = device.deviceId;
+    deviceCheckinData.id = deviceId;
     common.login('solink', function (token) {
-      common.json('post', '/api/devices/' + device.deviceId + '/checkin', token)
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
         .end(function(err, res) {
@@ -87,7 +90,7 @@ describe('Checkin after initial device activation', function() {
 
   it('should update device and create cameras, POS devices and deviceLogEntry', function(done) {
     common.login('solink', function (token) {
-      common.json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
         .send({})
         .expect(200)
         .end(function(err, res) {
@@ -110,13 +113,13 @@ describe('Checkin of existing device', function() {
 
   it('should allow updated checkin data to be posted', function(done) {
     
-    deviceCheckinData.id = device.deviceId;
+    deviceCheckinData.id = deviceId;
 
     // set the back camera to an offline state
     deviceCheckinData.cameraInformation[1].status = 'offline';
 
     common.login('solink', function (token) {
-      common.json('post', '/api/devices/' + device.deviceId + '/checkin', token)
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
         .end(function(err, res) {
@@ -128,7 +131,7 @@ describe('Checkin of existing device', function() {
 
   it('should result in new values, an updated checkin time and another log entry', function(done) {
     common.login('solink', function (token) {
-      common.json('get', '/api/devices/' + device.deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
         .send({})
         .expect(200)
         .end(function(err, res) {
