@@ -43,10 +43,10 @@ describe('License tests', function() {
                   console.log('error! ' + err);
                   throw err;
                 }
-                var response = JSON.parse(res.body);
+                var response = res.body;
                 assert(response.deviceId, 'must have a deviceId');
-                assert(response.username, 'must return a username');
-                assert(response.password, 'must return a password');
+                assert(response.authToken, 'must return a jwt token');
+                assert(response.refreshToken, 'must return a refresh token');
                 
                 // ensure that the number of devices has grown
                 common.json('get', '/api/devices/count', token)

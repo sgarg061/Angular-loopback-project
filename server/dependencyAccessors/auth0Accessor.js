@@ -62,29 +62,34 @@ Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
 Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     'use strict';
     var config = new Config();
+
+    var userCreationForm = {
+        email: email,
+        password: password,
+        connection: 'Username-Password-Authentication',
+        app_metadata: {
+            tenant_id: userData.customerId ? userData.customerId : 'none',
+            reseller_id: userData.resellerId,
+            cloud_id: userData.cloudId,
+            user_type: userData.userType
+        }
+    };
+
+    if (userData.email_verified) {
+        userCreationForm.email_verified = true;
+    }
+
     request({
         url: config.auth0URL + '/api/v2/users',
         method: 'POST',
-        form: {
-            email: email,
-            password: password,
-            connection: 'Username-Password-Authentication',
-            app_metadata: {
-                tenant_id: userData.customerId,
-                reseller_id: userData.resellerId,
-                cloud_id: userData.cloudId,
-                user_type: userData.userType,
-            }
-        },
+        form: userCreationForm,
         auth: {
             bearer: config.createUserToken
         }
     }, function (error, response, body) {
-        console.log('user creation!');
         if (error) {
             cb(error, '');
         } else if (response.statusCode !== 201) {
-            console.log(body);
             var e = new Error('Unable to create user');
             e.statusCode = response.statusCode;
             cb(e, '');
