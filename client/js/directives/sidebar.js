@@ -8,7 +8,8 @@ angular
         model: "=model",
         type: "=type",
         addLicenseFunction: "=addLicenseFunction",
-        showLicenseFunction: "=showLicenseFunction"
+        showLicenseFunction: "=showLicenseFunction",
+        deleteFunction: "=deleteFunction"
       },
       link: function (scope, element, attrs) {
       
@@ -18,6 +19,14 @@ angular
         scope.showLicense = function(license) {
           scope.showLicenseFunction(license);
         }
+        scope.deleteModel = function(model) {
+          scope.deleteFunction(model);
+        }
+        var originatorEv;
+        scope.openMenu = function($mdOpenMenu, ev) {
+          originatorEv = ev;
+          $mdOpenMenu(ev);
+        };
       }
     }
   });

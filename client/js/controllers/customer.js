@@ -292,11 +292,50 @@ angular
         clickOutsideToClose:false
       })
       .then(function(result) {
-      }, function() {
       });
     }
 
+  function deleteCustomer(customer) {
+    console.log('delete customer: ' + JSON.stringify(customer));
+    $mdDialog.show({
+        controller: function (scope, $mdDialog) {
+          scope.customerName = '';
+
+          scope.deleteCustomer = function() {
+
+            if (scope.customerName === customer.name) {
+              Customer.deleteById({id: customer.id})
+                .$promise
+                .then(function(license) {
+                  $mdDialog.cancel();
+                  $scope.selectReseller($scope.resellerId);
+                  toastr.info('Customer ' + customer.name + ' deleted');
+                }, function(err) {
+                  $mdDialog.cancel();
+                  toastr.error('Unable to delete customer: ' + err.data.error.message);
+                });
+            } else {
+              toastr.info('Customer not deleted - name did not match "' + customer.name + '"');
+              $mdDialog.cancel();
+            }
+          };
+
+          scope.close = function() {
+            $mdDialog.cancel();
+          };
+
+        },
+        templateUrl: 'views/customerDelete.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:false
+      })
+      .then(function(result) {
+      });
+  }
+
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
+  $scope.deleteCustomer = deleteCustomer;
 
 }]);

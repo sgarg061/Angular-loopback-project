@@ -1,7 +1,23 @@
 <div class="sidebar">
   
-  <div layout-padding>
+  <div layout="row" layout-padding layout-align="space-between center">
+
     <h2>{{model.name}}</h2>
+
+    <md-menu>
+      <md-button aria-label="interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+        <md-icon md-menu-origin md-svg-icon="drop_down" style="color:red;"></md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button ng-click="deleteModel(model)">
+            <md-icon md-svg-icon="close" md-menu-align-target></md-icon>
+            Delete
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+
   </div>
   
   <md-divider></md-divider>

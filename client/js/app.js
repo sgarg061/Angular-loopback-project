@@ -20,6 +20,7 @@ angular
       $mdIconProvider
                     .icon("close", "./assets/svg/close.svg", 24)
                     .icon("content_copy", "./assets/svg/content_copy.svg", 24)
+                    .icon("drop_down", "./assets/svg/ic_arrow_drop_down_circle_black_24px.svg")
                     .icon("indicator_red", "./assets/svg/indicator_red.svg", 24)
                     .icon("indicator_yellow", "./assets/svg/indicator_yellow.svg", 24)
                     .icon("indicator_green", "./assets/svg/indicator_green.svg", 24);
