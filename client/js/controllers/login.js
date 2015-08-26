@@ -1,12 +1,12 @@
 angular.module('app').controller('LoginController', function($scope, $state, Auth, $localStorage, toastr, blockUI) {
   
-  $scope.username = "cwhiten@solinkcorp.com";
+  $scope.username = "jstatham@solinkcorp.com";
   $scope.password = "test";
 
   function successAuth(res, headers) {
     blockUI.stop();
     var result = JSON.parse(JSON.stringify(res));
-    $localStorage.token = result.response.auth_token;
+    $localStorage.token = result.response.authToken;
     $state.go('cloud');
   }
 
