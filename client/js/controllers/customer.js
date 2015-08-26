@@ -53,7 +53,14 @@ angular
               {
                 relation: 'devices',
                 scope: {
-                  include: ['cameras', 'posDevices'],
+                  include: ['cameras', 'posDevices', 'license',
+                  {
+                    relation: 'logEntries',
+                    scope: {
+                      limit: 10,
+                      order: 'timestamp DESC'
+                    }
+                  }],
                   order: 'name ASC'
                 }
               }
@@ -116,7 +123,7 @@ angular
             // console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
           }
           
-          // console.log('$scope.customer: ' + JSON.stringify($scope.customer));
+          console.log('$scope.customer: ' + JSON.stringify($scope.customer));
         });
     }
 
@@ -334,8 +341,23 @@ angular
       });
   }
 
+  function showCheckin(anEntry) {
+    console.log('show checkin entry: ' + JSON.stringify(anEntry));
+    $mdDialog.show({
+      parent: angular.element(document.body),
+      templateUrl: 'views/device_checkin_entry.tmpl.html',
+      controller: function (scope, $mdDialog) {
+        scope.entry = anEntry;
+        scope.close = function() {
+          $mdDialog.cancel();
+        }
+      }
+    });
+  }
+
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
+  $scope.showCheckin = showCheckin;
 
 }]);

@@ -1,0 +1,20 @@
+<md-dialog aria-label="Checkin Entry">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>Device Checkin {{ entry.timestamp | date:'medium'}} </h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content style="height: 600px;padding: 24px;">
+    <pre pretty-json="entry"/>
+  </md-dialog-content>
+
+  <div class="md-actions">
+    <md-button ng-click="close()" class="md-primary">Close</md-button>
+  </div>
+</md-dialog>

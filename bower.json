@@ -23,7 +23,8 @@
     "angular-bootstrap": "~0.13.3",
     "async": "~1.4.2",
     "zeroclipboard": "~2.2.0",
-    "ng-clip": "~0.2.6"
+    "ng-clip": "~0.2.6",
+    "ng-prettyjson": "~0.1.9"
   },
   "resolutions": {
     "angular": "1.4.4"

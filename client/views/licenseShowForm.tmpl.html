@@ -22,6 +22,10 @@
         </div>
       </div>
      
+      <md-input-container ng-show="license.deviceId">
+        <label>Device ID</label>
+        <input ng-model="license.deviceId" disabled>
+      </md-input-container>
       <md-input-container ng-show="license.activated">
         <label>Username</label>
         <input ng-model="license.username" disabled>

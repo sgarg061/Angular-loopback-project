@@ -15,27 +15,95 @@
     <div class="col-md-8" layout-margin layout-fill layout-padding>
       <h2>Devices</h2>
 
-      <md-grid-list md-cols="1" md-row-height="100px" md-gutter="10px">
+      <md-grid-list md-cols="2" md-row-height="600" md-gutter="10px">
 
-        <md-grid-tile ng-repeat="device in customer.devices" class="card" ng-click='selectDevice(device)' md-rowspan="0" md-colspan="1">
+        <md-grid-tile class="card" ng-repeat="device in customer.devices" ngx-click='selectDevice(device)' md-rowspan="0" md-colspan="1">
           <div layout-fill layout-align="start center" layout-padding>
-            <div layout="row" layout-margin layout-fill layout-padding>
-                <div layout="col" layout-align="start center"><h2 class="md-title">{{device.name}}</h2></div>
-                  <span flex=""></span>
-                  
-                  <div layout-align="end center">
-                    <span ng-show="deviceData[device.id].posStatus.total > 0" style="vertical-align:middle">
-                      <b>{{deviceData[device.id].posStatus.online}} / {{deviceData[device.id].posStatus.total}}</b> POS Online 
-                      <md-icon md-svg-icon='indicator_{{deviceData[device.id].posStatus.color}}'></md-icon>
-                    </span>
-                    
-                    <span ng-show="deviceData[device.id].cameraStatus.total > 0" style="vertical-align:middle">
-                      <b>{{deviceData[device.id].cameraStatus.online}} / {{deviceData[device.id].cameraStatus.total}}</b> Cameras Online 
-                      <md-icon md-svg-icon="indicator_{{deviceData[device.id].cameraStatus.color}}"></md-icon>
-                    </span>
+            
+            <div layout-padding><h2 class="md-title">{{device.name}}</h2></div>
 
+            <div layout="row" layout-fill layout-padding>
+              <md-input-container flex>
+                <label>License</label>
+                  <input ng-model="device.license.key" disabled>
+              </md-input-container>
+              <md-input-container flex>
+                <label>Device ID</label>
+                <input ng-model="device.id" disabled>
+              </md-input-container>
+            </div>
+              
+            <md-tabs md-dynamic-height>
+              <md-tab label="CHECK-IN" >
+                <div layout="column" style="margin:20px;">
+
+                    <md-input-container>
+                      <label>Check-in Interval</label>
+                      <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" ng-model="device.checkinInterval">
+                    </md-input-container>
+                  
+                  <div>
+                    <b>Check-in History</b>
+                    <md-content style="height:200px;"
+                      <md-list layout-padding>
+                        <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="entry in device.logEntries">
+                        <span ng-click="showCheckin(entry)">
+                          {{ entry.timestamp | date:'medium'}}
+                        </span>
+                      </md-list-item>
+                    </md-content>
                   </div>
-              </div>
+                </div>
+              </md-tab>
+              <md-tab label="EVENTS">
+                <div layout="column" style="margin:20px;">
+                  <div layout="row" layout-align="space-around center">
+                    <md-input-container>
+                      <label>Transactions</label>
+                      <md-select ng-model="device.transactions">
+                        <md-option value="FIFO" selected>FIFO</md-option>
+                        <md-option value="LIFO">LIFO</md-option>
+                      </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                      <label>Motion</label>
+                       <md-select ng-model="device.motion">
+                        <md-option value="FIFO">FIFO</md-option>
+                        <md-option value="LIFO" selected>LIFO</md-option>
+                      </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                      <label>Bitrate</label>
+                      <md-select ng-model="device.bitrate">
+                        <md-option value="128" selected>128 kbps</md-option>
+                        <md-option value="256">256 kbps</md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                  <div layout="row" layout-align="space-around center">
+                    <md-input-container>
+                        <label>Save Events for</label>
+                        <md-select ng-model="device.saveEventsFor">
+                          <md-option value="7" selected>7 Days</md-option>
+                          <md-option value="17">14 Days</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Max Number of Events</label>
+                        <md-select ng-model="device.maxNumberOfEvents">
+                          <md-option value="20000" selected>20000</md-option>
+                          <md-option value="50000">50000</md-option>
+                        </md-select>
+                    </md-input-container>
+                  </div>
+                </div>
+              </md-tab>
+              <md-tab label="DEVICES">
+                <div layout="column" style="margin:20px;">
+                </div>
+              </md-tab>
+            </md-tabs>
+
           </div>
         </md-grid-tile>
 
