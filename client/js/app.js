@@ -7,10 +7,11 @@ angular
     'ngAnimate',
     'toastr',
     'blockUI',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngClipboard'
   ])
-  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 
-    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr) {
+  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider',
+    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider) {
       
       $mdThemingProvider.theme('default')
         .primaryPalette('blue')
@@ -18,10 +19,10 @@ angular
 
       $mdIconProvider
                     .icon("close", "./assets/svg/close.svg", 24)
+                    .icon("content_copy", "./assets/svg/content_copy.svg", 24)
                     .icon("indicator_red", "./assets/svg/indicator_red.svg", 24)
                     .icon("indicator_yellow", "./assets/svg/indicator_yellow.svg", 24)
                     .icon("indicator_green", "./assets/svg/indicator_green.svg", 24);
-
 
       $locationProvider.html5Mode(true);
 

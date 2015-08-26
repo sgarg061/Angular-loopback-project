@@ -189,42 +189,67 @@ angular
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
    
-    function showLicense(license) {
-      console.log('show license: ' + JSON.stringify(license));
-      var parentEl = angular.element(document.body);
-      $mdDialog.show({
-        parent: parentEl,
-        template:
-          '<md-dialog aria-label="List dialog">' +
-          '  <md-dialog-content>'+
-          '  {{license}}' +
-          '  </md-dialog-content>' +
-          '  <div class="md-actions">' +
-          '    <md-button ng-click="revokeLicense(license)" class="md-primary">Revoke</md-button>' +
-          '    <md-button ng-click="close()" class="md-primary">Close</md-button>' +
-          '  </div>' +
-          '</md-dialog>',
-        locals: { license: $scope.license },
-        controller: DialogController
-      });
-
-      function DialogController($scope, $mdDialog, license) {
-        $scope.license = license;
-        $scope.close = function() {
-          $mdDialog.cancel();
+    var convArrToObj = function(array){
+      var thisEleObj = new Object();
+      if(typeof array == "object"){
+        for(var i in array){
+          var thisEle = convArrToObj(array[i]);
+          thisEleObj[i] = thisEle;
         }
-        $scope.revokeLicense = function(aLicense) {
-          console.log('revoking license: ' + $scope.license);
-          $mdDialog.cancel();
-        }
+      } else {
+        thisEleObj = array;
       }
+      return thisEleObj;
+    }
+
+    function showLicense(aLicense) {
+      console.log('show license: ' + JSON.stringify(aLicense));
+      $mdDialog.show({
+        parent: angular.element(document.body),
+        templateUrl: 'views/licenseShowForm.tmpl.html',
+        controller: function (scope, $mdDialog) {
+          scope.license = aLicense;
+          scope.close = function() {
+            $mdDialog.cancel();
+          }
+          scope.activateLicense = function() {
+            console.log('activating license: ' + scope.license);
+            License.activate({key: scope.license.key})
+              .$promise
+              .then(function(activationResult) {
+
+                console.log('activated license: ' + JSON.stringify(activationResult));
+
+                var licenseIndex = $scope.customer.licenses.indexOf(scope.license);
+
+                if (~licenseIndex) {
+                  $scope.customer.licenses[licenseIndex].activated = true;
+                  $scope.customer.licenses[licenseIndex].username = activationResult.username;
+                  $scope.customer.licenses[licenseIndex].password = activationResult.password;
+                  $scope.customer.licenses[licenseIndex].deviceId = activationResult.deviceId;
+                }
+
+                // update device list
+                getCustomer();
+
+              }, function(err) {
+                console.log('activated license error: ' + err);
+            });
+            $mdDialog.cancel();
+          }
+          $scope.revokeLicense = function() {
+            console.log('revoking license: ' + scope.license);
+            $mdDialog.cancel();
+          }
+        }
+      });
     }
 
     function addLicense(customerId) {
       console.log('add license for customer id: ' + customerId);
 
       $mdDialog.show({
-        controller: function DialogController(scope, $mdDialog) {
+        controller: function (scope, $mdDialog) {
           scope.quantity = 0;
           scope.create = function() {
             
@@ -248,7 +273,7 @@ angular
           };
 
         },
-        templateUrl: 'views/licenseForm.tmpl.html',
+        templateUrl: 'views/licenseCreateForm.tmpl.html',
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:true

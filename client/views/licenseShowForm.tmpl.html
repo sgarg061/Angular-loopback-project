@@ -1,0 +1,41 @@
+<md-dialog aria-label="License">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>{{license.activated ? "In Use" : "Available"}} License</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div layout="column">
+      
+      <div layout="row" layout-fill layout-align="space-around center">
+        <div><h2>{{license.key}}</h2></div>
+        <div>
+          <md-button clip-copy="license.key" class="md-primary">
+            <md-icon md-svg-icon='content_copy' aria-label="Copy to Clipboard"></md-icon>
+          </md-button>
+        </div>
+      </div>
+     
+      <md-input-container ng-show="license.activated">
+        <label>Username</label>
+        <input ng-model="license.username" disabled>
+      </md-input-container>
+      <md-input-container ng-show="license.activated">
+        <label>Password</label>
+        <input ng-model="license.password" disabled>
+      </md-input-container>
+
+    </div>
+  </md-dialog-content>
+  <div class="md-actions">
+    <md-button ng-hide="license.activated" ng-click="activateLicense(license)" class="md-primary">Activate</md-button>
+    <md-button ng-show="license.activated" ng-click="revokeLicense(license)" class="md-primary">Revoke</md-button>
+    <md-button ng-click="close()" class="md-primary">Close</md-button>
+  </div>
+</md-dialog>
