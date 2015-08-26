@@ -59,11 +59,12 @@ A device object has the following attributes:
                 ]
             }
 
-## List All Devices [/api/devices/{?filter%5Boffset%5D,filter%5Blimit%5D}]
+## List All Devices [/api/devices/{?filter%5Boffset%5D,filter%5Blimit%5D,filter%5Binclude%5D}]
 
 + Parameters
     + filter%5Boffset%5D: 5 (optional, number) - The offset of the device list to start paging from
     + filter%5Blimit%5D: 10 (optional, number) - The maximum number of devices to return
+    + filter%5Binclude%5D: cameras (optional) - Relational data to include with the devices
     
 ### List all Devices [GET]
 
