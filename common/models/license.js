@@ -130,7 +130,7 @@ function performActivationTasks(License, license, cb) {
             var userData = {
                 deviceId: deviceId,
                 usertype: 'connect',
-                custeromId: license.customerId,
+                customerId: license.customerId,
                 email_verified: true
             };
             authService.createUser(username, password, userData, function (err, res) {
@@ -160,8 +160,8 @@ function performActivationTasks(License, license, cb) {
                                 } else {
                                     var response = {
                                         deviceId: deviceId,
-                                        authToken: res.auth_token,
-                                        refreshToken: res.refresh_token
+                                        authToken: res.authToken,
+                                        refreshToken: res.refreshToken
                                     };
 
                                     cb(null, response);

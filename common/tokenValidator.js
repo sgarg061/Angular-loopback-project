@@ -21,8 +21,8 @@ module.exports = {
 
                 // ensure the token isn't revoked
                 var revokedClient = cacheService.getCacheClient('revoked');
-                var hashed_token = crypto.createHash('md5').update(token).digest('hex');
-                revokedClient.exists(hashed_token, function (err, reply) {
+                var hashedToken = crypto.createHash('md5').update(token).digest('hex');
+                revokedClient.exists(hashedToken, function (err, reply) {
                     if (err) {
                         e = new Error('Error validating token');
                         e.statusCode = 500;
@@ -34,14 +34,14 @@ module.exports = {
                             cb(e, 'token has been revoked');
                         } else {
                             // if successful, add it to the validated token list and set it up to expire once the token is expired
-                            addValidToken(hashed_token, decoded.exp, currentTime, cb);
+                            addValidToken(hashedToken, decoded.exp, currentTime, cb);
                         }
                     }
                 });
             } else {
-                var invalid_err = new Error('Invalid authentication token');
-                invalid_err.statusCode = 401;
-                cb(invalid_err, 'invalid token');
+                var invalidErr = new Error('Invalid authentication token');
+                invalidErr.statusCode = 401;
+                cb(invalidErr, 'invalid token');
             }
         });
     }

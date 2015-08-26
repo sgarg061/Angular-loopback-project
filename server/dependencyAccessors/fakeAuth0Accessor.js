@@ -52,13 +52,13 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
     var token = createValidToken(matchingUser[0]);
 
     var response = {
-        auth_token: token,
+        authToken: token,
         aws: {
             AccessKeyId: 'fakeaccesskey',
             SecretAccessKey: 'fakesecretaccesskey',
             SessionToken: 'fakesessiontoken'
         },
-        refresh_token: 'a refresh token'
+        refreshToken: 'a refresh token'
     };
     cb(null, response);
 };
@@ -78,15 +78,15 @@ FakeAuth0Accessor.prototype.createUser = function (email, password, userData, cb
 function createValidToken (user) {
     'use strict';
     var appMetadata = {
-        user_type: user.userType
+        userType: user.userType
     };
 
     if (user.userType === 'cloud') {
-        appMetadata.cloud_id = user.cloudId;
+        appMetadata.cloudId = user.cloudId;
     } else if (user.userType === 'reseller') {
-        appMetadata.reseller_id = user.resellerId;
+        appMetadata.resellerId = user.resellerId;
     } else if (user.tenantId) {
-        appMetadata.tenant_id = user.tenantId;
+        appMetadata.tenantId = user.tenantId;
     }
 
     var payload = {
