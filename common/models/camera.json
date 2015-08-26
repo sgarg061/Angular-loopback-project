@@ -28,8 +28,8 @@
       "type": "string",
       "required": true
     },
-    "streamId": {
-      "type": "string",
+    "streams": {
+      "type": "Array",
       "required": false
     },
     "thumbnail": {
