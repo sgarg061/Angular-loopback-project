@@ -118,12 +118,12 @@ function authenticateWithAWS(token, refreshToken, cb) {
             var token_info = JSON.parse(body);
             var creds = token_info.Credentials;
             var response = {
-                auth_token: token,
-                refresh_token: refreshToken,
+                authToken: token,
+                refreshToken: refreshToken,
                 aws: {
-                    AccessKeyId: creds.AccessKeyId,
-                    SecretAccessKey: creds.SecretAccessKey,
-                    SessionToken: creds.SessionToken
+                    accessKeyId: creds.AccessKeyId,
+                    secretAccessKey: creds.SecretAccessKey,
+                    sessionToken: creds.SessionToken
                 }
             };
             cb(null, response);
