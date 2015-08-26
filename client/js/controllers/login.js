@@ -5,8 +5,8 @@ angular.module('app').controller('LoginController', function($scope, $state, Aut
 
   function successAuth(res, headers) {
     blockUI.stop();
-    var result = JSON.parse(res.response);
-    $localStorage.token = result.auth_token;
+    var result = JSON.parse(JSON.stringify(res));
+    $localStorage.token = result.response.auth_token;
     $state.go('cloud');
   }
 
