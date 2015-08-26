@@ -31,6 +31,10 @@
     "streamId": {
       "type": "string",
       "required": false
+    },
+    "thumbnail": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
