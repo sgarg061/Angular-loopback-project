@@ -6,7 +6,7 @@
   "elasticsearch": {
     "name": "elasticsearch",
     "connector": "mongodb",
-    "host": "http://internal-mongodb-2011656830.us-west-2.elb.amazonaws.com",
+    "host": "internal-mongodb-2011656830.us-west-2.elb.amazonaws.com",
     "database": "call-home",
     "port": "80"
   }
