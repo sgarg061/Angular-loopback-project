@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr',
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr', 
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr) {
 
     $scope.clouds = [];
@@ -84,31 +84,35 @@ angular
                                           };
 
             var online = true;
-            for (var j=0; j<device.cameras.length; j++) {
-              var camera = device.cameras[j];
-              if (camera.status === 'online') {
-                $scope.deviceData[device.id].cameraStatus.online++;
-              } else if (camera.status === 'offline') {
-                $scope.deviceData[device.id].cameraStatus.offline++;
-              } else {
-                $scope.deviceData[device.id].cameraStatus.unreachable++;
+            if (device.cameras) {
+              for (var j=0; j<device.cameras.length; j++) {
+                var camera = device.cameras[j];
+                if (camera.status === 'online') {
+                  $scope.deviceData[device.id].cameraStatus.online++;
+                } else if (camera.status === 'offline') {
+                  $scope.deviceData[device.id].cameraStatus.offline++;
+                } else {
+                  $scope.deviceData[device.id].cameraStatus.unreachable++;
+                }
+                $scope.deviceData[device.id].cameraStatus.total++;
               }
-              $scope.deviceData[device.id].cameraStatus.total++;
+              $scope.deviceData[device.id].cameraStatus.color = ($scope.deviceData[device.id].cameraStatus.offline>0 ? 'red' : $scope.deviceData[device.id].cameraStatus.unreachable>0 ? 'yellow' : 'green');
             }
-            $scope.deviceData[device.id].cameraStatus.color = ($scope.deviceData[device.id].cameraStatus.offline>0 ? 'red' : $scope.deviceData[device.id].cameraStatus.unreachable>0 ? 'yellow' : 'green');
 
-            for (var k=0; k<device.posDevices.length; k++) {
-              var pos = device.posDevices[k];
-              if (pos.status === 'online') {
-                $scope.deviceData[device.id].posStatus.online++;
-              } else if (camera.status === 'offline') {
-                $scope.deviceData[device.id].posStatus.offline++;
-              } else {
-                $scope.deviceData[device.id].posStatus.unreachable++;
+            if (device.posDevices) {
+              for (var k=0; k<device.posDevices.length; k++) {
+                var pos = device.posDevices[k];
+                if (pos.status === 'online') {
+                  $scope.deviceData[device.id].posStatus.online++;
+                } else if (camera.status === 'offline') {
+                  $scope.deviceData[device.id].posStatus.offline++;
+                } else {
+                  $scope.deviceData[device.id].posStatus.unreachable++;
+                }
+                $scope.deviceData[device.id].posStatus.total++;
               }
-              $scope.deviceData[device.id].posStatus.total++;
+              $scope.deviceData[device.id].posStatus.color = ($scope.deviceData[device.id].posStatus.offline>0 ? 'red' : $scope.deviceData[device.id].posStatus.unreachable>0 ? 'yellow' : 'green');
             }
-            $scope.deviceData[device.id].posStatus.color = ($scope.deviceData[device.id].posStatus.offline>0 ? 'red' : $scope.deviceData[device.id].posStatus.unreachable>0 ? 'yellow' : 'green');
             // console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
           }
           
@@ -251,6 +255,9 @@ angular
       $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.quantity = 0;
+          scope.created = false;
+          scope.licenseKeys = [];
+          scope.licenseKeyList = "";
           scope.create = function() {
             
             async.times(scope.quantity, function(n, next){
@@ -258,12 +265,18 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
+                  console.log('adding license key: ' + license.key);
+
+                  // add to the list on screen and to the string that might be copied to the clipboard
+                  scope.licenseKeys.push(license.key);
+                  scope.licenseKeyList += license.key + "\n";
+
                   next(undefined, license)
                 }, function(err) {
                   next(err);
                 })    
               }, function(err, users) {
-                $mdDialog.cancel();
+                scope.created = true;
             });
 
           };
@@ -276,7 +289,7 @@ angular
         templateUrl: 'views/licenseCreateForm.tmpl.html',
         parent: angular.element(document.body),
         targetEvent: event,
-        clickOutsideToClose:true
+        clickOutsideToClose:false
       })
       .then(function(result) {
       }, function() {

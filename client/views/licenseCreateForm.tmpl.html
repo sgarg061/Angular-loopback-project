@@ -11,27 +11,42 @@
   </md-toolbar>
   <md-dialog-content style="max-width:800px;max-height:810px;">
     <div>
-      <md-input-container>
-        <div layout>
-          <div flex="40" layout layout-align="center center">
+      <md-input-container ng-hide="created">
+        <div layout layout-align="space-around center">
+          <div flex="30" layout layout-align="center center">
             <span class="md-body-1">Quantity</span>
           </div>
           
-            <md-slider flex min="0" max="50" ng-model="quantity" aria-label="quantity" id="quantity-slider" class></md-slider>
+          <md-slider flex min="0" max="50" ng-model="quantity" aria-label="quantity" id="quantity-slider" class></md-slider>
           
           <div flex="30" layout layout-align="center center">
             <input type="number" ng-model="quantity" aria-label="quantity" aria-controls="quantity-slider" style="text-align:center;">
           </div>
         </div>
       </md-input-container>
+      
+      <md-content layout-fill ng-show="created" layout-padding style="height: 160px;padding: 24px;">
+        <md-list class="license-list">
+          <md-list-item style="height:16px; min-height:16px !important;" ng-repeat="key in licenseKeys">
+            <pre style="margin: 0px;">{{key}}</pre>
+          </md-list-item>
+        </md-list>
+      </md-content>
+      <md-button ng-show="created" clip-copy="licenseKeyList" class="md-primary">
+          <md-icon md-svg-icon='content_copy' aria-label="Copy to Clipboard"></md-icon> COPY
+        </md-button>
+
     </div>
   </md-dialog-content>
   <div class="md-actions" layout="row">
-    <md-button ng-click="cancel()">
+    <md-button ng-hide="created" ng-click="cancel()">
      Cancel
     </md-button>
-    <md-button ng-click="create()" style="margin-right:20px;">
+    <md-button ng-hide="created" ng-click="create()" style="margin-right:20px;">
       Create
+    </md-button>
+    <md-button ng-show="created" ng-click="cancel()">
+     Close
     </md-button>
   </div>
   
