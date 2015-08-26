@@ -67,9 +67,9 @@ module.exports = {
             if (err) throw err;
             var response = res.body.response;
             assert(typeof response === 'object');
-            assert(response.auth_token, 'must have an auth_token');
+            assert(response.authToken, 'must have an authToken');
 
-            next(response.auth_token);
+            next(response.authToken);
         });
     }
 };

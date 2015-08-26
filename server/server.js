@@ -29,18 +29,18 @@ app.use(function jwtMiddleware (req, res, next) {
         
         var jwtToken = {
             token: token,
-            userType: unpackedToken.app_metadata.user_type
+            userType: unpackedToken.app_metadata.userType
         };
-        if (unpackedToken.app_metadata.tenant_id) {
-            jwtToken.tenantId = unpackedToken.app_metadata.tenant_id;
+        if (unpackedToken.app_metadata.tenantId) {
+            jwtToken.tenantId = unpackedToken.app_metadata.tenantId;
         }
 
-        if (unpackedToken.app_metadata.reseller_id) {
-            jwtToken.resellerId = unpackedToken.app_metadata.reseller_id;
+        if (unpackedToken.app_metadata.resellerId) {
+            jwtToken.resellerId = unpackedToken.app_metadata.resellerId;
         }
 
-        if (unpackedToken.app_metadata.cloud_id) {
-            jwtToken.cloudId = unpackedToken.app_metadata.cloud_id;
+        if (unpackedToken.app_metadata.cloudId) {
+            jwtToken.cloudId = unpackedToken.app_metadata.cloudId;
         }
 
         var ctx = loopback.getCurrentContext();

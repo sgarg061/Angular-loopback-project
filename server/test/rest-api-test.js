@@ -30,9 +30,9 @@ describe('REST', function() {
             if (err) throw err;
             var response = res.body.response;
             assert(typeof response === 'object');
-            assert(response.auth_token, 'must have an auth_token');
+            assert(response.authToken, 'must have an authToken');
 
-            authToken = response.auth_token;
+            authToken = response.authToken;
             done();
           });
       });
@@ -100,9 +100,9 @@ describe('REST', function() {
             var response = res.body.response;
 
             assert(typeof response === 'object');
-            assert(response.auth_token, 'must have an auth_token');
+            assert(response.authToken, 'must have an authToken');
 
-            userToken = response.auth_token;
+            userToken = response.authToken;
             done();
         });
       });

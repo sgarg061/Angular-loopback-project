@@ -73,7 +73,7 @@ module.exports = function (Auth) {
         'refresh',
         {
             accepts: {arg: 'token', type: 'string'},
-            returns: {arg: 'auth_token', type: 'string'}
+            returns: {arg: 'authToken', type: 'string'}
         }
     );
 };

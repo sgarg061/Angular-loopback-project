@@ -38,8 +38,8 @@ A device object has the following attributes:
                 "address": "221B Baker Street, London, England",
                 "lat": -31.42,
                 "lon": 41.99,
-                "location_path": "Canada/Ontario/Kanata",
-                "last_updated": "2015-08-25T20:11:46.370Z",
+                "organizationPath": "Canada/Ontario/Kanata",
+                "lastCheckin": "2015-08-25T20:11:46.370Z",
                 "cameras": [
                     {
                         "id":"c5084250-4b37-11e5-8184-752d1c0476b3",
@@ -59,7 +59,7 @@ A device object has the following attributes:
                 ]
             }
 
-## List All Devices [/api/devices/{?filter%5Boffset%5D,filter%5Blimit%5D,filter%5Binclude%5D}]
+## List All Devices [/api/devices{?filter%5Boffset%5D,filter%5Blimit%5D,filter%5Binclude%5D}]
 
 + Parameters
     + filter%5Boffset%5D: 5 (optional, number) - The offset of the device list to start paging from
@@ -76,148 +76,143 @@ A device object has the following attributes:
 
     + Body
     
-            {
-                "offset": 5,
-                "count": 10,
-                "total": 220,
-                "results": [
-                    {
-                        "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
-                        "name": "Amazing Connect #1",
-                        "status": "offline",
-                        "address": "221B Baker Street, London, England",
-                        "lat": -31.42,
-                        "lon": 41.99,
-                        "location_path": "Canada/Ontario/Kanata",
-                        "last_updated": "2015-08-25T20:11:46.370Z",
-                        "cameras": [
-                            {
-                                "id":"c5084250-4b37-11e5-8184-752d1c0476b3",
-                                "name":"camera 1",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
-                            },
-                            {
-                                "id":"d5084250-4b37-11e5-8184-752d1c0476b3",
-                                "name":"camera 2",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
-                            },
-                            {
-                                "id":"e5084250-4b37-11e5-8184-752d1c0476b3",
-                                "name":"camera 3",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "b5084250-4b37-11e5-8184-752d1c0476b4",
-                        "name": "Amazing Connect #2",
-                        "status": "online",
-                        "address": "221B Faker Street, London, England",
-                        "lat": -311.42,
-                        "lon": 411.99,
-                        "location_path": "Canada/Ontario/Kanata",
-                        "last_updated": "2015-08-25T20:11:46.370Z",
-                        "cameras": [
-                            {
-                                "id":"a3084250-4b37-11e5-8184-752d1c0476b3",
-                                "name":"camera 1",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
-                            },
-                            {
-                                "id":"a5084250-4b37-11e5-8184-752d1c0476b3",
-                                "name":"camera 2",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
-                            },
-                            {
-                                "id":"b3084250-4b37-11e5-8184-752d1c0476b3",
-                                "name":"camera 3",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "c3084250-4b37-11e5-8184-752d1c0476b3",
-                        "name": "Not So Amazing Connect #1",
-                        "status": "online",
-                        "address": "390 March Road, Ottawa, Ontario, Canada",
-                        "lat": 31.42,
-                        "lon": 41.99,
-                        "location_path": "Canada/Ontario/Kanata",
-                        "last_updated": "2015-08-25T20:11:46.370Z",
-                        "cameras": [
-                            {
-                                "id":"53",
-                                "name":"camera 1",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
-                            },
-                            {
-                                "id":"54",
-                                "name":"camera 2",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
-                            },
-                            {
-                                "id":"55",
-                                "name":"camera 3",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "d3084250-4b37-11e5-8184-752d1c0476b3",
-                        "name": "Not So Amazing Connect #2",
-                        "status": "online",
-                        "address": "221B Baker Street, London, England",
-                        "lat": -31.142,
-                        "lon": 41.939,
-                        "location_path": "Canada/Ontario/Kanata",
-                        "last_updated": "2015-08-25T20:11:46.370Z",
-                        "cameras": [
-                            {
-                                "id":"43",
-                                "name":"camera 1",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello33.jpg"
-                            },
-                            {
-                                "id":"44",
-                                "name":"camera 2",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello44.jpg"
-                            },
-                            {
-                                "id":"45",
-                                "name":"camera 3",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello11.jpg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "e3084250-4b37-11e5-8184-752d1c0476b3",
-                        "name": "Not So Amazing Connect #3",
-                        "status": "offline",
-                        "address": "123 Sesame Street, Paris, France",
-                        "lat": -11.42,
-                        "lon": 11.99,
-                        "location_path": "Canada/Quebec/Nepean",
-                        "last_updated": "2015-08-25T20:11:46.370Z",
-                        "cameras": [
-                            {
-                                "id":"13",
-                                "name":"camera 1",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello5.jpg"
-                            },
-                            {
-                                "id":"14",
-                                "name":"camera 2",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello3.jpg"
-                            },
-                            {
-                                "id":"15",
-                                "name":"camera 3",
-                                "thumbnail": "http://solink.aws.s3/12/thumbnails/hello7.jpg"
-                            }
-                        ]
-                    },
-                ]
-            }
+            [
+                {
+                    "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
+                    "name": "Amazing Connect #1",
+                    "status": "offline",
+                    "address": "221B Baker Street, London, England",
+                    "lat": -31.42,
+                    "lon": 41.99,
+                    "organizationPath": "Canada/Ontario/Kanata",
+                    "lastCheckin": "2015-08-25T20:11:46.370Z",
+                    "cameras": [
+                        {
+                            "id":"c5084250-4b37-11e5-8184-752d1c0476b3",
+                            "name":"camera 1",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                        },
+                        {
+                            "id":"d5084250-4b37-11e5-8184-752d1c0476b3",
+                            "name":"camera 2",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                        },
+                        {
+                            "id":"e5084250-4b37-11e5-8184-752d1c0476b3",
+                            "name":"camera 3",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                        }
+                    ]
+                },
+                {
+                    "id": "b5084250-4b37-11e5-8184-752d1c0476b4",
+                    "name": "Amazing Connect #2",
+                    "status": "online",
+                    "address": "221B Faker Street, London, England",
+                    "lat": -311.42,
+                    "lon": 411.99,
+                    "organizationPath": "Canada/Ontario/Kanata",
+                    "lastCheckin": "2015-08-25T20:11:46.370Z",
+                    "cameras": [
+                        {
+                            "id":"a3084250-4b37-11e5-8184-752d1c0476b3",
+                            "name":"camera 1",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
+                        },
+                        {
+                            "id":"a5084250-4b37-11e5-8184-752d1c0476b3",
+                            "name":"camera 2",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
+                        },
+                        {
+                            "id":"b3084250-4b37-11e5-8184-752d1c0476b3",
+                            "name":"camera 3",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello1.jpg"
+                        }
+                    ]
+                },
+                {
+                    "id": "c3084250-4b37-11e5-8184-752d1c0476b3",
+                    "name": "Not So Amazing Connect #1",
+                    "status": "online",
+                    "address": "390 March Road, Ottawa, Ontario, Canada",
+                    "lat": 31.42,
+                    "lon": 41.99,
+                    "organizationPath": "Canada/Ontario/Kanata",
+                    "lastCheckin": "2015-08-25T20:11:46.370Z",
+                    "cameras": [
+                        {
+                            "id":"53",
+                            "name":"camera 1",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
+                        },
+                        {
+                            "id":"54",
+                            "name":"camera 2",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
+                        },
+                        {
+                            "id":"55",
+                            "name":"camera 3",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello555.jpg"
+                        }
+                    ]
+                },
+                {
+                    "id": "d3084250-4b37-11e5-8184-752d1c0476b3",
+                    "name": "Not So Amazing Connect #2",
+                    "status": "online",
+                    "address": "221B Baker Street, London, England",
+                    "lat": -31.142,
+                    "lon": 41.939,
+                    "organizationPath": "Canada/Ontario/Kanata",
+                    "lastCheckin": "2015-08-25T20:11:46.370Z",
+                    "cameras": [
+                        {
+                            "id":"43",
+                            "name":"camera 1",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello33.jpg"
+                        },
+                        {
+                            "id":"44",
+                            "name":"camera 2",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello44.jpg"
+                        },
+                        {
+                            "id":"45",
+                            "name":"camera 3",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello11.jpg"
+                        }
+                    ]
+                },
+                {
+                    "id": "e3084250-4b37-11e5-8184-752d1c0476b3",
+                    "name": "Not So Amazing Connect #3",
+                    "status": "offline",
+                    "address": "123 Sesame Street, Paris, France",
+                    "lat": -11.42,
+                    "lon": 11.99,
+                    "organizationPath": "Canada/Quebec/Nepean",
+                    "lastCheckin": "2015-08-25T20:11:46.370Z",
+                    "cameras": [
+                        {
+                            "id":"13",
+                            "name":"camera 1",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello5.jpg"
+                        },
+                        {
+                            "id":"14",
+                            "name":"camera 2",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello3.jpg"
+                        },
+                        {
+                            "id":"15",
+                            "name":"camera 3",
+                            "thumbnail": "http://solink.aws.s3/12/thumbnails/hello7.jpg"
+                        }
+                    ]
+                },
+            ]
             
 ## List All Cameras on a Device [/api/devices/{id}/cameras]
 
@@ -230,26 +225,24 @@ A device object has the following attributes:
 
     + Body
     
-            {
-                "results": [
-                    {
-                        "id":"a3084250-4b37-11e5-8184-752d1c0476b3",
-                        "name":"axis camera",
-                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
-                    },
-                    {
-                        "id":"b3084250-4b37-11e5-8184-752d1c0476b3",
-                        "name":" POS camera",
-                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
-                    },
-                    {
-                        "id":"c3084250-4b37-11e5-8184-752d1c0476b3",
-                        "name":"Door camera",
-                        "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
-                    }
-                ]
-            }
-            
+            [
+                {
+                    "id":"a3084250-4b37-11e5-8184-752d1c0476b3",
+                    "name":"axis camera",
+                    "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                },
+                {
+                    "id":"b3084250-4b37-11e5-8184-752d1c0476b3",
+                    "name":" POS camera",
+                    "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                },
+                {
+                    "id":"c3084250-4b37-11e5-8184-752d1c0476b3",
+                    "name":"Door camera",
+                    "thumbnail": "http://solink.aws.s3/12/thumbnails/hello.jpg"
+                }
+            ]
+                
 
 ## Group Licenses
 
@@ -267,8 +260,8 @@ When installing a Connect device, a license key is provided.  Providing this lic
 + Response 200 (application/json)
 
         {
-            username: "device123@solinkcorp.com",
-            password: "test",
+            authToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
+            refreshToken: "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM",
             deviceId: "A4af23bij"
         }
 
@@ -289,12 +282,12 @@ A user or connect device will post to the /auth/login endpoint to get a valid JW
 + Response 200 (application/json)
 
         {
-            auth_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
-            refresh_token: "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM",
+            authToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
+            refreshToken: "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM",
             aws: {
-                AccessKeyId: "ASIAIE3VWYBHAN32YG5Q",
-                SecretAccessKey: "UbILm6V9ip0gyUpw6kqDcet+PGFwrjBhmPa+Z6p2",
-                SessionToken: "AQoDYXdzENr//////////wEawALgJc/SxMUbsxgIL5CGQcoGQmxF5wpV8ZuWQtwDYGngPfrXCHxoknbwxjwQOJPaK6N2rFtKoPw4ojJon1K9BQlNZnUQ4NSuPmTqDLZdltS+nrlUdZ/U8RWdFhoDtrJLL/aBsHBlymLPIR//JcuiCMnWZDtPpOIZVK92wZKllMunfnnpVz9LN/X6jkeX2NhMYRK+Q2dTH0Z7UuOgK+UMTW1/ayFECDGrVCctkmdR1Rr/cVA0yq8zF4k/SYar5WZIWQ1YLvSHT57/jD/lAUBOuBQ64gMwvXw8ptsRpl1c0xjWZn4azrMBz+FJAs2OTbcrl/arUF3YVLttH+aEIxHMamGYbUxqq3e7LOjKvnJbWFVWfdsrRaWMyaEIPYbVKOodRtlcsD+9p2qXtBr0eB48hBggxoir+P9yGNFeprgG7s/e/SCZ3cmtBQ=="
+                accessKeyId: "ASIAIE3VWYBHAN32YG5Q",
+                secretAccessKey: "UbILm6V9ip0gyUpw6kqDcet+PGFwrjBhmPa+Z6p2",
+                sessionToken: "AQoDYXdzENr//////////wEawALgJc/SxMUbsxgIL5CGQcoGQmxF5wpV8ZuWQtwDYGngPfrXCHxoknbwxjwQOJPaK6N2rFtKoPw4ojJon1K9BQlNZnUQ4NSuPmTqDLZdltS+nrlUdZ/U8RWdFhoDtrJLL/aBsHBlymLPIR//JcuiCMnWZDtPpOIZVK92wZKllMunfnnpVz9LN/X6jkeX2NhMYRK+Q2dTH0Z7UuOgK+UMTW1/ayFECDGrVCctkmdR1Rr/cVA0yq8zF4k/SYar5WZIWQ1YLvSHT57/jD/lAUBOuBQ64gMwvXw8ptsRpl1c0xjWZn4azrMBz+FJAs2OTbcrl/arUF3YVLttH+aEIxHMamGYbUxqq3e7LOjKvnJbWFVWfdsrRaWMyaEIPYbVKOodRtlcsD+9p2qXtBr0eB48hBggxoir+P9yGNFeprgG7s/e/SCZ3cmtBQ=="
             }-
         }
         

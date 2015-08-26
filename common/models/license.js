@@ -77,78 +77,6 @@ function setUniqueLicenseKey(License, license, next) {
     });
 }
 
-function addUniqueLicense(License, license, next) {
-    'use strict';
-    var randToken = require('rand-token').generator({
-        source: crypto.randomBytes
-    });
-
-    var licenseKey = license.key;
-    if (!licenseKey) {
-        licenseKey = randToken.generate(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
-    }
-
-    License.find({where: {key: licenseKey}}, function checkIfLicenseExists(err, res) {
-        if (err) {
-            console.log('Error while checking if license exists: ' + err);
-            next(err);
-        } else {
-            if (res.length > 0 && !license.key) {
-                logger.error('WARNING: license already exists');
-                return addUniqueLicense(License, license, next);
-            } else {
-                // the license is unique.
-                var Device = License.app.models.Device;
-                Device.create({
-                    name: 'Unactivated Device',
-                    customerId: license.customerId
-                }, function sendResponse(err, res) {
-                    if (err) {
-                        logger.error('WARNING: Unable to create device: ' + err);
-                        next(err);
-                    } else {
-                        var deviceId = res.id;
-                        // device is created, now create corresponding user
-                        var username = 'cwhiten+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
-                        var password = randToken.generate(16);
-                        License.app.models.Customer.getOwnership(license.customerId, function (err, res) {
-                            if (err) {
-                                logger.error('error getting customer ownership! ' + err);
-                                next(err);
-                            } else {
-                                var userData = res;
-                                userData.deviceId = deviceId;
-                                userData.usertype = 'connect';
-                                authService.createUser(username, password, userData, function (err, res) {
-                                    if (err) {
-                                        logger.error('Error while creating user: ' + err);
-                                        next(err);
-                                    } else {
-                                        // device is created, now just update the attributes.
-                                        license.updateAttributes({
-                                            key: licenseKey,
-                                            username: username,
-                                            password: password,
-                                            deviceId: deviceId
-                                        }, function (err, instance) {
-                                            if (err) {
-                                                logger.error('error updating license! ' + err);
-                                                next(err);
-                                            } else {
-                                                next();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    });
-}
-
 function activateLicense(License, key, cb) {
     'use strict';
     License.find({where: {key: key}}, function activateLicense(err, res) {
@@ -202,7 +130,8 @@ function performActivationTasks(License, license, cb) {
             var userData = {
                 deviceId: deviceId,
                 usertype: 'connect',
-                custeromId: license.customerId
+                customerId: license.customerId,
+                email_verified: true
             };
             authService.createUser(username, password, userData, function (err, res) {
                 if (err) {
@@ -222,13 +151,22 @@ function performActivationTasks(License, license, cb) {
                             logger.error(err);
                             cb(err);
                         } else {
-                            var response = {
-                                username: username,
-                                password: password,
-                                deviceId: deviceId
-                            };
+                            // log in and get refresh token, return that + auth token instead!
+                            authService.login(username, password, function (err, res) {
+                                if (err) {
+                                    logger.error('Error while logging in with newly created device user');
+                                    logger.error(err);
+                                    cb(err);
+                                } else {
+                                    var response = {
+                                        deviceId: deviceId,
+                                        authToken: res.authToken,
+                                        refreshToken: res.refreshToken
+                                    };
 
-                            cb(null, JSON.stringify(response));
+                                    cb(null, response);
+                                }
+                            });
                         }
                     });
                 }

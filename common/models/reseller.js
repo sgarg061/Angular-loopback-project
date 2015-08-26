@@ -142,7 +142,8 @@ function resellerAccessPermissions(ctx, next) {
 function createResellerUser(reseller, next) {
     var userData = {
         userType: 'reseller',
-        resellerId: reseller.id
+        resellerId: reseller.id,
+        email_verified: true
     };
 
     authService.createUser(reseller.email, reseller.password, userData, function (err, res) {
