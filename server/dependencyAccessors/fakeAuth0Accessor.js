@@ -54,9 +54,9 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
     var response = {
         authToken: token,
         aws: {
-            AccessKeyId: 'fakeaccesskey',
-            SecretAccessKey: 'fakesecretaccesskey',
-            SessionToken: 'fakesessiontoken'
+            accessKeyId: 'fakeaccesskey',
+            secretAccessKey: 'fakesecretaccesskey',
+            sessionToken: 'fakesessiontoken'
         },
         refreshToken: 'a refresh token'
     };
