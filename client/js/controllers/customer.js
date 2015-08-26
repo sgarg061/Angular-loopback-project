@@ -197,10 +197,11 @@ angular
         template:
           '<md-dialog aria-label="List dialog">' +
           '  <md-dialog-content>'+
-          '  {{JSON.stringify(license)}}' +
+          '  {{license}}' +
           '  </md-dialog-content>' +
           '  <div class="md-actions">' +
-          '    <md-button ng-click="closeDialog()" class="md-primary">Close</md-button>' +
+          '    <md-button ng-click="revokeLicense(license)" class="md-primary">Revoke</md-button>' +
+          '    <md-button ng-click="close()" class="md-primary">Close</md-button>' +
           '  </div>' +
           '</md-dialog>',
         locals: { license: $scope.license },
@@ -209,8 +210,12 @@ angular
 
       function DialogController($scope, $mdDialog, license) {
         $scope.license = license;
-        $scope.closeDialog = function() {
-          $mdDialog.hide();
+        $scope.close = function() {
+          $mdDialog.cancel();
+        }
+        $scope.revokeLicense = function(aLicense) {
+          console.log('revoking license: ' + $scope.license);
+          $mdDialog.cancel();
         }
       }
     }
@@ -219,14 +224,15 @@ angular
       console.log('add license for customer id: ' + customerId);
 
       $mdDialog.show({
-        controller: function DialogController($scope, $mdDialog) {
-          $scope.quantity = 0;
-          $scope.create = function() {
+        controller: function DialogController(scope, $mdDialog) {
+          scope.quantity = 0;
+          scope.create = function() {
             
-            async.times($scope.quantity, function(n, next){
+            async.times(scope.quantity, function(n, next){
               License.create({customerId: customerId})
                 .$promise
                 .then(function(license) {
+                  $scope.customer.licenses.push(license);
                   next(undefined, license)
                 }, function(err) {
                   next(err);
@@ -237,7 +243,7 @@ angular
 
           };
 
-          $scope.cancel = function() {
+          scope.cancel = function() {
             $mdDialog.cancel();
           };
 

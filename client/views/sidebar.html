@@ -52,7 +52,7 @@
         <md-content layout-padding style="height: 200px;padding: 0px;">  
           <md-list style="box-shadow: 1px 1px 2px 0px rgba(163,163,163,1);">
             <md-list-item ng-repeat="license in model.licenses">
-                <md-button ng-click='showLicense(license)'>
+                <md-button ng-click='showLicense(license.key)'>
                   <div layout="row" layout-align="start center">
                     <div>{{license.key}}</div>
                     <div flex></div>
@@ -63,7 +63,7 @@
           </md-list>
         </md-content>
       
-      <button class="btn btn-default" flex ng-click="addLicense(model.id)">Add Licenses</button>
+      <md-button class="md-primary" ng-click="addLicense(model.id)">Add Licenses</md-button>
     </div>
 
   </div>
