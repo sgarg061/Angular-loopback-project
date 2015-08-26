@@ -115,8 +115,8 @@ function authenticateWithAWS(token, refreshToken, cb) {
         }
     }, function (err, res, body) {
         if (!err && res.statusCode === 200) {
-            var token_info = JSON.parse(body);
-            var creds = token_info.Credentials;
+            var tokenInfo = JSON.parse(body);
+            var creds = tokenInfo.Credentials;
             var response = {
                 authToken: token,
                 refreshToken: refreshToken,
