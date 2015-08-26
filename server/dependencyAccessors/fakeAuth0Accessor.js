@@ -59,7 +59,7 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
             SessionToken: 'fakesessiontoken'
         }
     };
-    cb(null, JSON.stringify(response));
+    cb(null, response);
 };
 
 

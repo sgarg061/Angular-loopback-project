@@ -121,7 +121,7 @@ function authenticateWithAWS(token, refreshToken, cb) {
                     SessionToken: creds.SessionToken
                 }
             };
-            cb(null, JSON.stringify(response));
+            cb(null, response);
         } else {
             var e = new Error('Unable to login');
             e.statusCode = res.statusCode;
