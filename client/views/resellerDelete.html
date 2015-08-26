@@ -1,8 +1,8 @@
-<md-dialog aria-label="Delete Customer">
+<md-dialog aria-label="Delete Reseller">
   
   <md-toolbar>
       <div class="md-toolbar-tools">
-      <h2>Delete Customer</h2>
+      <h2>Delete Reseller</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="close()">
         <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
@@ -11,15 +11,15 @@
   </md-toolbar>
 
   <md-dialog-content>
-    <p><b>Are you sure you want to delete this customer?</b></p>
-    <p>If so, type in the name of the customer to confirm</p>
+    <p><b>Are you sure you want to delete this reseller?</b></p>
+    <p>If so, type in the name of the reseller to confirm</p>
     <md-input-container>
-        <label>Customer Name</label>
-        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="customerName">
+        <label>Reseller Name</label>
+        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="resellerName">
       </md-input-container>
   </md-dialog-content>
   <div class="md-actions">
     <md-button ng-click="close()" class="md-primary">Cancel</md-button>
-    <md-button ng-click="deleteCustomer()" class="md-primary">Delete</md-button>
+    <md-button ng-click="deleteReseller()" class="md-primary">Delete</md-button>
   </div>
 </md-dialog>

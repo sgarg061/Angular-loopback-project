@@ -139,4 +139,45 @@ angular
       });
     }
 
+  function deleteReseller(reseller) {
+    console.log('delete reseller: ' + JSON.stringify(reseller));
+    $mdDialog.show({
+        controller: function (scope, $mdDialog) {
+          scope.resellerName = '';
+
+          scope.deleteReseller = function() {
+
+            if (scope.resellerName === reseller.name) {
+              Reseller.deleteById({id: reseller.id})
+                .$promise
+                .then(function(result) {
+                  $mdDialog.cancel();
+                  $scope.selectCloud($scope.cloudId);
+                  toastr.info('Reseller ' + reseller.name + ' deleted');
+                }, function(err) {
+                  $mdDialog.cancel();
+                  toastr.error('Unable to delete reseller: ' + err.data.error.message);
+                });
+            } else {
+              toastr.info('Reseller not deleted - name did not match "' + reseller.name + '"');
+              $mdDialog.cancel();
+            }
+          };
+
+          scope.close = function() {
+            $mdDialog.cancel();
+          };
+
+        },
+        templateUrl: 'views/resellerDelete.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:false
+      })
+      .then(function(result) {
+      });
+    }
+
+    $scope.deleteReseller = deleteReseller;
+
   }]);

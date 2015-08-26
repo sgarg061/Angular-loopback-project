@@ -306,7 +306,7 @@ angular
             if (scope.customerName === customer.name) {
               Customer.deleteById({id: customer.id})
                 .$promise
-                .then(function(license) {
+                .then(function(result) {
                   $mdDialog.cancel();
                   $scope.selectReseller($scope.resellerId);
                   toastr.info('Customer ' + customer.name + ' deleted');
