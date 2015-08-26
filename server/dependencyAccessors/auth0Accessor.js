@@ -68,10 +68,10 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
         password: password,
         connection: 'Username-Password-Authentication',
         app_metadata: {
-            tenant_id: userData.customerId ? userData.customerId : 'none',
-            reseller_id: userData.resellerId,
-            cloud_id: userData.cloudId,
-            user_type: userData.userType
+            tenantId: userData.customerId ? userData.customerId : 'none',
+            resellerId: userData.resellerId,
+            cloudId: userData.cloudId,
+            userType: userData.userType
         }
     };
 

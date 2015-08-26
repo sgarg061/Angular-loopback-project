@@ -170,8 +170,8 @@ describe('To create or modify a reseller, you must be along its ownership chain'
           done();
         });
     }, {
-      user_type: 'cloud',
-      cloud_id: validCloud.id
+      userType: 'cloud',
+      cloudId: validCloud.id
     });
   });
 
