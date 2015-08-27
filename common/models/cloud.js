@@ -33,6 +33,7 @@ module.exports = function(Cloud) {
 
         if (context && context.get('jwt')) {
             var cloudId = context.get('jwt').cloudId;
+            var customerId = context.get('jwt').tenantId;
             
             if (context.get('jwt').userType === 'solink') {
                 next();
@@ -45,6 +46,20 @@ module.exports = function(Cloud) {
                     };
                 }
                 next();
+            } else if (customerId) {
+                // get the cloud of this customer id, must be that id.
+                loopback.getModel('Customer').findById(customerId, {include: 'reseller'}, function (err, res) {
+                    console.log('here is a customer and reseller!');
+                    console.log(res);
+                    if (ctx.query.where) {
+                        ctx.query.where.id = res.reseller.cloudId;
+                    } else {
+                        ctx.query.where = {
+                            id: res.reseller.cloudId
+                        };
+                    }
+                    next();
+                });
             } else {
                 var error = new Error('Unauthorized');
                 error.statusCode = 401;
