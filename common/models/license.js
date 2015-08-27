@@ -152,7 +152,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
 
             var userData = {
                 deviceId: deviceId,
-                usertype: 'connect',
+                userType: 'connect',
                 customerId: license.customerId,
                 email_verified: true
             };

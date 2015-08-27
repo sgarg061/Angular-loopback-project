@@ -50,7 +50,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
         if (!err && res.statusCode === 200) {
             var tokenInfo = JSON.parse(body);
             var token = tokenInfo.id_token;
-            cb(null, token);
+            authenticateWithAWS(token, refreshToken, cb);
         } else {
             var e = new Error('Unable to use refresh token');
             e.statusCode = res.statusCode;

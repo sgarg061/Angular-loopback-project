@@ -94,13 +94,31 @@ module.exports = function(Reseller) {
 
 function resellerAccessPermissions(ctx, next) {
     var context = loopback.getCurrentContext();
+    console.log(loopback.getModel('Reseller'));
     if (context && context.get('jwt')) {
         var resellerId = context.get('jwt').resellerId;
         var cloudId = context.get('jwt').cloudId;
         var userType = context.get('jwt').userType;
+        var customerId = context.get('jwt').tenantId;
 
         if (userType === 'solink') {
             next();
+        } else if (customerId) {
+            // only allow read for reseller
+            loopback.getModel('Customer').findById(customerId, function (err, customer) {
+                if (err) {
+                    next(err);
+                } else {
+                    if (ctx.query.where) {
+                        ctx.query.where.id = customer.resellerId;
+                    } else {
+                        ctx.query.where = {
+                            id: customer.resellerId
+                        };
+                    }
+                    next();
+                }
+            });
         } else if (resellerId) {
             if (ctx.isNewInstance) {
                 // resellers cannot create new resellers
