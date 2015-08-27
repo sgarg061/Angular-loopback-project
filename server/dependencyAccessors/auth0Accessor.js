@@ -44,7 +44,8 @@ Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
             client_id: config.auth0ClientID,
             grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             refresh_token: refreshToken,
-            api_type: 'app'
+            api_type: 'app',
+            scope: config.auth0Scope
         }
     }, function (err, res, body) {
         if (!err && res.statusCode === 200) {
