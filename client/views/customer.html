@@ -21,9 +21,13 @@
           <div layout-fill layout-align="start center" layout-padding>
             
             <div layout="row" style="padding-left:20px; padding-right:20px;" layout-align="space-between center" layout-fill>
-              <h2 class="md-title">{{device.name}} 
-                <md-icon md-svg-icon='content_copy' style="width:24px;margin:0px;"></md-icon>
-              </h2>
+              <div layout="row">
+                <h2 class="md-title" ng-click="selectDevice(device)">{{device.name}} 
+                  <md-icon md-svg-icon='right_arrow' style="width:24px;margin:0px; vertical-align:center; padding-bottom:3px;"></md-icon>
+                </h2>
+                
+              </div>
+
               <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
             </div>
 
