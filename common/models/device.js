@@ -341,7 +341,9 @@ module.exports = function(Device) {
         if (deviceData.guid) {
             checkedInProperties.guid = deviceData.guid;
         }
-
+        // hardcoded
+        // TODO
+        deviceData.organizationPath = 'Canada/Ontario/Ottawa';
         if (deviceData.organizationPath) {
             checkedInProperties.organizationPath = deviceData.organizationPath;
         }
