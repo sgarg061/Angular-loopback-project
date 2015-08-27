@@ -1,6 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', '$mdDialog',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, $mdDialog) {
 
     $scope.customer = {};
 
@@ -144,4 +145,18 @@ angular
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
    
+   $scope.showCheckin = function(anEntry) {
+    console.log('show checkin entry: ' + JSON.stringify(anEntry));
+    $mdDialog.show({
+      parent: angular.element(document.body),
+      templateUrl: 'views/device_checkin_entry.tmpl.html',
+      controller: function (scope, $mdDialog) {
+        scope.entry = anEntry;
+        scope.close = function() {
+          $mdDialog.cancel();
+        }
+      }
+    });
+  }
+
   }]);

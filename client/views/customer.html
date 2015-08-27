@@ -17,11 +17,13 @@
 
       <md-grid-list md-cols="2" md-row-height="600" md-gutter="10px">
 
-        <md-grid-tile class="card" ng-repeat="device in customer.devices" ngx-click='selectDevice(device)' md-rowspan="0" md-colspan="1">
+        <md-grid-tile class="card" ng-repeat="device in customer.devices" md-rowspan="0" md-colspan="1">
           <div layout-fill layout-align="start center" layout-padding>
             
             <div layout="row" style="padding-left:20px; padding-right:20px;" layout-align="space-between center" layout-fill>
-              <h2 class="md-title">{{device.name}}</h2>
+              <h2 class="md-title">{{device.name}} 
+                <md-icon md-svg-icon='content_copy' style="width:24px;margin:0px;"></md-icon>
+              </h2>
               <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
             </div>
 
@@ -47,7 +49,7 @@
                   
                   <div>
                     <b>Check-in History</b>
-                    <md-content style="height:200px;"
+                    <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
                       <md-list layout-padding>
                         <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="entry in device.logEntries">
                         <span ng-click="showCheckin(entry)">
