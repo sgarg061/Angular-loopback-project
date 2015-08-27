@@ -1,6 +1,7 @@
 var uuid = require('node-uuid');
 var logger = require('../../server/logger');
 var loopback = require('loopback');
+var authService = require('../../server/services/authService');
 
 module.exports = function(Customer) {
 
@@ -17,6 +18,14 @@ module.exports = function(Customer) {
                 next();
             }
         });
+    });
+
+    Customer.observe('after save', function createUser(ctx, next) {
+        if (ctx.isNewInstance) {
+            createCustomerAdminUser(ctx.instance, next);
+        } else {
+            next();
+        }
     });
 
     Customer.remoteMethod('getOwnership', {
@@ -262,4 +271,24 @@ function customerAccessPermissions(ctx, next) {
     } else {
         next();
     }
+}
+
+function createCustomerAdminUser(customer, next) {
+    var userData = {
+        userType: 'admin',
+        customerId: customer.id
+    };
+
+    authService.createUser(customer.email, customer.password, userData, function (err, res) {
+        if (err) {
+            logger.error('Could not create customer user');
+            logger.error(err);
+            next(err);
+        } else {
+            logger.info('Created new customer user ' + customer.email);
+            logger.info(res);
+            customer.unsetAttribute('password');
+            next();
+        }
+    });
 }
