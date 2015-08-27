@@ -184,7 +184,8 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                                     var response = {
                                         deviceId: deviceId,
                                         authToken: res.authToken,
-                                        refreshToken: res.refreshToken
+                                        refreshToken: res.refreshToken,
+                                        aws: res.aws
                                     };
 
                                     cb(null, response);
