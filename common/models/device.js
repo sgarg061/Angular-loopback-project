@@ -262,10 +262,8 @@ module.exports = function(Device) {
     };
 
     Device.checkin = function (id, data, cb) {
-
         // before doing anything else, log the checkin data 
         logCheckin(data);
-
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
         // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
@@ -453,7 +451,7 @@ module.exports = function(Device) {
         var componentId = component[componentIdName];
 
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
-        if (!componentId) {
+        if (componentId === undefined) {
             // TODO: this should go in the customer log
             logger.error('Cannot register %s - missing %s: %s', componentType, componentIdName, JSON.stringify(component));
             return;
