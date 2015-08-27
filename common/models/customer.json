@@ -26,6 +26,12 @@
     "softwareVersionId": {
       "type": "string",
       "required": false
+    },
+    "email": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
     }
   },
   "validations": [],
