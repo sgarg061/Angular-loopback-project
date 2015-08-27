@@ -99,7 +99,47 @@
                 </div>
               </md-tab>
               <md-tab label="DEVICES">
+
                 <div layout="column" style="margin:20px;">
+
+                    <md-input-container>
+                      <label>Software Version</label>
+                      <input type="text" class="form-control focus" name="softwareVersion" autocomplete="off" ng-model="device.softwareVersion">
+                    </md-input-container>
+                  
+                    <div layout="row" layout-align="space-around center">
+                      <div layout="column" layout-align="start start" layout-fill>
+                        
+                        <div style="margin-bottom: 5px;"><b>Cameras</b></div>
+                        <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
+                          <md-list layout-padding>
+                            <md-list-item style="height:26px; min-height:20px !important;" ng-repeat="camera in device.cameras">
+                              <div layout="row" layout-fill layout-align="space-between center">
+                                <span>{{ camera.name }}</span>
+                                <span flex="20">
+                                <md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>
+                              </div>
+                          </md-list-item>
+                        </md-content>
+
+                        <div flex></div>
+                        <br/>
+
+                        <div style="margin-bottom: 5px;"><b>POS Devices</b></div>
+                        <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
+                          <md-list layout-padding>
+                            <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="posDevice in device.posDevices">
+                            <div layout="row" layout-fill layout-align="space-between center">
+                              <span>{{ posDevice.name }}</span>
+                              <span flex="20">
+                              <md-icon md-svg-icon='indicator_{{posDevice.status === "online" ? "green" : posDevice.status === "offline" ? "red" : "yellow"}}'></md-icon>
+                            </div>
+                          </md-list-item>
+                        </md-content>
+
+                      </div>
+                    </div>
+
                 </div>
               </md-tab>
             </md-tabs>
