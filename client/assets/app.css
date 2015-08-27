@@ -10,6 +10,12 @@ html, body {
   display: none !important;
 }
 
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
+}
+
 /* Sidebar */
 .sidebar {
   width: 300px;
