@@ -52,8 +52,8 @@ angular
               {
                 relation: 'devices',
                 scope: {
-                  include: ['cameras', 'posDevices', 'license',
-                  {
+                  limit: 10, /* FIXME - prevent a billion devices and all their related bits from coming back */
+                  include: ['cameras', 'posDevices', 'license', {
                     relation: 'logEntries',
                     scope: {
                       limit: 10,
