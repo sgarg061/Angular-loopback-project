@@ -74,8 +74,8 @@
     <div ng-show="type=='customer'">
       <div style="margin:30px 0px 5px 0px;">Licenses</div>
       
-        <md-content layout-padding style="height: 200px;padding: 0px;">  
-          <md-list ng-show="model.licenses && model.licenses.length>0" style="box-shadow: 1px 1px 2px 0px rgba(163,163,163,1);">
+        <md-content layout-padding style="height: 200px;padding: 0px; border: 1px solid rgba(0, 0, 0, 0.117647)">  
+          <md-list ng-show="model.licenses && model.licenses.length > 0">
             <md-list-item ng-repeat="license in model.licenses">
                 <md-button ng-click='showLicense(license)'>
                   <div layout="row" layout-align="start center">

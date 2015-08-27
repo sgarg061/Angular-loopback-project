@@ -44,7 +44,6 @@ angular
                   include: {
                     relation: 'cloud',
                     scope: {
-                      fields: {id: true, name: true},
                       order: 'name ASC'
                     }
                   }
@@ -82,44 +81,99 @@ angular
 
           watchForChanges();
 
+          /* 
+            Device status
+
+            green: 
+              - all cameras are green
+              - all pos devices are green
+              - device has checked in within expected interval
+            
+            yellow:
+              - one or more cameras or pos devices are red
+              - device has checked in within expected interval 
+            red:
+              - device has not checked in within expected interval
+          */
           for (var i=0; i<$scope.devices.length; i++) {
             var device = $scope.devices[i];
 
-            $scope.deviceData[device.id] = {
-                                            cameraStatus: {online: 0, offline: 0, unreachable: 0, total: 0},
-                                            posStatus: {online: 0, offline: 0, unreachable: 0, total: 0}
-                                          };
+            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+            var nowInSeconds = new Date().getTime() / 1000;
 
-            var online = true;
+            var checkinIntervalInSeconds = device.checkinInterval || 
+                                          $scope.customer.checkinInterval || 
+                                          $scope.customer.reseller.checkinInterval || 
+                                          $scope.customer.reseller.cloud.checkinInterval;
+
+            console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
+
+            var gracePeriodInSeconds = 30;
+            var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
+            console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
+
+            var allCamerasOnline = true;
             if (device.cameras) {
               for (var j=0; j<device.cameras.length; j++) {
                 var camera = device.cameras[j];
-                if (camera.status === 'online') {
-                  $scope.deviceData[device.id].cameraStatus.online++;
-                } else if (camera.status === 'offline') {
-                  $scope.deviceData[device.id].cameraStatus.offline++;
-                } else {
-                  $scope.deviceData[device.id].cameraStatus.unreachable++;
-                }
-                $scope.deviceData[device.id].cameraStatus.total++;
+                if (camera.status != 'online') {
+                  allCamerasOnline = false;
+                  break;
+                } 
               }
-              $scope.deviceData[device.id].cameraStatus.color = ($scope.deviceData[device.id].cameraStatus.offline>0 ? 'red' : $scope.deviceData[device.id].cameraStatus.unreachable>0 ? 'yellow' : 'green');
             }
 
+            var allPOSDevicesOnline = true;
             if (device.posDevices) {
               for (var k=0; k<device.posDevices.length; k++) {
                 var pos = device.posDevices[k];
-                if (pos.status === 'online') {
-                  $scope.deviceData[device.id].posStatus.online++;
-                } else if (camera.status === 'offline') {
-                  $scope.deviceData[device.id].posStatus.offline++;
-                } else {
-                  $scope.deviceData[device.id].posStatus.unreachable++;
+                if (pos.status != 'online') {
+                  allPOSDevicesOnline = false;
+                  break;
                 }
-                $scope.deviceData[device.id].posStatus.total++;
               }
-              $scope.deviceData[device.id].posStatus.color = ($scope.deviceData[device.id].posStatus.offline>0 ? 'red' : $scope.deviceData[device.id].posStatus.unreachable>0 ? 'yellow' : 'green');
             }
+
+            if (hasCheckedInOnTime) {
+              if (allCamerasOnline && allPOSDevicesOnline) {
+                device.status = 'green';
+              } else {
+                device.status = 'yellow';
+              }
+            } else {
+              device.status = 'red';
+            }
+
+            // var online = true;
+            // if (device.cameras) {
+            //   for (var j=0; j<device.cameras.length; j++) {
+            //     var camera = device.cameras[j];
+            //     if (camera.status === 'online') {
+            //       $scope.deviceData[device.id].cameraStatus.online++;
+            //     } else if (camera.status === 'offline') {
+            //       $scope.deviceData[device.id].cameraStatus.offline++;
+            //     } else {
+            //       $scope.deviceData[device.id].cameraStatus.unreachable++;
+            //     }
+            //     $scope.deviceData[device.id].cameraStatus.total++;
+            //   }
+            //   $scope.deviceData[device.id].cameraStatus.color = ($scope.deviceData[device.id].cameraStatus.offline>0 ? 'red' : $scope.deviceData[device.id].cameraStatus.unreachable>0 ? 'yellow' : 'green');
+            // }
+
+            // if (device.posDevices) {
+            //   for (var k=0; k<device.posDevices.length; k++) {
+            //     var pos = device.posDevices[k];
+            //     if (pos.status === 'online') {
+            //       $scope.deviceData[device.id].posStatus.online++;
+            //     } else if (camera.status === 'offline') {
+            //       $scope.deviceData[device.id].posStatus.offline++;
+            //     } else {
+            //       $scope.deviceData[device.id].posStatus.unreachable++;
+            //     }
+            //     $scope.deviceData[device.id].posStatus.total++;
+            //   }
+            //   $scope.deviceData[device.id].posStatus.color = ($scope.deviceData[device.id].posStatus.offline>0 ? 'red' : $scope.deviceData[device.id].posStatus.unreachable>0 ? 'yellow' : 'green');
+            // }
             // console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
           }
           
