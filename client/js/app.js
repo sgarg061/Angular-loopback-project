@@ -9,10 +9,11 @@ angular
     'blockUI',
     'ui.bootstrap',
     'ngClipboard',
-    'ngPrettyJson'
+    'ngPrettyJson',
+    'uiGmapgoogle-maps'
   ])
-  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider',
-    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider) {
+  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',
+    function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider, uiGmapGoogleMapApiProvider) {
       
       $mdThemingProvider.theme('default')
         .primaryPalette('blue')

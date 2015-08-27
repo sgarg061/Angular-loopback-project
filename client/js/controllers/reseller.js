@@ -9,6 +9,8 @@ angular
     $scope.cloudId = null;
     $scope.resellerId = null;
 
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+
     function watchForChanges() {
       // watch reseller for updates and save them when they're found
       $scope.$watch("reseller", function(newValue, oldValue) {

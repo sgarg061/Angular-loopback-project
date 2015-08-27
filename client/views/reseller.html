@@ -10,16 +10,27 @@
     </div>
 
     <div class="col-md-8" layout-margin layout-fill layout-padding>
+
       <h2>Customers</h2>
-      <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
+      
+      <md-tabs md-dynamic-height>
+        <md-tab label="LIST">
+          <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
 
-        <md-grid-tile ng-repeat="customer in reseller.customers" class="card" ng-click='selectCustomer(customer)' md-rowspan="0" md-colspan="1">
-          <div layout-fill layout-align="start center" layout-padding>
-            <span class="md-title" style="vertical-align: middle; height:50px;">{{customer.name}}</span>
-          </div>
-        </md-grid-tile>
+            <md-grid-tile ng-repeat="customer in reseller.customers" class="card" ng-click='selectCustomer(customer)' md-rowspan="0" md-colspan="1">
+              <div layout-fill layout-align="start center" layout-padding>
+                <span class="md-title" style="vertical-align: middle; height:50px;">{{customer.name}}</span>
+              </div>
+            </md-grid-tile>
 
-      </md-grid-list>
+          </md-grid-list>
+        </md-tab>
+        <md-tab label="MAP">
+          <md-content style="height:400px;">
+            <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+          </md-content>
+        </md-tab>
+      </md-tabs>
 
     </div>
   </div>

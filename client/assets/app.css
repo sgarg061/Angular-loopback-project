@@ -80,6 +80,9 @@ md-sidenav  md-list {
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
 }
 
+/* Maps */
+.angular-google-map-container { height: 400px; }
+
 /* Primary content area */
 
 #content {
