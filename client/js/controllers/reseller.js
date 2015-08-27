@@ -9,7 +9,8 @@ angular
     $scope.cloudId = null;
     $scope.resellerId = null;
 
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
+    $scope.markers = [];    
 
     function watchForChanges() {
       // watch reseller for updates and save them when they're found
@@ -31,7 +32,13 @@ angular
             include: ['cloud', 'softwareVersion', 'posConnectors', {
               relation: 'customers',
               scope: {
-                order: 'name ASC'
+                order: 'name ASC',
+                include: {
+                  relation: 'devices',
+                  scope: {
+                    fields: {id: true, name: true, location: true}
+                  }
+                }
               }
             }]
           }
@@ -47,6 +54,35 @@ angular
 
           getCloudResellers(resellers[0].cloud.id);
 
+
+          if ($scope.reseller.customers) {
+            for (var i=0; i<$scope.reseller.customers.length; i++) {
+              var customer = $scope.reseller.customers[i];
+              if (customer.devices) {
+                for (var j=0; j<customer.devices.length; j++) {
+                  var device = customer.devices[j];
+                  // console.log('device name: ' + device.name + " location: " + device.location);
+                  if (device.location) {
+                    $scope.markers.push({
+                      id: device.id,
+                      icon: 'assets/images/map_marker_28x40.png',
+                      latitude: device.location.lat,
+                      longitude: device.location.lng,
+                      showWindow: false,
+                      customerName: customer.name,
+                      deviceName: device.name,
+                      deviceId: device.id,
+                      options: {
+                        labelContent: customer.name,
+                        labelAnchor: "22 0",
+                        labelClass: "marker-labels"
+                      }
+                    });
+                  }
+                }
+              }
+            }
+          }
           // console.log('$scope.reseller: ' + JSON.stringify($scope.reseller));
         });
     }
@@ -180,6 +216,13 @@ angular
       });
     }
 
+    function onMarkerClicked(marker) {
+      console.log("marker clicked");
+      marker.showWindow = true;
+      $scope.$apply();
+    }
+
     $scope.deleteReseller = deleteReseller;
+    $scope.onMarkerClicked = onMarkerClicked;
 
   }]);
