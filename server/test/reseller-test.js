@@ -9,31 +9,116 @@ describe('Reseller tests', function() {
   this.timeout(5000);
 
   describe('Solink, cloud owners, and the reseller in question can query resellers', function() {
-    it('should return an error for each other type of user', function(done) {
-      
-      var invalidLoginTypes = ['user', 'admin'];
-      async.each(invalidLoginTypes, function loginWithInvalidType(loginType, cb) {
-        common.login(loginType, function (token) {
-          common.json('get', '/api/resellers', token)
+    
+
+      var reseller1;
+      var reseller2;
+      var cust1reseller1;
+      var cust2reseller1;
+      var cust1reseller2;
+
+      before(function(done) {
+        var Cloud = app.models.Cloud;
+        var Reseller = app.models.Reseller;
+        var Customer = app.models.Customer;
+        var Device = app.models.Device;
+
+        Cloud.find({}, function (err, res) {
+          var cloud = res[0];
+
+          Reseller.create({
+            name: 'reseller 1',
+            cloudId: cloud.id,
+            email: 'r1@solinkcorp.com',
+            password: 'hello'
+          }, function (err, res) {
+            reseller1 = res;
+
+            Reseller.create({
+              name: 'reseller 2',
+              cloudId: cloud.id,
+              email: 'r2@solinkcorp.com',
+              password: 'hello',
+            }, function (err, res) {
+              reseller2 = res;
+
+              Customer.create({
+                name: 'c1',
+                resellerId: reseller1.id,
+                email: 'c@solinkcorp.com',
+                password: 'test'
+              }, function (err, res) {
+                cust1reseller1 = res;
+
+                Customer.create({
+                  name: 'c2',
+                  resellerId: reseller1.id
+                }, function (err, res) {
+                  cust2reseller1 = res;
+
+                  Customer.create({
+                    name: 'c3',
+                    resellerId: reseller2.id
+                  }, function (err, res) {
+                    cust1reseller2 = res;
+
+                    authService.createUser('c1-connect', 'test', {
+                      userType: 'connect',
+                      tenantId: cust1reseller1.id
+                    }, function c1connectCreated (err, res) {
+                      authService.createUser('c3-connect', 'test', {
+                        userType: 'connect',
+                        tenantId: cust1reseller2.id
+                      }, function c3connectCreated(err, res) {
+                        done();
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+
+      it('should only list resellers, with no leaking customer information, in the direct ownership chain of a customer-level login', function (done) {
+        // c1 user should only see r1 and only c1 as a customer
+        common.login({username: 'c1-connect', password: 'test'}, function (token) {
+          common.json('get', '/api/resellers?filter[include]=customers', token)
             .send({})
-            .expect(401)
+            .expect(200)
             .end(function (err, res) {
-              if (err) {
-                cb(err);
-              } else {
-                cb();
-              }
+              if (err) throw err;
+              console.log('----------');
+              console.log(res.body);
+              console.log('----------');
+              assert(res.body.length === 1, 'should only have access to one reseller');
+              var retrievedReseller = res.body[0];
+              assert(retrievedReseller.customers.length === 1, 'should only see the customer that i belong to');
+              assert(retrievedReseller.name === reseller1.name, 'should be reseller 1s name: ');
+              assert(retrievedReseller.customers[0].name === cust1reseller1.name, 'should be the customer that i belong to');
+
+              // c3 should see only r2
+              common.login({username: 'c3-connect', password: 'test'}, function (token) {
+                common.json('get', '/api/resellers?filter[include]=customers', token)
+                  .send({})
+                  .expect(200)
+                  .end(function (err, res) {
+                    if (err) throw err;
+                    assert(res.body.length === 1, 'should only have access to one reseller');
+                    assert(res.body[0].customers.length === 1, 'should only see the customer that i belong to');
+                    retrievedReseller = res.body[0];
+                    assert(retrievedReseller.name === reseller2.name, 'should be reseller 1s name');
+                    assert(retrievedReseller.customers[0].name === cust1reseller2.name, 'should be the customer that i belong to');
+
+                    done();
+                  });
+              });
             });
         });
-      }, function (err) {
-        if (err) {
-          throw err;
-        }
-        done();
       });
-    });
 
-    it('should successfully list clouds when queried as Solink', function(done) {
+    it('should successfully list all resellers when queried as Solink', function(done) {
       common.login('solink', function (token) {
         common.json('get', '/api/resellers', token)
         .send({})

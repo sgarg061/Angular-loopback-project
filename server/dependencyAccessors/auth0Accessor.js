@@ -28,7 +28,9 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
             authenticateWithAWS(token, refreshToken, cb);
         } else {
             var e = new Error('Unable to login');
-            e.statusCode = res.statusCode;
+            if (res) {
+                e.statusCode = res.statusCode;
+            }
             cb(e, 'Failed login');
         }
     });
