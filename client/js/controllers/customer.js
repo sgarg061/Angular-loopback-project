@@ -426,7 +426,7 @@ angular
                               $scope.customer.signallingServerUrl || 
                               $scope.reseller.signallingServerUrl ||
                               $scope.cloud.signallingServerUrl;
-    signallingServerUrl = 'http://localhost:8888';
+                              
     webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
       if (err) {
         // maybe display an error message?
