@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr', 
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr', '$localStorage',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr, $localStorage) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -423,8 +423,16 @@ angular
                               $scope.customer.signallingServerUrl || 
                               $scope.reseller.signallingServerUrl ||
                               $scope.cloud.signallingServerUrl;
-    console.log(signallingServerUrl);
-
+    signallingServerUrl = 'http://localhost:8888';
+    webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
+      if (err) {
+        console.log('there is an error!');
+        console.log(err);
+      } else {
+        console.log('here is my response!');
+        console.log(res);
+      }
+    });
   }
 
   $scope.showLicense = showLicense;
