@@ -13,6 +13,9 @@ angular
     $scope.resellerId = null;
     $scope.customerId = null;
 
+    $scope.cloud = null;
+    $scope.reseller = null;
+
     $scope.deviceData = {};
 
     function watchForChanges() {
@@ -73,6 +76,9 @@ angular
           $scope.customerId = customers[0].id;
           $scope.resellerId = customers[0].reseller.id;
           $scope.cloudId = customers[0].reseller.cloud.id;
+
+          $scope.cloud = customers[0].reseller.cloud;
+          $scope.reseller = customers[0].reseller;
 
           $scope.devices = customers[0].devices;
 
@@ -409,9 +415,22 @@ angular
     });
   }
 
+  function checkin(device) {
+    console.log('Checkin on device ' + device.id);
+
+    // get the right signalling server
+    var signallingServerUrl = device.signallingServerUrl || 
+                              $scope.customer.signallingServerUrl || 
+                              $scope.reseller.signallingServerUrl ||
+                              $scope.cloud.signallingServerUrl;
+    console.log(signallingServerUrl);
+
+  }
+
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.showCheckin = showCheckin;
+  $scope.checkin = checkin;
 
 }]);
