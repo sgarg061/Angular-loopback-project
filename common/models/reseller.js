@@ -94,8 +94,8 @@ module.exports = function(Reseller) {
 
 function resellerAccessPermissions(ctx, next) {
     var context = loopback.getCurrentContext();
-    // console.log(loopback.getModel('Reseller'));
     if (context && context.get('jwt')) {
+        console.log('i am in!');
         var resellerId = context.get('jwt').resellerId;
         var cloudId = context.get('jwt').cloudId;
         var userType = context.get('jwt').userType;
