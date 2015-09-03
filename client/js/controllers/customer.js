@@ -18,6 +18,8 @@ angular
 
     $scope.deviceData = {};
 
+    $scope.sendingCheckin = null;
+
     function watchForChanges() {
       // watch customer for updates and save them when they're found
       $scope.$watch("customer", function(newValue, oldValue) {
@@ -417,6 +419,7 @@ angular
 
   function checkin(device) {
     console.log('Checkin on device ' + device.id);
+    $scope.sendingCheckin = device.id;
 
     // get the right signalling server
     var signallingServerUrl = device.signallingServerUrl || 
@@ -432,6 +435,8 @@ angular
         console.log('here is my response!');
         console.log(res);
       }
+      $scope.sendingCheckin = null;
+      $scope.$digest();
     });
   }
 

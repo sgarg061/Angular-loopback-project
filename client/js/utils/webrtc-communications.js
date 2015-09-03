@@ -31,7 +31,6 @@ var webrtcCommunications = (function() {
       ready: false
     };
     sockets[signallingServer] = socketInfo;
-
     var socket = io.connect(signallingServer + "?token=" + token, socketOptions);
     sockets[signallingServer].socket = socket;
       
@@ -39,7 +38,6 @@ var webrtcCommunications = (function() {
         console.log('connected to signalling server ' + signallingServer);
         sockets[signallingServer].ready = true;
         next();
-        //sendOffer(connectId);
     });
 
     socket.on('answer', function (data) {
@@ -73,6 +71,8 @@ var webrtcCommunications = (function() {
     socket.on('error', function (data){
       console.log('error...');
       console.log(data);
+      console.log(data.deviceId);
+      connections[data.deviceId].cb(new Error(data.msg));
     });
   }
 
