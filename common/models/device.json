@@ -42,6 +42,10 @@
       "type": "string",
       "required": false
     },
+    "signallingServerUrl": {
+      "type": "string",
+      "required": false
+    },
     "model": {
       "type": "string",
       "required": false

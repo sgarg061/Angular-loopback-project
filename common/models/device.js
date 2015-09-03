@@ -421,6 +421,7 @@ module.exports = function(Device) {
                 // handle inherited attributes
                 var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
                 var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
+                var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
                 var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
                 var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
 

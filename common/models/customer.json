@@ -27,6 +27,10 @@
       "type": "string",
       "required": false
     },
+    "signallingServerUrl": {
+      "type": "string",
+      "required": false
+    },
     "email": {
       "type": "string"
     },
