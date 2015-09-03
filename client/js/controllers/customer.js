@@ -429,10 +429,10 @@ angular
     signallingServerUrl = 'http://localhost:8888';
     webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
       if (err) {
-        console.log('there is an error!');
+        // maybe display an error message?
         console.log(err);
       } else {
-        console.log('here is my response!');
+        // maybe display a success message?
         console.log(res);
       }
       $scope.sendingCheckin = null;
