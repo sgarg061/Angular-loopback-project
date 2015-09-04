@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr',
-    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr) {
+  .controller('HomeController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'SoftwareVersion',
+    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, SoftwareVersion) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -9,6 +9,8 @@ angular
 
     $scope.clouds = [];
     $scope.cloudId = null;
+
+    $scope.softwareVersions = [];
 
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
@@ -23,6 +25,7 @@ angular
     }
 
     function getCloud() {
+      console.log('changing to cloud: ' + $stateParams.cloudId);
       Cloud
         .find({
           filter: {
@@ -72,31 +75,34 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          $scope.clouds    = [].concat(clouds);          
-          
-          // select the first by default
-          if (!$stateParams.cloudId && clouds.length > 0) {
-            $scope.selectCloud(clouds[0]);
-          }
+          $scope.clouds    = [].concat(clouds);
         });
     }
 
-    $scope.goHome = function () {
-      $state.go('home');
+    function getSoftwareVersions() {
+      SoftwareVersion
+        .find({
+          filter: {
+            fields: {id: true, name: true, url: true},
+            order: 'name ASC'
+          }
+        })
+        .$promise
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+          console.log($scope.softwareVersions);
+        })
     }
 
-    if ($stateParams.cloudId) {
-      getCloud();
-      getCloudResellerCount();
-    }
     getClouds();
+    getSoftwareVersions();
 
     $scope.pageChanged = function() {
       $log.log('Page changed to: ' + $scope.currentPage);
     };
 
     $scope.selectReseller = function(reseller) {
-      $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id});
+      $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
     }
 
     $scope.selectCloud = function(cloud) {

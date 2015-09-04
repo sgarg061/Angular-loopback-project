@@ -7,7 +7,7 @@ angular.module('app').controller('LoginController', function($scope, $state, Aut
     blockUI.stop();
     var result = JSON.parse(JSON.stringify(res));
     $localStorage.token = result.response.authToken;
-    $state.go('cloud');
+    $state.go('home');
   }
 
   function errorAuth(res) {

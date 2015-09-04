@@ -6,11 +6,10 @@ angular
     $scope.clouds = [ ];
     $scope.reseller = {};
     
-    $scope.cloudId = null;
     $scope.resellerId = null;
 
     $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
-    $scope.markers = [];    
+    $scope.markers = [];
 
     function watchForChanges() {
       // watch reseller for updates and save them when they're found
@@ -48,6 +47,7 @@ angular
           $scope.reseller = resellers[0];
 
           $scope.cloudId = resellers[0].cloud.id;
+          $scope.cloud = resellers[0].cloud;
           $scope.resellerId = resellers[0].id;
 
           watchForChanges();
@@ -134,6 +134,7 @@ angular
     }
 
     $scope.selectCloud = function(cloud) {
+      $scope.cloud = cloud;
       $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
     }
 
@@ -222,7 +223,12 @@ angular
       $scope.$apply();
     }
 
+    function goHome() {
+      $state.go('home');
+    }
+
     $scope.deleteReseller = deleteReseller;
     $scope.onMarkerClicked = onMarkerClicked;
+    $scope.goHome = goHome;
 
   }]);

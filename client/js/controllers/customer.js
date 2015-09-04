@@ -72,7 +72,9 @@ angular
 
           $scope.customerId = customers[0].id;
           $scope.resellerId = customers[0].reseller.id;
+          $scope.reseller = customers[0].reseller;
           $scope.cloudId = customers[0].reseller.cloud.id;
+          $scope.cloud = customers[0].reseller.cloud;
 
           $scope.devices = customers[0].devices;
 
@@ -243,6 +245,7 @@ angular
     }
 
     $scope.selectCloud = function(cloud) {
+      $scope.cloud = cloud;
       $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
     }
 
@@ -409,9 +412,14 @@ angular
     });
   }
 
+  function goHome() {
+      $state.go('home');
+    }
+
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.showCheckin = showCheckin;
+  $scope.goHome = goHome;
 
 }]);

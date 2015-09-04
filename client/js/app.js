@@ -65,11 +65,19 @@ angular
         //     requiresLogin: true
         //   }
         // })
-        .state('cloud', {
+          .state('home', {
           url: '/',
           params: {
             cloudId: null,
           },
+          templateUrl: 'views/home.html',
+          controller: 'HomeController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('cloud', {
+          url: '/cloud/:cloudId',
           templateUrl: 'views/cloud.html',
           controller: 'CloudController',
           data: {
@@ -111,7 +119,7 @@ angular
           controller: 'LogoutController'
         });    
 
-      $urlRouterProvider.otherwise('cloud');
+      $urlRouterProvider.otherwise('home');
   }])
   .run(function($rootScope, $location) {
 

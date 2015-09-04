@@ -1,17 +1,20 @@
 <md-toolbar layout="row" layout-padding class="breadcrumb">
   
   <div layout="row" layout-align="start center">
-    <md-select ng-model="cloudId" ng-change="selectCloud(cloudId)" aria-label="Cloud">
-      <md-option ng-repeat="aCloud in clouds" value="{{aCloud.id}}">{{aCloud.name}}</md-option>
-    </md-select>
-    <span ng-show="resellerId">&gt;</span>
-    <md-select ng-show="resellerId" ng-model="resellerId" ng-change="selectReseller(resellerId)" aria-label="Reseller">
-      <md-option ng-repeat="aReseller in resellers" value="{{aReseller.id}}">{{aReseller.name}}</md-option>
-    </md-select>
-    <span ng-show="customerId">&gt;</span>
-    <md-select ng-show="customerId" ng-model="customerId" ng-change="selectCustomer(customerId)" aria-label="Customer">
-      <md-option ng-repeat="aCustomer in customers" value="{{aCustomer.id}}">{{aCustomer.name}}</md-option>
-    </md-select>
+    <span class="md-title" ng-click="goHome()">Call Home &nbsp;</span>
+
+    <div ng-if="cloud">
+      <span class="md-title" ng-click="selectCloud(cloud)" aria-label="Cloud">&nbsp; > &nbsp; {{cloud.name}}</span>
+    </div>
+
+    <div ng-if="reseller">
+      <span class="md-title" ng-click="selectReseller(reseller)" aria-label="Reseller">&nbsp; > &nbsp; {{reseller.name}}</span>
+    </div>
+
+    <div ng-if="customer">
+      <span class="md-title" ng-click="selectCustomer(customer)" aria-label="Customer">&nbsp; > &nbsp; {{customer.name}}</span>
+    </div>
+    
     <span ng-show="deviceId">&gt;</span>
     <md-select ng-show="deviceId" ng-model="deviceId" ng-change="selectDevice(deviceId)" aria-label="Device">
       <md-option ng-repeat="aDevice in devices" value="{{aDevice.id}}">{{aDevice.name}}</md-option>
