@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', '$mdDialog', 'toastr',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, $mdDialog, toastr) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, $mdDialog, toastr, userService) {
 
     $scope.clouds = [ ];
     $scope.reseller = {};
@@ -177,6 +177,26 @@ angular
       }, function() {
       });
     }
+
+  $scope.canModifyEventUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyCheckinInterval = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySoftwareVersion = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
 
   function deleteReseller(reseller) {
     console.log('delete reseller: ' + JSON.stringify(reseller));

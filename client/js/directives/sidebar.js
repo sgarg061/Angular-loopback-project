@@ -9,7 +9,11 @@ angular
         type: "=type",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
-        deleteFunction: "=deleteFunction"
+        deleteFunction: "=deleteFunction",
+        canModifyEventUrlFunction: "=canModifyEventUrlFunction",
+        canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
+        canModifyCheckinIntervalFunction: "=canModifyCheckinIntervalFunction",
+        canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
       },
       link: function (scope, element, attrs) {
       
@@ -21,6 +25,18 @@ angular
         }
         scope.deleteModel = function(model) {
           scope.deleteFunction(model);
+        }
+        scope.canModifyEventUrl = function(model) {
+          return scope.canModifyEventUrlFunction(model);
+        }
+        scope.canModifyImageServerUrl = function(model) {
+          return scope.canModifyImageServerUrlFunction(model);
+        }
+        scope.canModifyCheckinInterval = function(model) {
+          return scope.canModifyCheckinIntervalFunction(model);
+        }
+        scope.canModifySoftwareVersion = function(model) {
+          return scope.canModifySoftwareVersionFunction(model);
         }
         var originatorEv;
         scope.openMenu = function($mdOpenMenu, ev) {

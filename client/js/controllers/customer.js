@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr', 
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr', 'userService', 
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -411,6 +411,28 @@ angular
       }
     });
   }
+
+  // TODO: refactor these permissions
+  // so much code replication :/
+  $scope.canModifyEventUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyCheckinInterval = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySoftwareVersion = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
 
   function goHome() {
       $state.go('home');

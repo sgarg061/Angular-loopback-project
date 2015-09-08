@@ -12,20 +12,21 @@
   ],
   "dependencies": {
     "angular-block-ui": "~0.2.0",
+    "angular-bootstrap": "~0.13.3",
     "angular-breadcrumb": "~0.4.1",
     "angular-cookies": "~1.4.3",
+    "angular-google-maps": "~2.1.5",
+    "angular-jwt": "~0.0.9",
     "angular-material": "~0.10.1",
     "angular-resource": "~1.4.3",
     "angular-toastr": "~1.4.1",
     "angular-ui-router": "~0.2.15",
-    "bootstrap": "~3.3.5",
-    "ngstorage": "~0.3.9",
-    "angular-bootstrap": "~0.13.3",
     "async": "~1.4.2",
-    "zeroclipboard": "~2.2.0",
+    "bootstrap": "~3.3.5",
     "ng-clip": "~0.2.6",
     "ng-prettyjson": "~0.1.9",
-    "angular-google-maps": "~2.1.5"
+    "ngstorage": "~0.3.9",
+    "zeroclipboard": "~2.2.0"
   },
   "resolutions": {
     "angular": "1.4.4"

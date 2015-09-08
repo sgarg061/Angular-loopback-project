@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('HomeController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'SoftwareVersion',
-    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, SoftwareVersion) {
+  .controller('HomeController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'SoftwareVersion', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, SoftwareVersion, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -94,8 +94,30 @@ angular
         })
     }
 
-    getClouds();
-    getSoftwareVersions();
+    function redirectBasedOnUserType() {
+      var userType = userService.getUserType();
+      switch (userType) {
+        case 'solink':
+          return;
+          break;
+        case 'cloud':
+          $state.go('cloud', {cloudId: userService.getCloudId()}, {reload: true});
+          break;
+        case 'reseller':
+          $state.go('reseller', {resellerId: userService.getResellerId()}, {reload: true});
+          break;
+        default:
+          $state.go('logout', {}, {reload: true});
+          break;
+      }
+    }
+
+    if (userService.getUserType() !== 'solink') {
+      redirectBasedOnUserType();
+    } else {
+      getClouds();
+      getSoftwareVersions();
+    }
 
     $scope.pageChanged = function() {
       $log.log('Page changed to: ' + $scope.currentPage);
@@ -179,6 +201,11 @@ angular
         $scope.status = 'You cancelled the dialog.';
       });
     }
+
+  $scope.canModifyEventServer = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  }
 
     
   }]);

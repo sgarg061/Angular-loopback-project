@@ -10,7 +10,8 @@ angular
     'ui.bootstrap',
     'ngClipboard',
     'ngPrettyJson',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'customUserService'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',
     function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider, uiGmapGoogleMapApiProvider) {

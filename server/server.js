@@ -73,6 +73,7 @@ app.start = function() {
     'use strict';
     authService.initialize(new Auth0Accessor());
     initializeRedis();
+    console.log('initializing!');
     cacheService.initialize(RedisAccessor);
     // start the web server
     return app.listen(function() {

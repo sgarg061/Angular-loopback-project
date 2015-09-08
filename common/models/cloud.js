@@ -49,8 +49,6 @@ module.exports = function(Cloud) {
             } else if (customerId) {
                 // get the cloud of this customer id, must be that id.
                 loopback.getModel('Customer').findById(customerId, {include: 'reseller'}, function (err, res) {
-                    console.log('here is a customer and reseller!');
-                    console.log(res);
                     if (ctx.query.where) {
                         ctx.query.where.id = res.reseller.cloudId;
                     } else {

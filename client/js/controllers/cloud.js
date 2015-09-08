@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr',
-    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -41,8 +41,6 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
-
-          watchForChanges();
           
           if ($scope.cloud) {
 
@@ -51,6 +49,8 @@ angular
               {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
             ];
           }
+
+          //watchForChanges();
         });
     }
 
@@ -87,9 +87,9 @@ angular
 
     if ($stateParams.cloudId) {
       getCloud();
-      getCloudResellerCount();
+      //getCloudResellerCount();
     }
-    getClouds();
+    //getClouds();
 
     $scope.pageChanged = function() {
       $log.log('Page changed to: ' + $scope.currentPage);
@@ -173,6 +173,26 @@ angular
         $scope.status = 'You cancelled the dialog.';
       });
     }
+
+  $scope.canModifyEventUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyCheckinInterval = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySoftwareVersion = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
 
     
   }]);

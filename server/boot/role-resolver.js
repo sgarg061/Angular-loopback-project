@@ -12,7 +12,6 @@ module.exports = function (app) {
         if (!jwt) {
             return unauthorized(cb);
         }
-
         tokenValidator.validateToken(jwt.token, function (err, msg) {
             return cb(null, !err); // if no err, we are happy.
         });
@@ -24,7 +23,6 @@ module.exports = function (app) {
         if (!jwt) {
             return unauthorized(cb);
         }
-
         tokenValidator.validateToken(jwt.token, function (err, msg) {
             return cb(null, (!err && jwt.userType === 'solink'));
         });
@@ -144,6 +142,14 @@ function isOwnerOfCloud(context, token, cb) {
             } else {
                 context.model.cloudId = token.cloudId;
                 cb(null, context.remotingContext.instance.cloudId === token.cloudId);
+            }
+            break;
+        case 'GET':
+            if (token.userType !== 'cloud') {
+                unauthorized(cb);
+            } else {
+                // must be a cloud user to call GET
+                cb(null, token.cloudId);
             }
             break;
         default:
