@@ -159,7 +159,7 @@ angular
     });
   }
 
-  $scope.canModifyEventServer = function() {
+  $scope.canModifyEventUrl = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
   };

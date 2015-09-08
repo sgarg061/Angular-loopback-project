@@ -1,0 +1,64 @@
+<md-dialog aria-label="New Cloud">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>New Cloud</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="max-width:800px;max-height:810px; ">
+    <div>
+      <md-input-container>
+        <label>Name</label>
+        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newCloud.name">
+      </md-input-container>
+      <md-input-container>
+        <label>Email</label>
+        <input type="text" class="form-control" name="email" autocomplete="off" required ng-model="newCloud.email">
+      </md-input-container>
+      <md-input-container>
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newCloud.password">
+      </md-input-container>
+      <md-input-container>
+        <label>Event Server URL</label>
+        <input type="text" class="form-control" name="eventServerUrl" autocomplete="off" required ng-model="newCloud.eventServerUrl">
+      </md-input-container>
+      <md-input-container>
+        <label>Image Server URL</label>
+        <input type="text" class="form-control" name="imageServerUrl" autocomplete="off" required ng-model="newCloud.imageServerUrl">
+      </md-input-container>
+      <md-input-container>
+        <label>Signalling Server URL</label>
+        <input type="text" class="form-control" name="signallingServerUrl" autocomplete="off" required ng-model="newCloud.signallingServerUrl">
+      </md-input-container>
+      <md-input-container>
+        <label>Update Server URL</label>
+        <input type="text" class="form-control" name="updateServerUrl" autocomplete="off" required ng-model="newCloud.updateUrl">
+      </md-input-container>
+      <md-input-container>
+        <label>Check-In Interval</label>
+        <input type="text" class="form-control" name="checkinInterval" autocomplete="off" required ng-model="newCloud.checkinInterval">
+      </md-input-container>
+      <md-input-container>
+        <label>Software Version</label>
+        <md-select ng-model="newCloud.softwareVersionId">
+          <md-option ng-repeat="softwareVersion in softwareVersions" value="{{softwareVersion.id}}">{{softwareVersion.name}}</md-option>
+        </md-select>
+      </md-input-container>
+      
+    </div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="cancel()">
+     Cancel
+    </md-button>
+    <md-button ng-click="create()" style="margin-right:20px;">
+      Create
+    </md-button>
+  </div>
+  
+</md-dialog>

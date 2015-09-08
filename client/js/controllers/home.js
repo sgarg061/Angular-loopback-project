@@ -167,20 +167,17 @@ angular
         });
     };
 
-    $scope.openResellerForm = function(event, cloud) {
+    $scope.openCloudForm = function(event) {
+      var softwareVersions = $scope.softwareVersions;
       $mdDialog.show({
         controller: function DialogController($scope, $mdDialog) {
-                      $scope.newReseller = {
-                        cloudId: cloud.id,
-                        email: '',
-                        password: ''
-                      };
+                      $scope.softwareVersions = softwareVersions; // transfer to new scope
+                      $scope.Cloud = {};
                       $scope.create = function() {
-                        $scope.newReseller['cloudId'] = cloud.id;
-                        Reseller.create($scope.newReseller)
+                        Cloud.create($scope.newCloud)
                         .$promise
-                        .then(function(reseller) {
-                          getCloud();
+                        .then(function(cloud) {
+                          $state.go('cloud', {cloudId: cloud.id}, {reload: true});
                         }, function (res) {
                           toastr.error(res.data.error.message, 'Error');
                         });
@@ -190,7 +187,7 @@ angular
                         $mdDialog.cancel();
                       };
         },
-        templateUrl: 'views/resellerForm.tmpl.html',
+        templateUrl: 'views/cloudForm.tmpl.html',
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:true
@@ -205,7 +202,7 @@ angular
   $scope.canModifyEventServer = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
-  }
+  };
 
     
   }]);
