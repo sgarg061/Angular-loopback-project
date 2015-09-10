@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', '$mdDialog', 'toastr', 'userService', 
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -237,7 +237,7 @@ angular
     }
 
     getCustomer();
-    //getAllClouds();
+    getSoftwareVersions();
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
@@ -416,6 +416,20 @@ angular
       }
     });
   }
+
+  function getSoftwareVersions() {
+      SoftwareVersion
+        .find({
+          filter: {
+            fields: {id: true, name: true, url: true},
+            order: 'name ASC'
+          }
+        })
+        .$promise
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+        })
+    }
 
   // TODO: refactor these permissions
   // so much code replication :/

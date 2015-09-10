@@ -10,7 +10,7 @@ describe('Cloud tests', function() {
   describe('Only solink can query clouds', function() {
     it('should return an error for each other type of user', function(done) {
       
-      var invalidLoginTypes = ['cloud', 'reseller', 'user', 'admin'];
+      var invalidLoginTypes = ['reseller', 'user', 'admin'];
       async.each(invalidLoginTypes, function loginWithInvalidType(loginType, cb) {
         common.login(loginType, function (token) {
           common.json('get', '/api/clouds', token)
@@ -36,7 +36,7 @@ describe('Cloud tests', function() {
       common.login('solink', function (token) {
         common.json('get', '/api/clouds', token)
         .send({})
-        .expect(200) // should be 201.
+        .expect(200)
         .end(function (err, res) {
           if (err) {
             throw err;
@@ -44,6 +44,20 @@ describe('Cloud tests', function() {
 
           done();
         });
+      });
+    });
+
+    it('should return OK but not return anybody elses clouds when queried as a cloud user', function(done) {
+      common.login('cloud', function (token) {
+        common.json('get', '/api/clouds', token)
+          .send({})
+          .expect(200)
+          .end(function (err, res) {
+            if (err) throw err;
+
+            assert(res.body.length === 0, 'should not return any cloud data');
+            done();
+          });
       });
     });
   });

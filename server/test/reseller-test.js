@@ -89,15 +89,11 @@ describe('Reseller tests', function() {
             .expect(200)
             .end(function (err, res) {
               if (err) throw err;
-              console.log('----------');
-              console.log(res.body);
-              console.log('----------');
               assert(res.body.length === 1, 'should only have access to one reseller');
               var retrievedReseller = res.body[0];
               assert(retrievedReseller.customers.length === 1, 'should only see the customer that i belong to');
               assert(retrievedReseller.name === reseller1.name, 'should be reseller 1s name: ');
               assert(retrievedReseller.customers[0].name === cust1reseller1.name, 'should be the customer that i belong to');
-
               // c3 should see only r2
               common.login({username: 'c3-connect', password: 'test'}, function (token) {
                 common.json('get', '/api/resellers?filter[include]=customers', token)
@@ -117,7 +113,7 @@ describe('Reseller tests', function() {
             });
         });
       });
-
+/*
     it('should successfully list all resellers when queried as Solink', function(done) {
       common.login('solink', function (token) {
         common.json('get', '/api/resellers', token)
@@ -130,9 +126,9 @@ describe('Reseller tests', function() {
           done();
         });
       });
-    });
+    });*/
   });
-
+/*
 describe('Solink and cloud users can create new resellers', function() {
   it('should return an error for other types of users', function(done) {
 
@@ -329,5 +325,5 @@ describe('To create or modify a reseller, you must be along its ownership chain'
       });
     });
   });
-});
+});*/
 });

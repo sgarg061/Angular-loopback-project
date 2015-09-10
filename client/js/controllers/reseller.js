@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, $mdDialog, toastr, userService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.reseller = {};
     
@@ -86,7 +86,22 @@ angular
         });
     }
 
+    function getSoftwareVersions() {
+      SoftwareVersion
+        .find({
+          filter: {
+            fields: {id: true, name: true, url: true},
+            order: 'name ASC'
+          }
+        })
+        .$promise
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+        })
+    }
+
     getReseller();
+    getSoftwareVersions();
 
 
     $scope.selectReseller = function(reseller) {
