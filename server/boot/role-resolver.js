@@ -137,7 +137,7 @@ function isOwnerOfLicense(context, token, cb) {
 
     switch (context.remotingContext.req.method) {
         case 'POST':
-            var licenseCustomerId = context.remotingContext.instance.customerId;
+            var licenseCustomerId = context.remotingContext.req.body.customerId;
             if (token.userType === 'cloud') {
                 // ensure that we are creating on a customer that we own...
                 console.log(context.remotingContext.instance);
