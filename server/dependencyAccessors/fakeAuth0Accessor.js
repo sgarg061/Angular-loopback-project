@@ -101,7 +101,7 @@ function createValidToken (user) {
     };
 
     var config = new Config();
-    var token = jwt.sign(payload, new Buffer(config.jwtSecret, 'base64'));
+    var token = jwt.sign(payload, config.auth0PrivateKey, {algorithm: 'RS256'});
     return token;
 }
 

@@ -133,7 +133,7 @@ function isOwnerOfCustomer(context, token, cb) {
 }
 
 function isOwnerOfLicense(context, token, cb) {
-    var Customer = app.models.Customer;
+    var Customer = loopback.getModel('Customer');
 
     switch (context.remotingContext.req.method) {
         case 'POST':
@@ -172,8 +172,8 @@ function isOwnerOfLicense(context, token, cb) {
                 });
             } else {
                 unauthorized(cb);
-                break;
             }
+            break;
         default:
             invalidMethod(cb);
             break;
