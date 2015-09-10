@@ -244,8 +244,13 @@ angular
     }
 
     $scope.selectCloud = function(cloud) {
-      $scope.cloud = cloud;
-      $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
+      if (['solink', 'cloud'].indexOf(userService.getUserType()) > -1) {
+        $scope.cloud = cloud;
+        $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
+      } else {
+        // if not a cloud or solink user, stick around at the reseller page.
+        $scope.selectReseller($scope.reseller);
+      }
     }
 
     $scope.selectCustomer = function(customer) {
