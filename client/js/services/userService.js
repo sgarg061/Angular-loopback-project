@@ -15,21 +15,24 @@
 
         return {
             getUserType: function () {
-                if (!userType) {
-                    loadUserFromToken($localStorage.token);
+                var token = $localStorage.token;
+                if (!userType && token) {
+                    loadUserFromToken(token);
                 }
 
                 return userType;
             },
             getResellerId: function () {
-                if (!userType) {
-                    loadUserFromToken($localStorage.token);
+                var token = $localStorage.token;
+                if (!userType && token) {
+                    loadUserFromToken(token);
                 }
                 return resellerId;
             },
             getCloudId: function () {
-                if (!userType) {
-                    loadUserFromToken($localStorage.token);
+                var token = $localStorage.token;
+                if (!userType && token) {
+                    loadUserFromToken(token);
                 }
                 return cloudId;
             },

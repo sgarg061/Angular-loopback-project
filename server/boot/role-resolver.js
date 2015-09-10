@@ -53,6 +53,8 @@ module.exports = function (app) {
                         return isOwnerOfDevice(context, jwt, cb);
                     case 'Customer':
                         return isOwnerOfCustomer(context, jwt, cb);
+                    case 'License':
+                    return isOwnerOfLicense(context, jwt, cb);
                     default:
                         invalidMethod(cb);
                     }
@@ -130,6 +132,54 @@ function isOwnerOfCustomer(context, token, cb) {
     }
 }
 
+function isOwnerOfLicense(context, token, cb) {
+    var Customer = app.models.Customer;
+
+    switch (context.remotingContext.req.method) {
+        case 'POST':
+            var licenseCustomerId = context.remotingContext.instance.customerId;
+            if (token.userType === 'cloud') {
+                // ensure that we are creating on a customer that we own...
+                console.log(context.remotingContext.instance);
+                Customer.findById(licenseCustomerId, {
+                    include: {
+                        relation: 'reseller',
+                        scope: {
+                            include: {
+                                relation: 'cloud',
+                                scope: {
+                                    where: {id: token.cloudId}
+                                }
+                            }
+                        }
+                    }
+                }, function (err, res) {
+                    console.log('woot');
+                    console.log(res);
+                    if (err) {
+                        unauthorized(cb);
+                    } else {
+                        cb(null, true);
+                    }
+                });
+            } else if (token.userType === 'reseller') {
+                Customer.findById(licenseCustomerId, function (err, res) {
+                    if (err) {
+                        unauthorized(cb);
+                    } else {
+                        cb(null, res.resellerId === token.resellerId);
+                    }
+                });
+            } else {
+                unauthorized(cb);
+                break;
+            }
+        default:
+            invalidMethod(cb);
+            break;
+    }
+}
+
 function isOwnerOfCloud(context, token, cb) {
     switch (context.remotingContext.req.method) {
         case 'POST':
@@ -176,6 +226,16 @@ function isOwnerOfReseller(context, token, cb) {
                 unauthorized(cb);
             } else {
                 cb(null, context.remotingContext.instance.cloudId === token.cloudId);
+            }
+            break;
+
+        case 'GET':
+            if (token.userType === 'cloud') {
+                cb(null, token.cloudId);
+            } else if (token.userType === 'reseller') {
+                cb(null, token.resellerId);
+            } else {
+                unauthorized(cb);
             }
             break;
         default:

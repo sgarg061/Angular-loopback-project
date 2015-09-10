@@ -19,10 +19,12 @@ angular
       // watch customer for updates and save them when they're found
       $scope.$watch("customer", function(newValue, oldValue) {
         if (newValue) {
-          Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
-            .$promise.then(function(customer) {}, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-          });
+          if (!angular.equals(newValue, oldValue)) {
+            Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
+              .$promise.then(function(customer) {}, function (res) {
+                toastr.error(res.data.error.message, 'Error');
+            });
+          }
         }
       }, true);
     }
@@ -77,9 +79,6 @@ angular
           $scope.cloud = customers[0].reseller.cloud;
 
           $scope.devices = customers[0].devices;
-
-          getCloudResellers(customers[0].reseller.cloud.id);
-          getResellerCustomers(customers[0].reseller.id)
 
           watchForChanges();
 
@@ -238,7 +237,7 @@ angular
     }
 
     getCustomer();
-    getAllClouds();
+    //getAllClouds();
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
@@ -328,6 +327,7 @@ angular
               License.create({customerId: customerId})
                 .$promise
                 .then(function(license) {
+                  console.log('ahhh!');
                   $scope.customer.licenses.push(license);
                   console.log('adding license key: ' + license.key);
 
@@ -424,6 +424,11 @@ angular
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
   };
 
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
   $scope.canModifyCheckinInterval = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
@@ -432,6 +437,11 @@ angular
   $scope.canModifySoftwareVersion = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySignallingServer = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
   };
 
   function goHome() {

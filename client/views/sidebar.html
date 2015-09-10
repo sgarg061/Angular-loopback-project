@@ -45,17 +45,22 @@
 
       <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
         <label>Check-in Interval</label>
-        <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval">
+        <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval" ng-disabled="!canModifyCheckinInterval(model)">
       </md-input-container>
-
+      <div>
       <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
         <label>Software Version</label>
-        <input type="text" class="form-control focus" name="updateUrl" autocomplete="off" required ng-model="model.updateUrl">
+        <md-select ng-model="model.softwareVersionId" ng-disabled="!canModifySoftwareVersion(model)">
+          <md-option ng-repeat="softwareVersion in softwareVersions" value="{{softwareVersion.id}}" ng-selected="softwareVersion.id === model.softwareVersionId"> {{softwareVersion.name}}</md-option>
+           <md-button class="md-raised" ng-show="type=='cloud'" ng-click="openSoftwareVersionForm($event)">Add New</md-button>
+        </md-select>
       </md-input-container>
+      </div>
+
 
       <md-input-container ng-show="type=='cloud'">
         <label>Signalling Server</label>
-        <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="model.signallingServerUrl">
+        <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="model.signallingServerUrl" ng-disabled="!canModifySignallingServer(model)">
       </md-input-container>
 
       <div ng-show="type=='cloud'||type=='reseller'">

@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -9,11 +9,13 @@ angular
 
     $scope.clouds = [];
     $scope.cloudId = null;
+    $scope.cloud = null;
 
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
       $scope.$watch("cloud", function(newValue, oldValue) {
-        if (newValue) {
+
+        if (!angular.equals(newValue, oldValue)) {
           Cloud.prototype$updateAttributes({ id: $scope.cloud.id }, $scope.cloud)
             .$promise.then(function(cloud) {}, function (res) {
               toastr.error(res.data.error.message, 'Error');
@@ -50,16 +52,8 @@ angular
             ];
           }
 
-          //watchForChanges();
+          watchForChanges();
         });
-    }
-
-    function getCloudResellerCount() {
-      Reseller.count({filter: {where: {id: $stateParams.cloudId}}})
-      .$promise
-      .then(function(res) {
-        $scope.totalResellers = res.count;
-      });
     }
 
     function getClouds() {
@@ -81,15 +75,28 @@ angular
         });
     }
 
+    function getSoftwareVersions() {
+      SoftwareVersion
+        .find({
+          filter: {
+            fields: {id: true, name: true, url: true},
+            order: 'name ASC'
+          }
+        })
+        .$promise
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+        })
+    }
+
     $scope.goHome = function () {
       $state.go('home');
     }
 
     if ($stateParams.cloudId) {
       getCloud();
-      //getCloudResellerCount();
+      getSoftwareVersions();
     }
-    //getClouds();
 
     $scope.pageChanged = function() {
       $log.log('Page changed to: ' + $scope.currentPage);
@@ -174,6 +181,37 @@ angular
       });
     }
 
+  $scope.openSoftwareVersionForm = function(event) {
+    console.log('wha!');
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+                    $scope.newSoftwareVersion = {};
+                    $scope.create = function() {
+                      SoftwareVersion.create($scope.newSoftwareVersion)
+                      .$promise
+                      .then(function(softwareVersion) {
+                        getSoftwareVersions();
+                      }, function (res) {
+                        toastr.error(res.data.error.message, 'Error');
+                      });
+                      $mdDialog.cancel();
+                    };
+                    $scope.cancel = function() {
+                      $mdDialog.cancel();
+                    };
+      },
+      templateUrl: 'views/softwareVersionForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+    })
+    .then(function(result) {
+      $scope.status = 'You said the information was "' + answer + '".';
+    }, function() {
+      $scope.status = 'You cancelled the dialog.';
+    });
+  }
+
   $scope.canModifyEventUrl = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
@@ -193,6 +231,12 @@ angular
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
   };
+
+  $scope.canModifySignallingServer = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
+
 
     
   }]);

@@ -7,9 +7,12 @@
     <div class="col-md-3" layout-margin>
       <sidebar model="reseller" type="'reseller'"
         delete-function="deleteReseller"
-        can-modify-event-url-function="canModifyEventUrl"
+        can-modify-event-url-function="canModifyEventUrl" 
         can-modify-image-server-url-function="canModifyImageServerUrl"
-        />
+        create-software-version-function="openSoftwareVersionForm"
+        can-modify-software-version-function="canModifySoftwareVersion"
+        can-modify-checkin-interval-function="canModifyCheckinInterval"
+        can-modify-signalling-server-function="canModifySignallingServer"/>
     </div>
 
     <div class="col-md-8" layout-margin layout-fill layout-padding>

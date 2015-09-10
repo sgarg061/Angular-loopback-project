@@ -3,7 +3,6 @@ angular
   .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', '$mdDialog', 'toastr', 'userService',
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, $mdDialog, toastr, userService) {
 
-    $scope.clouds = [ ];
     $scope.reseller = {};
     
     $scope.resellerId = null;
@@ -15,10 +14,12 @@ angular
       // watch reseller for updates and save them when they're found
       $scope.$watch("reseller", function(newValue, oldValue) {
         if (newValue) {
-          Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
-            .$promise.then(function(reseller) {}, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-          });
+          if (!angular.equals(newValue, oldValue)) {
+            Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
+              .$promise.then(function(reseller) {}, function (res) {
+                toastr.error(res.data.error.message, 'Error');
+            });
+          }
         }
       }, true);
     }
@@ -51,8 +52,6 @@ angular
           $scope.resellerId = resellers[0].id;
 
           watchForChanges();
-
-          getCloudResellers(resellers[0].cloud.id);
 
 
           if ($scope.reseller.customers) {
@@ -87,55 +86,22 @@ angular
         });
     }
 
-    function getAllClouds() {
-      Cloud
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            include: {
-              relation: 'resellers',
-              scope: {
-                fields: {id: true, name: true},
-                order: 'name ASC'
-              }
-            }
-          }
-        })
-        .$promise
-        .then(function(clouds) {
-          $scope.clouds = clouds;
-          // console.log('$scope.clouds: ' + JSON.stringify($scope.clouds));
-        });
-    }
-
-    function getCloudResellers(cloudId) {
-      // console.log('*** finding resellers for cloud: ' + cloudId); 
-      Reseller
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {cloudId: cloudId},
-            order: 'name ASC'
-          }
-        })
-        .$promise
-        .then(function(resellers) {
-          $scope.resellers = resellers;
-          // console.log('*** $scope.resellers: ' + JSON.stringify($scope.resellers));
-        });
-    }
-
     getReseller();
-    getAllClouds();
 
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
     }
 
+
     $scope.selectCloud = function(cloud) {
-      $scope.cloud = cloud;
-      $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
+      if (['solink', 'cloud'].indexOf(userService.getUserType()) > -1) {
+        $scope.cloud = cloud;
+        $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
+      } else {
+        // if not a cloud or solink user, stick around at the reseller page.
+        $scope.selectReseller($scope.reseller);
+      }
     }
 
     $scope.selectCustomer = function(customer) {
@@ -196,6 +162,11 @@ angular
   $scope.canModifySoftwareVersion = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySignallingServer = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
   };
 
   function deleteReseller(reseller) {
