@@ -23,6 +23,10 @@
       "type": "string",
       "required": false
     },
+    "signallingServerUrl": {
+      "type": "string",
+      "required": false
+    },
     "checkinInterval": {
       "type": "number",
       "required": false

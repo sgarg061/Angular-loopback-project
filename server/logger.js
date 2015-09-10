@@ -8,11 +8,13 @@ module.exports = (function() {
             new (winston.transports.Console)({
                 level: config.log.console.level,
                 colorize: config.log.console.colorize,
-                label: config.log.console.label
+                label: config.log.console.label,
+                timestamp: true
             }),
             new (winston.transports.File)({
                 level: config.log.file.level,
-                filename: config.log.file.filename
+                filename: config.log.file.filename,
+                timestamp: true
             })]
         });
 

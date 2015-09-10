@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', '$localStorage' 
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService, $localStorage) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -13,7 +13,12 @@ angular
     $scope.resellerId = null;
     $scope.customerId = null;
 
+    $scope.cloud = null;
+    $scope.reseller = null;
+
     $scope.deviceData = {};
+
+    $scope.sendingCheckin = null;
 
     function watchForChanges() {
       // watch customer for updates and save them when they're found
@@ -77,6 +82,9 @@ angular
           $scope.reseller = customers[0].reseller;
           $scope.cloudId = customers[0].reseller.cloud.id;
           $scope.cloud = customers[0].reseller.cloud;
+
+          $scope.cloud = customers[0].reseller.cloud;
+          $scope.reseller = customers[0].reseller;
 
           $scope.devices = customers[0].devices;
 
@@ -417,19 +425,42 @@ angular
     });
   }
 
+  function checkin(device) {
+    console.log('Checkin on device ' + device.id);
+    $scope.sendingCheckin = device.id;
+
+    // get the right signalling server
+    var signallingServerUrl = device.signallingServerUrl || 
+                              $scope.customer.signallingServerUrl || 
+                              $scope.reseller.signallingServerUrl ||
+                              $scope.cloud.signallingServerUrl;
+                              
+    webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
+      if (err) {
+        // maybe display an error message?
+        console.log(err);
+      } else {
+        // maybe display a success message?
+        console.log(res);
+      }
+      $scope.sendingCheckin = null;
+      $scope.$digest();
+    });
+  }
+
   function getSoftwareVersions() {
-      SoftwareVersion
-        .find({
-          filter: {
-            fields: {id: true, name: true, url: true},
-            order: 'name ASC'
-          }
-        })
-        .$promise
-        .then(function(versions) {
-          $scope.softwareVersions = [].concat(versions);
-        })
-    }
+    SoftwareVersion
+      .find({
+        filter: {
+          fields: {id: true, name: true, url: true},
+          order: 'name ASC'
+        }
+      })
+      .$promise
+      .then(function(versions) {
+        $scope.softwareVersions = [].concat(versions);
+      })
+  }
 
   // TODO: refactor these permissions
   // so much code replication :/
@@ -471,6 +502,7 @@ angular
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.showCheckin = showCheckin;
+  $scope.checkin = checkin;
   $scope.goHome = goHome;
 
 }]);
