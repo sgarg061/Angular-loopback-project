@@ -63,6 +63,10 @@
                     </md-content>
                   </div>
                 </div>
+                <div>
+                  <md-button class="md-raised" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
+                  <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin"></md-progress-circular>
+                </div>
               </md-tab>
               <md-tab label="EVENTS">
                 <div layout="column" style="margin:20px;">
