@@ -9,6 +9,13 @@
         add-license-function="addLicense" 
         show-license-function="showLicense"
         delete-function="deleteCustomer"
+        software-versions="softwareVersions"
+        can-modify-event-url-function="canModifyEventUrl" 
+        can-modify-image-server-url-function="canModifyImageServerUrl"
+        create-software-version-function="openSoftwareVersionForm"
+        can-modify-software-version-function="canModifySoftwareVersion"
+        can-modify-checkin-interval-function="canModifyCheckinInterval"
+        can-modify-signalling-server-function="canModifySignallingServer"
       />
     </div>
 
@@ -22,8 +29,7 @@
             
             <div layout="row" style="padding-left:20px; padding-right:20px;" layout-align="space-between center" layout-fill>
               <div layout="row">
-                <h2 class="md-title" ng-click="selectDevice(device)">{{device.name}} 
-                  <md-icon md-svg-icon='right_arrow' style="width:24px;margin:0px; vertical-align:center; padding-bottom:3px;"></md-icon>
+                <h2 class="md-title">{{device.name}} 
                 </h2>
                 
               </div>

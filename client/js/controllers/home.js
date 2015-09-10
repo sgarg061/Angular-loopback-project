@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('HomeController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'SoftwareVersion', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, SoftwareVersion, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -9,13 +9,13 @@ angular
 
     $scope.clouds = [];
     $scope.cloudId = null;
-    $scope.cloud = null;
+
+    $scope.softwareVersions = [];
 
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
       $scope.$watch("cloud", function(newValue, oldValue) {
-
-        if (!angular.equals(newValue, oldValue)) {
+        if (newValue) {
           Cloud.prototype$updateAttributes({ id: $scope.cloud.id }, $scope.cloud)
             .$promise.then(function(cloud) {}, function (res) {
               toastr.error(res.data.error.message, 'Error');
@@ -25,6 +25,7 @@ angular
     }
 
     function getCloud() {
+      console.log('changing to cloud: ' + $stateParams.cloudId);
       Cloud
         .find({
           filter: {
@@ -43,6 +44,8 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
+
+          watchForChanges();
           
           if ($scope.cloud) {
 
@@ -51,9 +54,15 @@ angular
               {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
             ];
           }
-
-          watchForChanges();
         });
+    }
+
+    function getCloudResellerCount() {
+      Reseller.count({filter: {where: {id: $stateParams.cloudId}}})
+      .$promise
+      .then(function(res) {
+        $scope.totalResellers = res.count;
+      });
     }
 
     function getClouds() {
@@ -66,12 +75,7 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          $scope.clouds    = [].concat(clouds);          
-          
-          // select the first by default
-          if (!$stateParams.cloudId && clouds.length > 0) {
-            $scope.selectCloud(clouds[0]);
-          }
+          $scope.clouds    = [].concat(clouds);
         });
     }
 
@@ -86,15 +90,32 @@ angular
         .$promise
         .then(function(versions) {
           $scope.softwareVersions = [].concat(versions);
+          console.log($scope.softwareVersions);
         })
     }
 
-    $scope.goHome = function () {
-      $state.go('home');
+    function redirectBasedOnUserType() {
+      var userType = userService.getUserType();
+      switch (userType) {
+        case 'solink':
+          return;
+          break;
+        case 'cloud':
+          $state.go('cloud', {cloudId: userService.getCloudId()}, {reload: true});
+          break;
+        case 'reseller':
+          $state.go('reseller', {resellerId: userService.getResellerId()}, {reload: true});
+          break;
+        default:
+          $state.go('logout', {}, {reload: true});
+          break;
+      }
     }
 
-    if ($stateParams.cloudId) {
-      getCloud();
+    if (userService.getUserType() !== 'solink') {
+      redirectBasedOnUserType();
+    } else {
+      getClouds();
       getSoftwareVersions();
     }
 
@@ -103,7 +124,7 @@ angular
     };
 
     $scope.selectReseller = function(reseller) {
-      $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id});
+      $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
     }
 
     $scope.selectCloud = function(cloud) {
@@ -146,20 +167,17 @@ angular
         });
     };
 
-    $scope.openResellerForm = function(event, cloud) {
+    $scope.openCloudForm = function(event) {
+      var softwareVersions = $scope.softwareVersions;
       $mdDialog.show({
         controller: function DialogController($scope, $mdDialog) {
-                      $scope.newReseller = {
-                        cloudId: cloud.id,
-                        email: '',
-                        password: ''
-                      };
+                      $scope.softwareVersions = softwareVersions; // transfer to new scope
+                      $scope.Cloud = {};
                       $scope.create = function() {
-                        $scope.newReseller['cloudId'] = cloud.id;
-                        Reseller.create($scope.newReseller)
+                        Cloud.create($scope.newCloud)
                         .$promise
-                        .then(function(reseller) {
-                          getCloud();
+                        .then(function(cloud) {
+                          $state.go('cloud', {cloudId: cloud.id}, {reload: true});
                         }, function (res) {
                           toastr.error(res.data.error.message, 'Error');
                         });
@@ -169,7 +187,7 @@ angular
                         $mdDialog.cancel();
                       };
         },
-        templateUrl: 'views/resellerForm.tmpl.html',
+        templateUrl: 'views/cloudForm.tmpl.html',
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:true
@@ -181,62 +199,10 @@ angular
       });
     }
 
-  $scope.openSoftwareVersionForm = function(event) {
-    console.log('wha!');
-    $mdDialog.show({
-      controller: function DialogController($scope, $mdDialog) {
-                    $scope.newSoftwareVersion = {};
-                    $scope.create = function() {
-                      SoftwareVersion.create($scope.newSoftwareVersion)
-                      .$promise
-                      .then(function(softwareVersion) {
-                        getSoftwareVersions();
-                      }, function (res) {
-                        toastr.error(res.data.error.message, 'Error');
-                      });
-                      $mdDialog.cancel();
-                    };
-                    $scope.cancel = function() {
-                      $mdDialog.cancel();
-                    };
-      },
-      templateUrl: 'views/softwareVersionForm.tmpl.html',
-      parent: angular.element(document.body),
-      targetEvent: event,
-      clickOutsideToClose:true
-    })
-    .then(function(result) {
-      $scope.status = 'You said the information was "' + answer + '".';
-    }, function() {
-      $scope.status = 'You cancelled the dialog.';
-    });
-  }
-
-  $scope.canModifyEventUrl = function() {
+  $scope.canModifyEventServer = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
   };
-
-  $scope.canModifyImageServerUrl = function() {
-    var userType = userService.getUserType();
-    return ['solink'].indexOf(userType) > -1;
-  };
-
-  $scope.canModifyCheckinInterval = function() {
-    var userType = userService.getUserType();
-    return ['solink'].indexOf(userType) > -1;
-  };
-
-  $scope.canModifySoftwareVersion = function() {
-    var userType = userService.getUserType();
-    return ['solink'].indexOf(userType) > -1;
-  };
-
-  $scope.canModifySignallingServer = function() {
-    var userType = userService.getUserType();
-    return ['solink'].indexOf(userType) > -1;
-  };
-
 
     
   }]);

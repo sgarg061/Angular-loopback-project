@@ -1,8 +1,8 @@
-<md-dialog aria-label="New Reseller">
+<md-dialog aria-label="New Software Version">
   
   <md-toolbar>
       <div class="md-toolbar-tools">
-      <h2>New Reseller</h2>
+      <h2>New Software Version</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cancel()">
         <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
@@ -13,15 +13,15 @@
     <div>
       <md-input-container>
         <label>Name</label>
-        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newReseller.name">
+        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newSoftwareVersion.name">
       </md-input-container>
       <md-input-container>
-        <label>Email</label>
-        <input type="text" class="form-control" name="email" autocomplete="off" required ng-model="newReseller.email">
+        <label>Code</label>
+        <input type="number" class="form-control" name="code" autocomplete="off" required ng-model="newSoftwareVersion.code">
       </md-input-container>
       <md-input-container>
-        <label>Password</label>
-        <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newReseller.password">
+        <label>URL</label>
+        <input type="text" class="form-control" name="url" autocomplete="off" required ng-model="newSoftwareVersion.url">
       </md-input-container>
     </div>
   </md-dialog-content>

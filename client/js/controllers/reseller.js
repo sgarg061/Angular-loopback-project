@@ -1,25 +1,25 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', '$mdDialog', 'toastr',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, $mdDialog, toastr) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, SoftwareVersion, $mdDialog, toastr, userService) {
 
-    $scope.clouds = [ ];
     $scope.reseller = {};
     
-    $scope.cloudId = null;
     $scope.resellerId = null;
 
     $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
-    $scope.markers = [];    
+    $scope.markers = [];
 
     function watchForChanges() {
       // watch reseller for updates and save them when they're found
       $scope.$watch("reseller", function(newValue, oldValue) {
         if (newValue) {
-          Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
-            .$promise.then(function(reseller) {}, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-          });
+          if (!angular.equals(newValue, oldValue)) {
+            Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
+              .$promise.then(function(reseller) {}, function (res) {
+                toastr.error(res.data.error.message, 'Error');
+            });
+          }
         }
       }, true);
     }
@@ -48,11 +48,10 @@ angular
           $scope.reseller = resellers[0];
 
           $scope.cloudId = resellers[0].cloud.id;
+          $scope.cloud = resellers[0].cloud;
           $scope.resellerId = resellers[0].id;
 
           watchForChanges();
-
-          getCloudResellers(resellers[0].cloud.id);
 
 
           if ($scope.reseller.customers) {
@@ -87,54 +86,37 @@ angular
         });
     }
 
-    function getAllClouds() {
-      Cloud
+    function getSoftwareVersions() {
+      SoftwareVersion
         .find({
           filter: {
-            fields: {id: true, name: true},
-            include: {
-              relation: 'resellers',
-              scope: {
-                fields: {id: true, name: true},
-                order: 'name ASC'
-              }
-            }
-          }
-        })
-        .$promise
-        .then(function(clouds) {
-          $scope.clouds = clouds;
-          // console.log('$scope.clouds: ' + JSON.stringify($scope.clouds));
-        });
-    }
-
-    function getCloudResellers(cloudId) {
-      // console.log('*** finding resellers for cloud: ' + cloudId); 
-      Reseller
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {cloudId: cloudId},
+            fields: {id: true, name: true, url: true},
             order: 'name ASC'
           }
         })
         .$promise
-        .then(function(resellers) {
-          $scope.resellers = resellers;
-          // console.log('*** $scope.resellers: ' + JSON.stringify($scope.resellers));
-        });
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+        })
     }
 
     getReseller();
-    getAllClouds();
+    getSoftwareVersions();
 
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
     }
 
+
     $scope.selectCloud = function(cloud) {
-      $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
+      if (['solink', 'cloud'].indexOf(userService.getUserType()) > -1) {
+        $scope.cloud = cloud;
+        $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
+      } else {
+        // if not a cloud or solink user, stick around at the reseller page.
+        $scope.selectReseller($scope.reseller);
+      }
     }
 
     $scope.selectCustomer = function(customer) {
@@ -176,6 +158,31 @@ angular
       }, function() {
       });
     }
+
+  $scope.canModifyEventUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyCheckinInterval = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySoftwareVersion = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySignallingServer = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
 
   function deleteReseller(reseller) {
     console.log('delete reseller: ' + JSON.stringify(reseller));
@@ -222,7 +229,12 @@ angular
       $scope.$apply();
     }
 
+    function goHome() {
+      $state.go('home');
+    }
+
     $scope.deleteReseller = deleteReseller;
     $scope.onMarkerClicked = onMarkerClicked;
+    $scope.goHome = goHome;
 
   }]);

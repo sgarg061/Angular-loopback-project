@@ -83,24 +83,32 @@
   },
   {
     "principalType": "ROLE",
+    "principalId": "isValidated",
+    "permission": "ALLOW",
+    "accessType": "READ",
+    "property": "*"
+  },
+  {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "READ",
+    "property": "*"
+  },
+  {
+    "principalType": "ROLE",
     "principalId": "isOwner",
     "permission": "ALLOW",
     "accessType": "WRITE" ,
     "property": "create"
-    },
-    {
+  },
+  {
     "principalType": "ROLE",
     "principalId": "isOwner",
     "permission": "ALLOW",
     "accessType": "WRITE" ,
     "property": "updateAttributes"
-    },
-  {
-    "principalType": "ROLE",
-    "principalId": "isValidated",
-    "permission": "ALLOW",
-    "accessType": "READ" 
-  }
+    }
   ],
   "methods": []
 }

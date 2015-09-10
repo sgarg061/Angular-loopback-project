@@ -34,6 +34,7 @@ module.exports = function(Cloud) {
         if (context && context.get('jwt')) {
             var cloudId = context.get('jwt').cloudId;
             var customerId = context.get('jwt').tenantId;
+            var resellerId = context.get('jwt').resellerId;
             
             if (context.get('jwt').userType === 'solink') {
                 next();
@@ -46,11 +47,21 @@ module.exports = function(Cloud) {
                     };
                 }
                 next();
+            } else if (resellerId) {
+                loopback.getModel('Reseller').findById(resellerId, function (err, res) {
+                    if (ctx.query.where) {
+                        ctx.query.where.id = res.cloudId;
+                    } else {
+                        ctx.query.where = {
+                            id: res.cloudId
+                        };
+                    }
+
+                    next();
+                });
             } else if (customerId) {
                 // get the cloud of this customer id, must be that id.
                 loopback.getModel('Customer').findById(customerId, {include: 'reseller'}, function (err, res) {
-                    console.log('here is a customer and reseller!');
-                    console.log(res);
                     if (ctx.query.where) {
                         ctx.query.where.id = res.reseller.cloudId;
                     } else {

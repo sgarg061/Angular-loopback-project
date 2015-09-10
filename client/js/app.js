@@ -10,7 +10,8 @@ angular
     'ui.bootstrap',
     'ngClipboard',
     'ngPrettyJson',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'customUserService'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',
     function($stateProvider, $httpProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider, uiGmapGoogleMapApiProvider) {
@@ -65,11 +66,19 @@ angular
         //     requiresLogin: true
         //   }
         // })
-        .state('cloud', {
+          .state('home', {
           url: '/',
           params: {
             cloudId: null,
           },
+          templateUrl: 'views/home.html',
+          controller: 'HomeController',
+          data: {
+            requiresLogin: true
+          }
+        })
+        .state('cloud', {
+          url: '/cloud/:cloudId',
           templateUrl: 'views/cloud.html',
           controller: 'CloudController',
           data: {
@@ -111,7 +120,7 @@ angular
           controller: 'LogoutController'
         });    
 
-      $urlRouterProvider.otherwise('cloud');
+      $urlRouterProvider.otherwise('home');
   }])
   .run(function($rootScope, $location) {
 

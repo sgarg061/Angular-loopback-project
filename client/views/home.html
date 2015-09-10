@@ -1,0 +1,46 @@
+<div ng-include src="'views/breadcrumb.html'"></div>
+
+<md-content>
+  
+  <div layout="row" style="background-color: #f0f0f0;">
+
+    <div class="col-md-3" layout-margin>
+    </div>
+
+    <div class="col-md-8" class="main-content" style="background-color: #f0f0f0; height:100vh;" layout-fill layout-padding>
+      <h2>Clouds</h2>
+      <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
+
+        <md-grid-tile ng-repeat="cloud in clouds" class="card" 
+          ng-click='selectCloud(cloud)' md-rowspan="0" md-colspan="1">
+
+          <div layout-fill layout-align="start center" layout-padding>
+            <span class="md-title" style="vertical-align: middle; line-height:50px;">{{cloud.name}}</span>
+          </div>
+        </md-grid-tile>
+
+      </md-grid-list>
+
+      <h2>Software Versions</h2>
+      <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
+        <md-grid-tile ng-repeat="version in softwareVersions" class="card"
+          ng-click="selectSoftwareVersion(version)" md-rowspan="0" md-colspan="1">
+
+          <div layout-fill layout-align="start center" layout-padding>
+            <span class="md-title" style="vertical-align: middle; line-height:50px;">{{version.name}}</span>
+          </div>
+        </md-grid-tile>
+      </md-grid-list>
+        
+    </div>
+
+    <!-- <pagination ng-model="currentPage" total-items="totalResellers" max-size="resellersPerPage" boundary-links="true" direction-links="false"></pagination> -->
+
+  </div>
+
+</md-content> 
+
+
+<md-button class="md-fab md-accent md-fab-bottom-right" style="background-color:white;" ng-click="openCloudForm($event)">
+  <md-icon md-font-library="material-icons">add</md-icon>
+</md-button>

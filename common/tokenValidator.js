@@ -8,7 +8,7 @@ module.exports = {
     validateToken: function (token, cb) {
         'use strict';
         var config = new Config();
-        jwt.verify(token, new Buffer(config.jwtSecret, 'base64'), function (err, decoded) {
+        jwt.verify(token, config.auth0PublicKey, function (err, decoded) {
             if (!err) {
                 // ensure the token hasn't expired
                 var currentTime = Math.round(new Date().getTime()/1000);

@@ -5,7 +5,14 @@
   <div layout="row" style="background-color: #f0f0f0;">
 
     <div class="col-md-3" layout-margin>
-      <sidebar model="cloud" type="'cloud'"/>
+      <sidebar model="cloud" type="'cloud'" 
+        software-versions="softwareVersions"
+        can-modify-event-url-function="canModifyEventUrl" 
+        can-modify-image-server-url-function="canModifyImageServerUrl"
+        create-software-version-function="openSoftwareVersionForm"
+        can-modify-software-version-function="canModifySoftwareVersion"
+        can-modify-checkin-interval-function="canModifyCheckinInterval"
+        can-modify-signalling-server-function="canModifySignallingServer"/>
     </div>
 
     <div class="col-md-8" class="main-content" style="background-color: #f0f0f0; height:100vh;" layout-fill layout-padding>

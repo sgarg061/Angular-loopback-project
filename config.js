@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 var productionSettings = {
     auth0URL: 'https://solink.auth0.com',
     auth0ClientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
@@ -5,7 +7,8 @@ var productionSettings = {
     auth0AWSRole: 'arn:aws:iam::150303506660:role/s3-access-by-tenant',
     auth0AWSPrincipal: 'arn:aws:iam::150303506660:saml-provider/auth0-provider',
 
-    jwtSecret: 'IkZnJr_T0M4I9bfNM-LBIITtJrWw1YoQrSe0FNWaOodRH6TJ5L3qig0NDKS_B4yi',
+    auth0PublicKey: fs.readFileSync('solink.pem', {encoding: 'utf8'}),
+    auth0PrivateKey: fs.readFileSync('solink.priv', {encoding: 'utf8'}),
     createUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJwcHRsUENjQVFUSlVVOE5Eb05YNTlYUDlScXQ1cEpteiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQzOTIzNjMzNSwianRpIjoiMTAwMGQ1MzVjYTAzMzY0YTNhYTFlZWVlNTY0MjYxY2UifQ._eDHftt98ozdqy9Z9d9-NITVQOEBAplRAjN2EvrZ9po',
 
     validatedTokensRedisLocation: 'redis-validate.ppufgb.0001.usw2.cache.amazonaws.com',
@@ -32,7 +35,8 @@ var developmentSettings = {
     auth0AWSRole: 'arn:aws:iam::150303506660:role/s3-access-by-tenant',
     auth0AWSPrincipal: 'arn:aws:iam::150303506660:saml-provider/auth0-provider',
 
-    jwtSecret: 'IkZnJr_T0M4I9bfNM-LBIITtJrWw1YoQrSe0FNWaOodRH6TJ5L3qig0NDKS_B4yi',
+    auth0PublicKey: fs.readFileSync('solink.pem', {encoding: 'utf8'}),
+    auth0PrivateKey: fs.readFileSync('solink.priv', {encoding: 'utf8'}),
     createUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJwcHRsUENjQVFUSlVVOE5Eb05YNTlYUDlScXQ1cEpteiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQzOTIzNjMzNSwianRpIjoiMTAwMGQ1MzVjYTAzMzY0YTNhYTFlZWVlNTY0MjYxY2UifQ._eDHftt98ozdqy9Z9d9-NITVQOEBAplRAjN2EvrZ9po',
 
     validatedTokensRedisLocation: '127.0.0.1',

@@ -77,6 +77,13 @@
     "property": "*"
   },
   {
+    "principalType": "ROLE",
+    "principalId": "isOwner",
+    "permission": "ALLOW",
+    "accessType": "READ",
+    "property": "*"
+  },
+  {
   "principalType": "ROLE",
   "principalId": "isOwner",
   "permission": "ALLOW",
