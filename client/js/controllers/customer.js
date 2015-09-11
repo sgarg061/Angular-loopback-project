@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', '$localStorage' 
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', '$localStorage',
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService, $localStorage) {
 
     $scope.clouds = [];
