@@ -79,21 +79,6 @@ angular
         });
     }
 
-    function getSoftwareVersions() {
-      SoftwareVersion
-        .find({
-          filter: {
-            fields: {id: true, name: true, url: true},
-            order: 'name ASC'
-          }
-        })
-        .$promise
-        .then(function(versions) {
-          $scope.softwareVersions = [].concat(versions);
-          console.log($scope.softwareVersions);
-        })
-    }
-
     function redirectBasedOnUserType() {
       var userType = userService.getUserType();
       switch (userType) {
@@ -116,7 +101,6 @@ angular
       redirectBasedOnUserType();
     } else {
       getClouds();
-      getSoftwareVersions();
     }
 
     $scope.pageChanged = function() {
