@@ -61,11 +61,6 @@ function initializeRedis() {
         name: 'revoked',
         port: config.revokedTokensRedisPort,
         address: config.revokedTokensRedisLocation
-    },
-    {
-        name: 'validated',
-        port: config.validatedTokensRedisPort,
-        address: config.validatedTokensRedisLocation
     }]);
 }
 
