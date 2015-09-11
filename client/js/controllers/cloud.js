@@ -14,14 +14,36 @@ angular
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
       $scope.$watch("cloud", function(newValue, oldValue) {
-
-        if (!angular.equals(newValue, oldValue)) {
-          Cloud.prototype$updateAttributes({ id: $scope.cloud.id }, $scope.cloud)
-            .$promise.then(function(cloud) {}, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-          });
+        if (newValue) {
+          var id = $scope.cloud.id;
+          
+          if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
+            updateCloud(id, {eventServerUrl: newValue.eventServerUrl});
+          }
+          if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
+            updateCloud(id, {imageServerUrl: newValue.imageServerUrl});
+          }
+          if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
+            updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl});
+          }
+          if (newValue.updateUrl !== oldValue.updateUrl) {
+            updateCloud(id, {updateUrl: newValue.updateUrl});
+          }
+          if (newValue.checkinInterval !== oldValue.checkinInterval) {
+            updateCloud(id, {checkinInterval: newValue.checkinInterval});
+          }
+          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
+            updateCloud(id, {softwareVersionId: newValue.softwareVersionId});
+          }
         }
       }, true);
+    }
+
+    function updateCloud(id, changedDictionary) {
+      Cloud.prototype$updateAttributes({id: id}, changedDictionary)
+        .$promise.then(function(cloud) {}, function (res) {
+        toastr.error(res.data.error.message, 'Error');
+      });
     }
 
     function getCloud() {
@@ -75,19 +97,7 @@ angular
         });
     }
 
-    function getSoftwareVersions() {
-      SoftwareVersion
-        .find({
-          filter: {
-            fields: {id: true, name: true, url: true},
-            order: 'name ASC'
-          }
-        })
-        .$promise
-        .then(function(versions) {
-          $scope.softwareVersions = [].concat(versions);
-        })
-    }
+    
 
     $scope.goHome = function () {
       $state.go('home');
@@ -182,7 +192,6 @@ angular
     }
 
   $scope.openSoftwareVersionForm = function(event) {
-    console.log('wha!');
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
                     $scope.newSoftwareVersion = {};
@@ -211,6 +220,19 @@ angular
       $scope.status = 'You cancelled the dialog.';
     });
   }
+  function getSoftwareVersions() {
+    SoftwareVersion
+      .find({
+        filter: {
+          fields: {id: true, name: true, url: true},
+          order: 'name ASC'
+        }
+      })
+      .$promise
+      .then(function(versions) {
+        $scope.softwareVersions = [].concat(versions);
+      })
+    }
 
   $scope.canModifyEventUrl = function() {
     var userType = userService.getUserType();

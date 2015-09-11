@@ -230,7 +230,6 @@ function isOwnerOfReseller(context, token, cb) {
             break;
 
         case 'GET':
-            console.log('hi');
             if (token.userType === 'cloud') {
                 cb(null, token.cloudId);
             } else if (token.userType === 'reseller') {
