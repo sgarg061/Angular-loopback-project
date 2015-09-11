@@ -34,7 +34,7 @@ module.exports = {
                             cb(e, 'token has been revoked');
                         } else {
                             // if successful, add it to the validated token list and set it up to expire once the token is expired
-                            addValidToken(hashedToken, decoded.exp, currentTime, cb);
+                            cb(null, 'Valid token');
                         }
                     }
                 });
@@ -46,25 +46,3 @@ module.exports = {
         });
     }
 };
-
-function addValidToken(token, tokenExp, currentTime, cb) {
-    'use strict';
-    var validatedClient = cacheService.getCacheClient('validated');
-    validatedClient.exists(token, function (err, reply) {
-        if (err) {
-            logger.error(err);
-            var e = new Error('Error validating token');
-            e.statusCode = 500;
-            cb(e, 'Error validating token');
-            return;
-        }
-
-        if (reply === 1) {
-            cb(null, 'Valid token');
-        } else {
-            validatedClient.set(token, tokenExp);
-            validatedClient.expire(token, tokenExp - currentTime);
-            cb(null, 'Valid token');
-        }
-    });
-}
