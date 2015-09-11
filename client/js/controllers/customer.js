@@ -23,15 +23,29 @@ angular
     function watchForChanges() {
       // watch customer for updates and save them when they're found
       $scope.$watch("customer", function(newValue, oldValue) {
+
         if (newValue) {
-          if (!angular.equals(newValue, oldValue)) {
-            Customer.prototype$updateAttributes({ id: $scope.customer.id }, $scope.customer)
-              .$promise.then(function(customer) {}, function (res) {
-                toastr.error(res.data.error.message, 'Error');
-            });
+          // only update on a specific subset of values that change through the UI
+          var id = $scope.customer.id;
+
+          if (newValue.checkinInterval !== oldValue.checkinInterval) {
+            updateCustomer(id, {checkinInterval: newValue.checkinInterval});
+          }
+          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
+            updateCustomer(id, {softwareVersionId: newValue.softwareVersionId});
+          }
+          if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
+            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
         }
       }, true);
+    }
+
+    function updateCustomer(id, changedDictionary) {
+      Customer.prototype$updateAttributes({id: id}, changedDictionary)
+        .$promise.then(function(customer) {}, function (res) {
+          toastr.error(res.data.error.message, 'Error');
+        });
     }
 
     function getCustomer() {
@@ -185,8 +199,6 @@ angular
             // }
             // console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
           }
-          
-          console.log('$scope.customer: ' + JSON.stringify($scope.customer));
         });
     }
 
@@ -340,7 +352,6 @@ angular
               License.create({customerId: customerId})
                 .$promise
                 .then(function(license) {
-                  console.log('ahhh!');
                   $scope.customer.licenses.push(license);
                   console.log('adding license key: ' + license.key);
 

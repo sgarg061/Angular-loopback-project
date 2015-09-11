@@ -14,14 +14,31 @@ angular
       // watch reseller for updates and save them when they're found
       $scope.$watch("reseller", function(newValue, oldValue) {
         if (newValue) {
-          if (!angular.equals(newValue, oldValue)) {
-            Reseller.prototype$updateAttributes({ id: $scope.reseller.id }, $scope.reseller)
-              .$promise.then(function(reseller) {}, function (res) {
-                toastr.error(res.data.error.message, 'Error');
-            });
+          var id = $scope.reseller.id;
+          if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
+            updateReseller(id, {eventServerUrl: newValue.eventServerUrl});
+          }
+          if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
+            updateReseller(id, {imageServerUrl: newValue.imageServerUrl});
+          }
+          if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
+            updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl});
+          }
+          if (newValue.checkinInterval !== oldValue.checkinInterval) {
+            updateReseller(id, {checkinInterval: newValue.checkinInterval});
+          }
+          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
+            updateReseller(id, {softwareVersionId: newValue.softwareVersionId});
           }
         }
       }, true);
+    }
+
+    function updateReseller(id, changedDictionary) {
+      Reseller.prototype$updateAttributes({id: id}, changedDictionary)
+        .$promise.then(function(reseller) {}, function (res) {
+        toastr.error(res.data.error.message, 'Error');
+      });
     }
 
     function getReseller() {

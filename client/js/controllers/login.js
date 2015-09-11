@@ -23,8 +23,6 @@ angular.module('app').controller('LoginController', function($scope, $state, Aut
       password: $scope.password
     };
 
-    console.log('login.js username: ' + $scope.username + ' password: ' + $scope.password);
-
     // Block the user interface until the login succeeds or fails
     blockUI.start('Logging in...');
 

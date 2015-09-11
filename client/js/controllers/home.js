@@ -101,6 +101,7 @@ angular
       redirectBasedOnUserType();
     } else {
       getClouds();
+      getSoftwareVersions();
     }
 
     $scope.pageChanged = function() {
@@ -182,6 +183,20 @@ angular
         $scope.status = 'You cancelled the dialog.';
       });
     }
+
+  function getSoftwareVersions() {
+      SoftwareVersion
+        .find({
+          filter: {
+            fields: {id: true, name: true, url: true},
+            order: 'name ASC'
+          }
+        })
+        .$promise
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+        })
+  }
 
   $scope.canModifyEventServer = function() {
     var userType = userService.getUserType();
