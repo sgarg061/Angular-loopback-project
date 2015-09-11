@@ -11,8 +11,6 @@ var productionSettings = {
     auth0PrivateKey: fs.readFileSync('solink.priv', {encoding: 'utf8'}),
     createUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJwcHRsUENjQVFUSlVVOE5Eb05YNTlYUDlScXQ1cEpteiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQzOTIzNjMzNSwianRpIjoiMTAwMGQ1MzVjYTAzMzY0YTNhYTFlZWVlNTY0MjYxY2UifQ._eDHftt98ozdqy9Z9d9-NITVQOEBAplRAjN2EvrZ9po',
 
-    validatedTokensRedisLocation: 'redis-validate.ppufgb.0001.usw2.cache.amazonaws.com',
-    validatedTokensRedisPort: '6379',
     revokedTokensRedisLocation: 'redis-revoked.ppufgb.0001.usw2.cache.amazonaws.com',
     revokedTokensRedisPort: '6379',
     log: {
@@ -39,8 +37,6 @@ var developmentSettings = {
     auth0PrivateKey: fs.readFileSync('solink.priv', {encoding: 'utf8'}),
     createUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJwcHRsUENjQVFUSlVVOE5Eb05YNTlYUDlScXQ1cEpteiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQzOTIzNjMzNSwianRpIjoiMTAwMGQ1MzVjYTAzMzY0YTNhYTFlZWVlNTY0MjYxY2UifQ._eDHftt98ozdqy9Z9d9-NITVQOEBAplRAjN2EvrZ9po',
 
-    validatedTokensRedisLocation: '127.0.0.1',
-    validatedTokensRedisPort: '6379',
     revokedTokensRedisLocation: '127.0.0.1',
     revokedTokensRedisPort: '6380',
     log: {
