@@ -1,3 +1,17 @@
-angular.module('app').controller('MainController', function($scope) {
-
-});
+angular.module('app')
+    .controller('MainController', ['$scope', '$rootScope', '$window', 'userService',
+    function($scope, $rootScope, $window, userService) {
+        $rootScope.$on("$stateChangeStart", function(event, curr, prev){
+            var user = userService.getUser();
+            if (user && user.userType) {
+                console.log(user);
+                $window.Intercom('boot', {
+                    app_id: 'p9rbi4pn',
+                    email: user.email,
+                    created_at: user.createdAt,
+                    user_id: user.id
+                });
+                console.log('done');
+            }
+        });
+}]);

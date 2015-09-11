@@ -3,7 +3,7 @@ var fs = require('fs');
 var productionSettings = {
     auth0URL: 'https://solink.auth0.com',
     auth0ClientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
-    auth0Scope: 'openid email app_metadata offline_access',
+    auth0Scope: 'openid email app_metadata offline_access created_at',
     auth0AWSRole: 'arn:aws:iam::150303506660:role/s3-access-by-tenant',
     auth0AWSPrincipal: 'arn:aws:iam::150303506660:saml-provider/auth0-provider',
 
@@ -31,7 +31,7 @@ var productionSettings = {
 var developmentSettings = {
     auth0URL: 'https://solink.auth0.com',
     auth0ClientID: '5R9iDKiQ7nYCGOJaBDrPbesMwnkGj7ih',
-    auth0Scope: 'openid email app_metadata offline_access',
+    auth0Scope: 'openid email app_metadata offline_access created_at',
     auth0AWSRole: 'arn:aws:iam::150303506660:role/s3-access-by-tenant',
     auth0AWSPrincipal: 'arn:aws:iam::150303506660:saml-provider/auth0-provider',
 
