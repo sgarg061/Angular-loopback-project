@@ -18,24 +18,8 @@
             <span class="md-title" style="vertical-align: middle; line-height:50px;">{{cloud.name}}</span>
           </div>
         </md-grid-tile>
-
       </md-grid-list>
-
-      <h2>Software Versions</h2>
-      <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
-        <md-grid-tile ng-repeat="version in softwareVersions" class="card"
-          ng-click="selectSoftwareVersion(version)" md-rowspan="0" md-colspan="1">
-
-          <div layout-fill layout-align="start center" layout-padding>
-            <span class="md-title" style="vertical-align: middle; line-height:50px;">{{version.name}}</span>
-          </div>
-        </md-grid-tile>
-      </md-grid-list>
-        
     </div>
-
-    <!-- <pagination ng-model="currentPage" total-items="totalResellers" max-size="resellersPerPage" boundary-links="true" direction-links="false"></pagination> -->
-
   </div>
 
 </md-content> 
