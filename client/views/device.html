@@ -37,12 +37,6 @@
           <md-tabs md-dynamic-height>
             <md-tab label="CHECK-IN">
               <div layout="column" style="margin:20px;">
-
-                <md-input-container>
-                  <label>Check-in Interval</label>
-                  <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" ng-model="device.checkinInterval">
-                </md-input-container>
-
                 <div>
                   <b>Check-in History</b>
                   <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
@@ -104,10 +98,6 @@
             <md-tab label="DEVICES">
               <div layout="column" style="margin:20px;">
                 <md-input-container>
-                  <label>Software Version</label>
-                  <input type="text" class="form-control focus" name="softwareVersion" autocomplete="off" ng-model="device.softwareVersion">
-                </md-input-container>
-              
                 <div layout="row" layout-align="space-around center">
                   <div layout="column" layout-align="start start" layout-fill>
                     
@@ -117,7 +107,7 @@
                         <md-list-item style="height:26px; min-height:20px !important;" ng-repeat="camera in device.cameras">
                           <div layout="row" layout-fill layout-align="space-between center">
                             <span>{{ camera.name }}</span>
-                            <span flex="20">
+                            <span flex="20"/>
                             <md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>
                           </div>
                       </md-list-item>
