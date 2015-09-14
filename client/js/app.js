@@ -31,6 +31,9 @@ angular
                     .icon("indicator_red", "./assets/svg/indicator_red.svg", 24)
                     .icon("indicator_yellow", "./assets/svg/indicator_yellow.svg", 24)
                     .icon("indicator_green", "./assets/svg/indicator_green.svg", 24)
+                    .icon('checkmark', './assets/svg/ic_check_circle_green_24px.svg', 24)
+                    .icon('error', './assets/svg/ic_error_red_24px.svg', 24)
+                    .icon('warning', './assets/svg/ic_warning_yellow_24px.svg', 24)
                     .icon("right_arrow", "./assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24);
 
       $locationProvider.html5Mode(true);

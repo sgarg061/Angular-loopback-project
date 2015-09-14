@@ -22,151 +22,35 @@
     <div class="col-md-8" layout-margin layout-fill layout-padding>
       <h2>Devices</h2>
 
-      <md-grid-list md-cols="2" md-row-height="600" md-gutter="10px">
-
-        <md-grid-tile class="card" ng-repeat="device in customer.devices" md-rowspan="0" md-colspan="1">
-          <div layout-fill layout-align="start center" layout-padding>
-            
-            <div layout="row" style="padding-left:20px; padding-right:20px;" layout-align="space-between center" layout-fill>
-              <div layout="row">
-                <h2 class="md-title" ng-click="selectDevice(device)">{{device.name}}
-                  <md-icon md-svg-icon='right_arrow' style="width:24px;margin:0px; vertical-align:center; padding-bottom:3px;"></md-icon>
-                </h2>
-              </div>
-
-              <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
-            </div>
-
-            <div layout="row" layout-fill layout-padding>
-              <md-input-container flex>
-                <label>License</label>
-                  <input ng-model="device.license.key" disabled>
-              </md-input-container>
-              <md-input-container flex>
-                <label>Device ID</label>
-                <input ng-model="device.id" disabled>
-              </md-input-container>
-            </div>
-              
-            <md-tabs md-dynamic-height>
-              <md-tab label="CHECK-IN" >
-                <div layout="column" style="margin:20px;">
-
-                    <md-input-container>
-                      <label>Check-in Interval</label>
-                      <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" ng-model="device.checkinInterval">
-                    </md-input-container>
-                  
-                  <div>
-                    <b>Check-in History</b>
-                    <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
-                      <md-list layout-padding>
-                        <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="entry in device.logEntries">
-                        <span ng-click="showCheckin(entry)">
-                          {{ entry.timestamp | date:'medium'}}
-                        </span>
-                      </md-list-item>
-                    </md-content>
-                  </div>
-                </div>
-                <div>
-                  <md-button class="md-raised" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
-                  <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin"></md-progress-circular>
-                </div>
-              </md-tab>
-              <md-tab label="EVENTS">
-                <div layout="column" style="margin:20px;">
-                  <div layout="row" layout-align="space-around center">
-                    <md-input-container>
-                      <label>Transactions</label>
-                      <md-select ng-model="device.transactions">
-                        <md-option value="FIFO" selected>FIFO</md-option>
-                        <md-option value="LIFO">LIFO</md-option>
-                      </md-select>
-                    </md-input-container>
-                    <md-input-container>
-                      <label>Motion</label>
-                       <md-select ng-model="device.motion">
-                        <md-option value="FIFO">FIFO</md-option>
-                        <md-option value="LIFO" selected>LIFO</md-option>
-                      </md-select>
-                    </md-input-container>
-                    <md-input-container>
-                      <label>Bitrate</label>
-                      <md-select ng-model="device.bitrate">
-                        <md-option value="128" selected>128 kbps</md-option>
-                        <md-option value="256">256 kbps</md-option>
-                      </md-select>
-                    </md-input-container>
-                  </div>
-                  <div layout="row" layout-align="space-around center">
-                    <md-input-container>
-                        <label>Save Events for</label>
-                        <md-select ng-model="device.saveEventsFor">
-                          <md-option value="7" selected>7 Days</md-option>
-                          <md-option value="17">14 Days</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-input-container>
-                        <label>Max Number of Events</label>
-                        <md-select ng-model="device.maxNumberOfEvents">
-                          <md-option value="20000" selected>20000</md-option>
-                          <md-option value="50000">50000</md-option>
-                        </md-select>
-                    </md-input-container>
-                  </div>
-                </div>
-              </md-tab>
-              <md-tab label="DEVICES">
-
-                <div layout="column" style="margin:20px;">
-
-                    <md-input-container>
-                      <label>Software Version</label>
-                      <input type="text" class="form-control focus" name="softwareVersion" autocomplete="off" ng-model="device.softwareVersion">
-                    </md-input-container>
-                  
-                    <div layout="row" layout-align="space-around center">
-                      <div layout="column" layout-align="start start" layout-fill>
-                        
-                        <div style="margin-bottom: 5px;"><b>Cameras</b></div>
-                        <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
-                          <md-list layout-padding>
-                            <md-list-item style="height:26px; min-height:20px !important;" ng-repeat="camera in device.cameras">
-                              <div layout="row" layout-fill layout-align="space-between center">
-                                <span>{{ camera.name }}</span>
-                                <span flex="20">
-                                <md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>
-                              </div>
-                          </md-list-item>
-                        </md-content>
-
-                        <div flex></div>
-                        <br/>
-
-                        <div style="margin-bottom: 5px;"><b>POS Devices</b></div>
-                        <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
-                          <md-list layout-padding>
-                            <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="posDevice in device.posDevices">
-                            <div layout="row" layout-fill layout-align="space-between center">
-                              <span>{{ posDevice.name }}</span>
-                              <span flex="20">
-                              <md-icon md-svg-icon='indicator_{{posDevice.status === "online" ? "green" : posDevice.status === "offline" ? "red" : "yellow"}}'></md-icon>
-                            </div>
-                          </md-list-item>
-                        </md-content>
-
-                      </div>
-                    </div>
-
-                </div>
-              </md-tab>
-            </md-tabs>
-
-          </div>
-        </md-grid-tile>
-
-      </md-grid-list>
+      <md-content class="card">
+        <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
+        <table width="100%" style="margin: 0px;">
+        <tr>
+          <th align="left" ng-click="changeSorting('name')">Device Name</th>
+          <th align="left" ng-click="changeSorting('address')">Address</th>
+          <th align="left" ng-click="changeSorting('onlineStatus')">Status</th>
+          <th align="left"></th>
+          <th align="left" ng-click="changeSorting('status')">Camera Status</th>
+          <th align="left"></th>
+        </tr>
+        <tr ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
+          <td>{{device.name}}</td>
+          <td>{{device.address}}</td>
+          <td ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
+          <td>
+            <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.onlineStatus=='Online'"></md-icon>
+            <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.onlineStatus=='Offline'"></md-icon>
+            <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.onlineStatus=='Unknown'"></md-icon>
+          </td>
+          <td ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online</td>
+          <td>
+            <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.status=='green'"></md-icon>
+            <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.status=='red'"></md-icon>
+            <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.status=='yellow'"></md-icon>
+          </td>
+        </tr>
+        </table>
+      </md-content>
 
     </div>
   </div>
