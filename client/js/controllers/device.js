@@ -27,7 +27,7 @@ angular
         .find({
           filter: {
             where: {id: $stateParams.deviceId},
-            include: ['softwareVersion', 'logEntries', 'cameras', 'posDevices', 'license', {
+            include: ['softwareVersion', 'cameras', 'posDevices', 'license', {
               relation: 'customer',
               scope: {
                 include: {
@@ -38,6 +38,12 @@ angular
                     }
                   }
                 }
+              }
+            }, {
+              relation: 'logEntries',
+              scope: {
+                limit: 10,
+                order: 'timestamp DESC'
               }
             }]
           }
