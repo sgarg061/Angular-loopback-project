@@ -507,7 +507,7 @@ angular
 
   function goHome() {
       $state.go('home');
-    }
+  }
 
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;

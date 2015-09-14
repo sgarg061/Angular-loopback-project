@@ -1,100 +1,110 @@
 <div ng-include src="'views/breadcrumb.html'"></div>
 
+  <md-content>
+    <div layout="row" style="background-color: #f0f0f0;">
+    
+      <div class="col-md-3" layout-margin>
+        <sidebar model="reseller" type="'reseller'"
+          delete-function="deleteReseller"
+          software-versions="softwareVersions"
+          can-modify-event-url-function="canModifyEventUrl" 
+          can-modify-image-server-url-function="canModifyImageServerUrl"
+          create-software-version-function="openSoftwareVersionForm"
+          can-modify-software-version-function="canModifySoftwareVersion"
+          can-modify-checkin-interval-function="canModifyCheckinInterval"
+          can-modify-signalling-server-function="canModifySignallingServer"/>
+      </div>
 
+      <div class="col-md-8" layout-margin layout-fill layout-padding>
 
+        <md-content class="card">
+          <div layout="row" style="padding-left: 20px; padding-right: 20px;" layout-align="space-between center" layout-fill>
+            <h2 class="md-title">{{device.name}}</h2>
+            <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
+          </div>
 
-    <md-content class="card" style="margin: 20px;width: 400px;">
+          <div layout="row" layout-fill layout-padding>
+            <md-input-container flex>
+              <label>License</label>
+                <input ng-model="device.license.key" disabled>
+              </md-input-container>
+              <md-input-container flex>
+                <label>Device ID</label>
+                <input ng-model="device.id" disabled>
+              </md-input-container>
+          </div>
 
-      <div layout-fill layout-align="start center" layout-padding>
-        
-        <div layout="row" style="padding-left:20px; padding-right:20px;" layout-align="space-between center" layout-fill>
-          <h2 class="md-title">{{device.name}}</h2>
-          <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
-        </div>
-
-        <div layout="row" layout-fill layout-padding>
-          <md-input-container flex>
-            <label>License</label>
-              <input ng-model="device.license.key" disabled>
-          </md-input-container>
-          <md-input-container flex>
-            <label>Device ID</label>
-            <input ng-model="device.id" disabled>
-          </md-input-container>
-        </div>
-          
-        <md-tabs md-dynamic-height>
-          <md-tab label="CHECK-IN" >
-            <div layout="column" style="margin:20px;">
+          <md-tabs md-dynamic-height>
+            <md-tab label="CHECK-IN">
+              <div layout="column" style="margin:20px;">
 
                 <md-input-container>
                   <label>Check-in Interval</label>
                   <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" ng-model="device.checkinInterval">
                 </md-input-container>
-              
+
+                <div>
+                  <b>Check-in History</b>
+                  <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
+                    <md-list layout-padding>
+                      <md-list-item style="height: 20px; min-height: 20px !important;" ng-repeat="entry in device.logEntries">
+                        <span ng-click="showCheckin(entry)">
+                          {{ entry.timestamp | date: 'medium' }}
+                        </span>
+                      </md-list-item>
+                    </md-list>
+                  </md-content>
+                </div>
+              </div>
               <div>
-                <b>Check-in History</b>
-                <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
-                  <md-list layout-padding>
-                    <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="entry in device.logEntries">
-                    <span ng-click="showCheckin(entry)">
-                      {{ entry.timestamp | date:'medium'}}
-                    </span>
-                  </md-list-item>
-                </md-content>
+                <md-button class="md-raised">Check-in</md-button>
               </div>
-            </div>
-            <div>
-              <md-button class="md-raised">Check-in</md-button>
-            </div>
-          </md-tab>
-          <md-tab label="EVENTS">
-            <div layout="column" style="margin:20px;">
-              <div layout="row" layout-align="space-around center">
-                <md-input-container>
-                  <label>Transactions</label>
-                  <md-select ng-model="device.transactions">
-                    <md-option value="FIFO" selected>FIFO</md-option>
-                    <md-option value="LIFO">LIFO</md-option>
-                  </md-select>
-                </md-input-container>
-                <md-input-container>
-                  <label>Motion</label>
-                   <md-select ng-model="device.motion">
-                    <md-option value="FIFO">FIFO</md-option>
-                    <md-option value="LIFO" selected>LIFO</md-option>
-                  </md-select>
-                </md-input-container>
-                <md-input-container>
-                  <label>Bitrate</label>
-                  <md-select ng-model="device.bitrate">
-                    <md-option value="128" selected>128 kbps</md-option>
-                    <md-option value="256">256 kbps</md-option>
-                  </md-select>
-                </md-input-container>
-              </div>
-              <div layout="row" layout-align="space-around center">
-                <md-input-container>
-                    <label>Save Events for</label>
-                    <md-select ng-model="device.saveEventsFor">
-                      <md-option value="7" selected>7 Days</md-option>
-                      <md-option value="17">14 Days</md-option>
+            </md-tab>
+            <md-tab label="EVENTS">
+              <div layout="column" style="margin: 20px;">
+                <div layout="row" layout-align="space-around center">
+                  <md-input-container>
+                    <label>Transactions</label>
+                    <md-select ng-model="device.transactions">
+                      <md-option value="FIFO" selected>FIFO</md-option>
+                      <md-option value="LIFO">LIFO</md-option>
                     </md-select>
-                </md-input-container>
-                <md-input-container>
-                    <label>Max Number of Events</label>
-                    <md-select ng-model="device.maxNumberOfEvents">
-                      <md-option value="20000" selected>20000</md-option>
-                      <md-option value="50000">50000</md-option>
+                  </md-input-container>
+                  <md-input-container>
+                    <label>Motion</label>
+                     <md-select ng-model="device.motion">
+                      <md-option value="FIFO">FIFO</md-option>
+                      <md-option value="LIFO" selected>LIFO</md-option>
                     </md-select>
-                </md-input-container>
+                  </md-input-container>
+                  <md-input-container>
+                    <label>Bitrate</label>
+                    <md-select ng-model="device.bitrate">
+                      <md-option value="128" selected>128 kbps</md-option>
+                      <md-option value="256">256 kbps</md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+                <div layout="row" layout-align="space-around center">
+                  <md-input-container>
+                      <label>Save Events for</label>
+                      <md-select ng-model="device.saveEventsFor">
+                        <md-option value="7" selected>7 Days</md-option>
+                        <md-option value="17">14 Days</md-option>
+                      </md-select>
+                  </md-input-container>
+                  <md-input-container>
+                      <label>Max Number of Events</label>
+                      <md-select ng-model="device.maxNumberOfEvents">
+                        <md-option value="20000" selected>20000</md-option>
+                        <md-option value="50000">50000</md-option>
+                      </md-select>
+                  </md-input-container>
+                </div>
               </div>
-            </div>
-          </md-tab>
-          <md-tab label="DEVICES">
-
-            <div layout="column" style="margin:20px;">
-
+            </md-tab>
+            <md-tab label="DEVICES">
+              <div layout="column" style="margin:20px;">
                 <md-input-container>
                   <label>Software Version</label>
                   <input type="text" class="form-control focus" name="softwareVersion" autocomplete="off" ng-model="device.softwareVersion">
@@ -124,7 +134,7 @@
                         <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="posDevice in device.posDevices">
                         <div layout="row" layout-fill layout-align="space-between center">
                           <span>{{ posDevice.name }}</span>
-                          <span flex="20">
+                          <span flex="20"/>
                           <md-icon md-svg-icon='indicator_{{posDevice.status === "online" ? "green" : posDevice.status === "offline" ? "red" : "yellow"}}'></md-icon>
                         </div>
                       </md-list-item>
@@ -133,13 +143,12 @@
                   </div>
                 </div>
 
-            </div>
-          </md-tab>
-        </md-tabs>
-
+              </div>
+            </md-tab>
+          </md-tabs>
       </div>
-
-    </md-content>
+    </div>
+  </md-content>
 
 
 

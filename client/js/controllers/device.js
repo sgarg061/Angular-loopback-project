@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', '$mdDialog',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, $mdDialog) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'userService', '$mdDialog',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, userService, $mdDialog) {
 
     $scope.customer = {};
 
@@ -47,87 +47,34 @@ angular
           $scope.device = devices[0];
 
           $scope.deviceId = devices[0].id;
-          $scope.customerId = devices[0].customer.id;
-          $scope.resellerId = devices[0].customer.reseller.id;
-          $scope.cloudId = devices[0].customer.reseller.cloud.id;
+          $scope.customer = devices[0].customer;
+          $scope.reseller = devices[0].customer.reseller;
+          $scope.cloud = devices[0].customer.reseller.cloud;
 
           watchForChanges();
           
-          getCloudResellers($scope.cloudId);
-          getResellerCustomers($scope.resellerId);
-          getCustomerDevices($scope.customerId);
+          $scope.device.status = 'red';
 
           console.log('$scope.device: ' + JSON.stringify($scope.device));
         });
     }
 
-    function getCloudResellers(cloudId) {
-      Reseller
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {cloudId: cloudId}
-          }
-        })
-        .$promise
-        .then(function(resellers) {
-          $scope.resellers = resellers;
-        });
-    }
-
-    function getResellerCustomers(resellerId) {
-      Customer
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {resellerId: resellerId}
-          }
-        })
-        .$promise
-        .then(function(customers) {
-          $scope.customers = customers;
-          console.log('*** $scope.customers: ' + JSON.stringify($scope.customers));
-        });
-    }
-
-    function getCustomerDevices(customerId) {
-      console.log('*** finding devices for customer: ' + customerId); 
-      Device
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {customerId: customerId}
-          }
-        })
-        .$promise
-        .then(function(devices) {
-          $scope.devices = devices;
-          console.log('*** $scope.devices: ' + JSON.stringify($scope.devices));
-        });
-    }
-
-    function getAllClouds() {
-      Cloud
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            include: {
-              relation: 'resellers',
-              scope: {
-                fields: {id: true, name: true},
-              }
-            }
-          }
-        })
-        .$promise
-        .then(function(clouds) {
-          $scope.clouds = clouds;
-          console.log('$scope.clouds: ' + JSON.stringify($scope.clouds));
-        });
-    }
+    function getSoftwareVersions() {
+    SoftwareVersion
+      .find({
+        filter: {
+          fields: {id: true, name: true, url: true},
+          order: 'name ASC'
+        }
+      })
+      .$promise
+      .then(function(versions) {
+        $scope.softwareVersions = [].concat(versions);
+      })
+  }
 
     getDevice();
-    getAllClouds();
+    getSoftwareVersions();
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
@@ -159,9 +106,40 @@ angular
     });
   }
 
+  // TODO: refactor these permissions
+  // so much code replication :/
   $scope.canModifyEventUrl = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyImageServerUrl = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifyCheckinInterval = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySoftwareVersion = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  };
+
+  $scope.canModifySignallingServer = function() {
+    var userType = userService.getUserType();
+    return ['solink'].indexOf(userType) > -1;
+  };
+
+  function goHome() {
+      $state.go('home');
   };
 
   }]);
