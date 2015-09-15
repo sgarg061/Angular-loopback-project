@@ -8,18 +8,37 @@ angular
     $scope.cloudId = null;
     $scope.resellerId = null;
     $scope.customerId = null;
-    $scope.deviceId = null;
+    $scope.device = null;
 
     function watchForChanges() {
       // watch device for updates and save them when they're found
       $scope.$watch("device", function(newValue, oldValue) {
         if (newValue) {
-          Device.prototype$updateAttributes({ id: $scope.device.id }, $scope.device)
-            .$promise.then(function(device) {}, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-          });
+          var id = $scope.device.id;
+          if (newValue.checkinInterval !== oldValue.checkinInterval) {
+            updateDevice(id, {checkinInterval: newValue.checkinInterval});
+          }
+          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
+            updateDevice(id, {softwareVersionId: newValue.softwareVersionId});
+          }
+          if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
+            updateDevice(id, {signallingServerUrl: newValue.signallingServerUrl});
+          }
+          if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
+            updateDevice(id, {imageServerUrl: newValue.imageServerUrl});
+          }
+          if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
+            updateDevice(id, {eventServerUrl: newValue.eventServerUrl});
+          }
         }
       }, true);
+    }
+
+    function updateDevice(id, changedDictionary) {
+      Device.prototype$updateAttributes({id: id}, changedDictionary)
+        .$promise.then(function(device) {}, function (res) {
+          toastr.error(res.data.error.message, 'Error');
+        });
     }
 
     function getDevice() {
@@ -52,7 +71,7 @@ angular
         .then(function(devices) {
           $scope.device = devices[0];
 
-          $scope.deviceId = devices[0].id;
+          $scope.device = devices[0];
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;

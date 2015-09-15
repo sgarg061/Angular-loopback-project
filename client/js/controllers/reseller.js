@@ -77,7 +77,6 @@ angular
               if (customer.devices) {
                 for (var j=0; j<customer.devices.length; j++) {
                   var device = customer.devices[j];
-                  // console.log('device name: ' + device.name + " location: " + device.location);
                   if (device.location) {
                     $scope.markers.push({
                       id: device.id,
@@ -99,7 +98,6 @@ angular
               }
             }
           }
-          // console.log('$scope.reseller: ' + JSON.stringify($scope.reseller));
         });
     }
 
