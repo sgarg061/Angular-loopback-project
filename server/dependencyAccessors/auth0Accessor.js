@@ -7,6 +7,8 @@ var Auth0Accessor = function () {
 Auth0Accessor.prototype.login = function (username, password, cb) {
     'use strict';
     var config = new Config();
+    console.log(username);
+    console.log(password);
     request({
         url: config.auth0URL + '/oauth/ro',
         method: 'POST',
@@ -105,6 +107,7 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
 function authenticateWithAWS(token, refreshToken, cb) {
     'use strict';
     var config = new Config();
+    console.log(token);
     request({
         url: config.auth0URL + '/delegation',
         method: 'POST',
@@ -132,6 +135,7 @@ function authenticateWithAWS(token, refreshToken, cb) {
             cb(null, response);
         } else {
             var e = new Error('Unable to login');
+            console.log(res.body);
             e.statusCode = res.statusCode;
             cb(e, 'Failed login');
         }

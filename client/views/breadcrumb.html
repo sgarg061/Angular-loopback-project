@@ -15,11 +15,9 @@
       <span class="md-title" ng-click="selectCustomer(customer)" aria-label="Customer">&nbsp; > &nbsp; {{customer.name}}</span>
     </div>
     
-    <span ng-show="deviceId">&gt;</span>
-    <md-select ng-show="deviceId" ng-model="deviceId" ng-change="selectDevice(deviceId)" aria-label="Device">
-      <md-option ng-repeat="aDevice in devices" value="{{aDevice.id}}">{{aDevice.name}}</md-option>
-    </md-select>
-
+    <div ng-if="deviceId">
+      <span class="md-title" aria-label="Device">&nbsp; > &nbsp; {{device.name}}</span>
+    </div>
   </div>
   <span flex=""></span>
   <div layout="row" layout-align="end start"><a ui-sref="logout">Logout</a></div>
