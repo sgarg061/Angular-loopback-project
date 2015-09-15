@@ -10,6 +10,9 @@ html, body {
   display: none !important;
 }
 
+
+/* Layout */
+
 .wrapper{
   display: flex;
   flex-direction: column;
@@ -18,6 +21,7 @@ html, body {
 
 .wrapper md-content{
   height: 100%;
+  width: 100%;
 }
 
 .background{
@@ -26,22 +30,58 @@ html, body {
 }
 
 .child-list{
-  padding-right: 24px;
+  padding-right: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
 }
 
 .child-list h2{
   font-weight: 400;
   margin-bottom: 24px;
+  flex: 1 0 50%;
 }
 
-.md-title{
+.device-search{
+  height: 100%;
+  flex: 1 0 200px;
+  margin-top: 10px;
+  background: none;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+md-title{
   font-size: 1.3em;
   font-weight: 400;
 }
 
-.md-content{
+md-content{
     height: calc(100% - 64px);
 }
+/*
+md-tab-item{
+  max-width: none !important;
+}
+
+md-tab-item{
+  background-color: white;
+  box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
+  color: rgba(0,0,0,0.54);
+}
+
+md-tab-item.md-tab.md-active{
+  color: white;
+  background-color: rgb(33,150,243)
+}*/
+
+md-tabs,
+md-grid-list{
+  width: 100%;  
+}
+
+/*md-tabs md-tabs-wrapper{
+  margin-bottom: 16px;
+}*/
 
 [ng-click],
 [data-ng-click],
@@ -49,18 +89,16 @@ html, body {
     cursor: pointer;
 }
 
-.ng-scope{
- /* display: flex;
-  flex-direction: column;
-  height: 100%;*/
-}
 
 /* Typography */
+
 h2{
   font-weight: 500;
 }
 
+
 /* Sidebar */
+
 .sidebar {
   width: 300px;
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
@@ -96,14 +134,18 @@ h2{
   padding: 16px;
 }
 
-/* Breadcrumb */
-.breadcrumbs{
 
-}
+/* Breadcrumb */
+
 .breadcrumb { 
   list-style: none; 
   padding-left: 24px;
   padding-right: 24px;
+}
+
+.breadcrumb md-icon{
+  margin-right: 4px;
+  margin-left: 6px;
 }
 
 .breadcrumb .md-title{
@@ -125,7 +167,9 @@ h2{
   color: #ffffff;
 }
 
+
 /* Toolbar area */
+
 .menu {
   background-color: transparent;
   border: none;
@@ -137,6 +181,7 @@ h2{
 md-toolbar h1 {
   margin: auto;
 }
+
 
 /* Sidenav area */
 
@@ -154,21 +199,73 @@ md-sidenav  md-list {
   padding: 0px 0px 8px 0px;
 }
 
+
 /* Content */
+
 .view-toggle{
 
 }
 
+.device-table{
+  border-spacing: 0px;
+  margin: 0px 16px;
+}
+
+.device-table tr{
+  height: 32px;
+  min-height: 32px;
+  padding: 0 16px;
+}
+
+.device-table th, td{
+  border-bottom: 1px solid #ebebeb;
+}
+
+.device-table tr:last-of-type td{
+  border-bottom: none;
+}
+
+.device-table tr td{
+  padding: 4px 4px;
+  font-size: 16px;
+  color: #707070;
+}
+
+.device-table md-icon{
+  height: 18px;
+  width: 18px;
+}
+
+.device-table tr:first-of-type th:first-of-type,
+.device-table tr td:first-of-type{
+  padding-left: 16px;
+}
+
+.device-table tr:first-of-type th:last-of-type,
+.device-table tr td:last-of-type{
+  padding-right: 16px;
+}
+
+.device-table-row:hover{
+  background-color: #CDE9FF;
+}
+
 
 /* Cards */
+
 .card {
   background: #fff;
   border-radius: 2px;
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
 }
 
+
 /* Maps */
-.angular-google-map-container { height: 600px; }
+
+.angular-google-map-container {
+  height: 600px;
+}
+
 
 /* Primary content area */
 
@@ -222,11 +319,13 @@ md-button.menuBtn > md-icon {
   max-width: 500px;
 }
 
+
 /* Utils */
 
 .content-wrapper {
   position: relative;
 }
+
 
 /* Typography support coming in 0.8.0 */
 
@@ -251,7 +350,6 @@ md-toolbar h1 {
   -moz-transform:scale(0.70);
 }
 
-
 md-bottom-sheet  md-icon {
   margin-right:20px;
 }
@@ -263,7 +361,6 @@ span.name {
 }
 
 * { box-sizing:border-box; }
-
 
 form {
   width: 380px;
@@ -289,6 +386,7 @@ input {
 
 input:focus { outline: none; }
 
+
 /* Label */
 
 label {
@@ -311,7 +409,6 @@ input:focus ~ label, input.used ~ label {
   /* font-size: 14px; */
   color: #4a89dc;
 }
-
 
 
 /* Button */

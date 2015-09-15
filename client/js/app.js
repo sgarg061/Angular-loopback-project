@@ -36,6 +36,7 @@ angular
                     .icon('warning', './assets/svg/ic_warning_yellow_24px.svg', 24)
                     .icon("right_arrow", "./assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24);
 
+
       $locationProvider.html5Mode(true);
 
       $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function ($q, $location, $localStorage) {
