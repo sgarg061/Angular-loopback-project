@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'userService', '$mdDialog',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, userService, $mdDialog) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'userService', '$mdDialog', '$localStorage',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, userService, $mdDialog, $localStorage) {
 
     $scope.customer = {};
 
@@ -9,6 +9,8 @@ angular
     $scope.resellerId = null;
     $scope.customerId = null;
     $scope.device = null;
+
+    $scope.sendingCheckin = null;
 
     function watchForChanges() {
       // watch device for updates and save them when they're found
@@ -179,6 +181,29 @@ angular
     });
   }
 
+  function checkin(device) {
+    console.log('Checkin on device ' + device.id);
+    $scope.sendingCheckin = device.id;
+
+    // get the right signalling server
+    var signallingServerUrl = device.signallingServerUrl || 
+                              $scope.customer.signallingServerUrl || 
+                              $scope.reseller.signallingServerUrl ||
+                              $scope.cloud.signallingServerUrl;
+                              
+    webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
+      if (err) {
+        // maybe display an error message?
+        console.log(err);
+      } else {
+        // maybe display a success message?
+        console.log(res);
+      }
+      $scope.sendingCheckin = null;
+      $scope.$digest();
+    });
+  }
+
   // TODO: refactor these permissions
   // so much code replication :/
   $scope.canModifyEventUrl = function() {
@@ -214,5 +239,9 @@ angular
   function goHome() {
       $state.go('home');
   };
+
+
+  $scope.checkin = checkin;
+  $scope.goHome = goHome;
 
   }]);

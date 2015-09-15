@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', '$localStorage',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService, $localStorage) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -13,8 +13,6 @@ angular
     $scope.reseller = null;
 
     $scope.deviceData = {};
-
-    $scope.sendingCheckin = null;
 
     $scope.sort = {
       column: '',
@@ -345,29 +343,6 @@ angular
     });
   }
 
-  function checkin(device) {
-    console.log('Checkin on device ' + device.id);
-    $scope.sendingCheckin = device.id;
-
-    // get the right signalling server
-    var signallingServerUrl = device.signallingServerUrl || 
-                              $scope.customer.signallingServerUrl || 
-                              $scope.reseller.signallingServerUrl ||
-                              $scope.cloud.signallingServerUrl;
-                              
-    webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
-      if (err) {
-        // maybe display an error message?
-        console.log(err);
-      } else {
-        // maybe display a success message?
-        console.log(res);
-      }
-      $scope.sendingCheckin = null;
-      $scope.$digest();
-    });
-  }
-
   function getSoftwareVersions() {
     SoftwareVersion
       .find({
@@ -469,7 +444,6 @@ angular
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.showCheckin = showCheckin;
-  $scope.checkin = checkin;
   $scope.goHome = goHome;
 
 }]);
