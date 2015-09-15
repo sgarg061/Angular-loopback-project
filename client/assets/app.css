@@ -10,30 +10,106 @@ html, body {
   display: none !important;
 }
 
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wrapper md-content{
+  height: 100%;
+}
+
+.background{
+  background-color: #f0f0f0;
+  height: 100%;
+}
+
+.child-list{
+  padding-right: 24px;
+}
+
+.child-list h2{
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+.md-title{
+  font-size: 1.3em;
+  font-weight: 400;
+}
+
+.md-content{
+    height: calc(100% - 64px);
+}
+
 [ng-click],
 [data-ng-click],
 [x-ng-click] {
     cursor: pointer;
 }
 
+.ng-scope{
+ /* display: flex;
+  flex-direction: column;
+  height: 100%;*/
+}
+
+/* Typography */
+h2{
+  font-weight: 500;
+}
+
 /* Sidebar */
 .sidebar {
   width: 300px;
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
-  height:100vh;
   margin: -10px 0px 0px -10px !important;
   background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar [layout-padding]{
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.sidebar h2{
+  padding: 0px 8px;
+}
+
+.sidebar .list-box{
+  height: auto !important;
+}
+
+.sidebar md-input-container{
+  padding: 0px 8px 24px 8px;
+}
+
+.sidebar md-input-container .md-select-value{
+  padding-left: 6px;
 }
 
 .main-content {
   background-color: #f0f0f0;
+  padding: 16px;
 }
 
 /* Breadcrumb */
+.breadcrumbs{
+
+}
 .breadcrumb { 
   list-style: none; 
-  font: 18px Helvetica, Arial, Sans-Serif;
+  padding-left: 24px;
+  padding-right: 24px;
 }
+
+.breadcrumb .md-title{
+  font-size: 1em;
+}
+
 .breadcrumb li { 
   display: inline;
   list-style-type: none;
@@ -76,6 +152,11 @@ md-list .md-button.selected {
 
 md-sidenav  md-list {
   padding: 0px 0px 8px 0px;
+}
+
+/* Content */
+.view-toggle{
+
 }
 
 
@@ -212,7 +293,7 @@ input:focus { outline: none; }
 
 label {
   color: #999; 
-  font-size: 18px;
+  /*font-size: 14px;*/
   font-weight: normal;
   position: absolute;
   pointer-events: none;

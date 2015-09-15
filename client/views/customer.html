@@ -2,10 +2,10 @@
 
 <md-content>
 
-  <div layout="row" style="background-color: #f0f0f0;">
+  <div layout="row" class="background">
     
     <div class="col-md-3" layout-margin>
-      <sidebar model="customer" type="'customer'" 
+      <sidebar style="height:100%" model="customer" type="'customer'" 
         add-license-function="addLicense" 
         show-license-function="showLicense"
         delete-function="deleteCustomer"
@@ -19,7 +19,7 @@
       />
     </div>
 
-    <div class="col-md-8" layout-margin layout-fill layout-padding>
+    <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
       <h2>Devices</h2>
 
       <md-grid-list md-cols="2" md-row-height="600" md-gutter="10px">
