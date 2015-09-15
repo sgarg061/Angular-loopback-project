@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', '$localStorage',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService, $localStorage) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -9,16 +9,15 @@ angular
     $scope.customer = {};
     $scope.devices = [];
 
-    $scope.cloudId = null;
-    $scope.resellerId = null;
-    $scope.customerId = null;
-
     $scope.cloud = null;
     $scope.reseller = null;
 
     $scope.deviceData = {};
 
-    $scope.sendingCheckin = null;
+    $scope.sort = {
+      column: '',
+      descending: false
+    };
 
     function watchForChanges() {
       // watch customer for updates and save them when they're found
@@ -73,7 +72,6 @@ angular
               {
                 relation: 'devices',
                 scope: {
-                  limit: 10, /* FIXME - prevent a billion devices and all their related bits from coming back */
                   include: ['cameras', 'posDevices', 'license', {
                     relation: 'logEntries',
                     scope: {
@@ -91,10 +89,7 @@ angular
         .then(function(customers) {
           $scope.customer = customers[0];
 
-          $scope.customerId = customers[0].id;
-          $scope.resellerId = customers[0].reseller.id;
           $scope.reseller = customers[0].reseller;
-          $scope.cloudId = customers[0].reseller.cloud.id;
           $scope.cloud = customers[0].reseller.cloud;
 
           $scope.cloud = customers[0].reseller.cloud;
@@ -133,32 +128,28 @@ angular
 
             var gracePeriodInSeconds = 30;
             var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
+            if (hasCheckedInOnTime) {
+              device.onlineStatus = 'Online';
+            } else {
+              device.onlineStatus = 'Offline';
+            }
             console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
 
+            device.onlineCameraCount = 0;
             var allCamerasOnline = true;
             if (device.cameras) {
               for (var j=0; j<device.cameras.length; j++) {
                 var camera = device.cameras[j];
                 if (camera.status != 'online') {
                   allCamerasOnline = false;
-                  break;
-                } 
-              }
-            }
-
-            var allPOSDevicesOnline = true;
-            if (device.posDevices) {
-              for (var k=0; k<device.posDevices.length; k++) {
-                var pos = device.posDevices[k];
-                if (pos.status != 'online') {
-                  allPOSDevicesOnline = false;
-                  break;
+                } else {
+                  device.onlineCameraCount++;
                 }
               }
             }
 
             if (hasCheckedInOnTime) {
-              if (allCamerasOnline && allPOSDevicesOnline) {
+              if (allCamerasOnline) {
                 device.status = 'green';
               } else {
                 device.status = 'yellow';
@@ -166,93 +157,9 @@ angular
             } else {
               device.status = 'red';
             }
-
-            // var online = true;
-            // if (device.cameras) {
-            //   for (var j=0; j<device.cameras.length; j++) {
-            //     var camera = device.cameras[j];
-            //     if (camera.status === 'online') {
-            //       $scope.deviceData[device.id].cameraStatus.online++;
-            //     } else if (camera.status === 'offline') {
-            //       $scope.deviceData[device.id].cameraStatus.offline++;
-            //     } else {
-            //       $scope.deviceData[device.id].cameraStatus.unreachable++;
-            //     }
-            //     $scope.deviceData[device.id].cameraStatus.total++;
-            //   }
-            //   $scope.deviceData[device.id].cameraStatus.color = ($scope.deviceData[device.id].cameraStatus.offline>0 ? 'red' : $scope.deviceData[device.id].cameraStatus.unreachable>0 ? 'yellow' : 'green');
-            // }
-
-            // if (device.posDevices) {
-            //   for (var k=0; k<device.posDevices.length; k++) {
-            //     var pos = device.posDevices[k];
-            //     if (pos.status === 'online') {
-            //       $scope.deviceData[device.id].posStatus.online++;
-            //     } else if (camera.status === 'offline') {
-            //       $scope.deviceData[device.id].posStatus.offline++;
-            //     } else {
-            //       $scope.deviceData[device.id].posStatus.unreachable++;
-            //     }
-            //     $scope.deviceData[device.id].posStatus.total++;
-            //   }
-            //   $scope.deviceData[device.id].posStatus.color = ($scope.deviceData[device.id].posStatus.offline>0 ? 'red' : $scope.deviceData[device.id].posStatus.unreachable>0 ? 'yellow' : 'green');
-            // }
-            // console.log('status: ' + JSON.stringify($scope.deviceData[device.id]));
           }
-        });
-    }
 
-    function getAllClouds() {
-      Cloud
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            include: {
-              relation: 'resellers',
-              scope: {
-                fields: {id: true, name: true},
-                order: 'name ASC'
-              }
-            }
-          }
-        })
-        .$promise
-        .then(function(clouds) {
-          $scope.clouds = clouds;
-          // console.log('$scope.clouds: ' + JSON.stringify($scope.clouds));
-        });
-    }
-
-    function getCloudResellers(cloudId) {
-      Reseller
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {cloudId: cloudId},
-            order: 'name ASC'
-          }
-        })
-        .$promise
-        .then(function(resellers) {
-          $scope.resellers = resellers;
-          // console.log('*** $scope.resellers: ' + JSON.stringify($scope.resellers));
-        });
-    }
-
-    function getResellerCustomers(resellerId) {
-      // console.log('*** finding resellers for cloud: ' + resellerId); 
-      Customer
-        .find({
-          filter: {
-            fields: {id: true, name: true},
-            where: {resellerId: resellerId},
-            order: 'name ASC'
-          }
-        })
-        .$promise
-        .then(function(customers) {
-          $scope.customers = customers;
-          // console.log('*** $scope.customers: ' + JSON.stringify($scope.customers));
+          console.log(device);
         });
     }
 
@@ -436,29 +343,6 @@ angular
     });
   }
 
-  function checkin(device) {
-    console.log('Checkin on device ' + device.id);
-    $scope.sendingCheckin = device.id;
-
-    // get the right signalling server
-    var signallingServerUrl = device.signallingServerUrl || 
-                              $scope.customer.signallingServerUrl || 
-                              $scope.reseller.signallingServerUrl ||
-                              $scope.cloud.signallingServerUrl;
-                              
-    webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
-      if (err) {
-        // maybe display an error message?
-        console.log(err);
-      } else {
-        // maybe display a success message?
-        console.log(res);
-      }
-      $scope.sendingCheckin = null;
-      $scope.$digest();
-    });
-  }
-
   function getSoftwareVersions() {
     SoftwareVersion
       .find({
@@ -507,13 +391,59 @@ angular
 
   function goHome() {
       $state.go('home');
+  }
+
+  $scope.setDeviceStatusStyling = function(device) {
+    switch (device.onlineStatus) {
+      case 'Offline':
+        return {color: '#D10F0F'};
+        break;
+      case 'Online':
+        return {color: '#18D348'};
+        break;
+      default:
+        return {color: '#F4DB2A'};
     }
+  }
+
+  $scope.setCameraStatusStyling = function(device) {
+    var error = {color: '#D10F0F'};
+    var warning = {color: '#F4DB2A'};
+    var good = {color: '#18D348'};
+
+    if (!device.cameras || device.cameras.length < 1) {
+      return error;
+    }
+
+    var onlineCameras = device.cameras.filter(function (cam) {
+      return cam.status === 'online';
+    });
+
+    var percentageOfOnlineCameras = onlineCameras.length/device.cameras.length;
+    if (percentageOfOnlineCameras === 1) {
+      return good;
+    } else if (percentageOfOnlineCameras > 0.5) {
+      return warning;
+    } else {
+      return error;
+    }
+  }
+
+  $scope.changeSorting = function(column) {
+    var sort = $scope.sort;
+
+    if (sort.column === column) {
+      sort.descending = !sort.descending;
+    } else {
+      sort.column = column;
+      sort.descending = false;
+    }
+  };
 
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.showCheckin = showCheckin;
-  $scope.checkin = checkin;
   $scope.goHome = goHome;
 
 }]);
