@@ -85,9 +85,9 @@
               <md-list-item ng-repeat="license in model.licenses" style="height:24px; min-height:24px !important;">
                   <md-button ng-click='showLicense(license)'>
                     <div layout="row" layout-align="start center">
-                      <div style="font-size:12px; line-height:24px;">{{license.key}}</div>
+                      <div style="font-size:12px; line-height:24px; width: 80px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{license.key}}</div>
                       <div flex></div>
-                      <div style="font-size:12px; line-height:24px;">{{license.activated ? "In Use" : "Available"}}</div>
+                      <div style="font-size:12px; line-height:24px; text-overflow: ellipsis;">{{license.activated ? "In Use" : "Available"}}</div>
                     </div>
                   </md-button>
               </md-list-item>
