@@ -14,8 +14,17 @@ html, body {
 /* Layout */
 
 .wrapper{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;  
   height: 100%;
 }
 
@@ -31,19 +40,33 @@ html, body {
 
 .child-list{
   padding-right: 22px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: ms-flexbox;
   display: flex;
+  -webkit-flex-wrap: wrap;
+  -mox-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  -webkit-align-content: flex-start;
+  -moz-align-content: flex-start;
+  -ms-flex-line-pack: start;
   align-content: flex-start;
 }
 
 .child-list h2{
   font-weight: 400;
   margin-bottom: 24px;
+  -webkit-flex: 1 0 50%;
+  -ms-flex: 1 0 50%;
   flex: 1 0 50%;
 }
 
 .device-search{
   height: 100%;
+  -webkit-flex: 1 0 200px;
+  -ms-flex: 1 0 200px;
   flex: 1 0 200px;
   margin-top: 10px;
   background: none;
@@ -57,6 +80,14 @@ md-title{
 
 md-content{
     height: calc(100% - 64px);
+}
+
+.action-button{
+  background: #ffa000 !important;
+}
+
+.action-button md-icon{
+  color: white !important;
 }
 /*
 md-tab-item{
@@ -99,13 +130,26 @@ h2{
 
 /* Sidebar */
 
+.sidebar-container{
+  -webkit-flex: 0 0 300px;
+  -ms-flex: 0 0 300px;
+  flex: 0 0 300px;
+}
+
 .sidebar {
   width: 300px;
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
   margin: -10px 0px 0px -10px !important;
   background-color: #ffffff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;  
 }
 
 .sidebar [layout-padding]{
