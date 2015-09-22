@@ -129,7 +129,8 @@ function authenticateWithAWS(token, refreshToken, cb) {
                 aws: {
                     accessKeyId: creds.AccessKeyId,
                     secretAccessKey: creds.SecretAccessKey,
-                    sessionToken: creds.SessionToken
+                    sessionToken: creds.SessionToken,
+                    expiration: creds.Expiration
                 }
             };
             cb(null, response);
