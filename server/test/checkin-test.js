@@ -52,6 +52,7 @@ var deviceCheckinData = {
 };
 
 var deviceId;
+var checkin;
 
 describe('Checkin after initial device activation', function() {
 
@@ -72,8 +73,6 @@ describe('Checkin after initial device activation', function() {
         done();
       });
   });
-
-  var checkin;
 
   it('should checkin a new device and receive configuration information', function(done) {
     
