@@ -116,55 +116,52 @@ describe('Checkin after initial device activation', function() {
       });
   });
 
-describe('Checkin of existing device', function() {
+  describe('Checkin of existing device', function() {
 
-  it('should allow updated checkin data to be posted', function(done) {
-    
-    deviceCheckinData.id = deviceId;
+    it('should allow updated checkin data to be posted', function(done) {
 
-    // set the back camera to an offline state
-    deviceCheckinData.cameraInformation[1].status = 'offline';
+      deviceCheckinData.id = deviceId;
 
-    common.login('solink', function (token) {
-      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
-        .send({data: deviceCheckinData})
-        .expect(200)
-        .end(function(err, res) {
-           if (err) throw err;
-          done();
+      // set the back camera to an offline state
+      deviceCheckinData.cameraInformation[1].status = 'offline';
+
+      common.login('solink', function (token) {
+        common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+          .send({data: deviceCheckinData})
+          .expect(200)
+          .end(function(err, res) {
+             if (err) throw err;
+            done();
+          });
         });
-      });
-  });
+    });
 
-  it('should result in new values, an updated checkin time and another log entry', function(done) {
-    common.login('solink', function (token) {
-      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
-        .send({})
-        .expect(200)
-        .end(function(err, res) {
-          if (err) throw err;
-          assert(typeof res.body === 'object');
-          assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
-          assert.equal(res.body.posDevices.length, 2,'must have 2 POS device associated');
-          assert.equal(res.body.cameras[1].status, 'offline', 'camera 2 status must be offline');
-          
-          assert.equal(res.body.logEntries.length, 2, 'must have 2 log entries');
+    it('should result in new values, an updated checkin time and another log entry', function(done) {
+      common.login('solink', function (token) {
+        common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+          .send({})
+          .expect(200)
+          .end(function(err, res) {
+            if (err) throw err;
+            assert(typeof res.body === 'object');
+            assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
+            assert.equal(res.body.posDevices.length, 2,'must have 2 POS device associated');
+            assert.equal(res.body.cameras[1].status, 'offline', 'camera 2 status must be offline');
 
-          var latestCheckin = res.body.lastCheckin;
-          assert(latestCheckin > checkin, 'latest checkin must be later than previous checkin');
+            assert.equal(res.body.logEntries.length, 2, 'must have 2 log entries');
 
-          done();
-        });
+            var latestCheckin = res.body.lastCheckin;
+            assert(latestCheckin > checkin, 'latest checkin must be later than previous checkin');
+
+            done();
+          });
       });
     });
   });
+});
 
-describe('Checkin of existing device with missing camera', function() {
-
-  it('should allow updated checkin data to be posted', function(done) {
-
-    deviceCheckinData.id = deviceId;
-
+describe('Check-in of existing device with missing component', function() {
+  it('should not keep the camera missing from the check-in', function(done) {
     // remove the back camera
     deviceCheckinData.cameraInformation = deviceCheckinData.cameraInformation.slice(0,1);
     common.login('solink', function (token) {
@@ -175,10 +172,8 @@ describe('Checkin of existing device with missing camera', function() {
            if (err) throw err;
           done();
         });
-      });
-  });
+    });
 
-  it('should result in new values, the missing camera removed, an updated checkin time and another log entry', function(done) {
     common.login('solink', function (token) {
       common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
         .send({})
@@ -191,16 +186,10 @@ describe('Checkin of existing device with missing camera', function() {
           assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
           done();
         });
-      });
     });
   });
 
-describe('Checkin of existing device with missing POS', function() {
-
-  it('should allow updated checkin data to be posted', function(done) {
-
-    deviceCheckinData.id = deviceId;
-
+  it('should not keep the POS missing from the check-in', function(done) {
     // remove the 2nd POS
     deviceCheckinData.posInformation = deviceCheckinData.posInformation.slice(0,1);
     common.login('solink', function (token) {
@@ -211,10 +200,8 @@ describe('Checkin of existing device with missing POS', function() {
            if (err) throw err;
           done();
         });
-      });
-  });
+    });
 
-  it('should result in new values, the missing POS removed, an updated checkin time and another log entry', function(done) {
     common.login('solink', function (token) {
       common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
         .send({})
@@ -227,7 +214,6 @@ describe('Checkin of existing device with missing POS', function() {
           assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
           done();
         });
-      });
     });
   });
 });
