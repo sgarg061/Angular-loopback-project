@@ -376,6 +376,8 @@ module.exports = function(Device) {
             updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
         }
 
+        removeNonIncludedComponents('Camera', cameras, 'cameraId', device.id);
+
         updatePOSDevices(device, deviceData, cb);
     }
 
@@ -391,6 +393,8 @@ module.exports = function(Device) {
         for (var i=0; i<posDevices.length; i++) {
             updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
         }
+
+        removeNonIncludedComponents('POSDevice', posDevices, 'posId', device.id);
 
         generateConfigurationResponse(device, cb);
     }
@@ -494,9 +498,25 @@ module.exports = function(Device) {
                 }
             }
         });
+    }
 
-        // TODO: consider how to handle cameras and POS devices that weren't part of the payload? delete them? 
-        // mark  them as 'offline' or a 'removed' state?
+    function removeNonIncludedComponents(componentType, includedComponents, componentIdName, deviceId) {
+        Device.app.models[componentType].find({where: {deviceId: deviceId}}, function(err, res) {
+            if (err) {
+                // TODO: this should go in the customer log
+                logger.error('Failed while trying to find %s: %s', componentType, err);      
+                return;
+            }
+
+            var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName]});
+            for (var i = 0; i < res.length; i++) {
+                if(includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
+                var removeCondition = {};
+                removeCondition[componentIdName] = res[i][componentIdName];
+                    Device.app.models[componentType].remove(removeCondition);
+                }
+            };
+        });
     }
 
 };
