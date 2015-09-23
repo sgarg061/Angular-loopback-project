@@ -83,11 +83,11 @@ md-content{
     height: calc(100% - 64px);
 }
 
-.action-button{
+.md-fab{
   background: #ffa000 !important;
 }
 
-.action-button md-icon{
+.md-fab md-icon{
   color: white !important;
 }
 /*
@@ -136,6 +136,7 @@ h2{
   -webkit-flex: 0 0 300px;
   -ms-flex: 0 0 300px;
   flex: 0 0 300px;
+  position: relative;
 }
 
 .sidebar {
@@ -151,6 +152,9 @@ h2{
   -moz-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;  
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 @media only screen and (max-width: 640px) {
