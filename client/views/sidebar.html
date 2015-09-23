@@ -1,7 +1,5 @@
 <div class="sidebar">
   
-  <div style="margin-left:10px; margin-right:10px;">
-
     <div layout="row" layout-padding layout-align="space-between center">
 
       <h2>{{model.name}}</h2>
@@ -66,7 +64,7 @@
       <div ng-show="type=='cloud'||type=='reseller'">
         <md-input-container >
           <div style="margin:5px 0px 5px 0px;">POS Connectors</div>
-          <md-content layout-padding style="height: 100px; padding: 0px; border: 1px solid rgba(0, 0, 0, 0.117647)">  
+          <md-content class='list-box' layout-padding style="height: 100px; padding: 0px; border: 1px solid rgba(0, 0, 0, 0.117647)">  
             <md-list>
               <md-list-item ng-repeat="connector in model.posConnectors">
                   <md-button ng-click="selectConnector(connector)" ng-class="{'cloud' : connector === cloudController.cloud }">
@@ -98,5 +96,4 @@
       </div>
 
     </div>
-  </div>
 </div>

@@ -1,24 +1,36 @@
 <md-toolbar layout="row" layout-padding class="breadcrumb">
   
   <div layout="row" layout-align="start center">
-    <span class="md-title" ng-click="goHome()">Call Home &nbsp;</span>
+    <span class="md-title" ng-click="goHome()">Call Home</span>
 
     <div ng-if="cloud">
-      <span class="md-title" ng-click="selectCloud(cloud)" aria-label="Cloud">&nbsp; > &nbsp; {{cloud.name}}</span>
+      <span class="md-title" ng-click="selectCloud(cloud)" aria-label="Cloud">
+        <md-icon md-svg-icon="right_arrow" md-menu-align-target ></md-icon>
+        {{cloud.name}}
+      </span>
     </div>
 
     <div ng-if="reseller">
-      <span class="md-title" ng-click="selectReseller(reseller)" aria-label="Reseller">&nbsp; > &nbsp; {{reseller.name}}</span>
+      <span class="md-title" ng-click="selectReseller(reseller)" aria-label="Reseller">
+        <md-icon md-svg-icon="right_arrow" md-menu-align-target ></md-icon>
+        {{reseller.name}}
+      </span>
     </div>
 
     <div ng-if="customer">
-      <span class="md-title" ng-click="selectCustomer(customer)" aria-label="Customer">&nbsp; > &nbsp; {{customer.name}}</span>
+      <span class="md-title" ng-click="selectCustomer(customer)" aria-label="Customer">
+        <md-icon md-svg-icon="right_arrow" md-menu-align-target ></md-icon>
+        {{customer.name}}
+      </span>
     </div>
     
     <div ng-if="deviceId">
-      <span class="md-title" aria-label="Device">&nbsp; > &nbsp; {{device.name}}</span>
+      <span class="md-title" aria-label="Device">
+        <md-icon md-svg-icon="right_arrow" md-menu-align-target ></md-icon>
+        {{device.name}}
+      </span>
     </div>
   </div>
   <span flex=""></span>
-  <div layout="row" layout-align="end start"><a ui-sref="logout">Logout</a></div>
+  <div layout="row" layout-align="end center"><a ui-sref="logout">Logout</a></div>
 </md-toolbar>

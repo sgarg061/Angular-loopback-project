@@ -2,10 +2,10 @@
 
 <md-content>
 
-  <div layout="row" style="background-color: #f0f0f0;">
+  <div layout="row" class="background">
     
-    <div class="col-md-3" layout-margin>
-      <sidebar model="customer" type="'customer'" 
+    <div class="col-md-3  sidebar-container" layout-margin>
+      <sidebar style="height:100%" model="customer" type="'customer'" 
         add-license-function="addLicense" 
         show-license-function="showLicense"
         delete-function="deleteCustomer"
@@ -19,12 +19,12 @@
       />
     </div>
 
-    <div class="col-md-8" layout-margin layout-fill layout-padding>
+    <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
       <h2>Devices</h2>
+      <input type="text" class="device-search form-control" placeholder="Search" ng-model="searchFilter">
 
       <md-content class="card">
-        <input type="text" class="form-control" placeholder="Search" ng-model="searchFilter">
-        <table width="100%" style="margin: 0px;">
+        <table class="device-table" width="100%" style="margin: 0px;">
         <tr>
           <th align="left" ng-click="changeSorting('name')">Device Name</th>
           <th align="left" ng-click="changeSorting('address')">Address</th>
@@ -33,7 +33,7 @@
           <th align="left" ng-click="changeSorting('status')">Camera Status</th>
           <th align="left"></th>
         </tr>
-        <tr ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
+        <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
           <td>{{device.name}}</td>
           <td>{{device.address}}</td>
           <td ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>

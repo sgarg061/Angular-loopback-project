@@ -2,9 +2,9 @@
 
 <md-content>
   
-  <div layout="row" style="background-color: #f0f0f0;">
+  <div layout="row" class="background">
 
-    <div class="col-md-3" layout-margin>
+    <div class="col-md-3 sidebar-container" layout-margin>
       <sidebar model="cloud" type="'cloud'" 
         software-versions="softwareVersions"
         can-modify-event-url-function="canModifyEventUrl" 
@@ -15,7 +15,7 @@
         can-modify-signalling-server-function="canModifySignallingServer"/>
     </div>
 
-    <div class="col-md-8" class="main-content" style="background-color: #f0f0f0; height:100vh;" layout-fill layout-padding>
+    <div class="child-list col-md-8" class="main-content" layout-fill layout-padding>
       <h2>Resellers</h2>
       <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
 

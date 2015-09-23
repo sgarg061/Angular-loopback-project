@@ -1,9 +1,9 @@
 <div ng-include src="'views/breadcrumb.html'"></div>
 
   <md-content>
-    <div layout="row" style="background-color: #f0f0f0;">
+    <div layout="row" class="background">
     
-      <div class="col-md-3" layout-margin>
+      <div class="col-md-3  sidebar-container" layout-margin>
         <sidebar model="device" type="'device'"
           delete-function="deleteReseller"
           software-versions="softwareVersions"
@@ -15,7 +15,7 @@
           can-modify-signalling-server-function="canModifySignallingServer"/>
       </div>
 
-      <div class="col-md-8" layout-margin layout-fill layout-padding>
+      <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
 
         <md-content class="card">
           <div layout="row" style="padding-left: 20px; padding-right: 20px;" layout-align="space-between center" layout-fill>
@@ -36,7 +36,7 @@
 
           <md-tabs md-dynamic-height>
             <md-tab label="CHECK-IN">
-              <div layout="column" style="margin:20px;">
+              <div layout="column" style="margin:20px 20px 10px 20px;">
                 <div>
                   <b>Check-in History</b>
                   <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
@@ -50,7 +50,7 @@
                   </md-content>
                 </div>
               </div>
-              <div>
+              <div style="margin:0px 20px 20px 12px">
                 <md-button class="md-raised" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
                 <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin"></md-progress-circular>
               </div>
