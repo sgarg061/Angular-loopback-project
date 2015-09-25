@@ -72,13 +72,7 @@ angular
               {
                 relation: 'devices',
                 scope: {
-                  include: ['cameras', 'posDevices', 'license', {
-                    relation: 'logEntries',
-                    scope: {
-                      limit: 10,
-                      order: 'timestamp DESC'
-                    }
-                  }],
+                  include: ['cameras', 'posDevices', 'license'],
                   order: 'name ASC'
                 }
               }

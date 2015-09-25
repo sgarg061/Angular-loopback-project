@@ -30,6 +30,7 @@ module.exports = function(app, doneCallback) {
         app.models.Reseller.destroyAll();
         app.models.Customer.destroyAll();
         app.models.Device.destroyAll();
+        app.models.DeviceLogEntry.destroyAll();
         app.models.Camera.destroyAll();
         app.models.POSDevice.destroyAll();
         app.models.License.destroyAll();
@@ -206,6 +207,13 @@ module.exports = function(app, doneCallback) {
   }
 
   function createDevices(cb, results) {
+    logger.debug('creating device log entries collection...');
+    datastore.automigrate('DeviceLogEntry', function(err) {
+      if (err) {
+        logger.error(err);
+        return cb(err);
+      }
+    });
     logger.debug('creating devices...');
     datastore.automigrate('Device', function(err) {
       if (err) {

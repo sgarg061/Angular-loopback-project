@@ -7,6 +7,7 @@ var authService = require('./services/authService');
 var cacheService = require('./services/cacheService');
 var Config = require('../config');
 var loopbackConsole = require('loopback-console');
+var models = require('./model-config.json');
 
 var app = module.exports = loopback();
 
@@ -76,10 +77,31 @@ app.start = function() {
     });
 };
 
+// Update all collection schemas to model definitions
+function autoUpdateAll() {
+    Object.keys(models).forEach(function(model) {
+        if(models[model].dataSource == 'elasticsearch') {
+            app.dataSources.elasticsearch.autoupdate(model, function(err) {
+                if(err) throw err;
+            });
+        }
+    });
+}
+
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function(err) {
     if (err) throw err;
+
+    if(app.dataSources.elasticsearch.connected) {
+      autoUpdateAll();
+    } else {
+      // if not connected yet, wait. this prevents "possible EventEmitter memory leak detected" warnings.
+      // see https://github.com/strongloop/loopback/issues/1186
+      app.dataSources.elasticsearch.once('connected', function() {
+        autoUpdateAll();
+      });
+    }
 
     // start the server if `$ node server.js`
   if (loopbackConsole.activated()) {

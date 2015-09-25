@@ -10,6 +10,11 @@
     "deviceId": {
       "type": "string",
       "required": true
+    },
+    "timestamp": {
+      "type": "string",
+      "required": true,
+      "index": true
     }
   },
   "validations": [],
