@@ -141,6 +141,52 @@ function authenticateWithAWS(token, refreshToken, cb) {
             cb(e, 'Failed login');
         }
     });
-}
+};
+
+Auth0Accessor.prototype.setPassword = function (email, password, cb) {
+    'use strict';
+    var config = new Config();
+
+    request({
+        url: config.auth0URL + '/api/v2/users?q=email: "' + email + '"&search_engine=v2',
+        method: 'GET',
+        auth: {
+            bearer: config.updateUserToken
+        }
+    }, function(error, response, body) {
+        if (error) {
+            cb(error, '');
+        } else if(JSON.parse(body).length != 1) {
+            var e = new Error('Unable to set password.');
+            e.statusCode = 400;
+            cb(e, '');
+        } else if (response.statusCode !== 200) {
+            var e = new Error('Unable to set password.');
+            e.statusCode = response.statusCode;
+            cb(e, '');
+        } else {
+            request({
+                url: config.auth0URL + '/api/v2/users/' + JSON.parse(body)[0].user_id,
+                method: 'PATCH',
+                form: {
+                    password: password
+                },
+                auth: {
+                    bearer: config.updateUserToken
+                }
+            }, function (error, response, body) {
+                if (error) {
+                    cb(error, '');
+                } else if (response.statusCode !== 200) {
+                    var e = new Error('Unable to set password.');
+                    e.statusCode = response.statusCode;
+                    cb(e, '');
+                } else {
+                    cb(null, 'Password successfully updated.');
+                }
+            });
+        }
+    });
+};
 
 module.exports = Auth0Accessor;

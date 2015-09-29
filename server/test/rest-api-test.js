@@ -83,6 +83,47 @@ describe('REST', function() {
       });
     });
 
+    describe('Set Password', function () {
+      it('should change password', function (done) {
+        common.json('post', '/api/auth/setpassword')
+          .send({
+            email: SOLINK_ADMIN_USERNAME,
+            password: SOLINK_ADMIN_PASSWORD + '2'
+          })
+          .expect(202)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+
+      it('should fail for invalid email', function (done) {
+        common.json('post', '/api/auth/setpassword')
+          .send({
+            email: 'invalid@email.com',
+            password: 'test'
+          })
+          .expect(401)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+
+      // Change the password back to what it was before
+      after(function(done) {
+        common.json('post', '/api/auth/setpassword')
+          .send({
+            email: SOLINK_ADMIN_USERNAME,
+            password: SOLINK_ADMIN_PASSWORD
+          })
+          .expect(202)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+    });
 
     describe('List Devices', function() {
       var userToken;

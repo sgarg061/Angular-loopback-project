@@ -103,6 +103,27 @@ function createValidToken (user) {
     var config = new Config();
     var token = jwt.sign(payload, config.auth0PrivateKey, {algorithm: 'RS256'});
     return token;
-}
+};
+
+FakeAuth0Accessor.prototype.setPassword = function (email, password, cb) {
+    'use strict';
+
+    var matchingUser = users.filter(function (user) {
+        return user.username === email;
+    });
+
+    if (matchingUser.length != 1) {
+        var e = new Error('Unable to set password');
+        e.statusCode(401);
+        cb(e, 'Failed set password');
+        return;
+    }
+
+    matchingUser[0].password = password;
+    var response = {
+        response: "Password successfully updated."
+    };
+    cb(null, response);
+};
 
 module.exports = FakeAuth0Accessor;

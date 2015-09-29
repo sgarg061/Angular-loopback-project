@@ -48,6 +48,11 @@ module.exports = function (Auth) {
         authService.refresh(token, cb);
     };
 
+    Auth.setpassword = function(email, password, cb) {
+        logger.debug('Changing password of user ' + email);
+        authService.setPassword(email, password, cb);
+    }
+
     Auth.remoteMethod(
         'validate',
         {
@@ -74,6 +79,18 @@ module.exports = function (Auth) {
         {
             accepts: {arg: 'token', type: 'string'},
             returns: {arg: 'response', type: 'string'}
+        }
+    );
+
+    Auth.remoteMethod(
+        'setpassword',
+        {
+            accepts: [
+                {arg: 'email', type: 'string'},
+                {arg: 'password', type: 'string'}
+            ],
+            http: {verb: 'post', status: 202, errorStatus: 401},
+            returns: {arg: 'response', type: 'Array'}
         }
     );
 };

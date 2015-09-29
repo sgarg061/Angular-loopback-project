@@ -13,5 +13,8 @@ module.exports = {
     },
     refresh: function (token, cb) {
     	authAccessor.refresh(token, cb);
+    },
+    setPassword: function (email, password, cb) {
+        authAccessor.setPassword(email, password, cb);
     }
 };
