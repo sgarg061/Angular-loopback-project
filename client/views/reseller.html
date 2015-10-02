@@ -3,12 +3,12 @@
 <md-content>
 
   <div layout="row" class="background">
-    
+
     <div class="col-md-3  sidebar-container" layout-margin>
       <sidebar model="reseller" type="'reseller'"
         delete-function="deleteReseller"
         software-versions="softwareVersions"
-        can-modify-event-url-function="canModifyEventUrl" 
+        can-modify-event-url-function="canModifyEventUrl"
         can-modify-image-server-url-function="canModifyImageServerUrl"
         create-software-version-function="openSoftwareVersionForm"
         can-modify-software-version-function="canModifySoftwareVersion"
@@ -19,7 +19,7 @@
     <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
 
       <h2>Customers</h2>
-      
+
       <md-tabs md-dynamic-height>
         <md-tab label="LIST">
           <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
@@ -34,9 +34,9 @@
         </md-tab>
         <md-tab label="MAP">
           <md-content style="height:600px;">
-            
+
             <ui-gmap-google-map center='map.center' zoom='map.zoom'>
-              <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" click="onMarkerClicked" options="'options'" events="map.markers2Events">
+              <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" click="onMarkerClicked" options="'options'" events="map.markers2Events" fit="true">
                 <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
                   <div>
                       <b ng-non-bindable >{{ customerName }}</b><br>
