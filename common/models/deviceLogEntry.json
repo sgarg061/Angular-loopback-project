@@ -9,7 +9,8 @@
   "properties": {
     "deviceId": {
       "type": "string",
-      "required": true
+      "required": true,
+      "index": true
     },
     "timestamp": {
       "type": "string",
