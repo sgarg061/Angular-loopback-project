@@ -4,7 +4,7 @@ angular
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.reseller = {};
-    
+
     $scope.resellerId = null;
 
     $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
@@ -91,7 +91,8 @@ angular
                         labelContent: customer.name,
                         labelAnchor: "22 0",
                         labelClass: "marker-labels"
-                      }
+                      },
+                      selectDevice: $scope.selectDevice
                     });
                   }
                 }
@@ -141,7 +142,7 @@ angular
     $scope.selectDevice = function(device) {
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
-   
+
     $scope.openCustomerForm = function(event, reseller) {
       $mdDialog.show({
         controller: function DialogController($scope, $mdDialog) {
