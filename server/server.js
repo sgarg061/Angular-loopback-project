@@ -24,10 +24,10 @@ app.use(function jwtMiddleware (req, res, next) {
         if (authParts.length !== 2) {
             return next(); // invalid token. nothing to attach.
         }
-        
+
         var token = authParts[1];
         var unpackedToken = jwt.decode(token);
-        
+
         var jwtToken = {
             token: token,
             userType: unpackedToken.app_metadata.userType
@@ -80,7 +80,7 @@ app.start = function() {
 // Update all collection schemas to model definitions
 function autoUpdateAll() {
     Object.keys(models).forEach(function(model) {
-        if(models[model].dataSource == 'elasticsearch') {
+        if(models[model].dataSource === 'elasticsearch') {
             app.dataSources.elasticsearch.autoupdate(model, function(err) {
                 if(err) throw err;
             });

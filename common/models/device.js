@@ -79,7 +79,7 @@ module.exports = function(Device) {
             next();
         }
 
-        
+
     });
 
     function cloudPermissions(Device, ctx, cloudId, next) {
@@ -262,7 +262,7 @@ module.exports = function(Device) {
     };
 
     Device.checkin = function (id, data, cb) {
-        // before doing anything else, log the checkin data 
+        // before doing anything else, log the checkin data
         logCheckin(data);
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
@@ -270,7 +270,7 @@ module.exports = function(Device) {
         // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
         //Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
         Device.find({where: {id: id}}, function (err, res) {
-            var error; 
+            var error;
 
             if (err) {
                 cb(new Error('Failed while finding device to checkin'));
@@ -301,7 +301,7 @@ module.exports = function(Device) {
     function logCheckin(data) {
         var deviceLogEntry = _.clone(data);
         if (deviceLogEntry.id) {
-            
+
             // swap the id for deviceId attribute
             deviceLogEntry.deviceId = deviceLogEntry.id;
             delete deviceLogEntry.id;
@@ -360,6 +360,10 @@ module.exports = function(Device) {
             checkedInProperties.name = deviceData.locationName;
         }
 
+        if (deviceData.deviceInformation && deviceData.deviceInformation.ip) {
+            checkedInProperties.ipAddress = deviceData.deviceInformation.ip;
+        }
+
         return checkedInProperties;
     }
 
@@ -402,7 +406,7 @@ module.exports = function(Device) {
 
     function generateConfigurationResponse(device, cb) {
         var errorPrefix = 'Configuration parameters unavailable:';
-        
+
         var customer = device._customer;
         if (!customer) {
             return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
@@ -453,7 +457,7 @@ module.exports = function(Device) {
 
     // Update a device's attached components. A component can be a Camera or POS.
     function updateDeviceComponent (componentType, component, componentIdName, deviceId) {
-        
+
         var componentId = component[componentIdName];
 
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
@@ -472,7 +476,7 @@ module.exports = function(Device) {
         Device.app.models[componentType].find({where: where}, function(err, res) {
             if (err) {
                 // TODO: this should go in the customer log
-                logger.error('Cannot register %s - Failed while trying to find %s: %s', componentType, componentType, err);        
+                logger.error('Cannot register %s - Failed while trying to find %s: %s', componentType, componentType, err);
             } else {
                 if (res.length > 1) {
                     // TODO: this should go in the customer log
@@ -504,18 +508,18 @@ module.exports = function(Device) {
         Device.app.models[componentType].find({where: {deviceId: deviceId}}, function(err, res) {
             if (err) {
                 // TODO: this should go in the customer log
-                logger.error('Failed while trying to find %s: %s', componentType, err);      
+                logger.error('Failed while trying to find %s: %s', componentType, err);
                 return;
             }
 
-            var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName]});
+            var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
             for (var i = 0; i < res.length; i++) {
                 if(includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
                 var removeCondition = {};
                 removeCondition[componentIdName] = res[i][componentIdName];
                     Device.app.models[componentType].remove(removeCondition);
                 }
-            };
+            }
         });
     }
 
