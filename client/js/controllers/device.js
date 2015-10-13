@@ -79,17 +79,17 @@ angular
           $scope.cloud = devices[0].customer.reseller.cloud;
 
           watchForChanges();
-          
-          /* 
+
+          /*
             Device status
 
-            green: 
+            green:
               - all cameras are green
               - device has checked in within expected interval
-            
+
             yellow:
               - one or more cameras are red
-              - device has checked in within expected interval 
+              - device has checked in within expected interval
             red:
               - device has not checked in within expected interval
           */
@@ -98,9 +98,9 @@ angular
           var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
           var nowInSeconds = new Date().getTime() / 1000;
 
-          var checkinIntervalInSeconds = device.checkinInterval || 
-                                        $scope.customer.checkinInterval || 
-                                        $scope.customer.reseller.checkinInterval || 
+          var checkinIntervalInSeconds = device.checkinInterval ||
+                                        $scope.customer.checkinInterval ||
+                                        $scope.customer.reseller.checkinInterval ||
                                         $scope.customer.reseller.cloud.checkinInterval;
 
           console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
@@ -116,7 +116,7 @@ angular
               if (camera.status != 'online') {
                 allCamerasOnline = false;
                 break;
-              } 
+              }
             }
           }
 
@@ -166,7 +166,7 @@ angular
     $scope.selectDevice = function(device) {
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
-   
+
    $scope.showCheckin = function(anEntry) {
     console.log('show checkin entry: ' + JSON.stringify(anEntry));
     $mdDialog.show({
@@ -186,11 +186,11 @@ angular
     $scope.sendingCheckin = device.id;
 
     // get the right signalling server
-    var signallingServerUrl = device.signallingServerUrl || 
-                              $scope.customer.signallingServerUrl || 
+    var signallingServerUrl = device.signallingServerUrl ||
+                              $scope.customer.signallingServerUrl ||
                               $scope.reseller.signallingServerUrl ||
                               $scope.cloud.signallingServerUrl;
-                              
+
     webrtcCommunications.webrtcCheckin($localStorage.token, device.id, signallingServerUrl, function (err, res) {
       if (err) {
         // maybe display an error message?
