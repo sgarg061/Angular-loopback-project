@@ -141,7 +141,7 @@ function authenticateWithAWS(token, refreshToken, cb) {
             cb(e, 'Failed login');
         }
     });
-};
+}
 
 Auth0Accessor.prototype.setPassword = function (email, password, cb) {
     'use strict';
@@ -154,14 +154,15 @@ Auth0Accessor.prototype.setPassword = function (email, password, cb) {
             bearer: config.updateUserToken
         }
     }, function(error, response, body) {
+        var e = null;
         if (error) {
             cb(error, '');
-        } else if(JSON.parse(body).length != 1) {
-            var e = new Error('Unable to set password.');
+        } else if(JSON.parse(body).length !== 1) {
+            e = new Error('Unable to set password.');
             e.statusCode = 400;
             cb(e, '');
         } else if (response.statusCode !== 200) {
-            var e = new Error('Unable to set password.');
+            e = new Error('Unable to set password.');
             e.statusCode = response.statusCode;
             cb(e, '');
         } else {

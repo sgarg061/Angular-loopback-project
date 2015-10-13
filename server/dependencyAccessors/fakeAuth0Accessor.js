@@ -6,7 +6,7 @@ var users = [
         username: 'cwhiten@solinkcorp.com',
         password: 'test',
         userType: 'solink'
-    }, 
+    },
     {
         username: 'cwhiten+1@solinkcorp.com',
         password: 'test',
@@ -103,7 +103,7 @@ function createValidToken (user) {
     var config = new Config();
     var token = jwt.sign(payload, config.auth0PrivateKey, {algorithm: 'RS256'});
     return token;
-};
+}
 
 FakeAuth0Accessor.prototype.setPassword = function (email, password, cb) {
     'use strict';
@@ -112,7 +112,7 @@ FakeAuth0Accessor.prototype.setPassword = function (email, password, cb) {
         return user.username === email;
     });
 
-    if (matchingUser.length != 1) {
+    if (matchingUser.length !== 1) {
         var e = new Error('Unable to set password');
         e.statusCode(401);
         cb(e, 'Failed set password');
@@ -121,7 +121,7 @@ FakeAuth0Accessor.prototype.setPassword = function (email, password, cb) {
 
     matchingUser[0].password = password;
     var response = {
-        response: "Password successfully updated."
+        response: 'Password successfully updated.'
     };
     cb(null, response);
 };

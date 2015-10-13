@@ -51,7 +51,7 @@ module.exports = function (Auth) {
     Auth.setpassword = function(email, password, cb) {
         logger.debug('Changing password of user ' + email);
         authService.setPassword(email, password, cb);
-    }
+    };
 
     Auth.remoteMethod(
         'validate',
