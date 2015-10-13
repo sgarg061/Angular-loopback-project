@@ -53,7 +53,12 @@ angular
                 include: {
                   relation: 'devices',
                   scope: {
-                    fields: {id: true, name: true, location: true}
+                    include: {
+                      relation: 'cameras',
+                      scope: {
+                        fields: ['id', 'name', 'status']
+                      }
+                    }
                   }
                 }
               }
@@ -70,7 +75,6 @@ angular
 
           watchForChanges();
 
-
           if ($scope.reseller.customers) {
             for (var i=0; i<$scope.reseller.customers.length; i++) {
               var customer = $scope.reseller.customers[i];
@@ -78,9 +82,57 @@ angular
                 for (var j=0; j<customer.devices.length; j++) {
                   var device = customer.devices[j];
                   if (device.location) {
+
+                    // get device status
+                    /*
+                      Device status
+
+                      green:
+                        - all cameras are green
+                        - device has checked in within expected interval
+
+                      yellow:
+                        - one or more cameras are red
+                        - device has checked in within expected interval
+                      red:
+                        - device has not checked in within expected interval
+                    */
+                    var checkinIntervalInSeconds = device.checkinInterval ||
+                      customer.checkinInterval ||
+                      $scope.reseller.checkinInterval ||
+                      $scope.cloud.checkinInterval;
+
+                    var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+                    var nowInSeconds = new Date().getTime() / 1000;
+
+                    var gracePeriodInSeconds = 30;
+                    var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
+
+                    var allCamerasOnline = true;
+                    if (device.cameras) {
+                      for (var k = 0; k < device.cameras.length; k++) {
+                        var camera = device.cameras[k];
+                        if (camera.status != 'online') {
+                          allCamerasOnline = false;
+                          break;
+                        }
+                      }
+                    }
+
+                    if (hasCheckedInOnTime) {
+                      if (allCamerasOnline) {
+                        device.status = 'green';
+                      } else {
+                        device.status = 'yellow';
+                      }
+                    } else {
+                      device.status = 'red';
+                    }
+                    var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
+
                     $scope.markers.push({
                       id: device.id,
-                      icon: 'assets/images/map_marker_28x40.png',
+                      icon: icon,
                       latitude: device.location.lat,
                       longitude: device.location.lng,
                       showWindow: false,
@@ -88,7 +140,6 @@ angular
                       deviceName: device.name,
                       deviceId: device.id,
                       options: {
-                        labelContent: customer.name,
                         labelAnchor: "22 0",
                         labelClass: "marker-labels"
                       },
@@ -240,7 +291,6 @@ angular
     }
 
     function onMarkerClicked(marker) {
-      console.log("marker clicked");
       marker.showWindow = true;
       $scope.$apply();
     }
