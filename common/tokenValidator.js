@@ -18,26 +18,30 @@ module.exports = {
                     cb(e, 'Expired token');
                     return;
                 }
-
                 // ensure the token isn't revoked
                 var revokedClient = cacheService.getCacheClient('revoked');
                 var hashedToken = crypto.createHash('md5').update(token).digest('hex');
-                revokedClient.exists(hashedToken, function (err, reply) {
-                    if (err) {
-                        e = new Error('Error validating token');
-                        e.statusCode = 500;
-                        cb(e, 'Error validating token');
-                    } else {
-                        if (reply === 1) {
-                            e = new Error('Token revoked');
-                            e.statusCode = 401;
-                            cb(e, 'token has been revoked');
+
+                if (revokedClient.ready) {
+                    revokedClient.exists(hashedToken, function (err, reply) {
+                        if (err) {
+                            e = new Error('Error validating token');
+                            e.statusCode = 500;
+                            cb(e, 'Error validating token');
                         } else {
-                            // if successful, add it to the validated token list and set it up to expire once the token is expired
-                            cb(null, 'Valid token');
+                            if (reply === 1) {
+                                e = new Error('Token revoked');
+                                e.statusCode = 401;
+                                cb(e, 'token has been revoked');
+                            } else {
+                                // if successful, add it to the validated token list and set it up to expire once the token is expired
+                                cb(null, 'Valid token');
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    cb(null, 'Valid token');
+                }
             } else {
                 var invalidErr = new Error('Invalid authentication token');
                 invalidErr.statusCode = 401;
