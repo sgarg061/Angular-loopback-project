@@ -12,6 +12,9 @@ angular
     $scope.cloud = null;
     $scope.reseller = null;
 
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
+    $scope.markers = [];
+
     $scope.deviceData = {};
 
     $scope.sort = {
@@ -93,17 +96,17 @@ angular
 
           watchForChanges();
 
-          /* 
+          /*
             Device status
 
-            green: 
+            green:
               - all cameras are green
               - all pos devices are green
               - device has checked in within expected interval
-            
+
             yellow:
               - one or more cameras or pos devices are red
-              - device has checked in within expected interval 
+              - device has checked in within expected interval
             red:
               - device has not checked in within expected interval
           */
@@ -113,9 +116,9 @@ angular
             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
             var nowInSeconds = new Date().getTime() / 1000;
 
-            var checkinIntervalInSeconds = device.checkinInterval || 
-                                          $scope.customer.checkinInterval || 
-                                          $scope.customer.reseller.checkinInterval || 
+            var checkinIntervalInSeconds = device.checkinInterval ||
+                                          $scope.customer.checkinInterval ||
+                                          $scope.customer.reseller.checkinInterval ||
                                           $scope.customer.reseller.cloud.checkinInterval;
 
             console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
@@ -151,9 +154,28 @@ angular
             } else {
               device.status = 'red';
             }
-          }
 
-          console.log(device);
+            // TODO: add marker here
+            if (device.location) {
+              var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
+
+              $scope.markers.push({
+                id: device.id,
+                icon: icon,
+                latitude: device.location.lat,
+                longitude: device.location.lng,
+                showWindow: false,
+                customerName: $scope.customer.name,
+                deviceName: device.name,
+                deviceId: device.id,
+                options: {
+                  labelAnchor: "22 0",
+                  labelClass: "marker-labels"
+                },
+                selectDevice: $scope.selectDevice
+              });
+            }
+          }
         });
     }
 
@@ -181,7 +203,7 @@ angular
     $scope.selectDevice = function(device) {
       $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
-   
+
     var convArrToObj = function(array){
       var thisEleObj = new Object();
       if(typeof array == "object"){
@@ -248,7 +270,7 @@ angular
           scope.licenseKeys = [];
           scope.licenseKeyList = "";
           scope.create = function() {
-            
+
             async.times(scope.quantity, function(n, next){
               License.create({customerId: customerId})
                 .$promise
@@ -263,7 +285,7 @@ angular
                   next(undefined, license)
                 }, function(err) {
                   next(err);
-                })    
+                })
               }, function(err, users) {
                 scope.created = true;
             });
