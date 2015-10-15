@@ -3,11 +3,11 @@
     "name": "db",
     "connector": "memory"
   },
-  "elasticsearch": {
-    "name": "elasticsearch",
-    "connector": "mongodb",
-    "host": "internal-mongodb-2011656830.us-west-2.elb.amazonaws.com",
+  "callHomeDb": {
+    "name": "callHomeDb",
+    "connector": "postgresql",
+    "host": "52.25.203.2",
     "database": "call-home",
-    "port": "80"
+    "port": "27017"
   }
 }

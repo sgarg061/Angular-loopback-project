@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 
 module.exports = function(app, doneCallback) {
 
-  var datastore = app.dataSources.elasticsearch;
+  var datastore = app.dataSources.callHomeDb;
 
   logger.log('info', 'creating sample data...');
 
@@ -101,21 +101,21 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Cloud.create([
-        { name: 'Solink', 
-          eventServerUrl: 'http://api.solinkcloud.net', 
-          imageServerUrl: 'http://images.solinkcloud.net', 
-          signallingServerUrl: 'http://signaller.solinkcloud.net', 
-          updateUrl: 'http://update.solinkcloud.net', 
+        { name: 'Solink',
+          eventServerUrl: 'http://api.solinkcloud.net',
+          imageServerUrl: 'http://images.solinkcloud.net',
+          signallingServerUrl: 'http://signaller.solinkcloud.net',
+          updateUrl: 'http://update.solinkcloud.net',
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
           email: 'cwhiten+c1@solinkcorp.com',
           password: 'test'
         },
-        { name: 'Solink APAC', 
-          eventServerUrl: 'http://api.apac.solinkcloud.net', 
-          imageServerUrl: 'http://images.apac.solinkcloud.net', 
-          signallingServerUrl: 'http://signaller.apac.solinkcloud.net', 
-          updateUrl: 'http://update.solinkcloud.net', 
+        { name: 'Solink APAC',
+          eventServerUrl: 'http://api.apac.solinkcloud.net',
+          imageServerUrl: 'http://images.apac.solinkcloud.net',
+          signallingServerUrl: 'http://signaller.apac.solinkcloud.net',
+          updateUrl: 'http://update.solinkcloud.net',
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
           email: 'cwhiten+c2@solinkcorp.com',
@@ -133,19 +133,19 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Reseller.create([
-        { name: 'Reseller 1', 
-          cloudId: results.clouds[0].id, 
+        { name: 'Reseller 1',
+          cloudId: results.clouds[0].id,
           email: 'cwhiten+r1@solinkcorp.com',
           password: 'test'
         },
-        { name: 'Reseller 2', 
-          cloudId: results.clouds[0].id, 
+        { name: 'Reseller 2',
+          cloudId: results.clouds[0].id,
           checkinInterval: 3000,
           email: 'cwhiten+r2@solinkcorp.com',
           password: 'test'
         },
-        { name: 'Reseller 3', 
-          cloudId: results.clouds[1].id, 
+        { name: 'Reseller 3',
+          cloudId: results.clouds[1].id,
           checkinInterval: 3000,
           email: 'cwhiten+r3@solinkcorp.com',
           password: 'test'
@@ -162,11 +162,11 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       results.clouds[0].posConnectors.create([
-        { name: 'POS Brew Connector', 
+        { name: 'POS Brew Connector',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));'},
-        { name: 'POS MoBrew Connector`', 
+        { name: 'POS MoBrew Connector`',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));'},
-        { name: 'POS 2MuchBrew Connector', 
+        { name: 'POS 2MuchBrew Connector',
           script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));'}
       ], cb);
     });
@@ -180,9 +180,9 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       results.resellers[0].posConnectors.create([
-        { name: 'Connector 1', 
+        { name: 'Connector 1',
           script: 'console.log(\'Connector 1\');'}
-        ], function (err, res) { 
+        ], function (err, res) {
           if (err) {
             console.log('error creating reseller pos connectors: ' + err);
           }
@@ -277,10 +277,10 @@ module.exports = function(app, doneCallback) {
 
 
 if (require.main === module) {
-  // called directly from command line  
+  // called directly from command line
   var app = require('./server');
-  
-  // start the app in order to get system components like auth, redis and cache accessors started up 
+
+  // start the app in order to get system components like auth, redis and cache accessors started up
   app.start();
 
   // Run the import
@@ -289,8 +289,8 @@ if (require.main === module) {
       logger.error('Cannot import sample data - ', err);
     } else {
       logger.info('Sample data was imported.');
-      
+
     }
   });
 }
-  
+

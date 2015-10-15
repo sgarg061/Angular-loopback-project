@@ -3,8 +3,8 @@
     "name": "db",
     "connector": "memory"
   },
-  "elasticsearch": {
-    "name": "elasticsearch",
+  "callHomeDb": {
+    "name": "callHomeDb",
     "connector": "es",
     "index": "call-home",
     "hosts": [
@@ -20,7 +20,7 @@
         "properties": {
           "id": {"type": "string", "index": "not_analyzed"},
           "cloudId": {"type": "string", "index": "not_analyzed"}
-        }  
+        }
       },
       {
         "name": "POSDevice",

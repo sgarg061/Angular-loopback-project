@@ -33,67 +33,67 @@
     "public": false
   },
   "SoftwareVersion": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "POSConnector": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "CloudPOSConnector": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "ResellerPOSConnector": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Cloud": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Reseller": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Customer": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Device": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "Camera": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "POSDevice": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "License": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true
@@ -105,7 +105,7 @@
     "$resolved": true
   },
   "DeviceLogEntry": {
-    "dataSource": "elasticsearch",
+    "dataSource": "callHomeDb",
     "public": true,
     "$promise": {},
     "$resolved": true

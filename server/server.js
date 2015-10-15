@@ -80,8 +80,8 @@ app.start = function() {
 // Update all collection schemas to model definitions
 function autoUpdateAll() {
     Object.keys(models).forEach(function(model) {
-        if(models[model].dataSource === 'elasticsearch') {
-            app.dataSources.elasticsearch.autoupdate(model, function(err) {
+        if(models[model].dataSource === 'callHomeDb') {
+            app.dataSources.callHomeDb.autoupdate(model, function(err) {
                 if(err) throw err;
             });
         }
@@ -93,12 +93,12 @@ function autoUpdateAll() {
 boot(app, __dirname, function(err) {
     if (err) throw err;
 
-    if(app.dataSources.elasticsearch.connected) {
+    if(app.dataSources.callHomeDb.connected) {
       autoUpdateAll();
     } else {
       // if not connected yet, wait. this prevents "possible EventEmitter memory leak detected" warnings.
       // see https://github.com/strongloop/loopback/issues/1186
-      app.dataSources.elasticsearch.once('connected', function() {
+      app.dataSources.callHomeDb.once('connected', function() {
         autoUpdateAll();
       });
     }
