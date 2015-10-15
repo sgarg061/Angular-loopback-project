@@ -1,4 +1,5 @@
 var crypto = require('crypto');
+var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
 
@@ -25,6 +26,10 @@ module.exports = function (License) {
 
     License.observe('before save', function clearLicense(ctx, next) {
         if (ctx.isNewInstance) {
+            if (ctx.instance && !ctx.instance.id) {
+                ctx.instance.id = uuid.v1();
+            }
+
             var loopbackContext = loopback.getCurrentContext();
             // filter out these values if they are coming from an authenticated API request.
             // Otherwise, the request must be a back-end call where we want more control
