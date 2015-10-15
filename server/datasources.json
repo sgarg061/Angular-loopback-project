@@ -3,11 +3,10 @@
     "name": "db",
     "connector": "memory"
   },
-  "elasticsearch": {
-    "name": "elasticsearch",
-    "connector": "mongodb",
-    "host": "127.0.0.1",
-    "database": "call-home",
-    "port": "27017"
+  "callHomeDb": {
+    "name": "callHomeDb",
+    "connector": "postgresql",
+    "url": "postgres://postgres:solink@localhost:5432/call-home",
+    "debug": true
   }
 }

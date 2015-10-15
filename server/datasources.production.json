@@ -3,11 +3,10 @@
     "name": "db",
     "connector": "memory"
   },
-  "elasticsearch": {
-    "name": "elasticsearch",
-    "connector": "mongodb",
-    "host": "internal-mongodb-2011656830.us-west-2.elb.amazonaws.com",
-    "database": "call-home",
-    "port": "80"
+  "callHomeDb": {
+    "name": "callHomeDb",
+    "connector": "postgresql",
+    "url": "postgres://solink:ClhgCk22!!@callhome-test-db.crfyigzqcdko.us-west-2.rds.amazonaws.com:5432/callhome",
+    "debug": false
   }
 }

@@ -3,8 +3,8 @@
     "name": "db",
     "connector": "memory"
   },
-  "elasticsearch": {
-    "name": "elasticsearch",
+  "callHomeDb": {
+    "name": "callHomeDb",
     "connector": "memory"
   }
 }
