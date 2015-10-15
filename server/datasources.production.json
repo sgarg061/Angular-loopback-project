@@ -6,8 +6,7 @@
   "callHomeDb": {
     "name": "callHomeDb",
     "connector": "postgresql",
-    "host": "52.25.203.2",
-    "database": "call-home",
-    "port": "27017"
+    "url": "postgres://solink:ClhgCk22!!@callhome-test-db.crfyigzqcdko.us-west-2.rds.amazonaws.com:5432/callhome",
+    "debug": false
   }
 }
