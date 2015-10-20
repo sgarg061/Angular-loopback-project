@@ -11,8 +11,8 @@ module.exports = {
     createUser: function (email, password, userData, cb) {
     	authAccessor.createUser(email, password, userData, cb);
     },
-    refresh: function (token, cb) {
-    	authAccessor.refresh(token, cb);
+    refresh: function (refreshToken, jwt, cb) {
+    	authAccessor.refresh(refreshToken, jwt, cb);
     },
     setPassword: function (email, password, cb) {
         authAccessor.setPassword(email, password, cb);
