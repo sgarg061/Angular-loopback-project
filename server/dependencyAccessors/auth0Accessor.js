@@ -1,5 +1,6 @@
 var request = require('request');
 var Config = require('../../config');
+var jwt = require('jsonwebtoken');
 
 var Auth0Accessor = function () {
 };
@@ -38,30 +39,49 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
     });
 };
 
-Auth0Accessor.prototype.refresh = function (refreshToken, cb) {
+Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
     'use strict';
     var config = new Config();
-    request({
-        url: config.auth0URL + '/delegation',
-        method: 'POST',
-        form: {
-            client_id: config.auth0ClientID,
-            grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            refresh_token: refreshToken,
-            api_type: 'app',
-            scope: config.auth0Scope
-        }
-    }, function (err, res, body) {
-        if (!err && res.statusCode === 200) {
-            var tokenInfo = JSON.parse(body);
-            var token = tokenInfo.id_token;
-            authenticateWithAWS(token, refreshToken, cb);
-        } else {
-            var e = new Error('Unable to use refresh token');
-            e.statusCode = res.statusCode;
-            cb(e, 'Failed refresh');
-        }
-    });
+
+    // if jwt expires within an hour, refresh the whole thing
+    // else, just refresh the aws token and return the original jwt.
+    var refreshJwt = false;
+
+    var currentTime = Date.now();
+    var unpacked = jwt.decode(jwtToken);
+    console.log(unpacked);
+    if (typeof unpacked === 'object' && unpacked !== null) {
+        var jwtExpiry = unpacked.exp * 1000;
+        refreshJwt = (currentTime - jwtExpiry) < (3600 * 1000);
+    } else {
+        refreshJwt = true;
+    }
+
+    if (refreshJwt) {
+        request({
+            url: config.auth0URL + '/delegation',
+            method: 'POST',
+            form: {
+                client_id: config.auth0ClientID,
+                grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                refresh_token: refreshToken,
+                api_type: 'app',
+                scope: config.auth0Scope
+            }
+        }, function (err, res, body) {
+            if (!err && res.statusCode === 200) {
+                var tokenInfo = JSON.parse(body);
+                var token = tokenInfo.id_token;
+                authenticateWithAWS(token, refreshToken, cb);
+            } else {
+                var e = new Error('Unable to use refresh token');
+                e.statusCode = res.statusCode;
+                cb(e, 'Failed refresh');
+            }
+        });
+    } else {
+        authenticateWithAWS(jwtToken, refreshToken, cb);
+    }
 };
 
 Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
@@ -104,16 +124,16 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     });
 };
 
-function authenticateWithAWS(token, refreshToken, cb) {
+function authenticateWithAWS(jwtToken, refreshToken, cb) {
     'use strict';
     var config = new Config();
-    console.log(token);
+    console.log(jwtToken);
     request({
         url: config.auth0URL + '/delegation',
         method: 'POST',
         form: {
             grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            id_token: token,
+            id_token: jwtToken,
             client_id: config.auth0ClientID,
             role: config.auth0AWSRole,
             principal: config.auth0AWSPrincipal,
@@ -124,7 +144,7 @@ function authenticateWithAWS(token, refreshToken, cb) {
             var tokenInfo = JSON.parse(body);
             var creds = tokenInfo.Credentials;
             var response = {
-                authToken: token,
+                authToken: jwtToken,
                 refreshToken: refreshToken,
                 aws: {
                     accessKeyId: creds.AccessKeyId,

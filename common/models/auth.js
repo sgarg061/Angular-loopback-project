@@ -44,8 +44,8 @@ module.exports = function (Auth) {
         authService.login(username, password, cb);
     };
 
-    Auth.refresh = function(token, cb) {
-        authService.refresh(token, cb);
+    Auth.refresh = function(refreshToken, jwt, cb) {
+        authService.refresh(refreshToken, jwt, cb);
     };
 
     Auth.setpassword = function(email, password, cb) {
@@ -77,7 +77,10 @@ module.exports = function (Auth) {
     Auth.remoteMethod(
         'refresh',
         {
-            accepts: {arg: 'token', type: 'string'},
+            accepts: [
+                {arg: 'refreshToken', type: 'string'},
+                {arg: 'jwtToken', type: 'string'}
+            ],
             returns: {arg: 'response', type: 'string'}
         }
     );
