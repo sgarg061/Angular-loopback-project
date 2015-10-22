@@ -15,8 +15,7 @@ A device object has the following attributes:
 + name - The device's name
 + status - The current status of the device (ie. online, offline, ...)
 + address - The address of the device
-+ lat - The latitude of the device's location
-+ lon - The longitude of the device's location
++ location - The latitude and longitude of the device's location
 + organizationPath - The location path of the device (ie. Canada/Ontario/Kanata)
 + lastCheckin - The UTC datetime of the most recent check-in (so we know how stale this data may be)
 + username - The username to authenticate with the device
@@ -26,21 +25,23 @@ A device object has the following attributes:
 
 + Parameters
     + id: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
-    
+
 ### Get Device [GET]
 
 
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
                 "name": "Amazing Connect #1",
                 "status": "offline",
                 "address": "221B Baker Street, London, England",
-                "lat": -31.42,
-                "lon": 41.99,
+                "location": {
+                    "lat": -31.42,
+                    "lng": 41.99
+                },
                 "organizationPath": "Canada/Ontario/Kanata",
                 "lastCheckin": "2015-08-25T20:11:46.370Z",
                 "username": "christopher",
@@ -101,7 +102,7 @@ A device object has the following attributes:
     + filter%5Boffset%5D: 5 (optional, number) - The offset of the device list to start paging from
     + filter%5Blimit%5D: 10 (optional, number) - The maximum number of devices to return
     + filter%5Binclude%5D: cameras (optional) - Relational data to include with the devices
-    
+
 ### List all Devices [GET]
 
 + Response 200 (application/json)
@@ -111,15 +112,17 @@ A device object has the following attributes:
             Link: </devices?offset=5>; rel="next"
 
     + Body
-    
+
             [
                 {
                     "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
                     "name": "Amazing Connect #1",
                     "status": "offline",
                     "address": "221B Baker Street, London, England",
-                    "lat": -31.42,
-                    "lon": 41.99,
+                    "location": {
+                        "lat": -31.42,
+                        "lng": 41.99
+                    },
                     "organizationPath": "Canada/Ontario/Kanata",
                     "lastCheckin": "2015-08-25T20:11:46.370Z",
                     "username": "christopher",
@@ -178,8 +181,10 @@ A device object has the following attributes:
                     "name": "Amazing Connect #2",
                     "status": "online",
                     "address": "221B Faker Street, London, England",
-                    "lat": -311.42,
-                    "lon": 411.99,
+                    "location": {
+                        "lat": -311.42,
+                        "lng": 411.99
+                    },
                     "organizationPath": "Canada/Ontario/Kanata",
                     "lastCheckin": "2015-08-25T20:11:46.370Z",
                     "username": "christopher",
@@ -228,8 +233,10 @@ A device object has the following attributes:
                     "name": "Not So Amazing Connect #1",
                     "status": "online",
                     "address": "390 March Road, Ottawa, Ontario, Canada",
-                    "lat": 31.42,
-                    "lon": 41.99,
+                    "location": {
+                        "lat": -31.42,
+                        "lng": 41.99
+                    },
                     "organizationPath": "Canada/Ontario/Kanata",
                     "lastCheckin": "2015-08-25T20:11:46.370Z",
                     "username": "christopher",
@@ -267,8 +274,10 @@ A device object has the following attributes:
                     "name": "Not So Amazing Connect #2",
                     "status": "online",
                     "address": "221B Baker Street, London, England",
-                    "lat": -31.142,
-                    "lon": 41.939,
+                    "location": {
+                        "lat": -31.421,
+                        "lng": 41.991
+                    },
                     "organizationPath": "Canada/Ontario/Kanata",
                     "lastCheckin": "2015-08-25T20:11:46.370Z",
                     "username": "christopher",
@@ -304,8 +313,10 @@ A device object has the following attributes:
                     "name": "Not So Amazing Connect #3",
                     "status": "offline",
                     "address": "123 Sesame Street, Paris, France",
-                    "lat": -11.42,
-                    "lon": 11.99,
+                    "location": {
+                        "lat": -11.42,
+                        "lng": 11.99
+                    },
                     "organizationPath": "Canada/Quebec/Nepean",
                     "lastCheckin": "2015-08-25T20:11:46.370Z",
                     "username": "christopher",
@@ -330,18 +341,18 @@ A device object has the following attributes:
                     ]
                 },
             ]
-            
+
 ## List All Cameras on a Device [/api/devices/{id}/cameras]
 
 + Parameters
     + id: a3084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The id of the device
-    
+
 ### List all cameras on a device [GET]
 
 + Response 200 (application/json)
 
     + Body
-    
+
             [
                 {
                     "id":"a3084250-4b37-11e5-8184-752d1c0476b3",
@@ -389,7 +400,7 @@ A device object has the following attributes:
                     ]
                 }
             ]
-                
+
 
 ## Group Licenses
 
@@ -437,7 +448,7 @@ A user or connect device will post to the /auth/login endpoint to get a valid JW
                 sessionToken: "AQoDYXdzENr//////////wEawALgJc/SxMUbsxgIL5CGQcoGQmxF5wpV8ZuWQtwDYGngPfrXCHxoknbwxjwQOJPaK6N2rFtKoPw4ojJon1K9BQlNZnUQ4NSuPmTqDLZdltS+nrlUdZ/U8RWdFhoDtrJLL/aBsHBlymLPIR//JcuiCMnWZDtPpOIZVK92wZKllMunfnnpVz9LN/X6jkeX2NhMYRK+Q2dTH0Z7UuOgK+UMTW1/ayFECDGrVCctkmdR1Rr/cVA0yq8zF4k/SYar5WZIWQ1YLvSHT57/jD/lAUBOuBQ64gMwvXw8ptsRpl1c0xjWZn4azrMBz+FJAs2OTbcrl/arUF3YVLttH+aEIxHMamGYbUxqq3e7LOjKvnJbWFVWfdsrRaWMyaEIPYbVKOodRtlcsD+9p2qXtBr0eB48hBggxoir+P9yGNFeprgG7s/e/SCZ3cmtBQ=="
             }-
         }
-        
+
 ## Validate [/api/auth/validate]
 
 Validate whether a given JWT token is valid (not expired, matches secret, not revoked).
@@ -471,7 +482,7 @@ Generate a new authentication token from a user's refresh token.
         {
             "auth_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY"
         }
-        
+
 ## Set password [/api/auth/setpassword]
 
 A request from the platform is sent out with user's current email and new password
