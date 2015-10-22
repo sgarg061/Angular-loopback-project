@@ -9,6 +9,9 @@ var Config = require('../config');
 var loopbackConsole = require('loopback-console');
 var models = require('./model-config.json');
 
+var https = require('https');
+var sslConfig = require('./ssl-config');
+
 var app = module.exports = loopback();
 
 app.use(loopback.context());
@@ -70,10 +73,17 @@ app.start = function() {
     authService.initialize(new Auth0Accessor());
     initializeRedis();
     cacheService.initialize(RedisAccessor);
+
     // start the web server
-    return app.listen(function() {
-       app.emit('started');
-       console.log('Web server listening at: %s', app.get('url'));
+    var options = {
+        key: sslConfig.privateKey,
+        cert: sslConfig.certificate
+    };
+
+    var server = https.createServer(options, app);
+    return server.listen(app.get('port'), function () {
+        app.emit('started');
+        console.log('Web server listening at %s', app.get('url'));
     });
 };
 

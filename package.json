@@ -24,6 +24,7 @@
     "loopback-connector-postgresql": "^2.3.0",
     "loopback-console": "^0.1.0",
     "loopback-datasource-juggler": "^2.19.0",
+    "loopback-explorer": "^1.8.0",
     "mocha-teamcity-reporter": "0.0.4",
     "node-uuid": "^1.4.3",
     "rand-token": "^0.2.1",
