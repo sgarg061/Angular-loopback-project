@@ -48,9 +48,9 @@ module.exports = function (Auth) {
         authService.refresh(refreshToken, jwt, cb);
     };
 
-    Auth.setpassword = function(email, password, cb) {
+    Auth.setpassword = function(email, oldPassword, newPassword, cb) {
         logger.debug('Changing password of user ' + email);
-        authService.setPassword(email, password, cb);
+        authService.setPassword(email, oldPassword, newPassword, cb);
     };
 
     Auth.remoteMethod(
@@ -89,8 +89,9 @@ module.exports = function (Auth) {
         'setpassword',
         {
             accepts: [
-                {arg: 'email', type: 'string'},
-                {arg: 'password', type: 'string'}
+                {arg: 'email', type: 'string', required: true},
+                {arg: 'oldPassword', type: 'string', required: true},
+                {arg: 'newPassword', type: 'string', required: true}
             ],
             http: {verb: 'post', status: 202, errorStatus: 401},
             returns: {arg: 'response', type: 'Array'}
