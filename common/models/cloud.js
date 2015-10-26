@@ -35,7 +35,6 @@ module.exports = function(Cloud) {
             var cloudId = context.get('jwt').cloudId;
             var customerId = context.get('jwt').tenantId;
             var resellerId = context.get('jwt').resellerId;
-            
             if (context.get('jwt').userType === 'solink') {
                 next();
             } else if (cloudId) {
@@ -62,11 +61,12 @@ module.exports = function(Cloud) {
             } else if (customerId) {
                 // get the cloud of this customer id, must be that id.
                 loopback.getModel('Customer').findById(customerId, {include: 'reseller'}, function (err, res) {
+                    var cloudId = res.toJSON().reseller.cloudId;
                     if (ctx.query.where) {
-                        ctx.query.where.id = res.reseller.cloudId;
+                        ctx.query.where.id = cloudId;
                     } else {
                         ctx.query.where = {
-                            id: res.reseller.cloudId
+                            id: cloudId
                         };
                     }
                     next();
