@@ -200,4 +200,31 @@ Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword,
     });
 };
 
+Auth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
+    'use strict';
+    var config = new Config();
+
+    var forgotPasswordForm = {
+        email: email,
+        password: newPassword,
+        connection: 'Username-Password-Authentication'
+    };
+
+    request({
+        url: config.auth0URL + '/dbconnections/change_password',
+        method: 'POST',
+        form: forgotPasswordForm,
+    }, function (error, response, body) {
+        if (error) {
+            cb(error, '');
+        } else if (response.statusCode !== 200) {
+            var e = new Error('Unable to send forgot password email');
+            e.statusCode = response.statusCode;
+            cb(e, '');
+        } else {
+            cb(null, 'Forgot password email successfully sent.');
+        }
+    });
+};
+
 module.exports = Auth0Accessor;

@@ -155,6 +155,46 @@ describe('REST', function() {
       });
     });
 
+    describe('Forgot Password', function () {
+      it('should send forgot password email', function (done) {
+        common.json('post', '/api/auth/forgotpassword')
+          .send({
+            email: SOLINK_ADMIN_USERNAME,
+            newPassword: 'newpassword'
+          })
+          .expect(200)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+
+      it('should not send forgot password email with invalid email', function (done) {
+        common.json('post', '/api/auth/forgotpassword')
+          .send({
+            email: 'invalid email',
+            newPassword: 'newpassword'
+          })
+          .expect(400)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+
+      it('should not send forgot password email with missing new password', function (done) {
+        common.json('post', '/api/auth/forgotpassword')
+          .send({
+            email: SOLINK_ADMIN_USERNAME,
+          })
+          .expect(400)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+    });
+
     describe('List Devices', function() {
       var userToken;
 

@@ -16,5 +16,8 @@ module.exports = {
     },
     setPassword: function (email, oldPassword, newPassword, cb) {
         authAccessor.setPassword(email, oldPassword, newPassword, cb);
+    },
+    forgotPassword: function (email, newPassword, cb) {
+        authAccessor.forgotPassword(email, newPassword, cb);
     }
 };

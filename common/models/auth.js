@@ -53,6 +53,11 @@ module.exports = function (Auth) {
         authService.setPassword(email, oldPassword, newPassword, cb);
     };
 
+    Auth.forgotpassword = function(email, newPassword, cb) {
+        logger.debug('Forgot password of user ' + email);
+        authService.forgotPassword(email, newPassword, cb);
+    };
+
     Auth.remoteMethod(
         'validate',
         {
@@ -94,6 +99,18 @@ module.exports = function (Auth) {
                 {arg: 'newPassword', type: 'string', required: true}
             ],
             http: {verb: 'post', status: 202, errorStatus: 401},
+            returns: {arg: 'response', type: 'Array'}
+        }
+    );
+
+    Auth.remoteMethod(
+        'forgotpassword',
+        {
+            accepts: [
+                {arg: 'email', type: 'string', required: true},
+                {arg: 'newPassword', type: 'string', required: true}
+            ],
+            http: {verb: 'post', status: 200, errorStatus: 400},
             returns: {arg: 'response', type: 'Array'}
         }
     );
