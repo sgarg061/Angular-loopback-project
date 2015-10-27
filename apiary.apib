@@ -486,14 +486,15 @@ Generate a new authentication token from a user's refresh token.
 
 ## Set password [/api/auth/setpassword]
 
-A request from the platform is sent out with user's current email and new password
+A request from the platform is sent out with user's current email, current password and new password
 
 ### Change Password [POST]
 + Request (application/json)
 
         {
             "email": "isharif@solinkcorp.com",
-            "password": "new password"
+            "oldPassword": "old password",
+            "newPassword": "new password"
         }
 
 + Response 202 (application/json)

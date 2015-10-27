@@ -163,34 +163,24 @@ function authenticateWithAWS(jwtToken, refreshToken, cb) {
     });
 }
 
-Auth0Accessor.prototype.setPassword = function (email, password, cb) {
+Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword, cb) {
     'use strict';
     var config = new Config();
 
-    request({
-        url: config.auth0URL + '/api/v2/users?q=email: "' + email + '"&search_engine=v2',
-        method: 'GET',
-        auth: {
-            bearer: config.updateUserToken
-        }
-    }, function(error, response, body) {
-        var e = null;
-        if (error) {
-            cb(error, '');
-        } else if(JSON.parse(body).length !== 1) {
-            e = new Error('Unable to set password.');
-            e.statusCode = 400;
-            cb(e, '');
-        } else if (response.statusCode !== 200) {
-            e = new Error('Unable to set password.');
-            e.statusCode = response.statusCode;
+    Auth0Accessor.prototype.login(email, oldPassword, function (error, response, body) {
+        if (error || response && !response.authToken) {
+            var e = new Error('Unable to set password.');
+            if(response) {
+                e.statusCode = response.statusCode;
+            }
             cb(e, '');
         } else {
+            var userId = jwt.decode(response.authToken).sub;
             request({
-                url: config.auth0URL + '/api/v2/users/' + JSON.parse(body)[0].user_id,
+                url: config.auth0URL + '/api/v2/users/' + userId,
                 method: 'PATCH',
                 form: {
-                    password: password
+                    password: newPassword
                 },
                 auth: {
                     bearer: config.updateUserToken

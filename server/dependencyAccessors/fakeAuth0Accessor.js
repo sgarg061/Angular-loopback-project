@@ -105,21 +105,20 @@ function createValidToken (user) {
     return token;
 }
 
-FakeAuth0Accessor.prototype.setPassword = function (email, password, cb) {
+FakeAuth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword, cb) {
     'use strict';
 
     var matchingUser = users.filter(function (user) {
         return user.username === email;
     });
-
-    if (matchingUser.length !== 1) {
+    if (matchingUser.length !== 1 || matchingUser[0].password !== oldPassword) {
         var e = new Error('Unable to set password');
-        e.statusCode(401);
+        e.statusCode = 401;
         cb(e, 'Failed set password');
         return;
     }
 
-    matchingUser[0].password = password;
+    matchingUser[0].password = newPassword;
     var response = {
         response: 'Password successfully updated.'
     };

@@ -88,9 +88,37 @@ describe('REST', function() {
         common.json('post', '/api/auth/setpassword')
           .send({
             email: SOLINK_ADMIN_USERNAME,
-            password: SOLINK_ADMIN_PASSWORD + '2'
+            oldPassword: SOLINK_ADMIN_PASSWORD,
+            newPassword: 'newpassword'
           })
           .expect(202)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+
+      it('should not change password with missing old password', function (done) {
+        common.json('post', '/api/auth/setpassword')
+          .send({
+            email: SOLINK_ADMIN_USERNAME,
+            newPassword: 'newpassword'
+          })
+          .expect(400)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
+      });
+
+      it('should not change password with invalid old password', function (done) {
+        common.json('post', '/api/auth/setpassword')
+          .send({
+            email: SOLINK_ADMIN_USERNAME,
+            oldPassword: 'badpassword',
+            newPassword: 'newpassword'
+          })
+          .expect(401)
           .end(function(err, res) {
             if(err) throw err;
             done();
@@ -101,7 +129,8 @@ describe('REST', function() {
         common.json('post', '/api/auth/setpassword')
           .send({
             email: 'invalid@email.com',
-            password: 'test'
+            oldPassword: 'oldpassword',
+            newPassword: 'newpassword'
           })
           .expect(401)
           .end(function(err, res) {
@@ -115,7 +144,8 @@ describe('REST', function() {
         common.json('post', '/api/auth/setpassword')
           .send({
             email: SOLINK_ADMIN_USERNAME,
-            password: SOLINK_ADMIN_PASSWORD
+            oldPassword: 'newpassword',
+            newPassword: SOLINK_ADMIN_PASSWORD
           })
           .expect(202)
           .end(function(err, res) {
