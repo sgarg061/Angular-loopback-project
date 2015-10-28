@@ -125,4 +125,23 @@ FakeAuth0Accessor.prototype.setPassword = function (email, oldPassword, newPassw
     cb(null, response);
 };
 
+FakeAuth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
+    'use strict';
+
+    var matchingUser = users.filter(function (user) {
+        return user.username === email;
+    });
+    if (matchingUser.length !== 1) {
+        var e = new Error('Unable to send forgot password email');
+        e.statusCode = 400;
+        cb(e, 'Failed send forgot password email');
+        return;
+    }
+
+    var response = {
+        response: 'Forgot password email successfully sent.'
+    };
+    cb(null, response);
+};
+
 module.exports = FakeAuth0Accessor;
