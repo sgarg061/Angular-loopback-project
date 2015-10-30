@@ -22,4 +22,14 @@ module.exports = function(DeviceLogEntry) {
     // DeviceLogEntry.disableRemoteMethod('count', true);
     // DeviceLogEntry.disableRemoteMethod('exists', true);
 
+    DeviceLogEntry.prototype.toJSON = function() {
+        var o = this.toObject(false, true, false);
+        if (o.checkinData) {
+            for (var key in o.checkinData) {
+                o[key] = o.checkinData[key];
+            }
+            delete o.checkinData;
+        }
+        return o;
+    }
 };

@@ -115,6 +115,32 @@ describe('Checkin after initial device activation', function() {
       });
   });
 
+  it('should result in log entry with all the information', function (done) {
+    common.login('solink', function (token) {
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+          assert(typeof res.body === 'object');
+          assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+          var logEntry = res.body.logEntries[0];
+          assert(!logEntry.hasOwnProperty('checkinData'));
+          assert.equal(logEntry.deviceId, deviceId);
+          assert(logEntry.hasOwnProperty('timestamp'));
+          assert(logEntry.hasOwnProperty('id'));
+          assert.equal(logEntry.guid, deviceCheckinData.guid);
+          assert.equal(logEntry.organizationPath, deviceCheckinData.organizationPath);
+          assert.equal(logEntry.address, deviceCheckinData.address);
+          assert.deepEqual(logEntry.location, deviceCheckinData.location);
+          assert.deepEqual(logEntry.deviceInformation, deviceCheckinData.deviceInformation);
+          assert.deepEqual(logEntry.posInformation, deviceCheckinData.posInformation);
+          assert.deepEqual(logEntry.cameraInformation, deviceCheckinData.cameraInformation);
+          done();
+        });
+      });
+  });
+
   describe('Checkin of existing device', function() {
 
     it('should allow updated checkin data to be posted', function(done) {

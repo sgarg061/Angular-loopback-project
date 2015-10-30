@@ -298,20 +298,36 @@ module.exports = function(Device) {
         });
     };
 
+    Device.prototype.toJSON = function() {
+        var device = this.toObject(false, true, false);
+        if(device.logEntries) {
+            device.logEntries = device.logEntries.map(function (logEntry) {
+                if(logEntry.checkinData) {
+                    for (var key in logEntry.checkinData) {
+                        logEntry[key] = logEntry.checkinData[key];
+                    }
+                    delete logEntry.checkinData;
+                }
+                return logEntry;
+            });
+        }
+        return device;
+    };
+
     function logCheckin(data) {
-        var deviceLogEntry = _.clone(data);
-        if (deviceLogEntry.id) {
+        var deviceLogEntry = {checkinData: _.clone(data)};
+        if (deviceLogEntry.checkinData.id) {
 
             // swap the id for deviceId attribute
-            deviceLogEntry.deviceId = deviceLogEntry.id;
-            delete deviceLogEntry.id;
+            deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
+            delete deviceLogEntry.checkinData.id;
 
             // add a timestamp field
             deviceLogEntry.timestamp = Date.now();
 
             Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
                 if (err) {
-                    logger.err('Failed to insert logEntry for device checkin: %s', err);
+                    logger.error('Failed to insert logEntry for device checkin: %s', err);
                 } else {
                     logger.debug('logEntry for device stored successfully');
                 }
