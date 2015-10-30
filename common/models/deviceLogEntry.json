@@ -12,6 +12,13 @@
       "required": true,
       "index": true
     },
+    "checkinData": {
+      "type": "object",
+      "required": true,
+      "postgresql": {
+        "dataType": "jsonb"
+      }
+    },
     "timestamp": {
       "type": "string",
       "required": true,
