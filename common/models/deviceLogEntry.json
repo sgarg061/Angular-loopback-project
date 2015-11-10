@@ -14,7 +14,8 @@
     },
     "checkinData": {
       "type": "object",
-      "required": true,
+      "required": false,
+      "default": {},
       "postgresql": {
         "dataType": "jsonb"
       }
