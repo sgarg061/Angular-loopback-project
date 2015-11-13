@@ -15,6 +15,7 @@
 ## Running in Development
 
 Ensure the Elasticsearch and Redis processes are running. See datasources.json and config.json for expected locations and ports.
+Running locally also need postgres (database name: call-home)
   
 Running as a single Node process:
 
@@ -38,7 +39,7 @@ Stopping the cluster
 
 Creating sample data
 
-	node create-sample-data.js
+	node server/create-sample-data.js
 
 ## Interactive Console
 
