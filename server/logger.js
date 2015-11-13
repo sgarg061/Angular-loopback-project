@@ -32,8 +32,8 @@ module.exports = (function() {
                     fs.unlink(old_file_name);
                 }
             });
-        setTimeout(cleanUpOldLog , 24 * 60 * 60 * 1000)
-    }
+        setTimeout(cleanUpOldLog , 24 * 60 * 60 * 1000);
+    };
 
     cleanUpOldLog();
 
