@@ -18,9 +18,9 @@
 - Elasticsearch (port: 9200) (able to run without this)
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
-- Postgres (port: 5432, password for superuser(protgres): solink, database name: call-home)
+- Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
 
-More specific config data stored in [server/datasources.json](server/datasources.json) and [config.json](config.json).
+More specific config data stored in [server/datasources.json](server/datasources.json) and [config.js](config.js).
 
 ### Command for running
 Running as a single Node process:
