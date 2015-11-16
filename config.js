@@ -25,7 +25,7 @@ var productionSettings = {
             label: 'system'
         },
         file: {
-            filename: 'call-home-server.log',
+            filename: 'call-home-server',
             level: 'debug'
         }
     }
@@ -55,7 +55,7 @@ var developmentSettings = {
             label: 'system'
         },
         file: {
-            filename: 'call-home-server.log',
+            filename: 'call-home-server',
             level: 'debug'
         }
     }

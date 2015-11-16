@@ -14,8 +14,15 @@
 
 ## Running in Development
 
-Ensure the Elasticsearch and Redis processes are running. See datasources.json and config.json for expected locations and ports.
-  
+### Prerequisites
+- Elasticsearch (port: 9200) (able to run without this)
+- Redis processes (port: 6380) (able to run without this, but will keep logging error message:
+ `WARNING: Unable to create redis connection`)
+- Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
+
+More specific config data stored in [server/datasources.json](server/datasources.json) and [config.js](config.js).
+
+### Command for running
 Running as a single Node process:
 
 	node . # then browse to localhost:3000
@@ -38,7 +45,7 @@ Stopping the cluster
 
 Creating sample data
 
-	node create-sample-data.js
+	node server/create-sample-data.js
 
 ## Interactive Console
 
