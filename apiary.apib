@@ -418,9 +418,9 @@ When installing a Connect device, a license key is provided.  Providing this lic
 + Response 200 (application/json)
 
         {
-            authToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
-            refreshToken: "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM",
-            deviceId: "A4af23bij"
+            "authToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfbWV0YWRhdGEiOnsidGVuYW50X2lkIjoiMSIsInVzZXJfdHlwZSI6IlN1cGVyQWRtaW4ifSwiZW1haWwiOiJjd2hpdGVuKzFAc29saW5rY29ycC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vc29saW5rLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NWE2ODVjMjQ4OTdiM2FiMTAyNTUzMjgiLCJhdWQiOiI1UjlpREtpUTduWUNHT0phQkRyUGJlc013bmtHajdpaCIsImV4cCI6MTQzNzc5MzA4MCwiaWF0IjoxNDM3NzU3MDgwfQ.8yCltCoXpjAumpSiAZpFl55-rWwKTdZgQ8pOjFUCLsY",
+            "refreshToken": "W4WhwYpXTBeBYuuNz7zBSBf8zZbkazQlLWkRmvaYMoSAM",
+            "deviceId": "A4af23bij"
         }
 
 ## Group Authentication
@@ -498,6 +498,7 @@ A request from the platform is sent out with user's current email, current passw
         }
 
 + Response 202 (application/json)
+        
         {
             "response": "Password successfully updated."
         }
@@ -515,6 +516,7 @@ An email is sent to the user's current email to confirm changing the password
         }
 
 + Response 200 (application/json)
+        
         {
             "response": "Forgot password email successfully sent."
         }
