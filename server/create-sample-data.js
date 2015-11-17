@@ -267,7 +267,9 @@ module.exports = function(app, doneCallback) {
       }
       app.models.License.create([
         {key: 'ETSHOWDOTHEYWORK', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[0].id},
-        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[1].id}
+        {key: 'ABCDABCDABCD', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[1].id},
+        {key: 'ABCDABCDABCE', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[1].id},
+        {key: 'ABCDABCDABCF', username: 'tcope', password: 'password', customerId: results.customers[0].id, activated: false, deviceId: results.devices[1].id},
       ], cb);
     });
   }
