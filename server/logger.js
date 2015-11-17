@@ -26,9 +26,9 @@ module.exports = (function() {
         var month= date.getMonth() + 1;
         var year = date.getFullYear();
         var old_file_name = config.log.file.filename + '_' + day + '_' + month  + '_' + year + '.log';
-        fs.access(old_file_name, fs.F_OK,
-            function(err) {
-                if(!err) {
+        fs.exists(old_file_name,
+            function(exists) {
+                if(exists) {
                     fs.unlink(old_file_name);
                 }
             });
