@@ -35,8 +35,8 @@ var developmentSettings = {
     auth0URL: 'https://solink-test.auth0.com',
     auth0ClientID: 'apgeIHLz2aSl1PyHUET1jpy3VCL4HAEe',
     auth0Scope: 'openid email app_metadata offline_access created_at',
-    auth0AWSRole: 'arn:aws:iam::150303506660:role/s3-access-by-tenantid-integration',
-    auth0AWSPrincipal: 'arn:aws:iam::150303506660:saml-provider/auth0-solink-test',
+    auth0AWSRole: 'arn:aws:iam::150303506660:role/int-s3-access-by-tenant',
+    auth0AWSPrincipal: 'arn:aws:iam::150303506660:saml-provider/int-auth0-provider',
 
     auth0PublicKey: fs.readFileSync('private/solink-test.pem', {encoding: 'utf8'}),
     auth0PrivateKey: fs.readFileSync('private/solink-test.priv', {encoding: 'utf8'}),
