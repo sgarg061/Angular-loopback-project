@@ -215,7 +215,7 @@ function parseDeviceData(deviceInfo, customerId) {
     var address = '';
     if (typeof deviceInfo.address === 'string') {
         address = deviceInfo.address;
-    } else if (_.isPlainObject(deviceInfo.address)) {
+    } else if (_.isPlainObject(deviceInfo.address) && typeof deviceInfo.address.formatted_address === 'string') {
         address = deviceInfo.address.formatted_address;
     } else {
         address = 'Unknown address';
@@ -227,7 +227,7 @@ function parseDeviceData(deviceInfo, customerId) {
     deviceData.username = deviceUsername;
     deviceData.password = devicePassword;
 
-    if (typeof deviceInfo.location !== 'undefined') {
+    if (_.isPlainObject(deviceInfo.location)) {
         var lat = deviceInfo.location.lat;
         var lng = deviceInfo.location.lng;
         deviceData.location = {
@@ -240,7 +240,10 @@ function parseDeviceData(deviceInfo, customerId) {
     var orgPathComponents = [];
     if (_.isPlainObject(deviceInfo.address) && deviceInfo.address.address_components instanceof Array) {
         var addressComponents = deviceInfo.address.address_components;
-        var countryComponent = addressComponents.filter(function(component) {
+        var countryComponent = addressComponents.filter(function isCountryComponent(component) {
+            if (!(component.types instanceof Array)) {
+                return false;
+            }
             return component.types.filter(function(type) {
                 return type === 'country';
             }).length > 0;
@@ -250,7 +253,10 @@ function parseDeviceData(deviceInfo, customerId) {
             orgPathComponents.push(countryComponent[0].long_name);
         }
 
-        var provinceComponent = addressComponents.filter(function(component) {
+        var provinceComponent = addressComponents.filter(function isProvinceComponent(component) {
+            if (!(component.types instanceof Array)) {
+                return false;
+            }
             return component.types.filter(function (type) {
                 return ['administrative_area_level_1'].indexOf(type) >= 0; // what qualifies as a province here?  Test different countries. TODO
             }).length > 0;
@@ -260,7 +266,10 @@ function parseDeviceData(deviceInfo, customerId) {
             orgPathComponents.push(provinceComponent[0].long_name);
         }
 
-        var cityComponent = addressComponents.filter(function(component) {
+        var cityComponent = addressComponents.filter(function isCityComponent(component) {
+            if (!(component.types instanceof Array)) {
+                return false;
+            }
             return component.types.filter(function(type) {
                 return type === 'locality';
             }).length > 0;
