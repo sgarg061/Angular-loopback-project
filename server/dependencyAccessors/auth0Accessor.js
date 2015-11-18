@@ -49,10 +49,10 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
 
     var currentTime = Date.now();
     var unpacked = jwt.decode(jwtToken);
-    console.log(unpacked);
+    console.log('unpacked token to refresh: ', unpacked);
     if (typeof unpacked === 'object' && unpacked !== null) {
         var jwtExpiry = unpacked.exp * 1000;
-        refreshJwt = (currentTime - jwtExpiry) < (3600 * 1000);
+        refreshJwt = (jwtExpiry - currentTime) < (3600 * 1000);
     } else {
         refreshJwt = true;
     }
