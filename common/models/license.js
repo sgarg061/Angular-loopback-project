@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
+var _ = require('lodash');
 
 var loopback = require('loopback');
 
@@ -204,7 +205,7 @@ function parseDeviceData(deviceInfo, customerId) {
     var name = '';
     if (deviceInfo.name) {
         name = deviceInfo.name;
-    } else if (typeof deviceInfo.address === 'object' && typeof deviceInfo.address.name !== 'undefined') {
+    } else if (_.isPlainObject(deviceInfo.address) && typeof deviceInfo.address.name === 'string') {
         name = deviceInfo.address.name;
     } else {
         name = 'Activated Device';
@@ -214,7 +215,7 @@ function parseDeviceData(deviceInfo, customerId) {
     var address = '';
     if (typeof deviceInfo.address === 'string') {
         address = deviceInfo.address;
-    } else if (typeof deviceInfo.address === 'object') {
+    } else if (_.isPlainObject(deviceInfo.address)) {
         address = deviceInfo.address.formatted_address;
     } else {
         address = 'Unknown address';
@@ -237,7 +238,7 @@ function parseDeviceData(deviceInfo, customerId) {
 
     var organizationPath = '';
     var orgPathComponents = [];
-    if (typeof deviceInfo.address === 'object' && typeof deviceInfo.address.address_components === 'object') {
+    if (_.isPlainObject(deviceInfo.address) && deviceInfo.address.address_components instanceof Array) {
         var addressComponents = deviceInfo.address.address_components;
         var countryComponent = addressComponents.filter(function(component) {
             return component.types.filter(function(type) {
