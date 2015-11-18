@@ -412,7 +412,51 @@ When installing a Connect device, a license key is provided.  Providing this lic
 + Request (application/json)
 
         {
-            "key": "161bc25962da8fed6d2f59922fb642aa"
+            "key": "161bc25962da8fed6d2f59922fb642aa",
+            "username": "cwhiten",
+            "password": "hunter2",
+            "address": {
+                "address_components": [
+                {
+                    'long_name': city,
+                    'short_name':'Ottawa',
+                    'types':[
+                        'locality',
+                        'political'
+                    ]
+                },
+                {
+                    'long_name':'Ottawa Division',
+                    'short_name':'Ottawa Division',
+                    'types':[
+                        'administrative_area_level_2',
+                        'political'
+                    ]
+                },
+                {
+                    'long_name': province,
+                    'short_name':'ON',
+                    'types':[
+                        'administrative_area_level_1',
+                        'political'
+                    ]
+                },
+                {
+                    'long_name': country,
+                    'short_name':'CA',
+                    'types':[
+                        'country',
+                        'political'
+                    ]
+                }
+            ],
+            "formatted_address": "390 March Road, Kanata, ON, H0H0H0"
+        },
+        "location": {
+            "lat": 45.123,
+            "lng": -75.222
+        }
+
         }
 
 + Response 200 (application/json)

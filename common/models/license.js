@@ -2,12 +2,13 @@ var crypto = require('crypto');
 var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
+var _ = require('lodash');
 
 var loopback = require('loopback');
 
 module.exports = function (License) {
     'use strict';
-    License.activate = function (key, address, name, username, password, req, cb) {
+    License.activate = function (key, address, name, username, password, location, req, cb) {
         logger.info('Activating license key ' + key);
 
         var ipAddress = 'no ip detected';
@@ -19,7 +20,8 @@ module.exports = function (License) {
             name: name,
             username: username,
             password: password,
-            ipAddress: ipAddress
+            ipAddress: ipAddress,
+            location: location
         };
         activateLicense(License, key, deviceInfo, cb);
     };
@@ -57,10 +59,11 @@ module.exports = function (License) {
         {
             accepts: [
                 {arg: 'key', type: 'string', required: true},
-                {arg: 'address', type: 'string', required: false},
+                {arg: 'address', type: 'object', required: false},
                 {arg: 'name', type: 'string', required: false},
                 {arg: 'username', type: 'string', required: false},
                 {arg: 'password', type: 'string', required: false},
+                {arg: 'location', type: 'object', required: false},
                 {arg: 'req', type: 'object', http: {source: 'req'}},
             ],
             http: {verb: 'post', status: 200, errorStatus: 500},
@@ -128,20 +131,9 @@ function performActivationTasks(License, license, deviceInfo, cb) {
     'use strict';
     var Device = License.app.models.Device;
 
-    var ipAddress = deviceInfo.ipAddress;
-    var name = deviceInfo.name ? deviceInfo.name : 'Activated Device';
-    var address = deviceInfo.address ? deviceInfo.address : '390 March Road, Kanata, ON, Canada';
-    var deviceUsername = deviceInfo.username ? deviceInfo.username : 'admin';
-    var devicePassword = deviceInfo.password ? deviceInfo.password : 'password';
+    var deviceData = parseDeviceData(deviceInfo, license.customerId);
 
-    Device.create({
-        name: name,
-        customerId: license.customerId,
-        address: address,
-        username: deviceUsername,
-        password: devicePassword,
-        ipAddress: ipAddress
-    }, function createUser(err, res) {
+    Device.create(deviceData, function createUser(err, res) {
         if (err) {
             logger.error('Error creating device at activation time');
             logger.error(err);
@@ -202,4 +194,96 @@ function performActivationTasks(License, license, deviceInfo, cb) {
             });
         }
     });
+}
+
+function parseDeviceData(deviceInfo, customerId) {
+    var deviceData = {
+        customerId: customerId,
+        ipAddress: deviceInfo.ipAddress
+    };
+
+    var name = '';
+    if (deviceInfo.name) {
+        name = deviceInfo.name;
+    } else if (_.isPlainObject(deviceInfo.address) && typeof deviceInfo.address.name === 'string') {
+        name = deviceInfo.address.name;
+    } else {
+        name = 'Activated Device';
+    }
+    deviceData.name = name;
+
+    var address = '';
+    if (typeof deviceInfo.address === 'string') {
+        address = deviceInfo.address;
+    } else if (_.isPlainObject(deviceInfo.address) && typeof deviceInfo.address.formatted_address === 'string') {
+        address = deviceInfo.address.formatted_address;
+    } else {
+        address = 'Unknown address';
+    }
+    deviceData.address = address;
+
+    var deviceUsername = deviceInfo.username ? deviceInfo.username : 'solink-local';
+    var devicePassword = deviceInfo.password ? deviceInfo.password : '__connect__';
+    deviceData.username = deviceUsername;
+    deviceData.password = devicePassword;
+
+    if (_.isPlainObject(deviceInfo.location)) {
+        var lat = deviceInfo.location.lat;
+        var lng = deviceInfo.location.lng;
+        deviceData.location = {
+            lat: lat,
+            lng: lng
+        };
+    }
+
+    var organizationPath = '';
+    var orgPathComponents = [];
+    if (_.isPlainObject(deviceInfo.address) && deviceInfo.address.address_components instanceof Array) {
+        var addressComponents = deviceInfo.address.address_components;
+        var countryComponent = addressComponents.filter(function isCountryComponent(component) {
+            if (!(component.types instanceof Array)) {
+                return false;
+            }
+            return component.types.filter(function(type) {
+                return type === 'country';
+            }).length > 0;
+        });
+
+        if (countryComponent.length > 0) {
+            orgPathComponents.push(countryComponent[0].long_name);
+        }
+
+        var provinceComponent = addressComponents.filter(function isProvinceComponent(component) {
+            if (!(component.types instanceof Array)) {
+                return false;
+            }
+            return component.types.filter(function (type) {
+                return ['administrative_area_level_1'].indexOf(type) >= 0; // what qualifies as a province here?  Test different countries. TODO
+            }).length > 0;
+        });
+
+        if (provinceComponent.length > 0) {
+            orgPathComponents.push(provinceComponent[0].long_name);
+        }
+
+        var cityComponent = addressComponents.filter(function isCityComponent(component) {
+            if (!(component.types instanceof Array)) {
+                return false;
+            }
+            return component.types.filter(function(type) {
+                return type === 'locality';
+            }).length > 0;
+        });
+
+        if (cityComponent.length > 0) {
+            orgPathComponents.push(cityComponent[0].long_name);
+        }
+    }
+
+    if (orgPathComponents.length >0) {
+        organizationPath = orgPathComponents.join('/');
+    }
+    deviceData.organizationPath = organizationPath;
+
+    return deviceData;
 }

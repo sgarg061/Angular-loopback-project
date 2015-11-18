@@ -2,7 +2,7 @@
 
 module.exports = function(DeviceLogEntry) {
     'use strict';
-    
+
     // disable creation and destructive calls for log entries
     // allow finding and counting
     DeviceLogEntry.disableRemoteMethod('create', true);
@@ -15,7 +15,7 @@ module.exports = function(DeviceLogEntry) {
     // disable find by id since log entries don't have an id
     DeviceLogEntry.disableRemoteMethod('findById', true);
 
-    // allow 
+    // allow
     // DeviceLogEntry.disableRemoteMethod('find', true);
     // DeviceLogEntry.disableRemoteMethod('findOne', true);
     // DeviceLogEntry.disableRemoteMethod('confirm', true);
@@ -31,5 +31,5 @@ module.exports = function(DeviceLogEntry) {
             delete o.checkinData;
         }
         return o;
-    }
+    };
 };

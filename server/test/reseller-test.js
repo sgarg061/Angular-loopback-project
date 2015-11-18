@@ -9,7 +9,7 @@ describe('Reseller tests', function() {
   this.timeout(5000);
 
   describe('Solink, cloud owners, and the reseller in question can query resellers', function() {
-    
+
 
       var reseller1;
       var reseller2;
@@ -113,7 +113,7 @@ describe('Reseller tests', function() {
             });
         });
       });
-/*
+
     it('should successfully list all resellers when queried as Solink', function(done) {
       common.login('solink', function (token) {
         common.json('get', '/api/resellers', token)
@@ -122,13 +122,13 @@ describe('Reseller tests', function() {
         .end(function (err, res) {
           if (err) {
             throw err;
-          } 
+          }
           done();
         });
       });
-    });*/
+    });
   });
-/*
+
 describe('Solink and cloud users can create new resellers', function() {
   it('should return an error for other types of users', function(done) {
 
@@ -174,7 +174,7 @@ describe('Solink and cloud users can create new resellers', function() {
 
         common.json('post', '/api/resellers', token)
         .send({
-          name: 'solink reseller', 
+          name: 'solink reseller',
           cloudId: cloudId,
           softwareVersionId: softwareVersionId,
           email: 'cwhiten+solinkreseller@solinkcorp.com',
@@ -184,14 +184,14 @@ describe('Solink and cloud users can create new resellers', function() {
         .end(function (err, res) {
           if (err) {
             throw err;
-          } 
+          }
           done();
         });
       });
     });
   });
 });
-  
+
 describe('To create or modify a reseller, you must be along its ownership chain', function () {
 
   var validCloud;
@@ -247,7 +247,7 @@ describe('To create or modify a reseller, you must be along its ownership chain'
           assert(typeof newReseller === 'object');
           assert(newReseller.id !== fakeResellerId, 'do not accept client-sent ids');
           assert(newReseller.cloudId !== fakeCloudId, 'ensure that the cloud ID is forced to the id of this user');
-          
+
           done();
         });
     }, {
@@ -281,7 +281,7 @@ describe('To create or modify a reseller, you must be along its ownership chain'
           assert(typeof newReseller === 'object');
           assert(newReseller.id !== fakeResellerId, 'do not accept client-sent ids');
           assert(newReseller.cloudId === validCloud.id, 'ensure that the cloud ID is forced to the id of this user');
-          
+
           done();
         });
       });
@@ -325,5 +325,5 @@ describe('To create or modify a reseller, you must be along its ownership chain'
       });
     });
   });
-});*/
+});
 });
