@@ -43,7 +43,7 @@
 
       <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
         <label>Check-in Interval</label>
-        <input type="text" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval" ng-disabled="!canModifyCheckinInterval(model)" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
+        <input type="number" min="0" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval" ng-disabled="!canModifyCheckinInterval(model)" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
       </md-input-container>
       <div>
       <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
