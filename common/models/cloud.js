@@ -85,7 +85,8 @@ module.exports = function(Cloud) {
     function createCloudUser(cloud, next) {
         var userData = {
             userType: 'cloud',
-            cloudId: cloud.id
+            cloudId: cloud.id,
+            email_verified: true
         };
 
         authService.createUser(cloud.email, cloud.password, userData, function (err, res) {
