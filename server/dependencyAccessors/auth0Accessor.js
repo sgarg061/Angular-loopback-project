@@ -100,8 +100,10 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
         }
     };
 
-    if (userData.email_verified) {
+    if (userData.email_verified && password) {
         userCreationForm.email_verified = true;
+    } else {
+        userCreationForm.email_verified = false;
     }
 
     request({

@@ -276,7 +276,8 @@ function customerAccessPermissions(ctx, next) {
 function createCustomerAdminUser(customer, next) {
     var userData = {
         userType: 'admin',
-        customerId: customer.id
+        customerId: customer.id,
+        email_verified: true
     };
 
     authService.createUser(customer.email, customer.password, userData, function (err, res) {
