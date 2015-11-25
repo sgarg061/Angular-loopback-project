@@ -3,6 +3,8 @@ var loopback = require('loopback');
 var uuid = require('node-uuid');
 var _ = require('underscore');
 var async = require('async');
+var _ = require('lodash');
+
 
 module.exports = function(Device) {
     'use strict';
@@ -262,7 +264,18 @@ module.exports = function(Device) {
     };
 
     Device.checkin = function (id, data, cb) {
-        // before doing anything else, log the checkin data
+        // make sure the address is a string
+        var address = '';
+        if (typeof data.address === 'string') {
+            address = data.address;
+        } else if (_.isPlainObject(data.address) && typeof data.address.formatted_address === 'string') {
+            address = data.address.formatted_address;
+        } else {
+            address = 'Unknown address';
+        }
+        data.address = address;
+
+        // log the checkin data
         logCheckin(data);
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
