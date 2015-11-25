@@ -237,6 +237,96 @@ describe('Check-in of existing device with missing component', function() {
   });
 });
 
+describe('Checkin address format', function () {
+  it('should accept string address', function (done) {
+    deviceCheckinData.address = "string address";
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, "string address");
+               done();
+             });
+        });
+    });
+  });
+
+  it('should accept json address', function (done) {
+    deviceCheckinData.address = {"formatted_address": "formatted address"};
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, "formatted address");
+               done();
+             });
+        });
+    });
+  });
+
+  it('should have unknown address when address property is missing', function (done) {
+    delete deviceCheckinData.address;
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, "Unknown address");
+               done();
+             });
+        });
+    });
+  });
+
+  it('should have unknown address when formatted address property is missing', function (done) {
+    deviceCheckinData.address = {};
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, "Unknown address");
+               done();
+             });
+        });
+    });
+  });
+});
+
 describe('Modification of inherited values at various locations in the object tree should be reflected in the cofiguration data returned upon checkin', function() {
 
   it('should return attributes from device when device has overriden value', function(done) {
