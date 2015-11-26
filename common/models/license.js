@@ -3,7 +3,7 @@ var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
 var _ = require('lodash');
-var deviceDataParser = require('../utils/deviceDataParser')
+var deviceDataParser = require('../utils/deviceDataParser');
 
 var loopback = require('loopback');
 
