@@ -4,7 +4,6 @@ var common = require('./common');
 var deviceGuid = '7DB02DCF-4EA9-4177-A256-42BCFD511E90';
 var deviceCheckinData = {
     guid: deviceGuid,
-    organizationPath: '/Canada/Ontario/Ottawa/TH-1582',
     address: '479 March Road, Kanata, ON, K2K',
     location: {
         longitude: -75.9087814,
@@ -130,7 +129,7 @@ describe('Checkin after initial device activation', function() {
           assert(logEntry.hasOwnProperty('timestamp'));
           assert(logEntry.hasOwnProperty('id'));
           assert.equal(logEntry.guid, deviceCheckinData.guid);
-          assert.equal(logEntry.organizationPath, deviceCheckinData.organizationPath);
+          assert.equal(logEntry.organizationPath, '');
           assert.equal(logEntry.address, deviceCheckinData.address);
           assert.deepEqual(logEntry.location, deviceCheckinData.location);
           assert.deepEqual(logEntry.deviceInformation, deviceCheckinData.deviceInformation);
@@ -239,7 +238,7 @@ describe('Check-in of existing device with missing component', function() {
 
 describe('Checkin address format', function () {
   it('should accept string address', function (done) {
-    deviceCheckinData.address = "string address";
+    deviceCheckinData.address = 'string address';
     common.login('solink', function (token) {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
@@ -253,7 +252,7 @@ describe('Checkin address format', function () {
              .end(function(err, res) {
                if (err) throw err;
                assert(typeof res.body === 'object');
-               assert.equal(res.body.address, "string address");
+               assert.equal(res.body.address, 'string address');
                done();
              });
         });
@@ -261,7 +260,7 @@ describe('Checkin address format', function () {
   });
 
   it('should accept json address', function (done) {
-    deviceCheckinData.address = {"formatted_address": "formatted address"};
+    deviceCheckinData.address = {'formatted_address': 'formatted address'};
     common.login('solink', function (token) {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
@@ -275,7 +274,7 @@ describe('Checkin address format', function () {
              .end(function(err, res) {
                if (err) throw err;
                assert(typeof res.body === 'object');
-               assert.equal(res.body.address, "formatted address");
+               assert.equal(res.body.address, 'formatted address');
                done();
              });
         });
@@ -297,7 +296,7 @@ describe('Checkin address format', function () {
              .end(function(err, res) {
                if (err) throw err;
                assert(typeof res.body === 'object');
-               assert.equal(res.body.address, "Unknown address");
+               assert.equal(res.body.address, 'Unknown address');
                done();
              });
         });
@@ -319,7 +318,7 @@ describe('Checkin address format', function () {
              .end(function(err, res) {
                if (err) throw err;
                assert(typeof res.body === 'object');
-               assert.equal(res.body.address, "Unknown address");
+               assert.equal(res.body.address, 'Unknown address');
                done();
              });
         });
