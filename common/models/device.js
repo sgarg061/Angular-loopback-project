@@ -4,6 +4,7 @@ var uuid = require('node-uuid');
 var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
+var deviceDataParser = require('../utils/deviceDataParser')
 
 
 module.exports = function(Device) {
@@ -264,17 +265,8 @@ module.exports = function(Device) {
     };
 
     Device.checkin = function (id, data, cb) {
-        // make sure the address is a string
-        var address = '';
-        if (typeof data.address === 'string') {
-            address = data.address;
-        } else if (_.isPlainObject(data.address) && typeof data.address.formatted_address === 'string') {
-            address = data.address.formatted_address;
-        } else {
-            address = 'Unknown address';
-        }
-        data.address = address;
-
+        // parse checkin data
+        data = deviceDataParser.parseDeviceData(data);
         // log the checkin data
         logCheckin(data);
         // TODO: get the customerId from the current jwt token and use it in the device query
