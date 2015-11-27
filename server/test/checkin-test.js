@@ -6,8 +6,8 @@ var deviceCheckinData = {
     guid: deviceGuid,
     address: '479 March Road, Kanata, ON, K2K',
     location: {
-        longitude: -75.9087814,
-        latitude: 45.3376177
+        lng: -75.9087814,
+        lat: 45.3376177
     },
     deviceInformation: {
         name: 'NAS #1',
@@ -74,7 +74,7 @@ describe('Checkin after initial device activation', function() {
   });
 
   it('should checkin a new device and receive configuration information', function(done) {
-    
+
     deviceCheckinData.id = deviceId;
     common.login('solink', function (token) {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
@@ -329,12 +329,12 @@ describe('Checkin address format', function () {
 describe('Modification of inherited values at various locations in the object tree should be reflected in the cofiguration data returned upon checkin', function() {
 
   it('should return attributes from device when device has overriden value', function(done) {
-    
+
     common.login('solink', function (token) {
       common.json('get', '/api/SoftwareVersions/', token).send().end(function (err, res) {
         var versions = res.body;
         console.log('software versions: ' + JSON.stringify(versions));
-        
+
         common.json('get', '/api/devices?filter[where][guid]='+deviceGuid, token).send().end(function (err, res) {
           var device = res.body[0];
           deviceCheckinData.id = device.id;
@@ -347,29 +347,29 @@ describe('Modification of inherited values at various locations in the object tr
               var cloud = res.body[0];
 
               /*****************/
-              
+
               common.json('put', '/api/clouds/' + cloud.id, token).send(
                 {softwareVersionId: versions[7].id, checkinInterval:7000, eventServerUrl:'7000', imageServerUrl:'7000'}).end(function (err, res) {
                 common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
-                
+
                   assert.equal(res.body.eventServerUrl, '7000', 'eventServerUrl must be inherited from cloud');
                   assert.equal(res.body.imageServerUrl, '7000', 'imageServerUrl must be inherited from cloud');
                   assert.equal(res.body.updateUrl, versions[7].url, 'updateUrl must be inherited from cloud');
                   assert.equal(res.body.checkinInterval, 7000, 'checkinInterval must be inherited from cloud');
-                  
+
                   common.json('put', '/api/resellers/' + reseller.id, token).send(
                     {softwareVersionId: versions[6].id, checkinInterval:6000, eventServerUrl:'6000', imageServerUrl:'6000'}).end(function (err, res) {
                     common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
-                      
+
                       assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
                       assert.equal(res.body.imageServerUrl, '6000', 'imageServerUrl must be inherited from reseller');
                       assert.equal(res.body.updateUrl, versions[6].url, 'updateUrl must be inherited from reseller');
                       assert.equal(res.body.checkinInterval, 6000, 'checkinInterval must be inherited from reseller');
-                      
+
                       common.json('put', '/api/customers/' + customer.id, token).send(
                         {softwareVersionId: versions[5].id, checkinInterval:5000, eventServerUrl:'5000', imageServerUrl:'5000'}).end(function (err, res) {
                         common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
-                          
+
                           assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
                           assert.equal(res.body.imageServerUrl, '6000', 'imageServerUrl must be inherited from reseller');
                           assert.equal(res.body.updateUrl, versions[5].url, 'updateUrl must be inherited from customer');
