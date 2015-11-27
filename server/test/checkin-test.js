@@ -4,7 +4,6 @@ var common = require('./common');
 var deviceGuid = '7DB02DCF-4EA9-4177-A256-42BCFD511E90';
 var deviceCheckinData = {
     guid: deviceGuid,
-    organizationPath: '/Canada/Ontario/Ottawa/TH-1582',
     address: '479 March Road, Kanata, ON, K2K',
     location: {
         longitude: -75.9087814,
@@ -130,7 +129,7 @@ describe('Checkin after initial device activation', function() {
           assert(logEntry.hasOwnProperty('timestamp'));
           assert(logEntry.hasOwnProperty('id'));
           assert.equal(logEntry.guid, deviceCheckinData.guid);
-          assert.equal(logEntry.organizationPath, deviceCheckinData.organizationPath);
+          assert.equal(logEntry.organizationPath, '');
           assert.equal(logEntry.address, deviceCheckinData.address);
           assert.deepEqual(logEntry.location, deviceCheckinData.location);
           assert.deepEqual(logEntry.deviceInformation, deviceCheckinData.deviceInformation);
@@ -230,6 +229,96 @@ describe('Check-in of existing device with missing component', function() {
                assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
                assert.equal(res.body.logEntries.length, 4, 'must have 4 log entries');
                assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
+               done();
+             });
+        });
+    });
+  });
+});
+
+describe('Checkin address format', function () {
+  it('should accept string address', function (done) {
+    deviceCheckinData.address = 'string address';
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, 'string address');
+               done();
+             });
+        });
+    });
+  });
+
+  it('should accept json address', function (done) {
+    deviceCheckinData.address = {'formatted_address': 'formatted address'};
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, 'formatted address');
+               done();
+             });
+        });
+    });
+  });
+
+  it('should have unknown address when address property is missing', function (done) {
+    delete deviceCheckinData.address;
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, 'Unknown address');
+               done();
+             });
+        });
+    });
+  });
+
+  it('should have unknown address when formatted address property is missing', function (done) {
+    deviceCheckinData.address = {};
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId, token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(res.body.address, 'Unknown address');
                done();
              });
         });

@@ -3,6 +3,9 @@ var loopback = require('loopback');
 var uuid = require('node-uuid');
 var _ = require('underscore');
 var async = require('async');
+var _ = require('lodash');
+var deviceDataParser = require('../utils/deviceDataParser');
+
 
 module.exports = function(Device) {
     'use strict';
@@ -262,7 +265,9 @@ module.exports = function(Device) {
     };
 
     Device.checkin = function (id, data, cb) {
-        // before doing anything else, log the checkin data
+        // parse checkin data
+        data = deviceDataParser.parseDeviceData(data);
+        // log the checkin data
         logCheckin(data);
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.

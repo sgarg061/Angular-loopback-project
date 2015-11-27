@@ -3,6 +3,7 @@ var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
 var _ = require('lodash');
+var deviceDataParser = require('../utils/deviceDataParser');
 
 var loopback = require('loopback');
 
@@ -131,7 +132,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
     'use strict';
     var Device = License.app.models.Device;
 
-    var deviceData = parseDeviceData(deviceInfo, license.customerId);
+    var deviceData = deviceDataParser.parseDeviceData(deviceInfo, license.customerId);
 
     Device.create(deviceData, function createUser(err, res) {
         if (err) {
@@ -194,96 +195,4 @@ function performActivationTasks(License, license, deviceInfo, cb) {
             });
         }
     });
-}
-
-function parseDeviceData(deviceInfo, customerId) {
-    var deviceData = {
-        customerId: customerId,
-        ipAddress: deviceInfo.ipAddress
-    };
-
-    var name = '';
-    if (deviceInfo.name) {
-        name = deviceInfo.name;
-    } else if (_.isPlainObject(deviceInfo.address) && typeof deviceInfo.address.name === 'string') {
-        name = deviceInfo.address.name;
-    } else {
-        name = 'Activated Device';
-    }
-    deviceData.name = name;
-
-    var address = '';
-    if (typeof deviceInfo.address === 'string') {
-        address = deviceInfo.address;
-    } else if (_.isPlainObject(deviceInfo.address) && typeof deviceInfo.address.formatted_address === 'string') {
-        address = deviceInfo.address.formatted_address;
-    } else {
-        address = 'Unknown address';
-    }
-    deviceData.address = address;
-
-    var deviceUsername = deviceInfo.username ? deviceInfo.username : 'solink-local';
-    var devicePassword = deviceInfo.password ? deviceInfo.password : '__connect__';
-    deviceData.username = deviceUsername;
-    deviceData.password = devicePassword;
-
-    if (_.isPlainObject(deviceInfo.location)) {
-        var lat = deviceInfo.location.lat;
-        var lng = deviceInfo.location.lng;
-        deviceData.location = {
-            lat: lat,
-            lng: lng
-        };
-    }
-
-    var organizationPath = '';
-    var orgPathComponents = [];
-    if (_.isPlainObject(deviceInfo.address) && deviceInfo.address.address_components instanceof Array) {
-        var addressComponents = deviceInfo.address.address_components;
-        var countryComponent = addressComponents.filter(function isCountryComponent(component) {
-            if (!(component.types instanceof Array)) {
-                return false;
-            }
-            return component.types.filter(function(type) {
-                return type === 'country';
-            }).length > 0;
-        });
-
-        if (countryComponent.length > 0) {
-            orgPathComponents.push(countryComponent[0].long_name);
-        }
-
-        var provinceComponent = addressComponents.filter(function isProvinceComponent(component) {
-            if (!(component.types instanceof Array)) {
-                return false;
-            }
-            return component.types.filter(function (type) {
-                return ['administrative_area_level_1'].indexOf(type) >= 0; // what qualifies as a province here?  Test different countries. TODO
-            }).length > 0;
-        });
-
-        if (provinceComponent.length > 0) {
-            orgPathComponents.push(provinceComponent[0].long_name);
-        }
-
-        var cityComponent = addressComponents.filter(function isCityComponent(component) {
-            if (!(component.types instanceof Array)) {
-                return false;
-            }
-            return component.types.filter(function(type) {
-                return type === 'locality';
-            }).length > 0;
-        });
-
-        if (cityComponent.length > 0) {
-            orgPathComponents.push(cityComponent[0].long_name);
-        }
-    }
-
-    if (orgPathComponents.length >0) {
-        organizationPath = orgPathComponents.join('/');
-    }
-    deviceData.organizationPath = organizationPath;
-
-    return deviceData;
 }
