@@ -374,7 +374,7 @@ module.exports = function(Device) {
         }
 
         if (deviceData.location) {
-            checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.latitude, lng: deviceData.location.longitude});
+            checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.lat, lng: deviceData.location.lng});
         }
 
         if (deviceData.locationName) {
