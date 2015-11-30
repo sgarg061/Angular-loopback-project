@@ -145,7 +145,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
             });
 
             var deviceId = res.id;
-            var username = 'device+' + license.customerId + '+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
+            var username = 'device+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
             var password = randToken.generate(16);
 
             var userData = {
