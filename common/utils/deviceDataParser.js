@@ -22,16 +22,6 @@ module.exports = {
             address = 'Unknown address';
         }
 
-        var location = {};
-        if (_.isPlainObject(deviceInfo.location)) {
-            var lat = deviceInfo.location.lat;
-            var lng = deviceInfo.location.lng;
-            location = {
-                lat: lat,
-                lng: lng
-            };
-        }
-
         var organizationPath = '';
         var orgPathComponents = [];
         if (_.isPlainObject(deviceInfo.address) && deviceInfo.address.address_components instanceof Array) {
