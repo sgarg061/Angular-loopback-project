@@ -23,7 +23,7 @@ module.exports = {
         }
 
         var location;
-        if (deviceInfo.location && deviceInfo.location.lat && deviceInfo.location.lng) {
+        if (deviceInfo.location && !isNaN(deviceInfo.location.lat) && !isNaN(deviceInfo.location.lng)) {
             location = {
                 lat: parseFloat(deviceInfo.location.lat),
                 lng: parseFloat(deviceInfo.location.lng)
