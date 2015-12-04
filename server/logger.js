@@ -4,6 +4,14 @@ var fs = require('fs');
 
 module.exports = (function() {
     var config = new Config();
+    var format = function(options) {
+        var timeStamp = new Date().toISOString();
+        return timeStamp + ' - '
+             + options.level
+             + ': [' + options.label + '] '
+             + (undefined !== options.message ? options.message : '')
+    }
+
     var logger = new (winston.Logger)({
         transports: [
             new (winston.transports.Console)({
@@ -16,7 +24,10 @@ module.exports = (function() {
                 level: config.log.file.level,
                 filename: config.log.file.filename,
                 datePattern: '_dd_MM_yyyy.log',
-                timestamp: true
+                label: config.log.file.label,
+                timestamp: true,
+                json: false,
+                formatter: format
             })]
         });
 

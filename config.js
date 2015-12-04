@@ -23,7 +23,8 @@ var productionSettings = {
         },
         file: {
             filename: 'call-home-server',
-            level: 'debug'
+            level: 'debug',
+            label: 'system'
         }
     }
 };
@@ -53,7 +54,8 @@ var developmentSettings = {
         },
         file: {
             filename: 'call-home-server',
-            level: 'debug'
+            level: 'debug',
+            label: 'system'
         }
     }
 };
