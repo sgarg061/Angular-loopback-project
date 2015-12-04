@@ -22,6 +22,14 @@ module.exports = {
             address = 'Unknown address';
         }
 
+        var location;
+        if (deviceInfo.location && deviceInfo.location.lat && deviceInfo.location.lng) {
+            location = {
+                lat: parseFloat(deviceInfo.location.lat),
+                lng: parseFloat(deviceInfo.location.lng)
+            }
+        }
+
         var organizationPath = '';
         var orgPathComponents = [];
         if (_.isPlainObject(deviceInfo.address) && deviceInfo.address.address_components instanceof Array) {
@@ -77,6 +85,11 @@ module.exports = {
         deviceData.organizationPath = organizationPath;
         if (customerId) {
             deviceData.customerId = customerId;
+        }
+        if (location) {
+            deviceData.location = location;
+        } else {
+            delete deviceData.location;
         }
 
         return deviceData;
