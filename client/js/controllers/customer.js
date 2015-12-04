@@ -1,13 +1,14 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
     $scope.customers = [];
     $scope.customer = {};
     $scope.devices = [];
+    $scope.filters = [];
 
     $scope.cloud = null;
     $scope.reseller = null;
@@ -179,8 +180,21 @@ angular
         });
     }
 
+    function getFilters(){
+
+      POSConnector
+        .find()
+        .$promise
+        .then(function(connectors) {
+          $scope.filters = connectors;
+          console.debug('connectors', connectors, $scope);
+        })
+
+    }
+
     getCustomer();
     getSoftwareVersions();
+    getFilters();
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
@@ -454,6 +468,43 @@ angular
       sort.column = column;
       sort.descending = false;
     }
+  };
+
+  $scope.selectConnector = function(connector) {
+    console.debug('connector', connector);
+  };
+
+  $scope.addFilter = function(connector) {
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+                    $scope.newConnector = {
+                      name: '',
+                      script: ''
+                    };
+                    $scope.create = function() {
+                      var script = JSON.stringify($scope.newFilter.script);
+                      POSConnector.create({id: '', name: $scope.newFilter.name, description: $scope.newFilter.description, script: script})
+                      .$promise
+                      .then(function(customer) {
+                        console.debug('customer', customer);
+                        getFilters();
+                      }, function (res) {
+                        toastr.error(res.data.error.message, 'Error');
+                      });
+                      $mdDialog.cancel();
+                    };
+                    $scope.cancel = function() {
+                      $mdDialog.cancel();
+                    };
+      },
+      templateUrl: 'views/filterCreateForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+    }); 
   };
 
   $scope.showLicense = showLicense;

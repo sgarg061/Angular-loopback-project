@@ -60,9 +60,8 @@
       "foreignKey": "id"
     }
   },
-  "acls": 
-  [
-  {
+  "acls": [
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
@@ -76,18 +75,18 @@
       "property": "create"
     },
     {
-    "principalType": "ROLE",
-    "principalId": "isOwner",
-    "permission": "ALLOW",
-    "accessType": "WRITE" ,
-    "property": "create"
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "create"
     },
     {
-    "principalType": "ROLE",
-    "principalId": "isOwner",
-    "permission": "ALLOW",
-    "accessType": "WRITE" ,
-    "property": "updateAttributes"
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "updateAttributes"
     },
     {
       "accessType": "*",
@@ -97,5 +96,5 @@
       "property": "*"
     }
   ],
-  "methods": []
+  "methods": {}
 }

@@ -7,12 +7,15 @@
     <div class="col-md-3 sidebar-container" layout-margin>
       <sidebar model="cloud" type="'cloud'" 
         software-versions="softwareVersions"
+        add-filter-function="addFilter"
         can-modify-event-url-function="canModifyEventUrl" 
         can-modify-image-server-url-function="canModifyImageServerUrl"
         create-software-version-function="openSoftwareVersionForm"
         can-modify-software-version-function="canModifySoftwareVersion"
         can-modify-checkin-interval-function="canModifyCheckinInterval"
-        can-modify-signalling-server-function="canModifySignallingServer"/>
+        can-modify-signalling-server-function="canModifySignallingServer"
+        filters="filters"
+        select-connector-function="selectConnector"/>
     </div>
 
     <div class="child-list col-md-8" class="main-content" layout-fill layout-padding>

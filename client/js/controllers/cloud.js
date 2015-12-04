@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion','POSConnector', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSConnector, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -98,12 +98,25 @@ angular
     }
 
     
+    function getFilters(){
+
+      POSConnector
+        .find()
+        .$promise
+        .then(function(connectors) {
+          $scope.filters = connectors;
+          console.debug('connectors', connectors, $scope);
+        })
+
+    }
+
 
     $scope.goHome = function () {
       $state.go('home');
     }
 
     if ($stateParams.cloudId) {
+      getFilters();
       getCloud();
       getSoftwareVersions();
     }
@@ -259,6 +272,43 @@ angular
     return ['solink'].indexOf(userType) > -1;
   };
 
+  $scope.selectConnector = function(connector) {
+    console.debug('connecting to ', connector);
+  };
+
+
+  $scope.addFilter = function(connector) {
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+                    $scope.newConnector = {
+                      name: '',
+                      script: ''
+                    };
+                    $scope.create = function() {
+                      var script = JSON.stringify($scope.newFilter.script);
+                      POSConnector.create({id: '', name: $scope.newFilter.name, description: $scope.newFilter.description, script: script})
+                      .$promise
+                      .then(function(customer) {
+                        console.debug('customer', customer);
+                        getFilters();
+                      }, function (res) {
+                        toastr.error(res.data.error.message, 'Error');
+                      });
+                      $mdDialog.cancel();
+                    };
+                    $scope.cancel = function() {
+                      $mdDialog.cancel();
+                    };
+      },
+      templateUrl: 'views/filterCreateForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+    }); 
+  };
 
     
   }]);

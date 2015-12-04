@@ -4,9 +4,9 @@
     "connector": "memory"
   },
   "callHomeDb": {
+    "url": "postgres://postgres:solink@localhost:5432/call-home",
     "name": "callHomeDb",
     "connector": "postgresql",
-    "url": "postgres://postgres:solink@localhost:5432/call-home",
     "debug": true
   }
 }

@@ -17,7 +17,12 @@
     },
     "script": {
       "type": "string",
+      "length": 5000,
       "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],

@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.reseller = {};
 
@@ -167,6 +167,20 @@ angular
         })
     }
 
+    function getFilters(){
+
+      POSConnector
+        .find()
+        .$promise
+        .then(function(connectors) {
+          $scope.filters = connectors;
+          console.debug('connectors', connectors, $scope);
+        })
+
+    }
+
+
+    getFilters();
     getReseller();
     getSoftwareVersions();
 
@@ -298,6 +312,72 @@ angular
     function goHome() {
       $state.go('home');
     }
+
+    $scope.selectConnector = function(connector){
+      $mdDialog.show({
+        controller: function DialogController($scope, $mdDialog) {
+                      $scope.newCustomer = {
+                        resellerId: reseller.id,
+                        name: '',
+                      };
+                      $scope.create = function() {
+                        $scope.newCustomer['resellerId'] = reseller.id;
+                        Customer.create($scope.newCustomer)
+                        .$promise
+                        .then(function(customer) {
+                          getReseller();
+                        }, function (res) {
+                          toastr.error(res.data.error.message, 'Error');
+                        });
+                        $mdDialog.cancel();
+                      };
+                      $scope.cancel = function() {
+                        $mdDialog.cancel();
+                      };
+        },
+        templateUrl: 'views/customerForm.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+      });    
+    }
+
+    $scope.addFilter = function(connector) {
+      $mdDialog.show({
+        controller: function DialogController($scope, $mdDialog) {
+                      $scope.newConnector = {
+                        name: '',
+                        script: ''
+                      };
+                      $scope.create = function() {
+                        var script = JSON.stringify($scope.newFilter.script);
+                        POSConnector.create({id: '', name: $scope.newFilter.name, description: $scope.newFilter.description, script: script})
+                        .$promise
+                        .then(function(customer) {
+                          console.debug('customer', customer);
+                          getFilters();
+                        }, function (res) {
+                          toastr.error(res.data.error.message, 'Error');
+                        });
+                        $mdDialog.cancel();
+                      };
+                      $scope.cancel = function() {
+                        $mdDialog.cancel();
+                      };
+        },
+        templateUrl: 'views/filterCreateForm.tmpl.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:true
+        })
+        .then(function(result) {
+        }, function() {
+      }); 
+    };
+
 
     $scope.deleteReseller = deleteReseller;
     $scope.onMarkerClicked = onMarkerClicked;

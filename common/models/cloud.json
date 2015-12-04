@@ -65,37 +65,38 @@
     }
   },
   "acls": [
-  {
+    {
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "DENY"
-  },
-  {
-    "principalType": "ROLE",
-    "principalId": "isSolink",
-    "permission": "ALLOW",
-    "property": "*"
-  },
-  {
-    "principalType": "ROLE",
-    "principalId": "isOwner",
-    "permission": "ALLOW",
-    "accessType": "READ",
-    "property": "*"
-  },
-  {
-  "principalType": "ROLE",
-  "principalId": "isOwner",
-  "permission": "ALLOW",
-  "accessType": "WRITE" ,
-  "property": "create"
-  },
-  {
-  "principalType": "ROLE",
-  "principalId": "isOwner",
-  "permission": "ALLOW",
-  "accessType": "WRITE" ,
-  "property": "updateAttributes"
-  }
-  ]
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "*"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "*"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "updateAttributes"
+    }
+  ],
+  "methods": {}
 }

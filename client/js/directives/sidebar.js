@@ -9,6 +9,8 @@ angular
         type: "=type",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
+        addFilterFunction: "=addFilterFunction",
+        selectConnectorFunction: "=selectConnectorFunction",
         deleteFunction: "=deleteFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
         canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
@@ -16,15 +18,22 @@ angular
         canModifySignallingServerFunction: "=canModifySignallingServerFunction",
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
         createSoftwareVersionFunction: "=createSoftwareVersionFunction",
-        softwareVersions: "=softwareVersions"
+        softwareVersions: "=softwareVersions",
+        filters: "=filters"
       },
       link: function (scope, element, attrs) {
         scope.openSoftwareVersionForm = scope.$parent.openSoftwareVersionForm,
+        scope.addFilter = function(customerId) {
+          scope.addFilterFunction(customerId);
+        }
         scope.addLicense = function(customerId) {
           scope.addLicenseFunction(customerId);
         }
         scope.showLicense = function(license) {
           scope.showLicenseFunction(license);
+        }
+        scope.selectConnector = function(connector) {
+          scope.selectConnectorFunction(connector);
         }
         scope.deleteModel = function(model) {
           scope.deleteFunction(model);
