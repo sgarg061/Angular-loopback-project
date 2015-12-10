@@ -9,7 +9,8 @@
   "properties": {
     "id": {
       "type": "string",
-      "id": true
+      "id": true,
+      "required": false
     },
     "name": {
       "type": "string",
@@ -17,29 +18,29 @@
     },
     "script": {
       "type": "string",
-      "length": 5000,
-      "required": true
+      "required": true,
+      "length": 5000
     },
     "description": {
       "type": "string",
       "required": false
+    },
+    "creatorId": {
+      "type": "string",
+      "required": true
+    },
+    "creatorType": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
   "relations": {
-    "clouds": {
+    "cloudPOSConnectors": {
       "type": "hasMany",
-      "model": "Cloud",
-      "foreignKey": "posConnectorId",
-      "through": "CloudPOSConnector"
-    },
-    "resellers": {
-      "type": "hasMany",
-      "model": "Reseller",
-      "foreignKey": "posConnectorId",
-      "through": "ResellerPOSConnector"
+      "model": "CloudPOSConnector"
     }
   },
   "acls": [],
-  "methods": []
+  "methods": {}
 }

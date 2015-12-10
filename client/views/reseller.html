@@ -9,6 +9,8 @@
         delete-function="deleteReseller"
         software-versions="softwareVersions"
         add-filter-function="addFilter"
+        action-filter-function="actionFilter"
+        edit-filter-function="editFilter"
         can-modify-event-url-function="canModifyEventUrl"
         can-modify-image-server-url-function="canModifyImageServerUrl"
         create-software-version-function="openSoftwareVersionForm"
@@ -16,6 +18,12 @@
         can-modify-checkin-interval-function="canModifyCheckinInterval"
         can-modify-signalling-server-function="canModifySignallingServer"
         filters="filters"
+        children="children"
+        owned-filters="ownedFilters"
+        cascaded-filters="cascadedFilters"
+        selected-filters="selectedFilters"
+        filter-changed-function="filterChanged"
+        assign-filters-function="assignFilters"
         select-connector-function="selectConnector"/>
     </div>
 

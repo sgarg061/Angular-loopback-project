@@ -7,9 +7,14 @@ angular
       scope: {
         model: "=model",
         type: "=type",
+        filterChangedFunction: "=filterChangedFunction",
+        assignFiltersFunction: "=assignFiltersFunction",
+        selectedFilters: "=selectedFilters",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
+        loadFilterFunction: "=loadFilterFunction",
+        actionFilterFunction: "=actionFilterFunction",
         selectConnectorFunction: "=selectConnectorFunction",
         deleteFunction: "=deleteFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
@@ -19,15 +24,33 @@ angular
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
         createSoftwareVersionFunction: "=createSoftwareVersionFunction",
         softwareVersions: "=softwareVersions",
-        filters: "=filters"
+        filters: "=filters",
+        children: "=children",
+        ownedFilters: "=ownedFilters",
+        cascadedFilters: "=cascadedFilters"
       },
       link: function (scope, element, attrs) {
         scope.openSoftwareVersionForm = scope.$parent.openSoftwareVersionForm,
         scope.addFilter = function(customerId) {
           scope.addFilterFunction(customerId);
         }
+        scope.loadFilter = function(owner) {
+          scope.loadFilterFunction(owner);
+        }
+        scope.filterChanged = function(filter) {
+          scope.filterChangedFunction(filter);
+        }
+        scope.assignFilters = function(assignee, filters) {
+          scope.assignFiltersFunction(assignee, filters);
+        }
+        scope.actionFilter = function(filterId) {
+          scope.actionFilterFunction(filterId);
+        }
         scope.addLicense = function(customerId) {
           scope.addLicenseFunction(customerId);
+        }
+        scope.addLicense = function(selected) {
+          scope.addLicenseFunction(selected);
         }
         scope.showLicense = function(license) {
           scope.showLicenseFunction(license);
@@ -60,7 +83,17 @@ angular
         scope.openMenu = function($mdOpenMenu, ev) {
           originatorEv = ev;
           $mdOpenMenu(ev);
-        };
+        },
+        scope.announceClick = function(index) {
+          $mdDialog.show(
+            $mdDialog.alert()
+              .title('You clicked!')
+              .textContent('You clicked the menu item at index ' + index)
+              .ok('Nice')
+              .targetEvent(originatorEv)
+          );
+          originatorEv = null;
+        }
       }
     }
   });

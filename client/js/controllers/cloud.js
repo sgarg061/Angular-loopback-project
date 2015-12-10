@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion','POSConnector', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSConnector, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSConnector', 'CloudPOSConnector', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSConnector, CloudPOSConnector, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -11,6 +11,12 @@ angular
     $scope.cloudId = null;
     $scope.cloud = null;
 
+    $scope.children = [];
+    $scope.filters = [];
+
+    $scope.cascadedFilters = [];
+    $scope.ownedFilters = [];
+    
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
       $scope.$watch("cloud", function(newValue, oldValue) {
@@ -51,7 +57,7 @@ angular
         .find({
           filter: {
             where: {id: $stateParams.cloudId},
-            include: ['softwareVersion', 'posConnectors', {
+            include: ['softwareVersion', {
               relation: 'resellers',
               scope: {
                 order: 'name ASC',
@@ -65,14 +71,16 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
-          
-          if ($scope.cloud) {
 
-            $scope.cloud.posConnectors = [
-              {name: 'POS Connector 1', cloudId: $scope.cloud.id},
-              {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
-            ];
-          }
+          $scope.children = clouds[0].resellers;
+          
+          // if ($scope.cloud) {
+
+          //   $scope.cloud.posConnectors = [
+          //     {name: 'POS Connector 1', cloudId: $scope.cloud.id},
+          //     {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
+          //   ];
+          // }
 
           watchForChanges();
         });
@@ -99,13 +107,28 @@ angular
 
     
     function getFilters(){
-
       POSConnector
-        .find()
+        .find({
+          filter: {
+            where: {
+              creatorId: $stateParams.cloudId,
+              creatorType: 'cloud'
+            }
+          }
+        })
         .$promise
         .then(function(connectors) {
-          $scope.filters = connectors;
-          console.debug('connectors', connectors, $scope);
+
+          for(var i in connectors){
+            var filter = connectors[i];
+            if (i > -1) {
+              filter.owner = (filter.creatorType == 'cloud' || userService.getUserType() == 'solink');
+              $scope.filters.push(filter);
+
+              filter.creatorType == 'cloud' ? $scope.ownedFilters.push(filter) :$scope.cascadedFilters.push(filter)
+            };
+          }
+
         })
 
     }
@@ -273,23 +296,29 @@ angular
   };
 
   $scope.selectConnector = function(connector) {
-    console.debug('connecting to ', connector);
   };
 
 
   $scope.addFilter = function(connector) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
-                    $scope.newConnector = {
+                    $scope.newFilter = {
                       name: '',
-                      script: ''
+                      script: '',
+                      owner: true
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
-                      POSConnector.create({id: '', name: $scope.newFilter.name, description: $scope.newFilter.description, script: script})
+                      POSConnector.create({
+                        id: '',
+                        name: $scope.newFilter.name,
+                        description: $scope.newFilter.description,
+                        script: script,
+                        creatorId: $stateParams.cloudId,
+                        creatorType: 'cloud' 
+                      })
                       .$promise
                       .then(function(customer) {
-                        console.debug('customer', customer);
                         getFilters();
                       }, function (res) {
                         toastr.error(res.data.error.message, 'Error');
@@ -300,7 +329,7 @@ angular
                       $mdDialog.cancel();
                     };
       },
-      templateUrl: 'views/filterCreateForm.tmpl.html',
+      templateUrl: 'views/filterForm.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose:true
@@ -310,5 +339,71 @@ angular
     }); 
   };
 
+  $scope.actionFilter = function(filter) {
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+        $scope.newFilter = filter
+
+        if (!$scope.newFilter.parsed_script){
+          try {
+            $scope.newFilter.script = JSON.parse(filter.script)
+          }
+          catch(err){
+            $scope.newFilter.script = filter.script
+          }
+          
+          $scope.newFilter.parsed_script = true
+        }
+
+        $scope.newFilter.$edit = true
+        $scope.create = function() {
+          var script = JSON.stringify($scope.newFilter.script);
+          POSConnector.updateAll({
+            where: {id: filter.id}
+          }, {
+            name: $scope.newFilter.name,
+            description: $scope.newFilter.description,
+            script: script
+          })
+          .$promise
+          .then(function(customer) {
+            getFilters();
+          }, function (res) {
+            toastr.error(res.data.error.message, 'Error');
+          });
+          $mdDialog.cancel();
+        };
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };
+        $scope.destroy = function() {
+          var confirm = $mdDialog.confirm()
+            .title('Delete Filter')
+            .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
+            .ok('Yes')
+            .cancel('No');
+
+          $mdDialog.show(confirm).then(function() {
+            POSConnector.deleteById($scope.newFilter)
+              .$promise
+              .then(function(customer) {
+                getFilters();
+              }, function (res) {
+                toastr.error(res.data.error.message, 'Error');
+              });
+          });
+
+
+        };
+      },
+      templateUrl: 'views/filterForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+    }); 
+  };
     
   }]);

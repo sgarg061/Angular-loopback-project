@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSConnector', 'CloudPOSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSConnector, CloudPOSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -9,6 +9,9 @@ angular
     $scope.customer = {};
     $scope.devices = [];
     $scope.filters = [];
+
+    $scope.cascadedFilters = [];
+    $scope.ownedFilters = [];
 
     $scope.cloud = null;
     $scope.reseller = null;
@@ -94,6 +97,9 @@ angular
           $scope.reseller = customers[0].reseller;
 
           $scope.devices = customers[0].devices;
+
+          getFilters();
+          getAssignedFilters();
 
           watchForChanges();
 
@@ -181,20 +187,92 @@ angular
     }
 
     function getFilters(){
-
       POSConnector
-        .find()
+        .find({
+          filter: {
+            where: {
+              or: [{'creatorId': $stateParams.customerId},{'creatorId': $scope.reseller.id},{'creatorId': $scope.cloud.id}]
+            },
+            include: {
+              relation: 'cloudPOSConnectors',
+              scope: {
+                where: {
+                  or: [{'assigneeId': $stateParams.customerId},{'assigneeId': $scope.reseller.id}]
+                }
+              }
+            }
+          }
+        })
         .$promise
         .then(function(connectors) {
-          $scope.filters = connectors;
-          console.debug('connectors', connectors, $scope);
-        })
 
+          $scope.filters = [];
+          $scope.cascadedFilters = [];
+          $scope.ownedFilters = [];
+
+          for(var i in connectors){
+            var filter = connectors[i];
+            filter.selected = false;
+            filter.owner = (filter.creatorType == 'customer'  || userService.getUserType() == 'solink');
+            if (i > -1) {
+
+              if (filter.cloudPOSConnectors.length) {
+                var index = filter.cloudPOSConnectors.length - 1;
+
+                filter.selected = (filter.cloudPOSConnectors.length == 2);
+
+                if (filter.cloudPOSConnectors[index].assigneeType == 'customer') {
+                  filter.selected = true;                  
+                  $scope.filters.push(filter);
+                  filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
+                }
+                else if (filter.cloudPOSConnectors[index].assigneeType == 'reseller') {
+                  $scope.filters.push(filter);  
+                  filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
+                }
+              }
+              else if(filter.creatorType == 'customer'){
+                $scope.filters.push(filter);      
+                  filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)          
+              }
+            };
+            
+          }
+        })
     }
+
+    function getAssignedFilters() {
+      CloudPOSConnector
+        .find({
+          filter: {
+            where: {'assigneeId': $stateParams.customerId},
+            fields: {posConnectorId: true, id: true},
+            include: [{
+                  relation: 'posConnector',
+                  scope: {
+                    fields: {name: true, script: true, description: true}
+                  }
+                }]
+          }
+        })
+        .$promise
+        .then(function(connectors) {
+          console.log('total assigned filters', connectors);
+        });
+    }
+
 
     getCustomer();
     getSoftwareVersions();
-    getFilters();
+
+    $scope.loadFilters = function(owner){
+
+      var sortedFilters = $scope.filters.filter(function (el) {
+        return el.owner == owner;
+      })
+
+      return sortedFilters;
+    }
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
@@ -232,7 +310,6 @@ angular
     }
 
     function showLicense(aLicense) {
-      console.log('show license: ' + JSON.stringify(aLicense));
       $mdDialog.show({
         parent: angular.element(document.body),
         templateUrl: 'views/licenseShowForm.tmpl.html',
@@ -242,12 +319,9 @@ angular
             $mdDialog.cancel();
           }
           scope.activateLicense = function() {
-            console.log('activating license: ' + scope.license);
             License.activate({key: scope.license.key})
               .$promise
               .then(function(activationResult) {
-
-                console.log('activated license: ' + JSON.stringify(activationResult));
 
                 var licenseIndex = $scope.customer.licenses.indexOf(scope.license);
 
@@ -275,8 +349,6 @@ angular
     }
 
     function addLicense(customerId) {
-      console.log('add license for customer id: ' + customerId);
-
       $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.quantity = 0;
@@ -290,8 +362,6 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
-                  console.log('adding license key: ' + license.key);
-
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
@@ -321,7 +391,6 @@ angular
     }
 
   function deleteCustomer(customer) {
-    console.log('delete customer: ' + JSON.stringify(customer));
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.customerName = '';
@@ -471,33 +540,40 @@ angular
   };
 
   $scope.selectConnector = function(connector) {
-    console.debug('connector', connector);
   };
 
   $scope.addFilter = function(connector) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
-                    $scope.newConnector = {
+                    $scope.newFilter = {
                       name: '',
-                      script: ''
+                      script: '',
+                      owner: true
+
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
-                      POSConnector.create({id: '', name: $scope.newFilter.name, description: $scope.newFilter.description, script: script})
+                        POSConnector.create({
+                          id: '',
+                          name: $scope.newFilter.name,
+                          description: $scope.newFilter.description,
+                          script: script,
+                          creatorId: $stateParams.customerId,
+                          creatorType: 'customer' 
+                        })
                       .$promise
                       .then(function(customer) {
-                        console.debug('customer', customer);
                         getFilters();
                       }, function (res) {
                         toastr.error(res.data.error.message, 'Error');
                       });
-                      $mdDialog.cancel();
+                      $mdDialog.hide();
                     };
                     $scope.cancel = function() {
                       $mdDialog.cancel();
                     };
       },
-      templateUrl: 'views/filterCreateForm.tmpl.html',
+      templateUrl: 'views/filterForm.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose:true
@@ -506,6 +582,114 @@ angular
       }, function() {
     }); 
   };
+
+  $scope.actionFilter = function(filter) {
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+        $scope.newFilter = filter
+
+        if (!$scope.newFilter.parsed_script){
+          try {
+            $scope.newFilter.script = JSON.parse(filter.script)
+          }
+          catch(err){
+            $scope.newFilter.script = filter.script
+          }
+
+          $scope.newFilter.parsed_script = true
+        }
+
+        $scope.newFilter.$edit = true
+        $scope.create = function() {
+          var script = JSON.stringify($scope.newFilter.script);
+          POSConnector.updateAll({
+            where: {id: filter.id}
+          }, {
+            name: $scope.newFilter.name,
+            description: $scope.newFilter.description,
+            script: script
+          })
+          .$promise
+          .then(function(customer) {
+            getFilters();
+          }, function (res) {
+            toastr.error(res.data.error.message, 'Error');
+          });
+          $mdDialog.cancel();
+        };
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };
+        $scope.destroy = function() {
+          var confirm = $mdDialog.confirm()
+            .title('Delete Filter')
+            .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
+            .ok('Yes')
+            .cancel('No');
+
+          $mdDialog.show(confirm).then(function() {
+            POSConnector.deleteById($scope.newFilter)
+              .$promise
+              .then(function(customer) {
+                getFilters();
+              }, function (res) {
+                toastr.error(res.data.error.message, 'Error');
+              });
+          });
+
+
+        };
+      },
+      templateUrl: 'views/filterForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+    }); 
+  };
+
+
+    $scope.filterChanged = function (filter) {
+      if (filter.selected) {
+        CloudPOSConnector.create({
+          assigneeId: $stateParams.customerId,
+          posConnectorId: filter.id,
+          assigneeType: 'customer'
+        })
+        .$promise
+        .then(function(data) {
+          filter.cloudPOSConnectors.push(data)
+          toastr.success('Assigned filter successfully!', 'Filter Assigned')
+        }, function (res) {
+          toastr.error(res.data.error.message, 'Error');
+        });
+      }
+      else{
+
+        if (filter.cloudPOSConnectors.length) {
+          for(var i in filter.cloudPOSConnectors){
+            var connector = filter.cloudPOSConnectors[i];
+            if (connector.assigneeType == 'customer') {
+              deleteConnectorById(connector.id);
+            };
+          }
+        }
+      }
+    };
+
+
+    function deleteConnectorById (id) {
+      CloudPOSConnector.deleteById({id: id})
+      .$promise
+      .then(function(data) {
+        toastr.success('Unassigned filter successfully!', 'Filter Unassigned')
+      }, function (res) {
+        toastr.error(res.data.error.message, 'Error');
+      });
+    }
+
 
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
