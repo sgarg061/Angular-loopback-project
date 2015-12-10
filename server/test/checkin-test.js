@@ -155,7 +155,11 @@ describe('Checkin after initial device activation', function() {
           .expect(200)
           .end(function(err, res) {
              if (err) throw err;
-            done();
+             app.models.DeviceLogEntry.find({}, function (err, res) {
+              var logEntry = res[0];
+              assert(logEntry.checkinTime instanceof Date);
+              done();
+            })
           });
         });
     });

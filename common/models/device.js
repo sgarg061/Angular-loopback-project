@@ -329,6 +329,7 @@ module.exports = function(Device) {
 
             // add a timestamp field
             deviceLogEntry.timestamp = Date.now();
+            deviceLogEntry.checkinTime = Date.now();
 
             Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
                 if (err) {
