@@ -1,5 +1,6 @@
 var assert = require('assert');
 var common = require('./common');
+var app    = require('../server');
 
 var deviceGuid = '7DB02DCF-4EA9-4177-A256-42BCFD511E90';
 var deviceCheckinData = {
