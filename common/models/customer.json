@@ -58,6 +58,11 @@
       "type": "hasOne",
       "model": "SoftwareVersion",
       "foreignKey": "id"
+    },
+    "filters": {
+      "type": "hasMany",
+      "model": "CloudPOSConnector",
+      "foreignKey": "assigneeId"
     }
   },
   "acls": [
