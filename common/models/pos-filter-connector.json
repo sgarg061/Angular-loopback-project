@@ -7,19 +7,19 @@
     "validateUpsert": true
   },
   "properties": {
-      "id": {
-        "type": "string",
-        "id": true
-      },
-      "assigneeId": {
-        "type": "string",
-        "required": true
-      },
-      "assigneeType": {
-        "type": "string",
-        "required": true
-      }
+    "id": {
+      "type": "string",
+      "id": true
     },
+    "assigneeId": {
+      "type": "string",
+      "required": true
+    },
+    "assigneeType": {
+      "type": "string",
+      "required": true
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [],

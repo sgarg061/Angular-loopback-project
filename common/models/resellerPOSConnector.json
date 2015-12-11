@@ -22,11 +22,6 @@
       "type": "belongsTo",
       "model": "Reseller",
       "foreignKey": "resellerId"
-    },
-    "pOSConnector": {
-      "type": "belongsTo",
-      "model": "POSConnector",
-      "foreignKey": "posConnectorId"
     }
   },
   "acls": [],

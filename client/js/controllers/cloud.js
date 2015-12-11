@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSConnector', 'CloudPOSConnector', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSConnector, CloudPOSConnector, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSConnector', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSConnector, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -76,7 +76,7 @@ angular
           
           // if ($scope.cloud) {
 
-          //   $scope.cloud.posConnectors = [
+          //   $scope.cloud.posFilters = [
           //     {name: 'POS Connector 1', cloudId: $scope.cloud.id},
           //     {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
           //   ];

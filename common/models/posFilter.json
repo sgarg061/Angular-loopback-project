@@ -1,5 +1,6 @@
 {
   "name": "POSFilter",
+  "plural": "posFilters",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -7,9 +8,7 @@
   },
   "properties": {
     "id": {
-      "type": "string",
-      "id": true,
-      "required": false
+      "type": "string"
     },
     "name": {
       "type": "string",
@@ -17,11 +16,11 @@
     },
     "script": {
       "type": "string",
-      "required": true,
-      "length": 5000
+      "required": true
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "creatorId": {
       "type": "string",
@@ -33,12 +32,7 @@
     }
   },
   "validations": [],
-  "relations": {
-      "posFilter": {
-        "type": "belongsTo",
-        "model": "POSFilter"
-      }
-    },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
