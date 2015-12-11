@@ -59,9 +59,9 @@
       "model": "SoftwareVersion",
       "foreignKey": "id"
     },
-    "filters": {
+    "posConnectors": {
       "type": "hasMany",
-      "model": "CloudPOSConnector",
+      "model": "POSFilterConnector",
       "foreignKey": "assigneeId"
     }
   },

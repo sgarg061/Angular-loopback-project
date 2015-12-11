@@ -105,7 +105,7 @@ module.exports = function(app, doneCallback) {
           updateUrl: 'http://update.solinkcloud.net',
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
-          email: 'cwhiten+asdfsff2asf32asdf13@solinkcorp.com',
+          email: 'cwhiten+asdfsff2aasdfsf32asdf13@solinkcorp.com',
           password: 'test'
         },
         { name: 'Solink APAC',
@@ -115,7 +115,7 @@ module.exports = function(app, doneCallback) {
           updateUrl: 'http://update.solinkcloud.net',
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
-          email: 'cwhiten+m233asdffsfddfdf3asdf32@solinkcorp.com',
+          email: 'cwhiten+m233asdffsfasdfddfdf3asdf32@solinkcorp.com',
           password: 'test'
         },
       ], cb);
@@ -132,7 +132,7 @@ module.exports = function(app, doneCallback) {
       app.models.Reseller.create([
         { name: 'Reseller 1',
           cloudId: results.clouds[0].id,
-          email: 'cwhiten+rr21aasfdf231@solinkcorp.com',
+          email: 'cwhiten+rr21aaasdf231@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 2',
@@ -144,7 +144,7 @@ module.exports = function(app, doneCallback) {
         { name: 'Reseller 3',
           cloudId: results.clouds[1].id,
           checkinInterval: 3000,
-          email: 'cwhiten+rr233asasasdff22asdf3@solinkcorp.com',
+          email: 'cwhiten+rr233asasasasdf2asdf3@solinkcorp.com',
           password: 'test'
         }
       ], cb);
