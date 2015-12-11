@@ -1,5 +1,6 @@
 var assert = require('assert');
 var common = require('./common');
+var app    = require('../server');
 
 var deviceGuid = '7DB02DCF-4EA9-4177-A256-42BCFD511E90';
 var deviceCheckinData = {
@@ -155,7 +156,11 @@ describe('Checkin after initial device activation', function() {
           .expect(200)
           .end(function(err, res) {
              if (err) throw err;
-            done();
+             app.models.DeviceLogEntry.find({}, function (err, res) {
+              var logEntry = res[0];
+              assert(logEntry.checkinTime instanceof Date);
+              done();
+            })
           });
         });
     });

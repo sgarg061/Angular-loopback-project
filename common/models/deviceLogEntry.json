@@ -24,6 +24,11 @@
       "type": "string",
       "required": true,
       "index": true
+    },
+    "checkinTime": {
+      "type": "Date",
+      "required": true,
+      "index": true
     }
   },
   "validations": [],
