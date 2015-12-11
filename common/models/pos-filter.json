@@ -1,0 +1,44 @@
+{
+  "name": "POSFilter",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "required": false
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "script": {
+      "type": "string",
+      "required": true,
+      "length": 5000
+    },
+    "description": {
+      "type": "string"
+    },
+    "creatorId": {
+      "type": "string",
+      "required": true
+    },
+    "creatorType": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+      "posFilter": {
+        "type": "belongsTo",
+        "model": "POSFilter"
+      }
+    },
+  "acls": [],
+  "methods": {}
+}

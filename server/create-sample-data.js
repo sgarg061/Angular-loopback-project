@@ -27,6 +27,10 @@ module.exports = function(app, doneCallback) {
         app.models.SoftwareVersion.destroyAll();
         app.models.POSConnector.destroyAll();
         app.models.CloudPOSConnector.destroyAll();
+
+        // app.models.POSFilter.destroyAll();
+        // app.models.POSFilterConnector.destroyAll();
+
         app.models.Cloud.destroyAll();
         app.models.Reseller.destroyAll();
         app.models.Customer.destroyAll();
@@ -49,6 +53,9 @@ module.exports = function(app, doneCallback) {
       cloudPOSConnectors: ['resellers', function(cb, results) {
         createCloudPOSConnectors(cb, results);
       }],
+      // posFilters: ['filters', function(cb, results) {
+      //   createPOSFilters(cb, results);
+      // }],
       customers: ['resellerPOSConnectors', function (cb, results) {
         createCustomers(cb, results);
       }],
@@ -74,6 +81,7 @@ module.exports = function(app, doneCallback) {
     logger.debug('creating software versions...');
     datastore.automigrate('SoftwareVersion', function(err) {
       if (err) {
+        console.log('errr', err);
         logger.error(err);
         return cb(err);
       }
@@ -160,6 +168,33 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.POSConnector.create([
+        { name: 'HDX',
+          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));',
+          creatorId: results.clouds[0].id,
+          creatorType: 'cloud'
+        },
+        { name: 'QSR',
+          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));',
+          creatorId: results.clouds[0].id,
+          creatorType: 'cloud'
+        },
+        { name: 'Motion Parser',
+          script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));',
+          creatorId: results.clouds[0].id,
+          creatorType: 'cloud'
+        }
+      ], cb);
+    });
+  }
+
+  function createPOSFilters(cb, results) {
+    logger.debug('creating POS filters...');
+    datastore.automigrate('CreatePOSFilters', function(err) {
+      if (err) {
+        logger.error(err);
+        return cb(err);
+      }
+      app.models.POSFilter.create([
         { name: 'HDX',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));',
           creatorId: results.clouds[0].id,

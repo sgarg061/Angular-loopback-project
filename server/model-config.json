@@ -109,5 +109,13 @@
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "POSFilter": {
+    "dataSource": "callHomeDb",
+    "public": false
+  },
+  "POSFilterConnector": {
+    "dataSource": "callHomeDb",
+    "public": true
   }
 }
