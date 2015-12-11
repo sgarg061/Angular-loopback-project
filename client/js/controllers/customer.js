@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSConnector', 'CloudPOSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSConnector, CloudPOSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSFilterConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -99,7 +99,7 @@ angular
           $scope.devices = customers[0].devices;
 
           getFilters();
-          getAssignedFilters();
+          // getAssignedFilters();
 
           watchForChanges();
 
@@ -187,14 +187,14 @@ angular
     }
 
     function getFilters(){
-      POSConnector
+      POSFilter
         .find({
           filter: {
             where: {
               or: [{'creatorId': $stateParams.customerId},{'creatorId': $scope.reseller.id},{'creatorId': $scope.cloud.id}]
             },
             include: {
-              relation: 'cloudPOSConnectors',
+              relation: 'connectors',
               scope: {
                 where: {
                   or: [{'assigneeId': $stateParams.customerId},{'assigneeId': $scope.reseller.id}]
@@ -216,17 +216,17 @@ angular
             filter.owner = (filter.creatorType == 'customer'  || userService.getUserType() == 'solink');
             if (i > -1) {
 
-              if (filter.cloudPOSConnectors.length) {
-                var index = filter.cloudPOSConnectors.length - 1;
+              if (filter.connectors.length) {
+                var index = filter.connectors.length - 1;
 
-                filter.selected = (filter.cloudPOSConnectors.length == 2);
+                filter.selected = (filter.connectors.length == 2);
 
-                if (filter.cloudPOSConnectors[index].assigneeType == 'customer') {
+                if (filter.connectors[index].assigneeType == 'customer') {
                   filter.selected = true;                  
                   $scope.filters.push(filter);
                   filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
                 }
-                else if (filter.cloudPOSConnectors[index].assigneeType == 'reseller') {
+                else if (filter.connectors[index].assigneeType == 'reseller') {
                   $scope.filters.push(filter);  
                   filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
                 }
@@ -241,25 +241,25 @@ angular
         })
     }
 
-    function getAssignedFilters() {
-      CloudPOSConnector
-        .find({
-          filter: {
-            where: {'assigneeId': $stateParams.customerId},
-            fields: {posConnectorId: true, id: true},
-            include: [{
-                  relation: 'posConnector',
-                  scope: {
-                    fields: {name: true, script: true, description: true}
-                  }
-                }]
-          }
-        })
-        .$promise
-        .then(function(connectors) {
-          console.log('total assigned filters', connectors);
-        });
-    }
+    // function getAssignedFilters() {
+    //   POSFilterConnector
+    //     .find({
+    //       filter: {
+    //         where: {'assigneeId': $stateParams.customerId},
+    //         fields: {posFilterId: true, id: true},
+    //         include: [{
+    //               relation: 'posFilter',
+    //               scope: {
+    //                 fields: {name: true, script: true, description: true}
+    //               }
+    //             }]
+    //       }
+    //     })
+    //     .$promise
+    //     .then(function(connectors) {
+    //       console.log('total assigned filters', connectors);
+    //     });
+    // }
 
 
     getCustomer();
@@ -553,7 +553,7 @@ angular
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
-                        POSConnector.create({
+                        POSFilter.create({
                           id: '',
                           name: $scope.newFilter.name,
                           description: $scope.newFilter.description,
@@ -602,7 +602,7 @@ angular
         $scope.newFilter.$edit = true
         $scope.create = function() {
           var script = JSON.stringify($scope.newFilter.script);
-          POSConnector.updateAll({
+          POSFilter.updateAll({
             where: {id: filter.id}
           }, {
             name: $scope.newFilter.name,
@@ -628,7 +628,7 @@ angular
             .cancel('No');
 
           $mdDialog.show(confirm).then(function() {
-            POSConnector.deleteById($scope.newFilter)
+            POSFilter.deleteById($scope.newFilter)
               .$promise
               .then(function(customer) {
                 getFilters();
@@ -653,14 +653,14 @@ angular
 
     $scope.filterChanged = function (filter) {
       if (filter.selected) {
-        CloudPOSConnector.create({
+        POSFilterConnector.create({
           assigneeId: $stateParams.customerId,
-          posConnectorId: filter.id,
+          filterId: filter.id,
           assigneeType: 'customer'
         })
         .$promise
         .then(function(data) {
-          filter.cloudPOSConnectors.push(data)
+          filter.connectors.push(data)
           toastr.success('Assigned filter successfully!', 'Filter Assigned')
         }, function (res) {
           toastr.error(res.data.error.message, 'Error');
@@ -668,9 +668,9 @@ angular
       }
       else{
 
-        if (filter.cloudPOSConnectors.length) {
-          for(var i in filter.cloudPOSConnectors){
-            var connector = filter.cloudPOSConnectors[i];
+        if (filter.connectors.length) {
+          for(var i in filter.connectors){
+            var connector = filter.connectors[i];
             if (connector.assigneeType == 'customer') {
               deleteConnectorById(connector.id);
             };
@@ -681,7 +681,7 @@ angular
 
 
     function deleteConnectorById (id) {
-      CloudPOSConnector.deleteById({id: id})
+      POSFilterConnector.deleteById({id: id})
       .$promise
       .then(function(data) {
         toastr.success('Unassigned filter successfully!', 'Filter Unassigned')

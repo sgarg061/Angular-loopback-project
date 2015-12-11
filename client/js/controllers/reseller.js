@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSConnector', 'CloudPOSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSConnector, CloudPOSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSFilterConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.reseller = {};
 
@@ -182,14 +182,14 @@ angular
     }
 
     function getFilters(cloudId){
-      POSConnector
+      POSFilter
         .find({
           filter: {
             where: {
               or: [{'creatorId': $stateParams.resellerId},{'creatorId': cloudId}]
             },
             include: {
-              relation: 'cloudPOSConnectors',
+              relation: 'connectors',
               scope: {
                 where: {assigneeId: $stateParams.resellerId}
               }
@@ -199,6 +199,7 @@ angular
         .$promise
         .then(function(connectors) {
 
+          console.log('loaded connectors', connectors);
           $scope.filters = [];
           $scope.cascadedFilters = [];
           $scope.ownedFilters = [];
@@ -207,7 +208,7 @@ angular
           for(var i in connectors){
             var filter = connectors[i];
             if (i > -1) {
-              filter.selected = (filter.cloudPOSConnectors.length > 0)
+              filter.selected = (filter.connectors.length > 0)
               filter.owner = (filter.creatorType == 'reseller' || userService.getUserType() == 'solink');
               $scope.filters.push(filter);
               
@@ -393,7 +394,7 @@ angular
                       };
                       $scope.create = function() {
                         var script = JSON.stringify($scope.newFilter.script);
-                        POSConnector.create({
+                        POSFilter.create({
                           id: '',
                           name: $scope.newFilter.name,
                           description: $scope.newFilter.description,
@@ -441,7 +442,7 @@ angular
           $scope.newFilter.$edit = true
           $scope.create = function() {
             var script = JSON.stringify($scope.newFilter.script);
-            POSConnector.updateAll({
+            POSFilter.updateAll({
               where: {id: filter.id}
             }, {
               name: $scope.newFilter.name,
@@ -467,7 +468,7 @@ angular
               .cancel('No');
 
             $mdDialog.show(confirm).then(function() {
-              POSConnector.deleteById($scope.newFilter)
+              POSFilter.deleteById($scope.newFilter)
                 .$promise
                 .then(function(customer) {
                   getFilters();
@@ -491,28 +492,28 @@ angular
 
     $scope.filterChanged = function (filter) {
       if (filter.selected) {
-        CloudPOSConnector.create({
+        POSFilterConnector.create({
+          filterId: filter.id,
           assigneeId: $stateParams.resellerId,
-          posConnectorId: filter.id,
           assigneeType: 'reseller'
         })
         .$promise
         .then(function(data) {
-          filter.cloudPOSConnectors.push(data)
+          filter.connectors.push(data)
           toastr.success('Assigned filter successfully!', 'Filter Assigned')
         }, function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
       }
       else{
-        if (filter.cloudPOSConnectors.length) {
-          deleteConnectorById(filter.cloudPOSConnectors[0].id);
+        if (filter.connectors.length) {
+          deleteConnectorById(filter.connectors[0].id);
         }
       }
     }
 
     function deleteConnectorById (id) {
-      CloudPOSConnector.deleteById({id: id})
+      POSFilterConnector.deleteById({id: id})
       .$promise
       .then(function(data) {
         toastr.success('Unassigned filter successfully!', 'Filter Unassigned')

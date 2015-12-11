@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSConnector', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSConnector, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -107,7 +107,7 @@ angular
 
     
     function getFilters(){
-      POSConnector
+      POSFilter
         .find({
           filter: {
             where: {
@@ -118,7 +118,10 @@ angular
         })
         .$promise
         .then(function(connectors) {
-
+          $scope.filters = [];
+          $scope.ownedFilters = [];
+          $scope.cascadedFilters = [];
+          console.log('loaded', connectors);
           for(var i in connectors){
             var filter = connectors[i];
             if (i > -1) {
@@ -309,7 +312,7 @@ angular
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
-                      POSConnector.create({
+                      POSFilter.create({
                         id: '',
                         name: $scope.newFilter.name,
                         description: $scope.newFilter.description,
@@ -358,7 +361,7 @@ angular
         $scope.newFilter.$edit = true
         $scope.create = function() {
           var script = JSON.stringify($scope.newFilter.script);
-          POSConnector.updateAll({
+          POSFilter.updateAll({
             where: {id: filter.id}
           }, {
             name: $scope.newFilter.name,
@@ -384,7 +387,7 @@ angular
             .cancel('No');
 
           $mdDialog.show(confirm).then(function() {
-            POSConnector.deleteById($scope.newFilter)
+            POSFilter.deleteById($scope.newFilter)
               .$promise
               .then(function(customer) {
                 getFilters();

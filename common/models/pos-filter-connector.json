@@ -21,7 +21,12 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "filter": {
+      "type": "belongsTo",
+      "model": "POSFilter"
+    }
+  },
   "acls": [],
   "methods": {}
 }

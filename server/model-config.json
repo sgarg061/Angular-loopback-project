@@ -112,7 +112,7 @@
   },
   "POSFilter": {
     "dataSource": "callHomeDb",
-    "public": false
+    "public": true
   },
   "POSFilterConnector": {
     "dataSource": "callHomeDb",

@@ -25,6 +25,7 @@ module.exports = function(app, doneCallback) {
         logger.debug('destroying all existing data...');
         app.models.SoftwareVersion.destroyAll();
         app.models.POSFilter.destroyAll();
+        app.models.POSFilterConnector.destroyAll();
         app.models.Cloud.destroyAll();
         app.models.Reseller.destroyAll();
         app.models.Customer.destroyAll();
@@ -104,7 +105,7 @@ module.exports = function(app, doneCallback) {
           updateUrl: 'http://update.solinkcloud.net',
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
-          email: 'cwhiten+m234523213@solinkcorp.com',
+          email: 'cwhiten+asdfsff2asf32asdf13@solinkcorp.com',
           password: 'test'
         },
         { name: 'Solink APAC',
@@ -114,7 +115,7 @@ module.exports = function(app, doneCallback) {
           updateUrl: 'http://update.solinkcloud.net',
           checkinInterval: 3600,
           softwareVersionId: results.softwareVersions[0].id,
-          email: 'cwhiten+m23345332@solinkcorp.com',
+          email: 'cwhiten+m233asdffsfddfdf3asdf32@solinkcorp.com',
           password: 'test'
         },
       ], cb);
@@ -131,19 +132,19 @@ module.exports = function(app, doneCallback) {
       app.models.Reseller.create([
         { name: 'Reseller 1',
           cloudId: results.clouds[0].id,
-          email: 'cwhiten+rr21123231@solinkcorp.com',
+          email: 'cwhiten+rr21aasfdf231@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 2',
           cloudId: results.clouds[0].id,
           checkinInterval: 3000,
-          email: 'cwhiten+rr21212332@solinkcorp.com',
+          email: 'cwhiten+rr2121aaasdfsdfasf2332@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 3',
           cloudId: results.clouds[1].id,
           checkinInterval: 3000,
-          email: 'cwhiten+rr2331223@solinkcorp.com',
+          email: 'cwhiten+rr233asasasdff22asdf3@solinkcorp.com',
           password: 'test'
         }
       ], cb);
@@ -159,17 +160,23 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.POSFilter.create([
-        { name: 'HDX',
+        { 
+          id: '',
+          name: 'HDX',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));',
           creatorId: results.clouds[0].id,
           creatorType: 'cloud'
         },
-        { name: 'QSR',
+        { 
+          id: '',
+          name: 'QSR',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));',
           creatorId: results.clouds[0].id,
           creatorType: 'cloud'
         },
-        { name: 'Motion Parser',
+        { 
+          id: '',
+          name: 'Motion Parser',
           script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));',
           creatorId: results.clouds[0].id,
           creatorType: 'cloud'
@@ -189,9 +196,9 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Customer.create([
-        {name: 'Customer 1', resellerId: results.resellers[0].id, id: 1},
-        {name: 'Customer 2', resellerId: results.resellers[1].id, id: 2, checkinInterval: 2400},
-        {name: 'Customer 3', resellerId: results.resellers[2].id, id: 3},
+        {name: 'Customer 1', resellerId: results.resellers[0].id},
+        {name: 'Customer 2', resellerId: results.resellers[1].id, checkinInterval: 2400},
+        {name: 'Customer 3', resellerId: results.resellers[2].id},
       ], cb);
     });
   }
