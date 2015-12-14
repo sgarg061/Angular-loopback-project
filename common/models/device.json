@@ -103,11 +103,6 @@
       "model": "Camera",
       "foreignKey": "deviceId"
     },
-    "posDevices": {
-      "type": "hasMany",
-      "model": "POSDevice",
-      "foreignKey": "deviceId"
-    },
     "logEntries": {
       "type": "hasMany",
       "model": "DeviceLogEntry",

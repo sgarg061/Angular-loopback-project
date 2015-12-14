@@ -43,6 +43,11 @@
       "type": "belongsTo",
       "model": "Device",
       "foreignKey": "deviceId"
+    },
+    "pos": {
+      "type": "belongsTo",
+      "model": "POSCamera",
+      "foreignKey": "deviceId"
     }
   },
   "acls": [],

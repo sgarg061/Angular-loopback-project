@@ -1,6 +1,5 @@
 {
-  "name": "POSFilter",
-  "plural": "POSFilters",
+  "name": "POSCamera",
   "base": "PersistedModel",
   "strict": true,
   "options": {
@@ -10,37 +9,28 @@
   "properties": {
     "id": {
       "type": "string",
-      "id": true,
-      "required": false
+      "id": true
     },
-    "name": {
+    "cameraId": {
       "type": "string",
       "required": true
     },
-    "script": {
-      "type": "string",
-      "required": true,
-      "length": 10000
-    },
-    "description": {
-      "type": "string",
-      "required": false
-    },
-    "creatorId": {
-      "type": "string",
-      "required": true
-    },
-    "creatorType": {
+    "connectorId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "connectors": {
+    "cameras": {
       "type": "hasMany",
+      "model": "Camera",
+      "foreignKey": "cameraId"
+    },
+    "connector": {
+      "type": "belongsTo",
       "model": "POSFilterConnector",
-      "foreignKey": "filterId"
+      "foreignKey": "connectorId"
     }
   },
   "acls": [],
