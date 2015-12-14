@@ -570,3 +570,128 @@ An email is sent to the user's current email to confirm changing the password
         {
             "response": "Forgot password email successfully sent."
         }
+
+## Group POS Association
+            
+## POS Connectors [/api/customers/{id}/posConnectors]
+
+POS Connector will provide POS Filters assigned to a specified Customer by their parent or self.
+It has the following attributes:
++ filterId - POSFilter id, can be referenced to find the Filter.
++ assigneeType - Person who assigned the filter type (customer/reseller/cloud)
++ assigneeId - Person who assigned the filter id
+
+
++ Parameters
+    + id: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+
+
+### List available POS Connectors [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+              {
+                "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
+                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
+                "assigneeType": "customer",
+                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
+              },
+              {
+                "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
+                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
+                "assigneeType": "customer",
+                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
+              }
+            ]
+            ## Group Customers
+
+
+## POS Filters [/api/customers/{customerId}/posConnectors/{connectorId}/filter]
+
+POS Filter object has the following attributes:
++ name - Filter name.
++ script - Javascript blob of the script for the listener
++ description - description of the script
++ creatorType - Type of person who created it. (customer/reseller/cloud)
++ creatorId - person who created the filter
+
+
++ Parameters
+    + customerId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string)
+    + connectorId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
+
+
+### Get POS Filter [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "id": "41c47270-a28d-11e5-bad2-6fe88522b0fe",
+              "name": "Motion Parser",
+              "script": "console.log(String.fromCharCode(0xD83D, 0xDE32));",
+              "description": null,
+              "creatorId": "41705f00-a28d-11e5-bad2-6fe88522b0fe",
+              "creatorType": "cloud"
+            }
+            
+
+
+## Camera Association [/api/cameras/{cameraId}]
+
+Update the camera posId field with the POSConnector id to assign it to that POS.
+Set posId to null to dissassociate them.
++ Parameters
+    + cameraId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+
+### Associate Camera [PUT]
++ Request (application/json)
+
+        {
+          "posId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+        }
+
++ Response 200 (application/json)
+
+        {
+          "id": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+          "cameraId": "b5084250-4b37-11e5-8184-752d1c0476b3",
+          "name": "Front POS Camera",
+          "status": "online",
+          "deviceId": "",
+          "streams": [
+            "any"
+          ],
+          "thumbnail": "",
+          "posId": "2f704dd0-a2a9-11e5-9e4c-31c6c5024ea1"
+        }
+        
+
+## Associated Cameras [/api/posconnectors/{connectorId}/cameras]
+
+Get associated cameras to a POSConnector.
+
++ Parameters
+    + connectorId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+
+### List Associated Cameras [GET]
++ Response 200 (application/json)
+
+        [
+          {
+            "id": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+            "cameraId": "menan",
+            "name": "asdf",
+            "status": "asfd",
+            "deviceId": "asf",
+            "streams": [
+              "any"
+            ],
+            "thumbnail": "",
+            "posId": "2f704dd0-a2a9-11e5-9e4c-31c6c5024ea1"
+          }
+        ]
