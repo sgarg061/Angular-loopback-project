@@ -25,6 +25,11 @@
     "filter": {
       "type": "belongsTo",
       "model": "POSFilter"
+    },
+    "cameras": {
+      "type": "hasMany",
+      "model": "Camera",
+      "foreignKey": "posId"
     }
   },
   "acls": [],

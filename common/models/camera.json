@@ -46,8 +46,7 @@
     },
     "pos": {
       "type": "belongsTo",
-      "model": "POSCamera",
-      "foreignKey": "deviceId"
+      "model": "POSConnector"
     }
   },
   "acls": [],

@@ -60,9 +60,6 @@ module.exports = function(app, doneCallback) {
       cameras: ['devices', function (cb, results) {
         createCameras(cb, results);
       }],
-      posCameras: ['cameras', function (cb, results) {
-        createPOSCameras(cb, results);
-      }],
       posDevices: ['devices', function (cb, results) {
         createPOSDevices(cb, results);
       }],
@@ -264,20 +261,6 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function createPOSCameras(cb, results) {
-    logger.debug('creating POS camera...');
-    datastore.automigrate('POSCamera', function(err) {
-      if (err) {
-        logger.error(err);
-        return cb(err);
-      }
-      app.models.POSCamera.create([
-        {connectorId: 'd2128aeb-c6bd-498e-8e9e-616b4d11ec6d', cameraId: 'bb5357a6-5ac2-488b-817a-687c4ad637d6'},
-        {connectorId: '879d3c28-2a56-43c0-99dd-87d8ba1d2298', cameraId: '08996ceb-5e08-4ca2-8dd7-387d3041b4a7'},
-        {connectorId: '943fc52b-e378-4dc8-9fff-c94f4990a789', cameraId: '8978428b-3865-4602-be09-97502a4997ed'},
-      ], cb);
-    });
-  }
 
   function createLicenses(cb, results) {
     logger.debug('creating licenses...');
