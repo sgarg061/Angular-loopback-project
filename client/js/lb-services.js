@@ -6027,7 +6027,7 @@ module.factory(
      * @description
      *
      * The object `Customer.posConnectors` groups methods
-     * manipulating `POSFilterConnector` instances related to `Customer`.
+     * manipulating `POSConnector` instances related to `Customer`.
      *
      * Call {@link lbServices.Customer#posConnectors Customer.posConnectors()}
      * to query all related instances.
@@ -6061,11 +6061,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.posConnectors = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::get::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6100,7 +6100,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         R.posConnectors.count = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::count::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6134,11 +6134,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.posConnectors.create = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::create::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6172,11 +6172,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.posConnectors.createMany = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::createMany::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6207,7 +6207,7 @@ module.factory(
          * This method returns no data.
          */
         R.posConnectors.destroyAll = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::delete::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6240,7 +6240,7 @@ module.factory(
          * This method returns no data.
          */
         R.posConnectors.destroyById = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::destroyById::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6272,11 +6272,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.posConnectors.findById = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::findById::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -6312,11 +6312,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.posConnectors.updateById = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::updateById::Customer::posConnectors"];
           return action.apply(R, arguments);
         };
@@ -11058,7 +11058,7 @@ module.factory(
   "POSFilter",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/posFilters/:id",
+      urlBase + "/POSFilters/:id",
       { 'id': '@id' },
       {
 
@@ -11067,7 +11067,7 @@ module.factory(
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/posFilters/:id/connectors/:fk",
+          url: urlBase + "/POSFilters/:id/connectors/:fk",
           method: "GET"
         },
 
@@ -11076,7 +11076,7 @@ module.factory(
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/posFilters/:id/connectors/:fk",
+          url: urlBase + "/POSFilters/:id/connectors/:fk",
           method: "DELETE"
         },
 
@@ -11085,32 +11085,32 @@ module.factory(
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/posFilters/:id/connectors/:fk",
+          url: urlBase + "/POSFilters/:id/connectors/:fk",
           method: "PUT"
         },
 
         // INTERNAL. Use POSFilter.connectors() instead.
         "prototype$__get__connectors": {
           isArray: true,
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "GET"
         },
 
         // INTERNAL. Use POSFilter.connectors.create() instead.
         "prototype$__create__connectors": {
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "POST"
         },
 
         // INTERNAL. Use POSFilter.connectors.destroyAll() instead.
         "prototype$__delete__connectors": {
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "DELETE"
         },
 
         // INTERNAL. Use POSFilter.connectors.count() instead.
         "prototype$__count__connectors": {
-          url: urlBase + "/posFilters/:id/connectors/count",
+          url: urlBase + "/POSFilters/:id/connectors/count",
           method: "GET"
         },
 
@@ -11148,7 +11148,7 @@ module.factory(
          * </em>
          */
         "create": {
-          url: urlBase + "/posFilters",
+          url: urlBase + "/POSFilters",
           method: "POST"
         },
 
@@ -11187,7 +11187,7 @@ module.factory(
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/posFilters",
+          url: urlBase + "/POSFilters",
           method: "POST"
         },
 
@@ -11225,7 +11225,7 @@ module.factory(
          * </em>
          */
         "upsert": {
-          url: urlBase + "/posFilters",
+          url: urlBase + "/POSFilters",
           method: "PUT"
         },
 
@@ -11257,7 +11257,7 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/posFilters/:id/exists",
+          url: urlBase + "/POSFilters/:id/exists",
           method: "GET"
         },
 
@@ -11292,7 +11292,7 @@ module.factory(
          * </em>
          */
         "findById": {
-          url: urlBase + "/posFilters/:id",
+          url: urlBase + "/POSFilters/:id",
           method: "GET"
         },
 
@@ -11326,7 +11326,7 @@ module.factory(
          */
         "find": {
           isArray: true,
-          url: urlBase + "/posFilters",
+          url: urlBase + "/POSFilters",
           method: "GET"
         },
 
@@ -11359,7 +11359,7 @@ module.factory(
          * </em>
          */
         "findOne": {
-          url: urlBase + "/posFilters/findOne",
+          url: urlBase + "/POSFilters/findOne",
           method: "GET"
         },
 
@@ -11393,7 +11393,7 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/posFilters/update",
+          url: urlBase + "/POSFilters/update",
           method: "POST"
         },
 
@@ -11426,7 +11426,7 @@ module.factory(
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/posFilters/:id",
+          url: urlBase + "/POSFilters/:id",
           method: "DELETE"
         },
 
@@ -11458,7 +11458,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/posFilters/count",
+          url: urlBase + "/POSFilters/count",
           method: "GET"
         },
 
@@ -11495,7 +11495,7 @@ module.factory(
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/posFilters/:id",
+          url: urlBase + "/POSFilters/:id",
           method: "PUT"
         },
 
@@ -11532,13 +11532,13 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/posFilters/change-stream",
+          url: urlBase + "/POSFilters/change-stream",
           method: "POST"
         },
 
-        // INTERNAL. Use POSFilterConnector.filter() instead.
-        "::get::POSFilterConnector::filter": {
-          url: urlBase + "/posFilterConnectors/:id/filter",
+        // INTERNAL. Use POSConnector.filter() instead.
+        "::get::POSConnector::filter": {
+          url: urlBase + "/POSConnectors/:id/filter",
           method: "GET"
         },
       }
@@ -11691,7 +11691,7 @@ module.factory(
      * @description
      *
      * The object `POSFilter.connectors` groups methods
-     * manipulating `POSFilterConnector` instances related to `POSFilter`.
+     * manipulating `POSConnector` instances related to `POSFilter`.
      *
      * Call {@link lbServices.POSFilter#connectors POSFilter.connectors()}
      * to query all related instances.
@@ -11725,11 +11725,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.connectors = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::get::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11764,7 +11764,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         R.connectors.count = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::count::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11798,11 +11798,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.connectors.create = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::create::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11836,11 +11836,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.connectors.createMany = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::createMany::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11871,7 +11871,7 @@ module.factory(
          * This method returns no data.
          */
         R.connectors.destroyAll = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::delete::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11904,7 +11904,7 @@ module.factory(
          * This method returns no data.
          */
         R.connectors.destroyById = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::destroyById::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11936,11 +11936,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.connectors.findById = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::findById::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11976,11 +11976,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.connectors.updateById = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::updateById::POSFilter::connectors"];
           return action.apply(R, arguments);
         };
@@ -11990,13 +11990,13 @@ module.factory(
 
 /**
  * @ngdoc object
- * @name lbServices.POSFilterConnector
- * @header lbServices.POSFilterConnector
+ * @name lbServices.POSConnector
+ * @header lbServices.POSConnector
  * @object
  *
  * @description
  *
- * A $resource object for interacting with the `POSFilterConnector` model.
+ * A $resource object for interacting with the `POSConnector` model.
  *
  * ## Example
  *
@@ -12006,23 +12006,23 @@ module.factory(
  *
  */
 module.factory(
-  "POSFilterConnector",
+  "POSConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/posFilterConnectors/:id",
+      urlBase + "/POSConnectors/:id",
       { 'id': '@id' },
       {
 
-        // INTERNAL. Use POSFilterConnector.filter() instead.
+        // INTERNAL. Use POSConnector.filter() instead.
         "prototype$__get__filter": {
-          url: urlBase + "/posFilterConnectors/:id/filter",
+          url: urlBase + "/POSConnectors/:id/filter",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#create
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#create
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12049,18 +12049,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "create": {
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/POSConnectors",
           method: "POST"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#createMany
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#createMany
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12087,19 +12087,19 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/POSConnectors",
           method: "POST"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#upsert
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#upsert
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12126,18 +12126,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "upsert": {
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/POSConnectors",
           method: "PUT"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#exists
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#exists
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12162,14 +12162,14 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/posFilterConnectors/:id/exists",
+          url: urlBase + "/POSConnectors/:id/exists",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#findById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#findById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12193,18 +12193,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "findById": {
-          url: urlBase + "/posFilterConnectors/:id",
+          url: urlBase + "/POSConnectors/:id",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#find
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#find
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12226,19 +12226,19 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "find": {
           isArray: true,
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/POSConnectors",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#findOne
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#findOne
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12260,18 +12260,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "findOne": {
-          url: urlBase + "/posFilterConnectors/findOne",
+          url: urlBase + "/POSConnectors/findOne",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#updateAll
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#updateAll
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12298,14 +12298,14 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/posFilterConnectors/update",
+          url: urlBase + "/POSConnectors/update",
           method: "POST"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#deleteById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#deleteById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12327,18 +12327,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/posFilterConnectors/:id",
+          url: urlBase + "/POSConnectors/:id",
           method: "DELETE"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#count
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#count
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12363,14 +12363,14 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/posFilterConnectors/count",
+          url: urlBase + "/POSConnectors/count",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#prototype$updateAttributes
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#prototype$updateAttributes
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12396,18 +12396,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/posFilterConnectors/:id",
+          url: urlBase + "/POSConnectors/:id",
           method: "PUT"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#createChangeStream
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#createChangeStream
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12437,7 +12437,7 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/posFilterConnectors/change-stream",
+          url: urlBase + "/POSConnectors/change-stream",
           method: "POST"
         },
 
@@ -12505,7 +12505,7 @@ module.factory(
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/posFilters/:id/connectors/:fk",
+          url: urlBase + "/POSFilters/:id/connectors/:fk",
           method: "GET"
         },
 
@@ -12514,7 +12514,7 @@ module.factory(
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/posFilters/:id/connectors/:fk",
+          url: urlBase + "/POSFilters/:id/connectors/:fk",
           method: "DELETE"
         },
 
@@ -12523,39 +12523,39 @@ module.factory(
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/posFilters/:id/connectors/:fk",
+          url: urlBase + "/POSFilters/:id/connectors/:fk",
           method: "PUT"
         },
 
         // INTERNAL. Use POSFilter.connectors() instead.
         "::get::POSFilter::connectors": {
           isArray: true,
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "GET"
         },
 
         // INTERNAL. Use POSFilter.connectors.create() instead.
         "::create::POSFilter::connectors": {
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "POST"
         },
 
         // INTERNAL. Use POSFilter.connectors.createMany() instead.
         "::createMany::POSFilter::connectors": {
           isArray: true,
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "POST"
         },
 
         // INTERNAL. Use POSFilter.connectors.destroyAll() instead.
         "::delete::POSFilter::connectors": {
-          url: urlBase + "/posFilters/:id/connectors",
+          url: urlBase + "/POSFilters/:id/connectors",
           method: "DELETE"
         },
 
         // INTERNAL. Use POSFilter.connectors.count() instead.
         "::count::POSFilter::connectors": {
-          url: urlBase + "/posFilters/:id/connectors/count",
+          url: urlBase + "/POSFilters/:id/connectors/count",
           method: "GET"
         },
 
@@ -12571,8 +12571,8 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#updateOrCreate
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#updateOrCreate
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12599,15 +12599,15 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R["updateOrCreate"] = R["upsert"];
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#update
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#update
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12637,8 +12637,8 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#destroyById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#destroyById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12660,15 +12660,15 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R["destroyById"] = R["deleteById"];
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#removeById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#removeById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12690,7 +12690,7 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R["removeById"] = R["deleteById"];
@@ -12698,19 +12698,19 @@ module.factory(
 
     /**
     * @ngdoc property
-    * @name lbServices.POSFilterConnector#modelName
-    * @propertyOf lbServices.POSFilterConnector
+    * @name lbServices.POSConnector#modelName
+    * @propertyOf lbServices.POSConnector
     * @description
     * The name of the model represented by this $resource,
-    * i.e. `POSFilterConnector`.
+    * i.e. `POSConnector`.
     */
-    R.modelName = "POSFilterConnector";
+    R.modelName = "POSConnector";
 
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#filter
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#filter
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -12739,7 +12739,7 @@ module.factory(
          */
         R.filter = function() {
           var TargetResource = $injector.get("POSFilter");
-          var action = TargetResource["::get::POSFilterConnector::filter"];
+          var action = TargetResource["::get::POSConnector::filter"];
           return action.apply(R, arguments);
         };
 
@@ -13727,11 +13727,11 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R.connector = function() {
-          var TargetResource = $injector.get("POSFilterConnector");
+          var TargetResource = $injector.get("POSConnector");
           var action = TargetResource["::get::POSCamera::connector"];
           return action.apply(R, arguments);
         };

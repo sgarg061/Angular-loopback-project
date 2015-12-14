@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSFilterConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.reseller = {};
 
@@ -492,7 +492,7 @@ angular
 
     $scope.filterChanged = function (filter) {
       if (filter.selected) {
-        POSFilterConnector.create({
+        POSConnector.create({
           filterId: filter.id,
           assigneeId: $stateParams.resellerId,
           assigneeType: 'reseller'
@@ -513,7 +513,7 @@ angular
     }
 
     function deleteConnectorById (id) {
-      POSFilterConnector.deleteById({id: id})
+      POSConnector.deleteById({id: id})
       .$promise
       .then(function(data) {
         toastr.success('Unassigned filter successfully!', 'Filter Unassigned')

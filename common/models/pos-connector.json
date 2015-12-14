@@ -1,6 +1,6 @@
 {
-  "name": "POSFilterConnector",
-  "plural": "POSFilterConnectors",
+  "name": "POSConnector",
+  "plural": "POSConnectors",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {

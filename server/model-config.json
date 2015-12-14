@@ -96,7 +96,7 @@
     "dataSource": "callHomeDb",
     "public": true
   },
-  "POSFilterConnector": {
+  "POSConnector": {
     "dataSource": "callHomeDb",
     "public": true
   },

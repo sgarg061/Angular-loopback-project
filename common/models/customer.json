@@ -61,7 +61,7 @@
     },
     "posConnectors": {
       "type": "hasMany",
-      "model": "POSFilterConnector",
+      "model": "POSConnector",
       "foreignKey": "assigneeId"
     }
   },

@@ -29,7 +29,7 @@
     },
     "connector": {
       "type": "belongsTo",
-      "model": "POSFilterConnector",
+      "model": "POSConnector",
       "foreignKey": "connectorId"
     }
   },

@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSFilterConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -242,7 +242,7 @@ angular
     }
 
     // function getAssignedFilters() {
-    //   POSFilterConnector
+    //   POSConnector
     //     .find({
     //       filter: {
     //         where: {'assigneeId': $stateParams.customerId},
@@ -653,9 +653,9 @@ angular
 
     $scope.filterChanged = function (filter) {
       if (filter.selected) {
-        POSFilterConnector.create({
+        POSConnector.create({
           assigneeId: $stateParams.customerId,
-          filterId: filter.id,
+          filter: filter,
           assigneeType: 'customer'
         })
         .$promise
@@ -681,7 +681,7 @@ angular
 
 
     function deleteConnectorById (id) {
-      POSFilterConnector.deleteById({id: id})
+      POSConnector.deleteById({id: id})
       .$promise
       .then(function(data) {
         toastr.success('Unassigned filter successfully!', 'Filter Unassigned')

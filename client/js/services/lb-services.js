@@ -14812,13 +14812,13 @@ module.factory(
 
 /**
  * @ngdoc object
- * @name lbServices.POSFilterConnector
- * @header lbServices.POSFilterConnector
+ * @name lbServices.POSConnector
+ * @header lbServices.POSConnector
  * @object
  *
  * @description
  *
- * A $resource object for interacting with the `POSFilterConnector` model.
+ * A $resource object for interacting with the `POSConnector` model.
  *
  * ## Example
  *
@@ -14828,17 +14828,17 @@ module.factory(
  *
  */
 module.factory(
-  "POSFilterConnector",
+  "POSConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/posFilterConnectors/:id",
+      urlBase + "/posConnectors/:id",
       { 'id': '@id' },
       {
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#create
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#create
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -14865,18 +14865,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "create": {
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/posConnectors",
           method: "POST"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#createMany
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#createMany
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -14903,19 +14903,19 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/posConnectors",
           method: "POST"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#upsert
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#upsert
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -14942,18 +14942,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "upsert": {
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/posConnectors",
           method: "PUT"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#exists
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#exists
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -14978,14 +14978,14 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/posFilterConnectors/:id/exists",
+          url: urlBase + "/posConnectors/:id/exists",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#findById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#findById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15009,18 +15009,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "findById": {
-          url: urlBase + "/posFilterConnectors/:id",
+          url: urlBase + "/posConnectors/:id",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#find
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#find
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15042,19 +15042,19 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "find": {
           isArray: true,
-          url: urlBase + "/posFilterConnectors",
+          url: urlBase + "/posConnectors",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#findOne
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#findOne
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15076,18 +15076,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "findOne": {
-          url: urlBase + "/posFilterConnectors/findOne",
+          url: urlBase + "/posConnectors/findOne",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#updateAll
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#updateAll
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15114,14 +15114,14 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/posFilterConnectors/update",
+          url: urlBase + "/posConnectors/update",
           method: "POST"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#deleteById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#deleteById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15143,18 +15143,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/posFilterConnectors/:id",
+          url: urlBase + "/posConnectors/:id",
           method: "DELETE"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#count
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#count
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15179,14 +15179,14 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/posFilterConnectors/count",
+          url: urlBase + "/posConnectors/count",
           method: "GET"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#prototype$updateAttributes
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#prototype$updateAttributes
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15212,18 +15212,18 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/posFilterConnectors/:id",
+          url: urlBase + "/posConnectors/:id",
           method: "PUT"
         },
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#createChangeStream
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#createChangeStream
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15253,7 +15253,7 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/posFilterConnectors/change-stream",
+          url: urlBase + "/posConnectors/change-stream",
           method: "POST"
         },
       }
@@ -15263,8 +15263,8 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#updateOrCreate
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#updateOrCreate
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15291,15 +15291,15 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R["updateOrCreate"] = R["upsert"];
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#update
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#update
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15329,8 +15329,8 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#destroyById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#destroyById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15352,15 +15352,15 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R["destroyById"] = R["deleteById"];
 
         /**
          * @ngdoc method
-         * @name lbServices.POSFilterConnector#removeById
-         * @methodOf lbServices.POSFilterConnector
+         * @name lbServices.POSConnector#removeById
+         * @methodOf lbServices.POSConnector
          *
          * @description
          *
@@ -15382,7 +15382,7 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSFilterConnector` object.)
+         * This usually means the response is a `POSConnector` object.)
          * </em>
          */
         R["removeById"] = R["deleteById"];
@@ -15390,13 +15390,13 @@ module.factory(
 
     /**
     * @ngdoc property
-    * @name lbServices.POSFilterConnector#modelName
-    * @propertyOf lbServices.POSFilterConnector
+    * @name lbServices.POSConnector#modelName
+    * @propertyOf lbServices.POSConnector
     * @description
     * The name of the model represented by this $resource,
-    * i.e. `POSFilterConnector`.
+    * i.e. `POSConnector`.
     */
-    R.modelName = "POSFilterConnector";
+    R.modelName = "POSConnector";
 
 
     return R;

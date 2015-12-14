@@ -39,7 +39,7 @@
   "relations": {
     "connectors": {
       "type": "hasMany",
-      "model": "POSFilterConnector",
+      "model": "POSConnector",
       "foreignKey": "filterId"
     }
   },
