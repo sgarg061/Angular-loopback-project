@@ -55,9 +55,9 @@
               </td>
               <td ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online</td>
               <td>
-                <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.status=='green'"></md-icon>
-                <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.status=='red'"></md-icon>
-                <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.status=='yellow'"></md-icon>
+                <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.statusIconColor=='green'"></md-icon>
+                <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.statusIconColor=='red'"></md-icon>
+                <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.statusIconColor=='yellow'"></md-icon>
               </td>
             </tr>
             </table>
