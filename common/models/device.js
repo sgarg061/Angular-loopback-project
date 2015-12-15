@@ -534,11 +534,15 @@ module.exports = function(Device) {
                 return;
             }
 
+            if (!includedComponents || !(includedComponents instanceof Array)) {
+                return;
+            }
+
             var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
             for (var i = 0; i < res.length; i++) {
-                if(includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
-                var removeCondition = {};
-                removeCondition[componentIdName] = res[i][componentIdName];
+                if (includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
+                    var removeCondition = {};
+                    removeCondition[componentIdName] = res[i][componentIdName];
                     Device.app.models[componentType].remove(removeCondition);
                 }
             }

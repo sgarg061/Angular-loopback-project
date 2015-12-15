@@ -18,6 +18,10 @@
       "type": "string",
       "required": true
     },
+    "status": {
+      "type": "string",
+      "required": false
+    },
     "address": {
       "type": "string",
       "required": false
