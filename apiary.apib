@@ -617,6 +617,7 @@ POS Filter object has the following attributes:
 + description - description of the script
 + creatorType - Type of person who created it. (customer/reseller/cloud)
 + creatorId - person who created the filter
++ lastUpdated - the date and time when the object last updated(PUT/POST)
 
 
 + Parameters
@@ -635,7 +636,8 @@ POS Filter object has the following attributes:
               "script": "console.log(String.fromCharCode(0xD83D, 0xDE32));",
               "description": null,
               "creatorId": "41705f00-a28d-11e5-bad2-6fe88522b0fe",
-              "creatorType": "cloud"
+              "creatorType": "cloud",
+              "lastUpdated": ""
             }
             
 
@@ -683,10 +685,10 @@ Get associated cameras to a POSConnector.
         [
           {
             "id": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
-            "cameraId": "menan",
-            "name": "asdf",
-            "status": "asfd",
-            "deviceId": "asf",
+            "cameraId": "b5084250-4b37-11e5-8184-752d1c0476b3",
+            "name": "Front POS Camera",
+            "status": "online",
+            "deviceId": "",
             "streams": [
               "any"
             ],
