@@ -1,5 +1,5 @@
 {
-  "name": "POSConnector",
+  "name": "POSDevice",
   "base": "PersistedModel",
   "strict": true,
   "options": {
@@ -11,30 +11,32 @@
       "type": "string",
       "id": true
     },
+    "posId": {
+      "type": "string",
+      "id": true,
+      "required": true
+    },
     "name": {
       "type": "string",
       "required": true
     },
-    "script": {
+    "status": {
+      "type": "string",
+      "required": true
+    },
+    "deviceId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "clouds": {
-      "type": "hasMany",
-      "model": "Cloud",
-      "foreignKey": "posConnectorId",
-      "through": "CloudPOSConnector"
-    },
-    "resellers": {
-      "type": "hasMany",
-      "model": "Reseller",
-      "foreignKey": "posConnectorId",
-      "through": "ResellerPOSConnector"
+    "device": {
+      "type": "belongsTo",
+      "model": "Device",
+      "foreignKey": "deviceId"
     }
   },
   "acls": [],
-  "methods": []
+  "methods": {}
 }

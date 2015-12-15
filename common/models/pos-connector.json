@@ -1,42 +1,42 @@
 {
-  "name": "POSDevice",
+  "name": "POSConnector",
+  "plural": "POSConnectors",
   "base": "PersistedModel",
-  "strict": true,
+  "idInjection": true,
   "options": {
-    "validateUpsert": true,
-    "idInjection": true
+    "validateUpsert": true
   },
   "properties": {
     "id": {
       "type": "string",
       "id": true
     },
-    "posId": {
-      "type": "string",
-      "id": true,
-      "required": true
-    },
-    "name": {
+    "assigneeId": {
       "type": "string",
       "required": true
     },
-    "status": {
+    "assigneeType": {
       "type": "string",
       "required": true
     },
-    "deviceId": {
+    "filterId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "device": {
+    "filter": {
       "type": "belongsTo",
-      "model": "Device",
-      "foreignKey": "deviceId"
+      "model": "POSFilter",
+      "foreignKey": "filterId"
+    },
+    "cameras": {
+      "type": "hasMany",
+      "model": "Camera",
+      "foreignKey": "posId"
     }
   },
   "acls": [],
-  "methods": []
+  "methods": {}
 }

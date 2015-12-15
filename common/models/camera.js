@@ -7,4 +7,14 @@ module.exports = function(Camera) {
 		}
 		next();
 	});
+
+
+    Camera.prototype.toJSON = function() {
+        var camera = this.toObject(false, true, false);
+        if(camera.pos) {
+            camera.pos = camera.pos;
+        }
+        return camera;
+    };
+
 };

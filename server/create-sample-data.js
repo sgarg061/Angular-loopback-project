@@ -24,8 +24,8 @@ module.exports = function(app, doneCallback) {
       destroyAll: function(cb) {
         logger.debug('destroying all existing data...');
         app.models.SoftwareVersion.destroyAll();
+        app.models.POSFilter.destroyAll();
         app.models.POSConnector.destroyAll();
-        app.models.CloudPOSConnector.destroyAll();
         app.models.Cloud.destroyAll();
         app.models.Reseller.destroyAll();
         app.models.Customer.destroyAll();
@@ -45,21 +45,18 @@ module.exports = function(app, doneCallback) {
       resellers: ['clouds', function (cb, results) {
         createResellers(cb, results);
       }],
-      cloudPOSConnectors: ['resellers', function(cb, results) {
-        createCloudPOSConnectors(cb, results);
+      posFilters: ['clouds', function(cb, results) {
+        createPOSFilters(cb, results);
       }],
-      resellerPOSConnectors: ['cloudPOSConnectors', function(cb, results) {
-        createResellerPOSConnectors(cb, results);
-      }],
-      customers: ['resellerPOSConnectors', function (cb, results) {
+      customers: ['resellers', function (cb, results) {
         createCustomers(cb, results);
       }],
       devices: ['customers', function (cb, results) {
         createDevices(cb, results);
       }],
-    licenses: ['devices', function (cb, results) {
-      createLicenses(cb, results);
-    }],
+      licenses: ['devices', function (cb, results) {
+        createLicenses(cb, results);
+      }],
       cameras: ['devices', function (cb, results) {
         createCameras(cb, results);
       }],
@@ -135,13 +132,13 @@ module.exports = function(app, doneCallback) {
       app.models.Reseller.create([
         { name: 'Reseller 1',
           cloudId: results.clouds[0].id,
-          email: 'cwhiten+r1@solinkcorp.com',
+          email: 'cwhiten+r1@solinkcorp@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 2',
           cloudId: results.clouds[0].id,
           checkinInterval: 3000,
-          email: 'cwhiten+r2@solinkcorp.com',
+          email: 'cwhiten+r2@solinkcorp@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 3',
@@ -154,42 +151,42 @@ module.exports = function(app, doneCallback) {
     });
   }
 
-  function createCloudPOSConnectors(cb, results) {
-    logger.debug('creating Cloud POS connectors...');
-    datastore.automigrate('CloudPOSConnector', function(err) {
+
+  function createPOSFilters(cb, results) {
+    logger.debug('creating POS filters...');
+    datastore.automigrate('POSFilter', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
       }
-      results.clouds[0].posConnectors.create([
-        { name: 'POS Brew Connector',
-          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));'},
-        { name: 'POS MoBrew Connector`',
-          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));'},
-        { name: 'POS 2MuchBrew Connector',
-          script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));'}
+      app.models.POSFilter.create([
+        { 
+          id: '',
+          name: 'HDX',
+          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));',
+          creatorId: results.clouds[0].id,
+          creatorType: 'cloud'
+        },
+        { 
+          id: '',
+          name: 'QSR',
+          script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));',
+          creatorId: results.clouds[0].id,
+          creatorType: 'cloud'
+        },
+        { 
+          id: '',
+          name: 'Motion Parser',
+          script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));',
+          creatorId: results.clouds[0].id,
+          creatorType: 'cloud'
+        }
       ], cb);
     });
   }
 
-  function createResellerPOSConnectors(cb, results) {
-    logger.debug('creating Reseller POS connectors...');
-    datastore.automigrate('ResellerPOSConnector', function(err) {
-      if (err) {
-        logger.error(err);
-        return cb(err);
-      }
-      results.resellers[0].posConnectors.create([
-        { name: 'Connector 1',
-          script: 'console.log(\'Connector 1\');'}
-        ], function (err, res) {
-          if (err) {
-            console.log('error creating reseller pos connectors: ' + err);
-          }
-          cb(err, res);
-        });
-    });
-  }
+
+
 
   function createCustomers(cb, results) {
     logger.debug('creating customers...');
@@ -199,9 +196,15 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.Customer.create([
-        {name: 'Customer 1', resellerId: results.resellers[0].id, id: 1},
-        {name: 'Customer 2', resellerId: results.resellers[1].id, id: 2, checkinInterval: 2400},
-        {name: 'Customer 3', resellerId: results.resellers[2].id, id: 3},
+        { name: 'Customer 1',
+          resellerId: results.resellers[0].id
+        },
+        { name: 'Customer 2',
+          resellerId: results.resellers[1].id, checkinInterval: 2400
+        },
+        { name: 'Customer 3',
+          resellerId: results.resellers[2].id
+        },
       ], cb);
     });
   }
@@ -257,6 +260,7 @@ module.exports = function(app, doneCallback) {
       ], cb);
     });
   }
+
 
   function createLicenses(cb, results) {
     logger.debug('creating licenses...');

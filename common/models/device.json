@@ -103,11 +103,6 @@
       "model": "Camera",
       "foreignKey": "deviceId"
     },
-    "posDevices": {
-      "type": "hasMany",
-      "model": "POSDevice",
-      "foreignKey": "deviceId"
-    },
     "logEntries": {
       "type": "hasMany",
       "model": "DeviceLogEntry",
@@ -123,9 +118,8 @@
       "model": "License"
     }
   },
-  "acls": 
-  [
-   {
+  "acls": [
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
@@ -138,25 +132,25 @@
       "property": "create"
     },
     {
-    "principalType": "ROLE",
-    "principalId": "isOwner",
-    "permission": "ALLOW",
-    "accessType": "WRITE" ,
-    "property": "create"
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "create"
     },
     {
-    "principalType": "ROLE",
-    "principalId": "isOwner",
-    "permission": "ALLOW",
-    "accessType": "WRITE" ,
-    "property": "updateAttributes"
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "updateAttributes"
     },
     {
-    "principalType": "ROLE",
-    "principalId": "isOwner",
-    "permission": "ALLOW",
-    "accessType": "EXECUTE",
-    "property": "checkin"
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "checkin"
     },
     {
       "accessType": "*",
@@ -166,5 +160,5 @@
       "property": "*"
     }
   ],
-  "methods": []
+  "methods": {}
 }
