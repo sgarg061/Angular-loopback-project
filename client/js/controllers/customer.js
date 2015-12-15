@@ -359,11 +359,11 @@ angular
   }
 
   $scope.setDeviceStatusStyling = function(device) {
-    switch (device.statusIconColor) {
-      case 'red':
+    switch (device.onlineStatus) {
+      case 'Offline':
         return {color: '#D10F0F'};
         break;
-      case 'green':
+      case 'Online':
         return {color: '#18D348'};
         break;
       default:
