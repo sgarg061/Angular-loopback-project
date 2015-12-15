@@ -550,10 +550,10 @@ module.exports = function(Device) {
         if (camera.streams) {
             camera.streams.map(function (stream) {
                 if (stream.earliestSegmentDate) {
-                    stream.earliestSegmentDate = new Date(stream.earliestSegmentDate);
+                    stream.earliestSegmentDate = new Date(stream.earliestSegmentDate * 1000);
                 }
                 if (stream.latestSegmentDate) {
-                    stream.latestSegmentDate = new Date(stream.latestSegmentDate);
+                    stream.latestSegmentDate = new Date(stream.latestSegmentDate * 1000);
                 }
             });
         }
