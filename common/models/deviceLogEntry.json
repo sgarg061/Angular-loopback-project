@@ -27,7 +27,7 @@
     },
     "checkinTime": {
       "type": "Date",
-      "required": true,
+      "required": false,
       "index": true
     }
   },
