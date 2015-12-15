@@ -9,6 +9,13 @@ module.exports = function(PosFilter) {
 		if (ctx.instance && !ctx.instance.id) {
 			ctx.instance.id = uuid.v1();
 		}
+
+        if (ctx.instance) {
+            ctx.instance.lastUpdated = Date()
+        };
+
+
+
 		next();
 	});
 
