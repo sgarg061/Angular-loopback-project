@@ -6406,6 +6406,33 @@ module.factory(
           method: "PUT"
         },
 
+        // INTERNAL. Use Device.posDevices.findById() instead.
+        "prototype$__findById__posDevices": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Devices/:id/posDevices/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Device.posDevices.destroyById() instead.
+        "prototype$__destroyById__posDevices": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Devices/:id/posDevices/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Device.posDevices.updateById() instead.
+        "prototype$__updateById__posDevices": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Devices/:id/posDevices/:fk",
+          method: "PUT"
+        },
+
         // INTERNAL. Use Device.license() instead.
         "prototype$__get__license": {
           url: urlBase + "/Devices/:id/license",
@@ -6479,6 +6506,31 @@ module.factory(
         // INTERNAL. Use Device.cameras.count() instead.
         "prototype$__count__cameras": {
           url: urlBase + "/Devices/:id/cameras/count",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Device.posDevices() instead.
+        "prototype$__get__posDevices": {
+          isArray: true,
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Device.posDevices.create() instead.
+        "prototype$__create__posDevices": {
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Device.posDevices.destroyAll() instead.
+        "prototype$__delete__posDevices": {
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Device.posDevices.count() instead.
+        "prototype$__count__posDevices": {
+          url: urlBase + "/Devices/:id/posDevices/count",
           method: "GET"
         },
 
@@ -7768,6 +7820,307 @@ module.factory(
         };
     /**
      * @ngdoc object
+     * @name lbServices.Device.posDevices
+     * @header lbServices.Device.posDevices
+     * @object
+     * @description
+     *
+     * The object `Device.posDevices` groups methods
+     * manipulating `POSDevice` instances related to `Device`.
+     *
+     * Call {@link lbServices.Device#posDevices Device.posDevices()}
+     * to query all related instances.
+     */
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device#posDevices
+         * @methodOf lbServices.Device
+         *
+         * @description
+         *
+         * Queries posDevices of Device.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSDevice` object.)
+         * </em>
+         */
+        R.posDevices = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::get::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#count
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Counts posDevices of Device.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        R.posDevices.count = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::count::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#create
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Creates a new instance in posDevices of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSDevice` object.)
+         * </em>
+         */
+        R.posDevices.create = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::create::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#createMany
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Creates a new instance in posDevices of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSDevice` object.)
+         * </em>
+         */
+        R.posDevices.createMany = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::createMany::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#destroyAll
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Deletes all posDevices of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.posDevices.destroyAll = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::delete::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#destroyById
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Delete a related item by id for posDevices.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for posDevices
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.posDevices.destroyById = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::destroyById::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#findById
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Find a related item by id for posDevices.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for posDevices
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSDevice` object.)
+         * </em>
+         */
+        R.posDevices.findById = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::findById::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Device.posDevices#updateById
+         * @methodOf lbServices.Device.posDevices
+         *
+         * @description
+         *
+         * Update a related item by id for posDevices.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for posDevices
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSDevice` object.)
+         * </em>
+         */
+        R.posDevices.updateById = function() {
+          var TargetResource = $injector.get("POSDevice");
+          var action = TargetResource["::updateById::Device::posDevices"];
+          return action.apply(R, arguments);
+        };
+    /**
+     * @ngdoc object
      * @name lbServices.Device.license
      * @header lbServices.Device.license
      * @object
@@ -8297,9 +8650,55 @@ module.factory(
           method: "GET"
         },
 
+        // INTERNAL. Use Camera.pos.findById() instead.
+        "prototype$__findById__pos": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Cameras/:id/pos/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Camera.pos.destroyById() instead.
+        "prototype$__destroyById__pos": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Cameras/:id/pos/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Camera.pos.updateById() instead.
+        "prototype$__updateById__pos": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Cameras/:id/pos/:fk",
+          method: "PUT"
+        },
+
         // INTERNAL. Use Camera.pos() instead.
         "prototype$__get__pos": {
+          isArray: true,
           url: urlBase + "/Cameras/:id/pos",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Camera.pos.create() instead.
+        "prototype$__create__pos": {
+          url: urlBase + "/Cameras/:id/pos",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Camera.pos.destroyAll() instead.
+        "prototype$__delete__pos": {
+          url: urlBase + "/Cameras/:id/pos",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Camera.pos.count() instead.
+        "prototype$__count__pos": {
+          url: urlBase + "/Cameras/:id/pos/count",
           method: "GET"
         },
 
@@ -8783,65 +9182,6 @@ module.factory(
           url: urlBase + "/Devices/:id/cameras/count",
           method: "GET"
         },
-
-        // INTERNAL. Use POSConnector.cameras.findById() instead.
-        "::findById::POSConnector::cameras": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/POSConnectors/:id/cameras/:fk",
-          method: "GET"
-        },
-
-        // INTERNAL. Use POSConnector.cameras.destroyById() instead.
-        "::destroyById::POSConnector::cameras": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/POSConnectors/:id/cameras/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use POSConnector.cameras.updateById() instead.
-        "::updateById::POSConnector::cameras": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/POSConnectors/:id/cameras/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use POSConnector.cameras() instead.
-        "::get::POSConnector::cameras": {
-          isArray: true,
-          url: urlBase + "/POSConnectors/:id/cameras",
-          method: "GET"
-        },
-
-        // INTERNAL. Use POSConnector.cameras.create() instead.
-        "::create::POSConnector::cameras": {
-          url: urlBase + "/POSConnectors/:id/cameras",
-          method: "POST"
-        },
-
-        // INTERNAL. Use POSConnector.cameras.createMany() instead.
-        "::createMany::POSConnector::cameras": {
-          isArray: true,
-          url: urlBase + "/POSConnectors/:id/cameras",
-          method: "POST"
-        },
-
-        // INTERNAL. Use POSConnector.cameras.destroyAll() instead.
-        "::delete::POSConnector::cameras": {
-          url: urlBase + "/POSConnectors/:id/cameras",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use POSConnector.cameras.count() instead.
-        "::count::POSConnector::cameras": {
-          url: urlBase + "/POSConnectors/:id/cameras/count",
-          method: "GET"
-        },
       }
     );
 
@@ -9020,6 +9360,20 @@ module.factory(
           var action = TargetResource["::get::Camera::device"];
           return action.apply(R, arguments);
         };
+    /**
+     * @ngdoc object
+     * @name lbServices.Camera.pos
+     * @header lbServices.Camera.pos
+     * @object
+     * @description
+     *
+     * The object `Camera.pos` groups methods
+     * manipulating `POSCameraConnector` instances related to `Camera`.
+     *
+     * Call {@link lbServices.Camera#pos Camera.pos()}
+     * to query all related instances.
+     */
+
 
         /**
          * @ngdoc method
@@ -9028,13 +9382,86 @@ module.factory(
          *
          * @description
          *
-         * Fetches belongsTo relation pos.
+         * Queries pos of Camera.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `refresh` – `{boolean=}` - 
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R.pos = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::get::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#count
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Counts pos of Camera.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        R.pos.count = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::count::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#create
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Creates a new instance in pos of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -9048,12 +9475,190 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `POSConnector` object.)
+         * This usually means the response is a `POSCameraConnector` object.)
          * </em>
          */
-        R.pos = function() {
-          var TargetResource = $injector.get("POSConnector");
-          var action = TargetResource["::get::Camera::pos"];
+        R.pos.create = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::create::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#createMany
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Creates a new instance in pos of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R.pos.createMany = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::createMany::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#destroyAll
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Deletes all pos of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.pos.destroyAll = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::delete::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#destroyById
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Delete a related item by id for pos.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for pos
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.pos.destroyById = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::destroyById::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#findById
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Find a related item by id for pos.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for pos
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R.pos.findById = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::findById::Camera::pos"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Camera.pos#updateById
+         * @methodOf lbServices.Camera.pos
+         *
+         * @description
+         *
+         * Update a related item by id for pos.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for pos
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R.pos.updateById = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::updateById::Camera::pos"];
           return action.apply(R, arguments);
         };
 
@@ -9511,6 +10116,65 @@ module.factory(
         "createChangeStream": {
           url: urlBase + "/POSDevices/change-stream",
           method: "POST"
+        },
+
+        // INTERNAL. Use Device.posDevices.findById() instead.
+        "::findById::Device::posDevices": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Devices/:id/posDevices/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Device.posDevices.destroyById() instead.
+        "::destroyById::Device::posDevices": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Devices/:id/posDevices/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Device.posDevices.updateById() instead.
+        "::updateById::Device::posDevices": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Devices/:id/posDevices/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use Device.posDevices() instead.
+        "::get::Device::posDevices": {
+          isArray: true,
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Device.posDevices.create() instead.
+        "::create::Device::posDevices": {
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Device.posDevices.createMany() instead.
+        "::createMany::Device::posDevices": {
+          isArray: true,
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Device.posDevices.destroyAll() instead.
+        "::delete::Device::posDevices": {
+          url: urlBase + "/Devices/:id/posDevices",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Device.posDevices.count() instead.
+        "::count::Device::posDevices": {
+          url: urlBase + "/Devices/:id/posDevices/count",
+          method: "GET"
         },
       }
     );
@@ -12019,55 +12683,55 @@ module.factory(
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cameras.findById() instead.
-        "prototype$__findById__cameras": {
+        // INTERNAL. Use POSConnector.cameraConnectors.findById() instead.
+        "prototype$__findById__cameraConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cameras/:fk",
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/:fk",
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cameras.destroyById() instead.
-        "prototype$__destroyById__cameras": {
+        // INTERNAL. Use POSConnector.cameraConnectors.destroyById() instead.
+        "prototype$__destroyById__cameraConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cameras/:fk",
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/:fk",
           method: "DELETE"
         },
 
-        // INTERNAL. Use POSConnector.cameras.updateById() instead.
-        "prototype$__updateById__cameras": {
+        // INTERNAL. Use POSConnector.cameraConnectors.updateById() instead.
+        "prototype$__updateById__cameraConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cameras/:fk",
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/:fk",
           method: "PUT"
         },
 
-        // INTERNAL. Use POSConnector.cameras() instead.
-        "prototype$__get__cameras": {
+        // INTERNAL. Use POSConnector.cameraConnectors() instead.
+        "prototype$__get__cameraConnectors": {
           isArray: true,
-          url: urlBase + "/POSConnectors/:id/cameras",
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cameras.create() instead.
-        "prototype$__create__cameras": {
-          url: urlBase + "/POSConnectors/:id/cameras",
+        // INTERNAL. Use POSConnector.cameraConnectors.create() instead.
+        "prototype$__create__cameraConnectors": {
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
           method: "POST"
         },
 
-        // INTERNAL. Use POSConnector.cameras.destroyAll() instead.
-        "prototype$__delete__cameras": {
-          url: urlBase + "/POSConnectors/:id/cameras",
+        // INTERNAL. Use POSConnector.cameraConnectors.destroyAll() instead.
+        "prototype$__delete__cameraConnectors": {
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
           method: "DELETE"
         },
 
-        // INTERNAL. Use POSConnector.cameras.count() instead.
-        "prototype$__count__cameras": {
-          url: urlBase + "/POSConnectors/:id/cameras/count",
+        // INTERNAL. Use POSConnector.cameraConnectors.count() instead.
+        "prototype$__count__cameraConnectors": {
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/count",
           method: "GET"
         },
 
@@ -12552,12 +13216,6 @@ module.factory(
           method: "GET"
         },
 
-        // INTERNAL. Use Camera.pos() instead.
-        "::get::Camera::pos": {
-          url: urlBase + "/Cameras/:id/pos",
-          method: "GET"
-        },
-
         // INTERNAL. Use POSFilter.connectors.findById() instead.
         "::findById::POSFilter::connectors": {
           params: {
@@ -12796,27 +13454,27 @@ module.factory(
         };
     /**
      * @ngdoc object
-     * @name lbServices.POSConnector.cameras
-     * @header lbServices.POSConnector.cameras
+     * @name lbServices.POSConnector.cameraConnectors
+     * @header lbServices.POSConnector.cameraConnectors
      * @object
      * @description
      *
-     * The object `POSConnector.cameras` groups methods
-     * manipulating `Camera` instances related to `POSConnector`.
+     * The object `POSConnector.cameraConnectors` groups methods
+     * manipulating `POSCameraConnector` instances related to `POSConnector`.
      *
-     * Call {@link lbServices.POSConnector#cameras POSConnector.cameras()}
+     * Call {@link lbServices.POSConnector#cameraConnectors POSConnector.cameraConnectors()}
      * to query all related instances.
      */
 
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector#cameras
+         * @name lbServices.POSConnector#cameraConnectors
          * @methodOf lbServices.POSConnector
          *
          * @description
          *
-         * Queries cameras of POSConnector.
+         * Queries cameraConnectors of POSConnector.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -12836,23 +13494,23 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `Camera` object.)
+         * This usually means the response is a `POSCameraConnector` object.)
          * </em>
          */
-        R.cameras = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::get::POSConnector::cameras"];
+        R.cameraConnectors = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::get::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#count
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#count
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Counts cameras of POSConnector.
+         * Counts cameraConnectors of POSConnector.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -12874,20 +13532,20 @@ module.factory(
          *
          *  - `count` – `{number=}` - 
          */
-        R.cameras.count = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::count::POSConnector::cameras"];
+        R.cameraConnectors.count = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::count::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#create
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#create
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Creates a new instance in cameras of this model.
+         * Creates a new instance in cameraConnectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -12909,23 +13567,23 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `Camera` object.)
+         * This usually means the response is a `POSCameraConnector` object.)
          * </em>
          */
-        R.cameras.create = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::create::POSConnector::cameras"];
+        R.cameraConnectors.create = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::create::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#createMany
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#createMany
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Creates a new instance in cameras of this model.
+         * Creates a new instance in cameraConnectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -12947,23 +13605,23 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `Camera` object.)
+         * This usually means the response is a `POSCameraConnector` object.)
          * </em>
          */
-        R.cameras.createMany = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::createMany::POSConnector::cameras"];
+        R.cameraConnectors.createMany = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::createMany::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#destroyAll
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#destroyAll
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Deletes all cameras of this model.
+         * Deletes all cameraConnectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -12981,26 +13639,26 @@ module.factory(
          *
          * This method returns no data.
          */
-        R.cameras.destroyAll = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::delete::POSConnector::cameras"];
+        R.cameraConnectors.destroyAll = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::delete::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#destroyById
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#destroyById
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Delete a related item by id for cameras.
+         * Delete a related item by id for cameraConnectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for cameras
+         *  - `fk` – `{*}` - Foreign key for cameraConnectors
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -13014,26 +13672,26 @@ module.factory(
          *
          * This method returns no data.
          */
-        R.cameras.destroyById = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::destroyById::POSConnector::cameras"];
+        R.cameraConnectors.destroyById = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::destroyById::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#findById
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#findById
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Find a related item by id for cameras.
+         * Find a related item by id for cameraConnectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for cameras
+         *  - `fk` – `{*}` - Foreign key for cameraConnectors
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -13047,29 +13705,29 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `Camera` object.)
+         * This usually means the response is a `POSCameraConnector` object.)
          * </em>
          */
-        R.cameras.findById = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::findById::POSConnector::cameras"];
+        R.cameraConnectors.findById = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::findById::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cameras#updateById
-         * @methodOf lbServices.POSConnector.cameras
+         * @name lbServices.POSConnector.cameraConnectors#updateById
+         * @methodOf lbServices.POSConnector.cameraConnectors
          *
          * @description
          *
-         * Update a related item by id for cameras.
+         * Update a related item by id for cameraConnectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for cameras
+         *  - `fk` – `{*}` - Foreign key for cameraConnectors
          *
          * @param {Object} postData Request data.
          *
@@ -13087,14 +13745,724 @@ module.factory(
          *
          * <em>
          * (The remote method definition does not provide any description.
-         * This usually means the response is a `Camera` object.)
+         * This usually means the response is a `POSCameraConnector` object.)
          * </em>
          */
-        R.cameras.updateById = function() {
-          var TargetResource = $injector.get("Camera");
-          var action = TargetResource["::updateById::POSConnector::cameras"];
+        R.cameraConnectors.updateById = function() {
+          var TargetResource = $injector.get("POSCameraConnector");
+          var action = TargetResource["::updateById::POSConnector::cameraConnectors"];
           return action.apply(R, arguments);
         };
+
+    return R;
+  }]);
+
+/**
+ * @ngdoc object
+ * @name lbServices.POSCameraConnector
+ * @header lbServices.POSCameraConnector
+ * @object
+ *
+ * @description
+ *
+ * A $resource object for interacting with the `POSCameraConnector` model.
+ *
+ * ## Example
+ *
+ * See
+ * {@link http://docs.angularjs.org/api/ngResource.$resource#example $resource}
+ * for an example of using this object.
+ *
+ */
+module.factory(
+  "POSCameraConnector",
+  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
+    var R = Resource(
+      urlBase + "/POSCameraConnectors/:id",
+      { 'id': '@id' },
+      {
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#create
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "create": {
+          url: urlBase + "/POSCameraConnectors",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#createMany
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "createMany": {
+          isArray: true,
+          url: urlBase + "/POSCameraConnectors",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#upsert
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "upsert": {
+          url: urlBase + "/POSCameraConnectors",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#exists
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Check whether a model instance exists in the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `exists` – `{boolean=}` - 
+         */
+        "exists": {
+          url: urlBase + "/POSCameraConnectors/:id/exists",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#findById
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Find a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         *  - `filter` – `{object=}` - Filter defining fields and include
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/POSCameraConnectors/:id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#find
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Find all instances of the model matched by filter from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "find": {
+          isArray: true,
+          url: urlBase + "/POSCameraConnectors",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#findOne
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Find first instance of the model matched by filter from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "findOne": {
+          url: urlBase + "/POSCameraConnectors/findOne",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#updateAll
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * The number of instances updated
+         */
+        "updateAll": {
+          url: urlBase + "/POSCameraConnectors/update",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#deleteById
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "deleteById": {
+          url: urlBase + "/POSCameraConnectors/:id",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#count
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Count instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "count": {
+          url: urlBase + "/POSCameraConnectors/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#prototype$updateAttributes
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Update attributes for a model instance and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        "prototype$updateAttributes": {
+          url: urlBase + "/POSCameraConnectors/:id",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#createChangeStream
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Create a change stream.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `options` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `changes` – `{ReadableStream=}` - 
+         */
+        "createChangeStream": {
+          url: urlBase + "/POSCameraConnectors/change-stream",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Camera.pos.findById() instead.
+        "::findById::Camera::pos": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Cameras/:id/pos/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Camera.pos.destroyById() instead.
+        "::destroyById::Camera::pos": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Cameras/:id/pos/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Camera.pos.updateById() instead.
+        "::updateById::Camera::pos": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/Cameras/:id/pos/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use Camera.pos() instead.
+        "::get::Camera::pos": {
+          isArray: true,
+          url: urlBase + "/Cameras/:id/pos",
+          method: "GET"
+        },
+
+        // INTERNAL. Use Camera.pos.create() instead.
+        "::create::Camera::pos": {
+          url: urlBase + "/Cameras/:id/pos",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Camera.pos.createMany() instead.
+        "::createMany::Camera::pos": {
+          isArray: true,
+          url: urlBase + "/Cameras/:id/pos",
+          method: "POST"
+        },
+
+        // INTERNAL. Use Camera.pos.destroyAll() instead.
+        "::delete::Camera::pos": {
+          url: urlBase + "/Cameras/:id/pos",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use Camera.pos.count() instead.
+        "::count::Camera::pos": {
+          url: urlBase + "/Cameras/:id/pos/count",
+          method: "GET"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.findById() instead.
+        "::findById::POSConnector::cameraConnectors": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.destroyById() instead.
+        "::destroyById::POSConnector::cameraConnectors": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.updateById() instead.
+        "::updateById::POSConnector::cameraConnectors": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors() instead.
+        "::get::POSConnector::cameraConnectors": {
+          isArray: true,
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
+          method: "GET"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.create() instead.
+        "::create::POSConnector::cameraConnectors": {
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
+          method: "POST"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.createMany() instead.
+        "::createMany::POSConnector::cameraConnectors": {
+          isArray: true,
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
+          method: "POST"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.destroyAll() instead.
+        "::delete::POSConnector::cameraConnectors": {
+          url: urlBase + "/POSConnectors/:id/cameraConnectors",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use POSConnector.cameraConnectors.count() instead.
+        "::count::POSConnector::cameraConnectors": {
+          url: urlBase + "/POSConnectors/:id/cameraConnectors/count",
+          method: "GET"
+        },
+      }
+    );
+
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#updateOrCreate
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R["updateOrCreate"] = R["upsert"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#update
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * The number of instances updated
+         */
+        R["update"] = R["updateAll"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#destroyById
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R["destroyById"] = R["deleteById"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.POSCameraConnector#removeById
+         * @methodOf lbServices.POSCameraConnector
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `POSCameraConnector` object.)
+         * </em>
+         */
+        R["removeById"] = R["deleteById"];
+
+
+    /**
+    * @ngdoc property
+    * @name lbServices.POSCameraConnector#modelName
+    * @propertyOf lbServices.POSCameraConnector
+    * @description
+    * The name of the model represented by this $resource,
+    * i.e. `POSCameraConnector`.
+    */
+    R.modelName = "POSCameraConnector";
+
 
     return R;
   }]);

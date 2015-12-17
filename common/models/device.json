@@ -127,9 +127,8 @@
       "model": "License"
     }
   },
-  "acls": 
-  [
-   {
+  "acls": [
+    {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
@@ -142,24 +141,24 @@
       "property": "create"
     },
     {
+      "accessType": "WRITE",
       "principalType": "ROLE",
       "principalId": "isOwner",
       "permission": "ALLOW",
-      "accessType": "WRITE" ,
       "property": "create"
     },
     {
+      "accessType": "WRITE",
       "principalType": "ROLE",
       "principalId": "isOwner",
       "permission": "ALLOW",
-      "accessType": "WRITE" ,
       "property": "updateAttributes"
     },
     {
+      "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "isOwner",
       "permission": "ALLOW",
-      "accessType": "EXECUTE",
       "property": "checkin"
     },
     {
@@ -170,5 +169,5 @@
       "property": "*"
     }
   ],
-  "methods": []
+  "methods": {}
 }

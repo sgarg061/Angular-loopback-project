@@ -99,5 +99,9 @@
   "POSConnector": {
     "dataSource": "callHomeDb",
     "public": true
+  },
+  "POSCameraConnector": {
+    "dataSource": "callHomeDb",
+    "public": true
   }
 }

@@ -31,10 +31,10 @@
       "model": "POSFilter",
       "foreignKey": "filterId"
     },
-    "cameras": {
+    "cameraConnectors": {
       "type": "hasMany",
-      "model": "Camera",
-      "foreignKey": "posId"
+      "model": "POSCameraConnector",
+      "foreignKey": "connectorId"
     }
   },
   "acls": [],

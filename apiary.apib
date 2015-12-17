@@ -572,42 +572,6 @@ An email is sent to the user's current email to confirm changing the password
         }
 
 ## Group POS Association
-            
-## POS Connectors [/api/customers/{id}/posConnectors]
-
-POS Connector will provide POS Filters assigned to a specified Customer by their parent or self.
-It has the following attributes:
-+ filterId - POSFilter id, can be referenced to find the Filter.
-+ assigneeType - Person who assigned the filter type (customer/reseller/cloud)
-+ assigneeId - Person who assigned the filter id
-
-
-+ Parameters
-    + id: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
-
-
-### List available POS Connectors [GET]
-
-+ Response 200 (application/json)
-
-    + Body
-
-            [
-              {
-                "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
-                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
-                "assigneeType": "customer",
-                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
-              },
-              {
-                "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
-                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
-                "assigneeType": "customer",
-                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
-              }
-            ]
-            ## Group Customers
-
 
 ## POS Filters [/api/posConnectors/{connectorId}/filter]
 
@@ -640,59 +604,124 @@ POS Filter object has the following attributes:
               "lastUpdated": ""
             }
             
+## Camera [/api/cameras/{cameraId}]
+
+Camera object has the following attributes:
++ name - the name of the camera.
++ status - shows if the camera is online or offline
++ deviceId - id of the QNAP device the camera is associated with
++ streams - array of streams present in the camera
++ thumbnail - url of the thumbnail of the camera
 
 
-## Camera Association [/api/cameras/{cameraId}]
-
-Update the camera posId field with the POSConnector id to assign it to that POS.
-Set posId to null to dissassociate them.
 + Parameters
-    + cameraId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+    + cameraId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
 
-### Associate Camera [PUT]
-+ Request (application/json)
 
-        {
-          "posId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
-        }
+### Get Camera [GET]
 
 + Response 200 (application/json)
 
-        {
-          "id": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
-          "cameraId": "b5084250-4b37-11e5-8184-752d1c0476b3",
-          "name": "Front POS Camera",
-          "status": "online",
-          "deviceId": "",
-          "streams": [
-            "any"
-          ],
-          "thumbnail": "",
-          "posId": "2f704dd0-a2a9-11e5-9e4c-31c6c5024ea1"
-        }
-        
+    + Body
+    
+            {
+              "id": "25a82790-a4f8-11e5-94a2-fd50a5ff3026",
+              "cameraId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+              "name": "my camera",
+              "status": "online",
+              "deviceId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+              "streams": [
+                    "any"
+                    ],
+              "thumbnail": "thumbnail.jpeg"
+            }
+            
+## POS Connectors [/api/customers/{customerId}/posConnectors]
 
-## Associated Cameras [/api/posconnectors/{connectorId}/cameras]
+POS Connector will provide POS Filters assigned to a specified Customer.
+It has the following attributes:
++ filterId - POSFilter id, can be referenced to find the Filter.
++ assigneeType - Person who assigned the filter type (customer/reseller/cloud)
++ assigneeId - Person who assigned the filter id
 
-Get associated cameras to a POSConnector.
+
++ Parameters
+    + customerId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+
+
+### List available POS Connectors [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+              {
+                "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
+                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
+                "assigneeType": "customer",
+                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
+              },
+              {
+                "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
+                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
+                "assigneeType": "customer",
+                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
+              }
+            ]
+            ## Group Customers
+
+
+## Camera Assignment [/api/posconnectors/{connectorId}/cameraConnectors]
+
+Camera assignment is done through the following methods.
 
 + Parameters
     + connectorId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
 
-### List Associated Cameras [GET]
+### Assign Camera [POST]
++ Request (application/json)
+
+        {
+          "cameraId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+        }
+
++ Response 200 (application/json)
+
+        {
+          "id": 5,
+          "connectorId": "b5084250-4b37-11e5-8184-752d1c0476b3",
+          "cameraId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1"
+        }
+
+### Unassign Camera [DELETE]
++ Request (application/json)
+
+        {
+          "id": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
+        }
+
++ Response 200 (application/json)
+
+        {
+          "id": 5,
+          "connectorId": "b5084250-4b37-11e5-8184-752d1c0476b3",
+          "cameraId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1"
+        }
+
+
+### List Assigned Cameras [GET]
 + Response 200 (application/json)
 
         [
           {
-            "id": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
-            "cameraId": "b5084250-4b37-11e5-8184-752d1c0476b3",
-            "name": "Front POS Camera",
-            "status": "online",
-            "deviceId": "",
-            "streams": [
-              "any"
-            ],
-            "thumbnail": "",
-            "posId": "2f704dd0-a2a9-11e5-9e4c-31c6c5024ea1"
+            "cameraId": "25a82790-a4f8-11e5-94a2-fd50a5ff3026",
+            "connectorId": "73fee340-a4dd-11e5-a1aa-5de1b344ce9b",
+            "id": 3
+          },
+          {
+            "cameraId": "25a82790-a4f8-11e5-94a2-fd50a5ff3026",
+            "connectorId": "73fee340-a4dd-11e5-a1aa-5de1b344ce9b",
+            "id": 4
           }
         ]

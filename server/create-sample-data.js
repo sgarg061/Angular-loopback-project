@@ -26,6 +26,7 @@ module.exports = function(app, doneCallback) {
         app.models.SoftwareVersion.destroyAll();
         app.models.POSFilter.destroyAll();
         app.models.POSConnector.destroyAll();
+        app.models.POSCameraConnector.destroyAll();
         app.models.Cloud.destroyAll();
         app.models.Reseller.destroyAll();
         app.models.Customer.destroyAll();

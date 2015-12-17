@@ -46,7 +46,8 @@
     },
     "pos": {
       "type": "hasMany",
-      "model": "POSConnector"
+      "model": "POSCameraConnector",
+      "foreignKey": "cameraId"
     }
   },
   "acls": [],
