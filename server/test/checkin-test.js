@@ -40,7 +40,19 @@ var deviceCheckinData = {
           cameraId: 'F206872A-5AF6-4B9B-9649-370D4D704043',
           type: 'camera_type_y',
           name: 'Front Camera',
-          status: 'online'
+          status: 'online',
+          streams: [
+            {
+              "id": "stream1",
+              "name": "stream1 name",
+              "earliestSegmentDate": 1450211609000,
+              "latestSegmentDate": 1550211609000
+            },
+            {
+              "id": "stream2",
+              "name": "stream2 name"
+            }
+          ]
         },
         {
           cameraId: 'A8AA03AA-8A3E-4DBE-8E19-234EA0DD2905',
@@ -324,6 +336,52 @@ describe('Checkin address format', function () {
                if (err) throw err;
                assert(typeof res.body === 'object');
                assert.equal(res.body.address, 'Unknown address');
+               done();
+             });
+        });
+    });
+  });
+});
+
+describe('Stream date range format', function () {
+  it('should have a formatted date instead of an int timestamp', function (done) {
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert.equal(new Date(res.body.cameras[0].streams[0].earliestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].earliestSegmentDate).getTime());
+               assert.equal(new Date(res.body.cameras[0].streams[0].latestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].latestSegmentDate).getTime());
+               done();
+             });
+        });
+    });
+  });
+
+  it('should not have values when date is missing', function (done) {
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+        .send({data: deviceCheckinData})
+        .expect(200)
+        .end(function(err, res) {
+           if (err) throw err;
+
+           common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+             .send({})
+             .expect(200)
+             .end(function(err, res) {
+               if (err) throw err;
+               assert(typeof res.body === 'object');
+               assert(!res.body.cameras[0].streams[1].hasOwnProperty('earliestSegmentDate'))
+               assert(!res.body.cameras[0].streams[1].hasOwnProperty('latestSegmentDate'))
                done();
              });
         });
