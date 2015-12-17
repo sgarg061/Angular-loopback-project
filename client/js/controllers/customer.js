@@ -99,7 +99,6 @@ angular
           $scope.devices = customers[0].devices;
 
           getFilters();
-          // getAssignedFilters();
 
           watchForChanges();
 
@@ -189,28 +188,7 @@ angular
           }
         })
     }
-
-    // function getAssignedFilters() {
-    //   POSConnector
-    //     .find({
-    //       filter: {
-    //         where: {'assigneeId': $stateParams.customerId},
-    //         fields: {posFilterId: true, id: true},
-    //         include: [{
-    //               relation: 'posFilter',
-    //               scope: {
-    //                 fields: {name: true, script: true, description: true}
-    //               }
-    //             }]
-    //       }
-    //     })
-    //     .$promise
-    //     .then(function(connectors) {
-    //       console.log('total assigned filters', connectors);
-    //     });
-    // }
-
-
+    
     getCustomer();
     getSoftwareVersions();
 
