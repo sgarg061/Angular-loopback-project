@@ -113,7 +113,6 @@ angular
           $scope.filters = [];
           $scope.ownedFilters = [];
           $scope.cascadedFilters = [];
-          console.log('loaded', connectors);
           for(var i in connectors){
             var filter = connectors[i];
             if (i > -1) {
