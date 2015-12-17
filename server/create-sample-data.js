@@ -132,13 +132,13 @@ module.exports = function(app, doneCallback) {
       app.models.Reseller.create([
         { name: 'Reseller 1',
           cloudId: results.clouds[0].id,
-          email: 'cwhiten+r1@solinkcorp@solinkcorp.com',
+          email: 'cwhiten+r1@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 2',
           cloudId: results.clouds[0].id,
           checkinInterval: 3000,
-          email: 'cwhiten+r2@solinkcorp@solinkcorp.com',
+          email: 'cwhiten+r2@solinkcorp.com',
           password: 'test'
         },
         { name: 'Reseller 3',
@@ -197,13 +197,16 @@ module.exports = function(app, doneCallback) {
       }
       app.models.Customer.create([
         { name: 'Customer 1',
-          resellerId: results.resellers[0].id
+          resellerId: results.resellers[0].id,
+          id: 1
         },
         { name: 'Customer 2',
-          resellerId: results.resellers[1].id, checkinInterval: 2400
+          resellerId: results.resellers[1].id, checkinInterval: 2400,
+          id: 2
         },
         { name: 'Customer 3',
-          resellerId: results.resellers[2].id
+          resellerId: results.resellers[2].id,
+          id: 3
         },
       ], cb);
     });
