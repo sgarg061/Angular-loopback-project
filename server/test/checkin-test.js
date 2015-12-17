@@ -45,8 +45,8 @@ var deviceCheckinData = {
             {
               "id": "stream1",
               "name": "stream1 name",
-              "earliestSegmentDate": 1450211609,
-              "latestSegmentDate": 1550211609
+              "earliestSegmentDate": 1450211609000,
+              "latestSegmentDate": 1550211609000
             },
             {
               "id": "stream2",
@@ -358,8 +358,8 @@ describe('Stream date range format', function () {
              .end(function(err, res) {
                if (err) throw err;
                assert(typeof res.body === 'object');
-               assert.equal(new Date(res.body.cameras[0].streams[0].earliestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].earliestSegmentDate * 1000).getTime());
-               assert.equal(new Date(res.body.cameras[0].streams[0].latestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].latestSegmentDate * 1000).getTime());
+               assert.equal(new Date(res.body.cameras[0].streams[0].earliestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].earliestSegmentDate).getTime());
+               assert.equal(new Date(res.body.cameras[0].streams[0].latestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].latestSegmentDate).getTime());
                done();
              });
         });
