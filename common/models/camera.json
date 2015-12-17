@@ -45,7 +45,7 @@
       "foreignKey": "deviceId"
     },
     "pos": {
-      "type": "belongsTo",
+      "type": "hasMany",
       "model": "POSConnector"
     }
   },
