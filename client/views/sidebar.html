@@ -61,22 +61,6 @@
         <label>Signalling Server</label>
         <input type="text" class="form-control focus" name="signallingServerUrl" autocomplete="off" required ng-model="model.signallingServerUrl" ng-disabled="!canModifySignallingServer(model)" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
       </md-input-container>
-
-<!--       <div ng-show="type=='cloud'||type=='reseller'">
-        <md-input-container >
-          <div style="margin:5px 0px 5px 0px;">POS Connectors</div>
-          <md-content class='list-box' layout-padding style="height: 100px; padding: 0px; border: 1px solid rgba(0, 0, 0, 0.117647)">  
-            <md-list>
-              <md-list-item ng-repeat="connector in model.posConnectors">
-                  <md-button ng-click="selectConnector(connector)" ng-class="{'cloud' : connector === cloudController.cloud }">
-                    {{connector.name}}
-                  </md-button>
-              </md-list-item>
-            </md-list>
-          </md-content>
-        </md-input-container>
-      </div>
- -->
       <div ng-show="type=='customer'">
 
         <md-subheader class="md-no-sticky">Licenses</md-subheader>
@@ -127,16 +111,6 @@
         </md-list>
 
         <md-button class="md-primary" ng-click="addFilter(model.id)">Add Filter</md-button>
-<!-- 
-        <md-menu ng-if="selectedFilters.length && children.length">
-          <md-button class="md-primary" ng-click="$mdOpenMenu($event)">Assign {{selectedFilters.length}} to...</md-button>
-          <md-menu-content width="4">
-            <md-menu-item ng-repeat="item in children">
-              <md-button ng-click="assignFilters(item, selectedFilters)"> <span md-menu-align-target>{{item.name}}</span></md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
- -->
       </div>
     </div>
 </div>
