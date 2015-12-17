@@ -73,14 +73,6 @@ angular
           $scope.cloudId = clouds[0].id;
 
           $scope.children = clouds[0].resellers;
-          
-          // if ($scope.cloud) {
-
-          //   $scope.cloud.posFilters = [
-          //     {name: 'POS Connector 1', cloudId: $scope.cloud.id},
-          //     {name: 'POS Connector 2', cloudId: $scope.cloud.id, checkinInterval: 3000},
-          //   ];
-          // }
 
           watchForChanges();
         });
