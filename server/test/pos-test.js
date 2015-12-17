@@ -34,11 +34,11 @@ describe('POS tests', function() {
     var filter3;
 
     var connector1;
-    var connector1Username = 'pos-connector1';
+    var connector1Id = 'pos-connector1';
     var connector2;
-    var connector2Username = 'pos-connector2';
+    var connector2Id = 'pos-connector2';
     var connector3;
-    var connector3Username = 'pos-connector3';
+    var connector3Id = 'pos-connector3';
 
     var cloud1User;
     var cloud1UserUsername = 'pos-test-cloud1user';
@@ -168,7 +168,7 @@ describe('POS tests', function() {
 
                         
 			                        app.models.POSConnector.create({
-																id: connector1Username,
+																id: connector1Id,
 																filterId: filter1.id,
 																assigneeId: customer1.id,
 																assigneeType: 'customer'
@@ -177,7 +177,7 @@ describe('POS tests', function() {
 			                          connector1 = res;
 
 			                          app.models.POSConnector.create({
-																	id: connector2Username,
+																	id: connector2Id,
 																	filterId: filter2.id,
 																	assigneeId: customer1.id,
 																	assigneeType: 'customer'
@@ -186,7 +186,7 @@ describe('POS tests', function() {
 			                            connector2 = res;
 
 			                            app.models.POSConnector.create({
-																		id: connector3Username,
+																		id: connector3Id,
 																		filterId: filter3.id,
 																		assigneeId: customer1.id,
 																		assigneeType: 'customer'
@@ -231,7 +231,7 @@ describe('POS tests', function() {
 																					deviceId: "device-1",
 																					streams: ["any"],
 																					thumbnail: "",
-																					posId: connector1Username
+																					posId: connector1Id
 						                            }, function (err, res) {
 						                              if (err) throw err;
 						                              camera1 = res;
@@ -245,7 +245,7 @@ describe('POS tests', function() {
 																						deviceId: "device-1",
 																						streams: ["any"],
 																						thumbnail: "",
-																						posId: connector1Username
+																						posId: connector1Id
 							                            }, function (err, res) {
 							                              if (err) throw err;
 							                              camera2 = res;
@@ -258,7 +258,7 @@ describe('POS tests', function() {
 																							deviceId: "device-1",
 																							streams: ["any"],
 																							thumbnail: "",
-																							posId: connector1Username
+																							posId: connector1Id
 								                            }, function (err, res) {
 								                              if (err) throw err;
 								                              camera3 = res;
@@ -271,7 +271,7 @@ describe('POS tests', function() {
 																								deviceId: "device-1",
 																								streams: ["any"],
 																								thumbnail: "",
-																								posId: connector1Username
+																								posId: connector1Id
 									                            }, function (err, res) {
 									                              if (err) throw err;
 									                              camera4 = res;
@@ -284,7 +284,7 @@ describe('POS tests', function() {
 																									deviceId: "device-1",
 																									streams: ["any"],
 																									thumbnail: "",
-																									posId: connector1Username
+																									posId: connector1Id
 										                            }, function (err, res) {
 										                              if (err) throw err;
 										                              camera5 = res;
@@ -373,7 +373,7 @@ describe('POS tests', function() {
           if (err) throw err;
 
           assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
-          assert(res.body.length === 5, 'ensure that the 5 cameras user the pos connector ' + connector1Username);
+          assert(res.body.length === 5, 'ensure that the 5 cameras user the pos connector ' + connector1Id);
 
           done();
         });
