@@ -167,7 +167,7 @@ angular
               if (filter.connectors.length) {
                 var index = filter.connectors.length - 1;
 
-                filter.selected = (filter.connectors.length == 2);
+                filter.selected = (filter.connectors.length >= 2);
 
                 if (filter.connectors[index].assigneeType == 'customer') {
                   filter.selected = true;                  
@@ -582,7 +582,7 @@ angular
       if (filter.selected) {
         POSConnector.create({
           assigneeId: $stateParams.customerId,
-          filter: filter,
+          filterId: filter.id,
           assigneeType: 'customer'
         })
         .$promise
