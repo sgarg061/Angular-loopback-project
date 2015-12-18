@@ -231,7 +231,6 @@ describe('POS tests', function() {
 																					deviceId: "device-1",
 																					streams: ["any"],
 																					thumbnail: "",
-																					posId: connector1Id
 						                            }, function (err, res) {
 						                              if (err) throw err;
 						                              camera1 = res;
@@ -245,7 +244,6 @@ describe('POS tests', function() {
 																						deviceId: "device-1",
 																						streams: ["any"],
 																						thumbnail: "",
-																						posId: connector1Id
 							                            }, function (err, res) {
 							                              if (err) throw err;
 							                              camera2 = res;
@@ -258,7 +256,6 @@ describe('POS tests', function() {
 																							deviceId: "device-1",
 																							streams: ["any"],
 																							thumbnail: "",
-																							posId: connector1Id
 								                            }, function (err, res) {
 								                              if (err) throw err;
 								                              camera3 = res;
@@ -271,7 +268,6 @@ describe('POS tests', function() {
 																								deviceId: "device-1",
 																								streams: ["any"],
 																								thumbnail: "",
-																								posId: connector1Id
 									                            }, function (err, res) {
 									                              if (err) throw err;
 									                              camera4 = res;
@@ -284,13 +280,58 @@ describe('POS tests', function() {
 																									deviceId: "device-1",
 																									streams: ["any"],
 																									thumbnail: "",
-																									posId: connector1Id
 										                            }, function (err, res) {
 										                              if (err) throw err;
 										                              camera5 = res;
 
 
-	                                        				done(); // DONE!
+                                                  /*
+
+                                                  my-camera     --> connector1Id
+                                                  my-camera-1   --> connector1Id
+                                                  my-camera-2   --> connector1Id
+                                                  my-camera-3   --> connector2Id
+                                                  my-camera-4   --> connector2Id
+                                                  my-camera-1   --> connector2Id
+                                                  my-camera-1   --> connector3Id
+
+                                                  */
+
+                                                  app.models.POSCameraConnector.create([
+                                                  {
+                                                    cameraId: "my-camera",
+                                                    connectorId: connector1Id
+                                                  },
+                                                  {
+                                                    cameraId: "my-camera-1",
+                                                    connectorId: connector1Id
+                                                  },
+                                                  {
+                                                    cameraId: "my-camera-2",
+                                                    connectorId: connector1Id
+                                                  },
+                                                  {
+                                                    cameraId: "my-camera-3",
+                                                    connectorId: connector2Id
+                                                  },
+                                                  {
+                                                    cameraId: "my-camera-4",
+                                                    connectorId: connector2Id
+                                                  },
+                                                  {
+                                                    cameraId: "my-camera-1",
+                                                    connectorId: connector2Id
+                                                  },
+                                                  {
+                                                    cameraId: "my-camera-1",
+                                                    connectorId: connector3Id
+                                                  }], function (err, res) {
+                                                    if (err) throw err;
+
+                                                    done(); // DONE!
+
+                                                  })
+
 			                                        	});
 		                                        	});
 	                                        	});
@@ -338,12 +379,14 @@ describe('POS tests', function() {
 
     it('should show the filter assigned to a camera 1', function (done) {
       common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/cameras/' + camera1.id +'/pos' , token)
+        common.json('get', '/api/posconnectors/' + connector1Id +'/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
           if (err) throw err;
-          assert(typeof res.body === 'object', 'ensure that the result is a set of objects');
+          assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
+          assert(res.body.length === 3, 'ensure that all 1 pos conenctors (plus whatever other tests have added) are visible');
+
 
           done();
         });
@@ -352,12 +395,14 @@ describe('POS tests', function() {
 
     it('should show the filter assigned to a camera 2', function (done) {
       common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/cameras/' + camera2.id +'/pos' , token)
+        common.json('get', '/api/posconnectors/' + connector2Id +'/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
           if (err) throw err;
-          assert(typeof res.body === 'object', 'ensure that the result is a set of objects');
+          assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
+          assert(res.body.length === 3, 'ensure that all 1 pos conenctors (plus whatever other tests have added) are visible');
+
 
           done();
         });
@@ -366,14 +411,14 @@ describe('POS tests', function() {
 
     it('should show assigned cameras to a pos connector', function (done) {
       common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector1.id + '/cameras' , token)
+        common.json('get', '/api/posconnectors/' + connector3Id + '/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
           if (err) throw err;
 
           assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
-          assert(res.body.length === 5, 'ensure that the 5 cameras user the pos connector ' + connector1Id);
+          assert(res.body.length === 1, 'ensure that the 5 cameras user the pos connector ' + connector1.id);
 
           done();
         });
@@ -382,24 +427,24 @@ describe('POS tests', function() {
 
 
 	  describe('Checking camera association', function() {
+
+      var asscoation1Id = "association-1";
+
 	    it('should assign a camera to the provided POS', function(done) {
-	      common.json('put', '/api/cameras/' + camera1.id)
-	        .send({posId: connector2.id})
+	      common.json('post', '/api/poscameraconnectors')
+	        .send({id: asscoation1Id, connectorId: connector2.id, cameraId: camera1.id})
 	        .expect(200)
 	        .end(function (err, res) {
 	          if (err) throw err;
 
-            common.json('get', '/api/posconnectors/' + connector2.id + '/cameras')
+            common.json('get', '/api/posconnectors/' + connector2.id + '/cameraConnectors')
             .send({})
             .expect(200)
             .end(function (err, res) {
               if (err) throw err;
 
               assert(typeof res.body[0] === 'object', 'this is a proper object, too');
-              assert(res.body.length === 1, 'ensure that only 1 camera was returned');
-
-              var deviceName = res.body[0].name;
-              assert(deviceName === camera1.name, 'ensure that camera 1 was returned');
+              assert(res.body.length >= 1, 'ensure that only 1 camera was returned');
               done();
             });
 	        });
