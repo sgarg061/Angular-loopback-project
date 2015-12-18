@@ -85,7 +85,7 @@ angular
           $scope.children = $scope.reseller.customers;
 
 
-          getFilters($scope.cloudId);
+          getFilters();
 
           watchForChanges();
 
@@ -139,12 +139,12 @@ angular
         })
     }
 
-    function getFilters(cloudId){
+    function getFilters(){
       POSFilter
         .find({
           filter: {
             where: {
-              or: [{'creatorId': $stateParams.resellerId},{'creatorId': cloudId}]
+              or: [{'creatorId': $stateParams.resellerId},{'creatorId': $scope.cloudId}]
             },
             include: {
               relation: 'connectors',
