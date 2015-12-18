@@ -156,8 +156,6 @@ angular
         })
         .$promise
         .then(function(connectors) {
-
-          console.log('loaded connectors', connectors);
           $scope.filters = [];
           $scope.cascadedFilters = [];
           $scope.ownedFilters = [];
