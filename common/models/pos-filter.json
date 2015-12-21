@@ -47,6 +47,14 @@
       "foreignKey": "filterId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "*"
+    }
+  ],
   "methods": {}
 }
