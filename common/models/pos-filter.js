@@ -1,7 +1,11 @@
-var uuid = require('node-uuid');
-var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
 var loopback = require('loopback');
+var uuid = require('node-uuid');
+var _ = require('underscore');
+var async = require('async');
+var _ = require('lodash');
+var deviceDataParser = require('../utils/deviceDataParser');
+
 
 module.exports = function(POSFilter) {
     'use strict';
