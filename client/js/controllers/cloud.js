@@ -352,9 +352,8 @@ angular
         $scope.newFilter.$edit = true
         $scope.create = function() {
           var script = JSON.stringify($scope.newFilter.script);
-          POSFilter.updateAll({
-            where: {id: filter.id}
-          }, {
+          POSFilter.prototype$updateAttributes({id: filter.id},
+          {
             name: $scope.newFilter.name,
             description: $scope.newFilter.description,
             script: script
