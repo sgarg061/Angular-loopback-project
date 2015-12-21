@@ -160,7 +160,7 @@ describe('POS tests', function() {
 															id: '',
 															name: 'Motion Parser',
 															script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));',
-															creatorId: cloud2.id,
+															creatorId: customer3.id,
 															creatorType: 'cloud'
                             }, function (err, res) {
                               if (err) throw err;
@@ -188,8 +188,8 @@ describe('POS tests', function() {
 			                            app.models.POSConnector.create({
 																		id: connector3Id,
 																		filterId: filter3.id,
-																		assigneeId: customer1.id,
-																		assigneeType: 'customer'
+																		assigneeId: cloud1.id,
+																		assigneeType: 'cloud'
 			                            }, function (err, res) {
 			                              if (err) throw err;
 			                              connector3 = res;
@@ -369,7 +369,7 @@ describe('POS tests', function() {
           if (err) throw err;
 
           assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
-          assert(res.body.length === 3, 'ensure that all 3 pos filters (plus whatever other tests have added) are visible');
+          assert(res.body.length === 2, 'ensure that all 3 pos filters (plus whatever other tests have added) are visible');
 
           done();
         });
@@ -425,6 +425,164 @@ describe('POS tests', function() {
       });
     });
 
+    it('pos connector should be accessible to reseller user 1', function (done) {
+      common.login({username: reseller1Cloud1UserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/posconnectors/' + connector3Id + '/cameraConnectors' , token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
+          assert(res.body.length === 1, 'ensure that the 5 cameras user the pos connector ' + connector1.id);
+
+          done();
+        });
+      });
+    });
+
+
+    it('pos connector shouldnt be accessible to cloud user 2', function (done) {
+      common.login({username: cloud2UserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/posconnectors/' + connector3Id + '/cameraConnectors' , token)
+        .send({})
+        .expect(404)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+
+    it('pos connector shouldnt be accessible to reseller user on cloud user 2', function (done) {
+      common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/posconnectors/' + connector3Id , token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+
+
+    it('pos connector shouldnt be accessible to reseller user on cloud user 2', function (done) {
+      common.login({username: reseller1Cloud2UserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/posconnectors/' + connector1Id , token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+
+
+    it('it shouldnt get the POSFilter for Cloud2', function (done) {
+      common.login({username: cloud2UserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/posfilters/' + filter1.id , token)
+        .send({})
+        .expect(404)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+
+
+    it('it shouldnt let cloud 2 user edit the filter', function (done) {
+      common.login({username: cloud2UserUsername, password: 'test'}, function (token) {
+        common.json('put', '/api/posfilters/' + filter1.id , token)
+        .send({
+          description: 'my new description'
+        })
+        .expect(404)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+
+
+    it('it should let cloud 1 user edit the filter', function (done) {
+      common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
+        common.json('put', '/api/posfilters/' + filter1.id , token)
+        .send({
+          description:'my new description'
+        })
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          assert(typeof res.body=== 'object', 'ensure that the result is an object');
+          assert(res.body.description === 'my new description', 'ensure that the pos filter is updated with the new description');
+
+          done();
+        });
+      });
+    });
+
+
+
+    it('it shouldnt let reseller user assigned to cloud user 1 edit the filter', function (done) {
+      common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
+        common.json('put', '/api/posfilters/' + filter1.id , token)
+        .send({
+          description: 'my new description'
+        })
+        .expect(401)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+    
+
+    it('it shouldnt let random cloud user delete the filter', function (done) {
+      common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
+        common.json('delete', '/api/posfilters/' + filter1.id , token)
+        .send({})
+        .expect(401)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          done();
+        });
+      });
+    });
+    
+
+    it('it should allow the owner to delete the filter', function (done) {
+      common.login({username: cloud2UserUsername, password: 'test'}, function (token) {
+        common.json('delete', '/api/posfilters/' + filter2.id , token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+
+          assert(typeof res.body=== 'object', 'ensure that the result is an object');
+          assert(res.body.count === 1, 'ensure that one record was deleted from the db');
+
+          done();
+        });
+      });
+    });
+
+
+
+
 
 	  describe('Checking camera association', function() {
 
@@ -437,17 +595,19 @@ describe('POS tests', function() {
 	        .end(function (err, res) {
 	          if (err) throw err;
 
-            common.json('get', '/api/posconnectors/' + connector2.id + '/cameraConnectors')
-            .send({})
-            .expect(200)
-            .end(function (err, res) {
-              if (err) throw err;
+            common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
+              common.json('get', '/api/posconnectors/' + connector2.id + '/cameraConnectors', token)
+              .send({})
+              .expect(200)
+              .end(function (err, res) {
+                if (err) throw err;
 
-              assert(typeof res.body[0] === 'object', 'this is a proper object, too');
-              assert(res.body.length >= 1, 'ensure that only 1 camera was returned');
-              done();
-            });
-	        });
+                assert(typeof res.body[0] === 'object', 'this is a proper object, too');
+                assert(res.body.length >= 1, 'ensure that only 1 camera was returned');
+                done();
+              });
+  	        });
+          });
 	    });
 	  });
 
