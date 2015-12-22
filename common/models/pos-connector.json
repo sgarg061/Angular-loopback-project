@@ -1,6 +1,6 @@
 {
   "name": "POSConnector",
-  "plural": "POSConnectors",
+  "plural": "Connectors",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
