@@ -139,4 +139,13 @@ module.exports = function(POSConnector) {
             }
         });
     }
+
+
+    POSConnector.prototype.toJSON = function() {
+        var connector = this.toObject(false, true, false);
+        delete connector.assigneeId;
+        delete connector.assigneeType;
+        return connector;
+    };
+
 }
