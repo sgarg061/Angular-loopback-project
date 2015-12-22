@@ -54,7 +54,9 @@ module.exports = function (app) {
                     case 'Customer':
                         return isOwnerOfCustomer(context, jwt, cb);
                     case 'License':
-                    return isOwnerOfLicense(context, jwt, cb);
+                        return isOwnerOfLicense(context, jwt, cb);
+                    case 'POSFilter':
+                        return isOwnerOfFilter(context, jwt, cb);
                     default:
                         invalidMethod(cb);
                     }
@@ -63,6 +65,52 @@ module.exports = function (app) {
         });
     });
 };
+
+function isOwnerOfFilter(context, token, cb) {
+
+    var userId = getUserId(token);
+
+    switch (context.remotingContext.req.method) {
+        case 'PUT':
+        case 'DELETE':
+            if (context.modelId) {
+                context.model.findById(context.modelId, function(err, filter) {
+                    if(err || !filter) {
+                        logger.error(err);
+                        cb(err, false);
+                    }
+                    var mutable = (filter.creatorId === userId && filter.creatorType === token.userType);
+                    if (mutable) {
+                        cb(null, mutable); // true = is a team member
+                    }
+                    else{
+                        unauthorized(cb);
+                    }
+                });
+            }
+            else{
+                invalidMethod(cb);
+            }
+            break;
+        default:
+            cb(null, userId !== null);
+            break;
+    }
+    
+}
+function getUserId(token){
+    if (token.userType === 'cloud') {
+        return token.cloudId;
+    }
+    else if(token.userType === 'reseller'){
+        return token.resellerId;
+    }
+    else if(token.userType === 'customer'){
+        return token.customerId;
+    }
+    return null;
+
+}
 
 function isOwnerOfDevice(context, token, cb) {
     switch (context.remotingContext.req.method) {

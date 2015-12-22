@@ -1,0 +1,60 @@
+{
+  "name": "POSFilter",
+  "plural": "POSFilters",
+  "base": "PersistedModel",
+  "strict": true,
+  "options": {
+    "validateUpsert": true,
+    "idInjection": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "required": false
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "script": {
+      "type": "string",
+      "required": true,
+      "length": 10000
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "creatorId": {
+      "type": "string",
+      "required": true
+    },
+    "creatorType": {
+      "type": "string",
+      "required": true
+    },
+    "lastUpdated": {
+      "type": "date",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "connectors": {
+      "type": "hasMany",
+      "model": "POSConnector",
+      "foreignKey": "filterId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "*"
+    }
+  ],
+  "methods": {}
+}

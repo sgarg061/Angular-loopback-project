@@ -89,18 +89,18 @@ angular
     }
 
     function getSoftwareVersions() {
-    SoftwareVersion
-      .find({
-        filter: {
-          fields: {id: true, name: true, url: true},
-          order: 'name ASC'
-        }
-      })
-      .$promise
-      .then(function(versions) {
-        $scope.softwareVersions = [].concat(versions);
-      })
-  }
+      SoftwareVersion
+        .find({
+          filter: {
+            fields: {id: true, name: true, url: true},
+            order: 'name ASC'
+          }
+        })
+        .$promise
+        .then(function(versions) {
+          $scope.softwareVersions = [].concat(versions);
+        })
+    }
 
     getDevice();
     getSoftwareVersions();

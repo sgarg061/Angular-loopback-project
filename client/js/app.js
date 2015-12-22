@@ -34,7 +34,10 @@ angular
                     .icon('checkmark', './assets/svg/ic_check_circle_green_24px.svg', 24)
                     .icon('error', './assets/svg/ic_error_red_24px.svg', 24)
                     .icon('warning', './assets/svg/ic_warning_yellow_24px.svg', 24)
-                    .icon("right_arrow", "./assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24);
+                    .icon("right_arrow", "./assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24)
+                    .icon("edit", "./assets/svg/ic_border_color_black_24px.svg", 24)
+                    .icon("info", "./assets/svg/ic_info_outline_black_24px.svg", 24)
+                    .icon("show", "./assets/svg/ic_pageview_black_24px.svg", 24);
 
 
       $locationProvider.html5Mode(true);

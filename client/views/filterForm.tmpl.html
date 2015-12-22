@@ -1,0 +1,44 @@
+<md-dialog aria-label="New POS Filter">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2 ng-if="newFilter.owner">{{newFilter.$edit ? 'Edit' : 'New'}} POS Filter</h2>
+      <h2 ng-if="!newFilter.owner">View POS Filter</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="width:800px">
+    <div>
+      <md-input-container>
+        <label>Filter Name</label>
+        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newFilter.name" ng-disabled="!newFilter.owner">
+      </md-input-container>
+      
+      <md-input-container class="md-block">
+        <label>Filter Description</label>
+        <textarea ng-model="newFilter.description" rows="1" ng-disabled="!newFilter.owner"></textarea>
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Filter Script</label>
+        <textarea ng-model="newFilter.script" rows="22" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner"></textarea>
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row" ng-if="newFilter.owner">
+
+    <md-button ng-click="destroy()" class="md-warn" ng-if="newFilter.$edit">
+     Delete
+    </md-button>
+    <md-button ng-click="cancel()">
+     Cancel
+    </md-button>
+    <md-button ng-click="create()" style="margin-right:20px;">
+      {{newFilter.$edit ? 'Save' : 'Create'}}
+    </md-button>
+  </div>
+  
+</md-dialog>
