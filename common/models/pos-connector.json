@@ -37,6 +37,14 @@
       "foreignKey": "connectorId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isValidated",
+      "permission": "ALLOW",
+      "property": "*"
+    }
+  ],
   "methods": {}
 }

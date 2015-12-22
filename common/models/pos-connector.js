@@ -71,42 +71,16 @@ module.exports = function(POSConnector) {
 		        });
             }
             else if (tenantId) {
-
-				var ids = [tenantId];
-		        Customer.find({ where: {id: tenantId}, fields: ['resellerId']}, function (err, res) {
-		            if (err) {
-		                logger.error('Error querying reseller with id ' + tenantId);
-		                logger.error(err);
-		                next(err);
-		            } else if (res.length && res[0].resellerId) {
-	            		ids.push(res[0].resellerId);
-
-						Reseller.find({ where: {id: res[0].resellerId}, fields: ['cloudId']}, function (errReseller, resReseller) {
-				            if (errReseller) {
-				                logger.error('Error querying reseller with id ' + tenantId);
-				                logger.error(errReseller);
-				                next(errReseller);
-				            } else if (resReseller.length && resReseller[0].cloudId) {
-				            	ids.push(resReseller[0].cloudId);
-								if (ctx.query.where) {
-									ctx.query.where.assigneeId = {inq: ids}
-								} else {
-									ctx.query.where = {
-										assigneeId: {inq: ids}
-									};
-								}
-				            }
-				            else{
-				                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
-				            }
-				        });
-	            	}
-	            	else{
-		                logger.error('Customer or reseller was not fetched with tenantId ' + tenantId);
-	            	}
-
-					next();
-		        });
+				if (ctx.query.where) {
+					ctx.query.where.assigneeId = tenantId
+					ctx.query.where.assigneeType = 'customer'
+				} else {
+					ctx.query.where = {
+						assigneeId: tenantId,
+						assigneeType: 'customer'
+					};
+				}
+				next();
             }
             else {
 	            next();
