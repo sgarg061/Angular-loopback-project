@@ -172,4 +172,12 @@ module.exports = function(POSFilter) {
             }
         });
     }
+
+
+    POSFilter.prototype.toJSON = function() {
+        var filter = this.toObject(false, true, false);
+        delete filter.creatorId;
+        delete filter.creatorType;
+        return filter;
+    };
 };
