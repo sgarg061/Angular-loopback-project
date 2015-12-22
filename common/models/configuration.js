@@ -19,7 +19,7 @@ module.exports = function (Configuration) {
         {
             accepts: {arg: 'req', type: 'object', http: {source: 'req'}},
             http: {verb: 'get', status: 200, errorStatus: 500},
-            returns: {arg: 'response', type: 'string'}
+            returns: {type: 'string', root: true}
         }
     );
 };
