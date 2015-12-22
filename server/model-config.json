@@ -108,5 +108,6 @@
     "dataSource": "restDataSource",
     "public": true,
     "$promise": {},
-    "$resolved": true  }
+    "$resolved": true  
+  }
 }
