@@ -5,11 +5,14 @@ module.exports = function (Configuration) {
 
     Configuration.whatismyip = function (req, cb) {
 
-        var ipAddress = 'no ip detected';
+        var ipAddress = null;
         if (req) {
-            ipAddress = req.connection.remoteAddress;
+            ipAddress = req.headers["x-forwarded-for"];
+            if (!ipAddress)
+                ipAddress = req.connection.remoteAddress;
         }
         logger.info('Returning ip address ' + ipAddress);
+
 
         cb(null, ipAddress);
     };
