@@ -346,6 +346,12 @@ module.exports = function(Device) {
     function checkinDevice (device, deviceData, cb) {
         // update general metadata about the device
         var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
+
+        // override ip address, if necessary
+        if (device.overrideIpAddress && device.overrideIpAddress.length > 0) {
+            checkedInProperties.ipAddress = device.overrideIpAddress;
+        }
+
         device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
             if (err) {
                 cb(new Error('Error checking in device: %s', err));

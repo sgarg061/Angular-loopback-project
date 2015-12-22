@@ -253,6 +253,41 @@ describe('Check-in of existing device with missing component', function() {
   });
 });
 
+describe('Override IP address should be set on checkin', function() {
+  it('should set the IP address to the override IP address', function(done) {
+
+
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send({overrideIpAddress: 'overriden'})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+
+          // now, check in...
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+            .send({data: deviceCheckinData})
+            .expect(200)
+            .end(function(err, res) {
+              if (err) throw err;
+
+              // now query for the device, and see the ip address is 'overriden'
+              common.json('get', '/api/devices/' + deviceId, token)
+                .send({})
+                .expect(200)
+                .end(function(err, res) {
+                  if (err) throw err;
+
+                  assert(typeof res.body === 'object');
+                  assert.equal(res.body.ipAddress, 'overriden', 'the ip address returned must be set to overriden');
+                  done();
+                });
+            });
+        });
+    });
+  });
+});
+
 describe('Checkin address format', function () {
   it('should accept string address', function (done) {
     deviceCheckinData.address = 'string address';
