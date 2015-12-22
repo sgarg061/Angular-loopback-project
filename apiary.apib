@@ -573,15 +573,13 @@ An email is sent to the user's current email to confirm changing the password
 
 ## Group POS Association
 
-## POS Filters [/api/posConnectors/{connectorId}/filter]
+## POS Filters [/api/connectors/{connectorId}/filter]
 
 POS Filter object has the following attributes:
 + name - Filter name.
 + script - Javascript blob of the script for the listener
 + description - description of the script
-+ creatorType - Type of person who created it. (customer/reseller/cloud)
-+ creatorId - person who created the filter
-+ lastUpdated - the date and time when the object last updated(PUT/POST)
++ lastUpdated - the date and time when the object last updated(through PUT/POST)
 
 
 + Parameters
@@ -599,8 +597,6 @@ POS Filter object has the following attributes:
               "name": "Motion Parser",
               "script": "console.log(String.fromCharCode(0xD83D, 0xDE32));",
               "description": null,
-              "creatorId": "41705f00-a28d-11e5-bad2-6fe88522b0fe",
-              "creatorType": "cloud",
               "lastUpdated": ""
             }
             
@@ -636,17 +632,11 @@ Camera object has the following attributes:
               "thumbnail": "thumbnail.jpeg"
             }
             
-## POS Connectors [/api/customers/{customerId}/posConnectors]
+## POS Connectors [/api/connectors]
 
-POS Connector will provide POS Filters assigned to a specified Customer.
+POS Connector will provide POS Filters assigned to a provided device through auth0 token.
 It has the following attributes:
 + filterId - POSFilter id, can be referenced to find the Filter.
-+ assigneeType - Person who assigned the filter type (customer/reseller/cloud)
-+ assigneeId - Person who assigned the filter id
-
-
-+ Parameters
-    + customerId: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
 
 
 ### List available POS Connectors [GET]
@@ -658,21 +648,17 @@ It has the following attributes:
             [
               {
                 "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
-                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
-                "assigneeType": "customer",
                 "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
               },
               {
                 "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
-                "assigneeId": "4215edd1-a28d-11e5-bad2-6fe88522b0fe",
-                "assigneeType": "customer",
                 "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
               }
             ]
             ## Group Customers
 
 
-## Camera Assignment [/api/posconnectors/{connectorId}/cameraConnectors]
+## Camera Assignment [/api/connectors/{connectorId}/cameraConnectors]
 
 Camera assignment is done through the following methods.
 
