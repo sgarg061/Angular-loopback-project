@@ -8,5 +8,9 @@
     "connector": "postgresql",
     "url": "postgres://postgres:solink@localhost:5432/call-home",
     "debug": true
+  },
+  "restDataSource": {
+    "name": "restDataSource",
+    "connector": "rest"
   }
 }

@@ -23,6 +23,7 @@
     "loopback-connector-es": "^1.0.0",
     "loopback-connector-mongodb": "^1.13.0",
     "loopback-connector-postgresql": "^2.3.0",
+    "loopback-connector-rest": "^1.4.28",
     "loopback-console": "^0.1.0",
     "loopback-datasource-juggler": "^2.19.0",
     "loopback-explorer": "^1.8.0",
