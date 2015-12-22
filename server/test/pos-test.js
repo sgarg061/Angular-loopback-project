@@ -360,26 +360,9 @@ describe('POS tests', function() {
 });
 
 
-    it('should show POS filters existing for the customer.', function (done) {
-      common.login('solink', function (token) {
-        common.json('get', '/api/customers/' + customer1.id +'/posConnectors', token)
-        .send({})
-        .expect(200)
-        .end(function (err, res) {
-          if (err) throw err;
-
-          assert(typeof res.body[0] === 'object', 'ensure that the result is a set of objects');
-          assert(res.body.length === 2, 'ensure that all 3 pos filters (plus whatever other tests have added) are visible');
-
-          done();
-        });
-      });
-    });
-
-
     it('should show the filter assigned to a camera 1', function (done) {
       common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector1Id +'/cameraConnectors' , token)
+        common.json('get', '/api/connectors/' + connector1Id +'/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -395,7 +378,7 @@ describe('POS tests', function() {
 
     it('should show the filter assigned to a camera 2', function (done) {
       common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector2Id +'/cameraConnectors' , token)
+        common.json('get', '/api/connectors/' + connector2Id +'/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -411,7 +394,7 @@ describe('POS tests', function() {
 
     it('should show assigned cameras to a pos connector', function (done) {
       common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector3Id + '/cameraConnectors' , token)
+        common.json('get', '/api/connectors/' + connector3Id + '/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -427,7 +410,7 @@ describe('POS tests', function() {
 
     it('pos connector should be accessible to reseller user 1', function (done) {
       common.login({username: reseller1Cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector3Id + '/cameraConnectors' , token)
+        common.json('get', '/api/connectors/' + connector3Id + '/cameraConnectors' , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -444,7 +427,7 @@ describe('POS tests', function() {
 
     it('pos connector shouldnt be accessible to cloud user 2', function (done) {
       common.login({username: cloud2UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector3Id + '/cameraConnectors' , token)
+        common.json('get', '/api/connectors/' + connector3Id + '/cameraConnectors' , token)
         .send({})
         .expect(404)
         .end(function (err, res) {
@@ -457,7 +440,7 @@ describe('POS tests', function() {
 
     it('pos connector shouldnt be accessible to reseller user on cloud user 2', function (done) {
       common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector3Id , token)
+        common.json('get', '/api/connectors/' + connector3Id , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -471,7 +454,7 @@ describe('POS tests', function() {
 
     it('pos connector shouldnt be accessible to reseller user on cloud user 2', function (done) {
       common.login({username: reseller1Cloud2UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/posconnectors/' + connector1Id , token)
+        common.json('get', '/api/connectors/' + connector1Id , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -596,7 +579,7 @@ describe('POS tests', function() {
 	          if (err) throw err;
 
             common.login({username: cloud1UserUsername, password: 'test'}, function (token) {
-              common.json('get', '/api/posconnectors/' + connector2.id + '/cameraConnectors', token)
+              common.json('get', '/api/connectors/' + connector2.id + '/cameraConnectors', token)
               .send({})
               .expect(200)
               .end(function (err, res) {
