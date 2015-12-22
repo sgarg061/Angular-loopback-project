@@ -141,8 +141,10 @@ angular
     Device
       .prototype$updateAttributes(
         {id: $scope.device.id},
-        {overrideIpAddress: ipAddress},
-        {ipAddress: ipAddress}
+        {
+          overrideIpAddress: ipAddress,
+          ipAddress: ipAddress
+        }
       )
       .$promise
       .then(function(d) {
