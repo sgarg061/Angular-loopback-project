@@ -38,24 +38,6 @@
     "$promise": {},
     "$resolved": true
   },
-  "POSConnector": {
-    "dataSource": "callHomeDb",
-    "public": true,
-    "$promise": {},
-    "$resolved": true
-  },
-  "CloudPOSConnector": {
-    "dataSource": "callHomeDb",
-    "public": true,
-    "$promise": {},
-    "$resolved": true
-  },
-  "ResellerPOSConnector": {
-    "dataSource": "callHomeDb",
-    "public": true,
-    "$promise": {},
-    "$resolved": true
-  },
   "Cloud": {
     "dataSource": "callHomeDb",
     "public": true,
@@ -110,10 +92,21 @@
     "$promise": {},
     "$resolved": true
   },
+  "POSFilter": {
+    "dataSource": "callHomeDb",
+    "public": true
+  },
+  "POSConnector": {
+    "dataSource": "callHomeDb",
+    "public": true
+  },
+  "POSCameraConnector": {
+    "dataSource": "callHomeDb",
+    "public": true
+  },
   "Configuration": {
     "dataSource": "restDataSource",
     "public": true,
     "$promise": {},
-    "$resolved": true
-  }
+    "$resolved": true  }
 }

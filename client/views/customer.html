@@ -8,14 +8,23 @@
       <sidebar style="height:100%" model="customer" type="'customer'"
         add-license-function="addLicense"
         show-license-function="showLicense"
+        add-filter-function="addFilter"
+        edit-filter-function="editFilter"
+        action-filter-function="actionFilter"
         delete-function="deleteCustomer"
         software-versions="softwareVersions"
+        filters="filters"
         can-modify-event-url-function="canModifyEventUrl"
         can-modify-image-server-url-function="canModifyImageServerUrl"
         create-software-version-function="openSoftwareVersionForm"
         can-modify-software-version-function="canModifySoftwareVersion"
         can-modify-checkin-interval-function="canModifyCheckinInterval"
         can-modify-signalling-server-function="canModifySignallingServer"
+        children="children"
+        load-filters="loadFilters"
+        owned-filters="ownedFilters"
+        cascaded-filters="cascadedFilters"
+        filter-changed-function="filterChanged"
       />
     </div>
 

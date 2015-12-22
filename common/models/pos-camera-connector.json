@@ -1,5 +1,5 @@
 {
-  "name": "SoftwareVersion",
+  "name": "POSCameraConnector",
   "base": "PersistedModel",
   "strict": true,
   "options": {
@@ -11,15 +11,11 @@
       "type": "string",
       "id": true
     },
-    "name": {
+    "cameraId": {
       "type": "string",
       "required": true
     },
-    "code": {
-      "type": "number",
-      "required": true
-    },
-    "url": {
+    "connectorId": {
       "type": "string",
       "required": true
     }
@@ -27,5 +23,5 @@
   "validations": [],
   "relations": {},
   "acls": [],
-  "methods": []
+  "methods": {}
 }

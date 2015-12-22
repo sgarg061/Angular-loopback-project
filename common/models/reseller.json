@@ -61,11 +61,6 @@
       "type": "hasOne",
       "model": "SoftwareVersion",
       "foreignKey": "id"
-    },
-    "posConnectors": {
-      "type": "hasMany",
-      "model": "POSConnector",
-      "through": "ResellerPOSConnector"
     }
   },
   "acls": [
@@ -110,5 +105,5 @@
     "property": "updateAttributes"
     }
   ],
-  "methods": []
+  "methods": {}
 }

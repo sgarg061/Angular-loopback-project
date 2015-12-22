@@ -2,12 +2,12 @@
 
   <md-content>
     <div layout="row" class="background">
-    
+
       <div class="col-md-3  sidebar-container" layout-margin>
         <sidebar model="device" type="'device'"
           delete-function="deleteReseller"
           software-versions="softwareVersions"
-          can-modify-event-url-function="canModifyEventUrl" 
+          can-modify-event-url-function="canModifyEventUrl"
           can-modify-image-server-url-function="canModifyImageServerUrl"
           create-software-version-function="openSoftwareVersionForm"
           can-modify-software-version-function="canModifySoftwareVersion"
@@ -101,7 +101,7 @@
                 <md-input-container>
                 <div layout="row" layout-align="space-around center">
                   <div layout="column" layout-align="start start" layout-fill>
-                    
+
                     <div style="margin-bottom: 5px;"><b>Cameras</b></div>
                     <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
                       <md-list layout-padding>
@@ -134,10 +134,45 @@
 
               </div>
             </md-tab>
+            <md-tab label="SETTINGS">
+              <div layout="column" style="margin: 20px;">
+                <div>
+                  <b>Override IP Address</b>
+                  <input type="text" id="override" ng-model="device.overrideIpAddress" />
+                  <md-button class="md-raised" ng-click="setOverrideIpAddress(device.overrideIpAddress)" ng-disabled="isSavingOverrideIpAddress">OK</md-button>
+                </div>
+              </div>
+            </md-tab>
+            <md-tab label="CONNECTORS">
+              <div layout="column" style="margin:20px;">
+                <md-input-container>
+                <div layout="row" layout-align="space-around center">
+                  <div layout="column" layout-align="start start" layout-fill>
+                    
+                    <div style="margin-bottom: 5px;"><b>Listeners</b></div>
+                    <md-content layout-fill style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
+                      <md-list layout-padding>
+                        <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="posInfo in checkinData[0].posInformation">
+                        <div layout="row" layout-fill layout-align="space-between center">
+                          <span class="pos-name">{{ posInfo.name }}</span>
+                          <span class="pos-type">{{ posInfo.type }}</span>
+                          <span class="pos-host" ng-if="posInfo.type == 'tcp'">{{ posInfo.host }}:{{ posInfo.port }}</span>
+                          <span class="pos-url" ng-if="posInfo.type == 'socketio'">{{ posInfo.url }}</span>
+
+                          <span flex="20"/>
+                          <md-icon md-svg-icon='indicator_{{posInfo.status === "online" ? "green" : posInfo.status === "offline" ? "red" : "yellow"}}'></md-icon>
+
+                        </div>
+                      </md-list-item>
+                    </md-content>
+
+
+                  </div>
+                </div>
+
+              </div>
+            </md-tab>
           </md-tabs>
       </div>
     </div>
   </md-content>
-
-
-

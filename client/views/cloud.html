@@ -7,12 +7,23 @@
     <div class="col-md-3 sidebar-container" layout-margin>
       <sidebar model="cloud" type="'cloud'" 
         software-versions="softwareVersions"
+        add-filter-function="addFilter"
+        action-filter-function="actionFilter"
+        edit-filter-function="editFilter"
         can-modify-event-url-function="canModifyEventUrl" 
         can-modify-image-server-url-function="canModifyImageServerUrl"
         create-software-version-function="openSoftwareVersionForm"
         can-modify-software-version-function="canModifySoftwareVersion"
         can-modify-checkin-interval-function="canModifyCheckinInterval"
-        can-modify-signalling-server-function="canModifySignallingServer"/>
+        can-modify-signalling-server-function="canModifySignallingServer"
+        filters="filters"
+        children="children"
+        selected-filters="selectedFilters"
+        owned-filters="ownedFilters"
+        cascaded-filters="cascadedFilters"
+        filter-changed-function="filterChanged"
+        assign-filters-function="assignFilters"
+        select-connector-function="selectConnector"/>
     </div>
 
     <div class="child-list col-md-8" class="main-content" layout-fill layout-padding>
