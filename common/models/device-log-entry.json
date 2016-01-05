@@ -30,7 +30,7 @@
       "required": false,
       "index": true
     },
-    "eventType": {
+    "reason": {
       "type": "string",
       "required": false,
       "default": "default"

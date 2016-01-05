@@ -37,22 +37,36 @@
           <md-tabs md-dynamic-height>
             <md-tab label="CHECK-IN">
               <div layout="column" style="margin:20px 20px 10px 20px;">
+                <h3>Check-in History ({{device.logEntries.length}})</h3>
                 <div>
-                  <b>Check-in History</b>
-                  <md-content style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
+                  <md-content style="height:600px; width: 230px; border: 1px solid rgba(0, 0, 0, 0.117647); float: left;">
                     <md-list layout-padding>
-                      <md-list-item style="height: 20px; min-height: 20px !important;" ng-repeat="entry in device.logEntries">
-                        <span ng-click="showCheckin(entry)">
+                      <md-list-item style="min-height: 30px !important; border-bottom: 1px solid rgba(0, 0, 0, 0.117647)" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" class="logEntries {{device.currentEntry.timestamp === entry.timestamp? ' active': ''}}">
                           {{ entry.timestamp | date: 'medium' }}
-                        </span>
                       </md-list-item>
                     </md-list>
+                  </md-content>
+                  <md-content style="height:600px; width: 660px; border: 1px solid rgba(0, 0, 0, 0.117647); float: right;">
+                    <h3 class="md-title" style="text-align: center;">Raw Checkin Data</h3>
+                    <pre pretty-json="device.currentEntry"/>
                   </md-content>
                 </div>
               </div>
               <div style="margin:0px 20px 20px 12px">
-                <md-button class="md-raised" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
-                <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin"></md-progress-circular>
+                <div layout="row" style="height: 55px;">
+                  <md-input-container flex="15" ng-if="!device.noMoreLogs">
+                    <label>Only Show</label>
+                      <md-select ng-model="device.logDataLimit">
+                        <md-option ng-repeat="item in [10, 50, 100]" value="{{item}}">
+                          {{item}} Records
+                        </md-option>
+                      </md-select>
+                  </md-input-container>
+                  <md-button flex="15" class="md-raised" ng-click="loadMore(device.logDataLimit)" ng-if="!device.noMoreLogs">Load More...</md-button>
+                  <p class="md-body-1" flex="30" ng-if="device.noMoreLogs" style="text-align:center;">Listing all {{device.logEntries.length}} checkin data.</p>
+                  <md-button flex="15" class="md-raised" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
+                  <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin || device.loadingMore" md-diameter="30"></md-progress-circular>
+                </div>
               </div>
             </md-tab>
             <md-tab label="EVENTS">

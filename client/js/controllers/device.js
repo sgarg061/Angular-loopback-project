@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'userService', '$mdDialog', '$localStorage',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, userService, $mdDialog, $localStorage) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', '$localStorage',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, $localStorage) {
 
     $scope.customer = {};
 
@@ -9,6 +9,9 @@ angular
     $scope.resellerId = null;
     $scope.customerId = null;
     $scope.device = null;
+
+    $scope.logDataLimit = 10;
+    $scope.logOffset = 0;
 
     $scope.sendingCheckin = null;
 
@@ -63,7 +66,9 @@ angular
             }, {
               relation: 'logEntries',
               scope: {
-                limit: 10,
+                fields: ['timestamp'],
+                skip: $scope.logOffset,
+                limit: $scope.logDataLimit,
                 order: 'timestamp DESC'
               }
             }]
@@ -73,7 +78,21 @@ angular
         .then(function(devices) {
           $scope.device = devices[0];
 
-          $scope.device = devices[0];
+          $scope.device.loadingMore = false;
+          $scope.device.logDataLimit = $scope.logDataLimit;
+
+          if ($scope.device.logEntries.length) {
+            $scope.showCheckin($scope.device.logEntries[0]);
+
+            if ($scope.device.logEntries.length < $scope.logDataLimit) {
+              $scope.device.noMoreLogs = true;
+            }
+            else{
+              $scope.device.noMoreLogs = false;
+            }
+          };
+          $scope.logOffset += $scope.logDataLimit
+
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
@@ -84,7 +103,7 @@ angular
           var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
           device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
 
-          console.log('$scope.device: ' + JSON.stringify($scope.device));
+          // console.log('$scope.device: ' + JSON.stringify($scope.device));
         });
     }
 
@@ -122,17 +141,22 @@ angular
     }
 
    $scope.showCheckin = function(anEntry) {
-    console.log('show checkin entry: ' + JSON.stringify(anEntry));
-    $mdDialog.show({
-      parent: angular.element(document.body),
-      templateUrl: 'views/device_checkin_entry.tmpl.html',
-      controller: function (scope, $mdDialog) {
-        scope.entry = anEntry;
-        scope.close = function() {
-          $mdDialog.cancel();
-        }
-      }
-    });
+
+    $scope.device.loadingMore = true;
+
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {timestamp: anEntry.timestamp}
+          }
+      })
+      .$promise
+      .then(function(log) {
+        $scope.device.loadingMore = false;
+        $scope.device.currentEntry = log[0];
+      })
+
+
   }
 
   function checkin(device) {
@@ -156,6 +180,39 @@ angular
       $scope.sendingCheckin = null;
       $scope.$digest();
     });
+  }
+
+  function loadMore(value) {
+    $scope.device.loadingMore = true;
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {deviceId: $stateParams.deviceId},
+            fields: ['timestamp', 'deviceId'],
+            skip: $scope.logOffset,
+            limit: value,
+            order: 'timestamp DESC'
+          }
+      })
+      .$promise
+      .then(function(logs) {
+        $scope.device.loadingMore = false;
+        $scope.logOffset += value;
+
+        for(var i in logs){
+          if (i > -1) {
+            $scope.device.logEntries.push(logs[i]);
+          };
+        }
+
+        if (logs.length < $scope.logDataLimit) {
+          $scope.device.noMoreLogs = true;
+        }
+        else{
+          $scope.device.noMoreLogs = false;
+        }
+      })
+
   }
 
   // TODO: refactor these permissions
@@ -196,6 +253,7 @@ angular
 
 
   $scope.checkin = checkin;
+  $scope.loadMore = loadMore;
   $scope.goHome = goHome;
 
   }]);
