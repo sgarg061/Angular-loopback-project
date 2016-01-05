@@ -29,6 +29,11 @@
       "type": "Date",
       "required": false,
       "index": true
+    },
+    "eventType": {
+      "type": "string",
+      "required": false,
+      "default": "default"
     }
   },
   "validations": [],
