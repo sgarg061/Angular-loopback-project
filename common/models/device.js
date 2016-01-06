@@ -406,7 +406,6 @@ module.exports = function(Device) {
 
         for (var i=0; i<cameras.length; i++) {
             updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
-            formatStreamDates(cameras[i]);
         }
 
         removeNonIncludedComponents('Camera', cameras, 'cameraId', device.id);
@@ -554,18 +553,5 @@ module.exports = function(Device) {
                 }
             }
         });
-    }
-
-    function formatStreamDates (camera) {
-        if (camera.streams) {
-            camera.streams.map(function (stream) {
-                if (stream.earliestSegmentDate) {
-                    stream.earliestSegmentDate = new Date(stream.earliestSegmentDate);
-                }
-                if (stream.latestSegmentDate) {
-                    stream.latestSegmentDate = new Date(stream.latestSegmentDate);
-                }
-            });
-        }
     }
 };
