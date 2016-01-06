@@ -10,7 +10,7 @@ angular
     $scope.customerId = null;
     $scope.device = null;
 
-    $scope.logDataLimit = 10;
+    $scope.logDataLimit = 100;
     $scope.logOffset = 0;
 
     $scope.sendingCheckin = null;
