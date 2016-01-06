@@ -38,16 +38,16 @@
             <md-tab label="CHECK-IN">
               <div layout="column" style="margin:20px 20px 10px 20px;">
                 <h3>Check-in History ({{device.logEntries.length}})</h3>
-                <div layout="row">
+                <div layout="row" style="height:{{checkinHeight}}px;" ng-if="device.logEntries.length" layout-align="center stretch">
 
-                  <md-content flex="30" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);height:650px;">
+                  <md-content flex="30" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
                     <md-list layout-padding>
                       <md-list-item style="min-height: 30px !important; border-bottom: 1px solid rgba(0, 0, 0, 0.117647)" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" class="logEntries {{device.currentEntry.timestamp === entry.timestamp? ' active': ''}}">
                           {{ entry.timestamp | date: 'medium' }}
                       </md-list-item>
 
                       <md-list-item ng-click="loadMore(100)" ng-if="!device.noMoreLogs">
-                        Load 100 more...
+                        Load more...
                       </md-list-item>
 
 
@@ -59,13 +59,13 @@
                     <md-tabs md-dynamic-height md-border-bottom>
 
                       <md-tab label="raw checkin data">
-                        <md-content class="md-padding" style="height:600px;">
+                        <md-content style="height:{{checkinHeight-51}}px;">
                           <pre pretty-json="device.currentEntry"></pre>
                         </md-content>
                       </md-tab>
-
+                      
                       <md-tab label="devices status">
-                        <md-content class="md-padding" style="height:600px;">
+                        <md-content style="height:{{checkinHeight-51}}px;">
                         <div layout="column" style="margin:20px;">
                           <div layout="row" layout-align="space-around center">
                             <div layout="column" layout-align="start start" layout-fill>
@@ -89,6 +89,7 @@
                         </div>
                         </md-content>
                       </md-tab>
+
                     </md-tabs>
                   </md-content>
                 </div> 

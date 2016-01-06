@@ -10,6 +10,8 @@ angular
     $scope.customerId = null;
     $scope.device = null;
 
+    $scope.checkinHeight = 500;
+
     $scope.logDataLimit = 100;
     $scope.sendingCheckin = null;
     $scope.isSavingOverrideIpAddress = false;
@@ -88,7 +90,10 @@ angular
             else{
               $scope.device.noMoreLogs = false;
             }
+            
+            $scope.checkinHeight = document.body.clientHeight - 450;
           };
+
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
