@@ -224,62 +224,62 @@ describe('POS tests', function() {
 
 
 						                            app.models.Camera.create({
-																					id: "",
-																					cameraId: "my-camera",
-																					name: "Front Camera",
-																					status: "online",
-																					deviceId: "device-1",
-																					streams: ["any"],
-																					thumbnail: "",
+																					id: '',
+																					cameraId: 'my-camera',
+																					name: 'Front Camera',
+																					status: 'online',
+																					deviceId: 'device-1',
+																					streams: ['any'],
+																					thumbnail: '',
 						                            }, function (err, res) {
 						                              if (err) throw err;
 						                              camera1 = res;
 
 
 							                            app.models.Camera.create({
-																						id: "",
-																						cameraId: "my-camera-1",
-																						name: "Back Camera",
-																						status: "online",
-																						deviceId: "device-1",
-																						streams: ["any"],
-																						thumbnail: "",
+																						id: '',
+																						cameraId: 'my-camera-1',
+																						name: 'Back Camera',
+																						status: 'online',
+																						deviceId: 'device-1',
+																						streams: ['any'],
+																						thumbnail: '',
 							                            }, function (err, res) {
 							                              if (err) throw err;
 							                              camera2 = res;
 
 								                            app.models.Camera.create({
-																							id: "",
-																							cameraId: "my-camera-2",
-																							name: "Back Camera",
-																							status: "online",
-																							deviceId: "device-1",
-																							streams: ["any"],
-																							thumbnail: "",
+																							id: '',
+																							cameraId: 'my-camera-2',
+																							name: 'Back Camera',
+																							status: 'online',
+																							deviceId: 'device-1',
+																							streams: ['any'],
+																							thumbnail: '',
 								                            }, function (err, res) {
 								                              if (err) throw err;
 								                              camera3 = res;
 
 									                            app.models.Camera.create({
-																								id: "",
-																								cameraId: "my-camera-3",
-																								name: "Back Camera",
-																								status: "online",
-																								deviceId: "device-1",
-																								streams: ["any"],
-																								thumbnail: "",
+																								id: '',
+																								cameraId: 'my-camera-3',
+																								name: 'Back Camera',
+																								status: 'online',
+																								deviceId: 'device-1',
+																								streams: ['any'],
+																								thumbnail: '',
 									                            }, function (err, res) {
 									                              if (err) throw err;
 									                              camera4 = res;
 
 										                            app.models.Camera.create({
-																									id: "",
-																									cameraId: "my-camera-4",
-																									name: "Back Camera",
-																									status: "online",
-																									deviceId: "device-1",
-																									streams: ["any"],
-																									thumbnail: "",
+																									id: '',
+																									cameraId: 'my-camera-4',
+																									name: 'Back Camera',
+																									status: 'online',
+																									deviceId: 'device-1',
+																									streams: ['any'],
+																									thumbnail: '',
 										                            }, function (err, res) {
 										                              if (err) throw err;
 										                              camera5 = res;
@@ -299,38 +299,38 @@ describe('POS tests', function() {
 
                                                   app.models.POSCameraConnector.create([
                                                   {
-                                                    cameraId: "my-camera",
+                                                    cameraId: 'my-camera',
                                                     connectorId: connector1Id
                                                   },
                                                   {
-                                                    cameraId: "my-camera-1",
+                                                    cameraId: 'my-camera-1',
                                                     connectorId: connector1Id
                                                   },
                                                   {
-                                                    cameraId: "my-camera-2",
+                                                    cameraId: 'my-camera-2',
                                                     connectorId: connector1Id
                                                   },
                                                   {
-                                                    cameraId: "my-camera-3",
+                                                    cameraId: 'my-camera-3',
                                                     connectorId: connector2Id
                                                   },
                                                   {
-                                                    cameraId: "my-camera-4",
+                                                    cameraId: 'my-camera-4',
                                                     connectorId: connector2Id
                                                   },
                                                   {
-                                                    cameraId: "my-camera-1",
+                                                    cameraId: 'my-camera-1',
                                                     connectorId: connector2Id
                                                   },
                                                   {
-                                                    cameraId: "my-camera-1",
+                                                    cameraId: 'my-camera-1',
                                                     connectorId: connector3Id
                                                   }], function (err, res) {
                                                     if (err) throw err;
 
                                                     done(); // DONE!
 
-                                                  })
+                                                  });
 
 			                                        	});
 		                                        	});
@@ -569,7 +569,7 @@ describe('POS tests', function() {
 
 	  describe('Checking camera association', function() {
 
-      var asscoation1Id = "association-1";
+      var asscoation1Id = 'association-1';
 
 	    it('should assign a camera to the provided POS', function(done) {
 	      common.json('post', '/api/poscameraconnectors')

@@ -27,7 +27,7 @@ module.exports = {
             location = {
                 lat: parseFloat(deviceInfo.location.lat),
                 lng: parseFloat(deviceInfo.location.lng)
-            }
+            };
         }
 
         var organizationPath = '';

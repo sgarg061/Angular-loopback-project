@@ -7,7 +7,7 @@ module.exports = function (Configuration) {
 
         var ipAddress = null;
         if (req) {
-            ipAddress = req.headers["x-forwarded-for"];
+            ipAddress = req.headers['x-forwarded-for'];
             if (!ipAddress)
                 ipAddress = req.connection.remoteAddress;
         }

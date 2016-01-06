@@ -53,14 +53,14 @@ module.exports = function(POSConnector) {
 					            		ids.push(resCustomer[i].id);
 					            	}
 									if (ctx.query.where) {
-										ctx.query.where.assigneeId = {inq: ids}
+										ctx.query.where.assigneeId = {inq: ids};
 									} else {
 										ctx.query.where = {
 											assigneeId: {inq: ids}
 										};
 									}
 					            }
-					        })
+					        });
 		            	}
 		            	else{
 			                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
@@ -72,8 +72,8 @@ module.exports = function(POSConnector) {
             }
             else if (tenantId) {
 				if (ctx.query.where) {
-					ctx.query.where.assigneeId = tenantId
-					ctx.query.where.assigneeType = 'customer'
+					ctx.query.where.assigneeId = tenantId;
+					ctx.query.where.assigneeType = 'customer';
 				} else {
 					ctx.query.where = {
 						assigneeId: tenantId,
@@ -101,7 +101,7 @@ module.exports = function(POSConnector) {
                 logger.error(err);
                 next(err);
             } else {
-            	var resellerIds = []
+            	var resellerIds = [];
                 for (var i = 0; i < res.length; i++) {
                 	resellerIds.push(res[i].id);
                     ids.push(res[i].id);
@@ -148,4 +148,4 @@ module.exports = function(POSConnector) {
         return connector;
     };
 
-}
+};

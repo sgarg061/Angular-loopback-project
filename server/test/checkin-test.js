@@ -43,14 +43,14 @@ var deviceCheckinData = {
           status: 'online',
           streams: [
             {
-              "id": "stream1",
-              "name": "stream1 name",
-              "earliestSegmentDate": 1450211609000,
-              "latestSegmentDate": 1550211609000
+              'id': 'stream1',
+              'name': 'stream1 name',
+              'earliestSegmentDate': 1450211609000,
+              'latestSegmentDate': 1550211609000
             },
             {
-              "id": "stream2",
-              "name": "stream2 name"
+              'id': 'stream2',
+              'name': 'stream2 name'
             }
           ]
         },
@@ -172,7 +172,7 @@ describe('Checkin after initial device activation', function() {
               var logEntry = res[0];
               assert(logEntry.checkinTime instanceof Date);
               done();
-            })
+            });
           });
         });
     });
@@ -393,8 +393,8 @@ describe('Stream date range format', function () {
              .end(function(err, res) {
                if (err) throw err;
                assert(typeof res.body === 'object');
-               assert(!res.body.cameras[0].streams[1].hasOwnProperty('earliestSegmentDate'))
-               assert(!res.body.cameras[0].streams[1].hasOwnProperty('latestSegmentDate'))
+               assert(!res.body.cameras[0].streams[1].hasOwnProperty('earliestSegmentDate'));
+               assert(!res.body.cameras[0].streams[1].hasOwnProperty('latestSegmentDate'));
                done();
              });
         });

@@ -6,11 +6,8 @@ module.exports = (function() {
     var config = new Config();
     var format = function(options) {
         var timeStamp = new Date().toISOString();
-        return timeStamp + ' - '
-             + options.level
-             + ': [' + options.label + '] '
-             + (undefined !== options.message ? options.message : '')
-    }
+        return timeStamp + ' - ' + options.level + ': [' + options.label + '] ' + (undefined !== options.message ? options.message : '');
+    };
 
     var logger = new (winston.Logger)({
         transports: [

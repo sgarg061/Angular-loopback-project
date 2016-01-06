@@ -14,8 +14,8 @@ module.exports = function(POSFilter) {
 			ctx.instance.id = uuid.v1();
 		}
         if (ctx.instance) {
-            ctx.instance.lastUpdated = Date()
-        };
+            ctx.instance.lastUpdated = Date();
+        }
 
 		next();
 	});
@@ -60,14 +60,14 @@ module.exports = function(POSFilter) {
 					            		ids.push(resCustomer[i].id);
 					            	}
 									if (ctx.query.where) {
-										ctx.query.where.creatorId = {inq: ids}
+										ctx.query.where.creatorId = {inq: ids};
 									} else {
 										ctx.query.where = {
 											creatorId: {inq: ids}
 										};
 									}
 					            }
-					        })
+					        });
 		            	}
 		            	else{
 			                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
@@ -96,7 +96,7 @@ module.exports = function(POSFilter) {
 				            } else if (resReseller.length && resReseller[0].cloudId) {
 				            	ids.push(resReseller[0].cloudId);
 								if (ctx.query.where) {
-									ctx.query.where.creatorId = {inq: ids}
+									ctx.query.where.creatorId = {inq: ids};
 								} else {
 									ctx.query.where = {
 										creatorId: {inq: ids}
@@ -134,7 +134,7 @@ module.exports = function(POSFilter) {
                 logger.error(err);
                 next(err);
             } else {
-            	var resellerIds = []
+            	var resellerIds = [];
                 for (var i = 0; i < res.length; i++) {
                 	resellerIds.push(res[i].id);
                     ids.push(res[i].id);
