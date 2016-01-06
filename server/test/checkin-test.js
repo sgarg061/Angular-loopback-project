@@ -6,6 +6,7 @@ var deviceGuid = '7DB02DCF-4EA9-4177-A256-42BCFD511E90';
 var deviceCheckinData = {
     guid: deviceGuid,
     address: '479 March Road, Kanata, ON, K2K',
+    appVersion: '4.0.9',
     location: {
         lng: -75.9087814,
         lat: 45.3376177
@@ -15,9 +16,13 @@ var deviceCheckinData = {
         osVersion: '4.1',
         softwareVersion: '1.0',
         model: 'TS-221',
+        firmware: '4.2.0',
         modelName: 'QNAP TS-221 2-bay Personal Cloud NAS',
-        deviceCapacity: '975922976',
-        availableCapacity: '138579052'
+        localIP: '10.126.140.204',
+        size: 1926755254272,
+        used: 461314719744,
+        deviceCapacity: 1926755254272,
+        availableCapacity: 1465440534528,
     },
     posInformation: [
         {
@@ -148,6 +153,12 @@ describe('Checkin after initial device activation', function() {
           assert.deepEqual(logEntry.deviceInformation, deviceCheckinData.deviceInformation);
           assert.deepEqual(logEntry.posInformation, deviceCheckinData.posInformation);
           assert.deepEqual(logEntry.cameraInformation, deviceCheckinData.cameraInformation);
+          assert.deepEqual(logEntry.appVersion, deviceCheckinData.appVersion);
+          assert.deepEqual(logEntry.deviceModel, deviceCheckinData.deviceInformation.model);
+          assert.deepEqual(logEntry.deviceFirmware, deviceCheckinData.deviceInformation.firmware);
+          assert.deepEqual(logEntry.diskSize, deviceCheckinData.deviceInformation.size);
+          assert.deepEqual(logEntry.diskSpaceFree, deviceCheckinData.deviceInformation.availableCapacity);
+          assert.deepEqual(logEntry.diskSpaceUsed, deviceCheckinData.deviceInformation.used);
           done();
         });
       });

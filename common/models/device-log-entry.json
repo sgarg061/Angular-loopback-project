@@ -30,10 +30,29 @@
       "required": false,
       "index": true
     },
-    "reason": {
+    "deviceModel": {
       "type": "string",
-      "required": false,
-      "default": "default"
+      "required": false
+    },
+    "deviceFirmware": {
+      "type": "string",
+      "required": false
+    },
+    "appVersion": {
+      "type": "string",
+      "required": false
+    },
+    "diskSize": {
+      "type": "number",
+      "required": false
+    },
+    "diskSpaceFree": {
+      "type": "number",
+      "required": false
+    },
+    "diskSpaceUsed": {
+      "type": "number",
+      "required": false
     }
   },
   "validations": [],
