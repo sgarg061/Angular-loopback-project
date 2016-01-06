@@ -379,28 +379,6 @@ describe('Checkin address format', function () {
 });
 
 describe('Stream date range format', function () {
-  it('should have a formatted date instead of an int timestamp', function (done) {
-    common.login('solink', function (token) {
-      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
-        .send({data: deviceCheckinData})
-        .expect(200)
-        .end(function(err, res) {
-           if (err) throw err;
-
-           common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
-             .send({})
-             .expect(200)
-             .end(function(err, res) {
-               if (err) throw err;
-               assert(typeof res.body === 'object');
-               assert.equal(new Date(res.body.cameras[0].streams[0].earliestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].earliestSegmentDate).getTime());
-               assert.equal(new Date(res.body.cameras[0].streams[0].latestSegmentDate).getTime(), new Date(deviceCheckinData.cameraInformation[0].streams[0].latestSegmentDate).getTime());
-               done();
-             });
-        });
-    });
-  });
-
   it('should not have values when date is missing', function (done) {
     common.login('solink', function (token) {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
