@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'userService', '$mdDialog', '$localStorage',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, userService, $mdDialog, $localStorage) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', '$localStorage',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, $localStorage) {
 
     $scope.customer = {};
 
@@ -10,6 +10,9 @@ angular
     $scope.customerId = null;
     $scope.device = null;
 
+    $scope.checkinHeight = 500;
+
+    $scope.logDataLimit = 100;
     $scope.sendingCheckin = null;
     $scope.isSavingOverrideIpAddress = false;
 
@@ -64,7 +67,8 @@ angular
             }, {
               relation: 'logEntries',
               scope: {
-                limit: 10,
+                fields: ['id','timestamp'],
+                limit: $scope.logDataLimit,
                 order: 'timestamp DESC'
               }
             }]
@@ -74,7 +78,22 @@ angular
         .then(function(devices) {
           $scope.device = devices[0];
 
-          $scope.device = devices[0];
+          $scope.device.loadingMore = false;
+          $scope.device.logDataLimit = $scope.logDataLimit;
+
+          if ($scope.device.logEntries.length) {
+            $scope.showCheckin($scope.device.logEntries[0]);
+
+            if ($scope.device.logEntries.length < $scope.logDataLimit) {
+              $scope.device.noMoreLogs = true;
+            }
+            else{
+              $scope.device.noMoreLogs = false;
+            }
+            
+            $scope.checkinHeight = document.body.clientHeight - 450;
+          };
+
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
@@ -84,8 +103,6 @@ angular
           var device = $scope.device;
           var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
           device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
-
-          console.log('$scope.device: ' + JSON.stringify($scope.device));
         });
     }
 
@@ -123,17 +140,22 @@ angular
     }
 
    $scope.showCheckin = function(anEntry) {
-    console.log('show checkin entry: ' + JSON.stringify(anEntry));
-    $mdDialog.show({
-      parent: angular.element(document.body),
-      templateUrl: 'views/device_checkin_entry.tmpl.html',
-      controller: function (scope, $mdDialog) {
-        scope.entry = anEntry;
-        scope.close = function() {
-          $mdDialog.cancel();
-        }
-      }
-    });
+
+    $scope.device.loadingMore = true;
+
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {id: anEntry.id}
+          }
+      })
+      .$promise
+      .then(function(log) {
+        $scope.device.loadingMore = false;
+        $scope.device.currentEntry = log[0];
+      })
+
+
   }
 
   function setOverrideIpAddress(ipAddress) {
@@ -179,6 +201,38 @@ angular
     });
   }
 
+  function loadMore(value) {
+    $scope.device.loadingMore = true;
+    var lastTimeStamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}},
+            fields: ['id','timestamp', 'deviceId'],
+            limit: value,
+            order: 'timestamp DESC'
+          }
+      })
+      .$promise
+      .then(function(logs) {
+        $scope.device.loadingMore = false;
+
+        for(var i in logs){
+          if (i > -1) {
+            $scope.device.logEntries.push(logs[i]);
+          };
+        }
+
+        if (logs.length < $scope.logDataLimit) {
+          $scope.device.noMoreLogs = true;
+        }
+        else{
+          $scope.device.noMoreLogs = false;
+        }
+      })
+
+  }
+
   // TODO: refactor these permissions
   // so much code replication :/
   $scope.canModifyEventUrl = function() {
@@ -217,6 +271,7 @@ angular
 
 
   $scope.checkin = checkin;
+  $scope.loadMore = loadMore;
   $scope.setOverrideIpAddress = setOverrideIpAddress;
   $scope.goHome = goHome;
 

@@ -503,3 +503,11 @@ input:focus ~ label, input.used ~ label {
 
 .buttonBlue:hover { background: #357bd8; }
 
+
+.logEntries.active{
+  background-color: rgb(222, 222, 222) !important;
+  border: 0px;
+}
+.logEntries:last-child{
+  border: 0px !important;
+}
