@@ -30,6 +30,11 @@
       "required": false,
       "index": true
     },
+    "reason": {
+      "type": "string",
+      "required": false,
+      "default": "default"
+    },
     "deviceModel": {
       "type": "string",
       "required": false
