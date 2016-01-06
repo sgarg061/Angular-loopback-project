@@ -1843,59 +1843,59 @@ module.factory(
   "POSConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/POSConnectors/:id",
+      urlBase + "/Connectors/:id",
       { 'id': '@id' },
       {
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.findById() instead.
-        "prototype$__findById__cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.findById() instead.
+        "prototype$__findById__cloudConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/:fk",
+          url: urlBase + "/Connectors/:id/cloudConnectors/:fk",
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.destroyById() instead.
-        "prototype$__destroyById__cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.destroyById() instead.
+        "prototype$__destroyById__cloudConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/:fk",
+          url: urlBase + "/Connectors/:id/cloudConnectors/:fk",
           method: "DELETE"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.updateById() instead.
-        "prototype$__updateById__cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.updateById() instead.
+        "prototype$__updateById__cloudConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/:fk",
+          url: urlBase + "/Connectors/:id/cloudConnectors/:fk",
           method: "PUT"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors() instead.
-        "prototype$__get__cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors() instead.
+        "prototype$__get__cloudConnectors": {
           isArray: true,
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.create() instead.
-        "prototype$__create__cloudPOSConnectors": {
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+        // INTERNAL. Use POSConnector.cloudConnectors.create() instead.
+        "prototype$__create__cloudConnectors": {
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "POST"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.destroyAll() instead.
-        "prototype$__delete__cloudPOSConnectors": {
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+        // INTERNAL. Use POSConnector.cloudConnectors.destroyAll() instead.
+        "prototype$__delete__cloudConnectors": {
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "DELETE"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.count() instead.
-        "prototype$__count__cloudPOSConnectors": {
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/count",
+        // INTERNAL. Use POSConnector.cloudConnectors.count() instead.
+        "prototype$__count__cloudConnectors": {
+          url: urlBase + "/Connectors/:id/cloudConnectors/count",
           method: "GET"
         },
 
@@ -1933,7 +1933,7 @@ module.factory(
          * </em>
          */
         "create": {
-          url: urlBase + "/POSConnectors",
+          url: urlBase + "/Connectors",
           method: "POST"
         },
 
@@ -1972,7 +1972,7 @@ module.factory(
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/POSConnectors",
+          url: urlBase + "/Connectors",
           method: "POST"
         },
 
@@ -2010,7 +2010,7 @@ module.factory(
          * </em>
          */
         "upsert": {
-          url: urlBase + "/POSConnectors",
+          url: urlBase + "/Connectors",
           method: "PUT"
         },
 
@@ -2042,7 +2042,7 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/POSConnectors/:id/exists",
+          url: urlBase + "/Connectors/:id/exists",
           method: "GET"
         },
 
@@ -2077,7 +2077,7 @@ module.factory(
          * </em>
          */
         "findById": {
-          url: urlBase + "/POSConnectors/:id",
+          url: urlBase + "/Connectors/:id",
           method: "GET"
         },
 
@@ -2111,7 +2111,7 @@ module.factory(
          */
         "find": {
           isArray: true,
-          url: urlBase + "/POSConnectors",
+          url: urlBase + "/Connectors",
           method: "GET"
         },
 
@@ -2144,7 +2144,7 @@ module.factory(
          * </em>
          */
         "findOne": {
-          url: urlBase + "/POSConnectors/findOne",
+          url: urlBase + "/Connectors/findOne",
           method: "GET"
         },
 
@@ -2178,7 +2178,7 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/POSConnectors/update",
+          url: urlBase + "/Connectors/update",
           method: "POST"
         },
 
@@ -2211,7 +2211,7 @@ module.factory(
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/POSConnectors/:id",
+          url: urlBase + "/Connectors/:id",
           method: "DELETE"
         },
 
@@ -2243,7 +2243,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/POSConnectors/count",
+          url: urlBase + "/Connectors/count",
           method: "GET"
         },
 
@@ -2280,7 +2280,7 @@ module.factory(
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/POSConnectors/:id",
+          url: urlBase + "/Connectors/:id",
           method: "PUT"
         },
 
@@ -2317,7 +2317,7 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/POSConnectors/change-stream",
+          url: urlBase + "/Connectors/change-stream",
           method: "POST"
         },
 
@@ -2550,27 +2550,27 @@ module.factory(
 
     /**
      * @ngdoc object
-     * @name lbServices.POSConnector.cloudPOSConnectors
-     * @header lbServices.POSConnector.cloudPOSConnectors
+     * @name lbServices.POSConnector.cloudConnectors
+     * @header lbServices.POSConnector.cloudConnectors
      * @object
      * @description
      *
-     * The object `POSConnector.cloudPOSConnectors` groups methods
+     * The object `POSConnector.cloudConnectors` groups methods
      * manipulating `CloudPOSConnector` instances related to `POSConnector`.
      *
-     * Call {@link lbServices.POSConnector#cloudPOSConnectors POSConnector.cloudPOSConnectors()}
+     * Call {@link lbServices.POSConnector#cloudConnectors POSConnector.cloudConnectors()}
      * to query all related instances.
      */
 
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector#cloudPOSConnectors
+         * @name lbServices.POSConnector#cloudConnectors
          * @methodOf lbServices.POSConnector
          *
          * @description
          *
-         * Queries cloudPOSConnectors of POSConnector.
+         * Queries cloudConnectors of POSConnector.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -2593,20 +2593,20 @@ module.factory(
          * This usually means the response is a `CloudPOSConnector` object.)
          * </em>
          */
-        R.cloudPOSConnectors = function() {
+        R.cloudConnectors = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::get::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::get::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#count
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#count
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Counts cloudPOSConnectors of POSConnector.
+         * Counts cloudConnectors of POSConnector.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -2628,20 +2628,20 @@ module.factory(
          *
          *  - `count` – `{number=}` - 
          */
-        R.cloudPOSConnectors.count = function() {
+        R.cloudConnectors.count = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::count::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::count::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#create
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#create
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Creates a new instance in cloudPOSConnectors of this model.
+         * Creates a new instance in cloudConnectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -2666,20 +2666,20 @@ module.factory(
          * This usually means the response is a `CloudPOSConnector` object.)
          * </em>
          */
-        R.cloudPOSConnectors.create = function() {
+        R.cloudConnectors.create = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::create::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::create::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#createMany
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#createMany
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Creates a new instance in cloudPOSConnectors of this model.
+         * Creates a new instance in cloudConnectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -2704,20 +2704,20 @@ module.factory(
          * This usually means the response is a `CloudPOSConnector` object.)
          * </em>
          */
-        R.cloudPOSConnectors.createMany = function() {
+        R.cloudConnectors.createMany = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::createMany::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::createMany::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#destroyAll
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#destroyAll
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Deletes all cloudPOSConnectors of this model.
+         * Deletes all cloudConnectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -2735,26 +2735,26 @@ module.factory(
          *
          * This method returns no data.
          */
-        R.cloudPOSConnectors.destroyAll = function() {
+        R.cloudConnectors.destroyAll = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::delete::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::delete::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#destroyById
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#destroyById
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Delete a related item by id for cloudPOSConnectors.
+         * Delete a related item by id for cloudConnectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for cloudPOSConnectors
+         *  - `fk` – `{*}` - Foreign key for cloudConnectors
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -2768,26 +2768,26 @@ module.factory(
          *
          * This method returns no data.
          */
-        R.cloudPOSConnectors.destroyById = function() {
+        R.cloudConnectors.destroyById = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::destroyById::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::destroyById::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#findById
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#findById
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Find a related item by id for cloudPOSConnectors.
+         * Find a related item by id for cloudConnectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for cloudPOSConnectors
+         *  - `fk` – `{*}` - Foreign key for cloudConnectors
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -2804,26 +2804,26 @@ module.factory(
          * This usually means the response is a `CloudPOSConnector` object.)
          * </em>
          */
-        R.cloudPOSConnectors.findById = function() {
+        R.cloudConnectors.findById = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::findById::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::findById::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.POSConnector.cloudPOSConnectors#updateById
-         * @methodOf lbServices.POSConnector.cloudPOSConnectors
+         * @name lbServices.POSConnector.cloudConnectors#updateById
+         * @methodOf lbServices.POSConnector.cloudConnectors
          *
          * @description
          *
-         * Update a related item by id for cloudPOSConnectors.
+         * Update a related item by id for cloudConnectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for cloudPOSConnectors
+         *  - `fk` – `{*}` - Foreign key for cloudConnectors
          *
          * @param {Object} postData Request data.
          *
@@ -2844,9 +2844,9 @@ module.factory(
          * This usually means the response is a `CloudPOSConnector` object.)
          * </em>
          */
-        R.cloudPOSConnectors.updateById = function() {
+        R.cloudConnectors.updateById = function() {
           var TargetResource = $injector.get("CloudPOSConnector");
-          var action = TargetResource["::updateById::POSConnector::cloudPOSConnectors"];
+          var action = TargetResource["::updateById::POSConnector::cloudConnectors"];
           return action.apply(R, arguments);
         };
 
@@ -2874,7 +2874,7 @@ module.factory(
   "CloudPOSConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/CloudPOSConnectors/:id",
+      urlBase + "/CloudConnectors/:id",
       { 'id': '@id' },
       {
 
@@ -2912,7 +2912,7 @@ module.factory(
          * </em>
          */
         "create": {
-          url: urlBase + "/CloudPOSConnectors",
+          url: urlBase + "/CloudConnectors",
           method: "POST"
         },
 
@@ -2951,7 +2951,7 @@ module.factory(
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/CloudPOSConnectors",
+          url: urlBase + "/CloudConnectors",
           method: "POST"
         },
 
@@ -2989,7 +2989,7 @@ module.factory(
          * </em>
          */
         "upsert": {
-          url: urlBase + "/CloudPOSConnectors",
+          url: urlBase + "/CloudConnectors",
           method: "PUT"
         },
 
@@ -3021,7 +3021,7 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/CloudPOSConnectors/:id/exists",
+          url: urlBase + "/CloudConnectors/:id/exists",
           method: "GET"
         },
 
@@ -3056,7 +3056,7 @@ module.factory(
          * </em>
          */
         "findById": {
-          url: urlBase + "/CloudPOSConnectors/:id",
+          url: urlBase + "/CloudConnectors/:id",
           method: "GET"
         },
 
@@ -3090,7 +3090,7 @@ module.factory(
          */
         "find": {
           isArray: true,
-          url: urlBase + "/CloudPOSConnectors",
+          url: urlBase + "/CloudConnectors",
           method: "GET"
         },
 
@@ -3123,7 +3123,7 @@ module.factory(
          * </em>
          */
         "findOne": {
-          url: urlBase + "/CloudPOSConnectors/findOne",
+          url: urlBase + "/CloudConnectors/findOne",
           method: "GET"
         },
 
@@ -3157,7 +3157,7 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/CloudPOSConnectors/update",
+          url: urlBase + "/CloudConnectors/update",
           method: "POST"
         },
 
@@ -3190,7 +3190,7 @@ module.factory(
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/CloudPOSConnectors/:id",
+          url: urlBase + "/CloudConnectors/:id",
           method: "DELETE"
         },
 
@@ -3222,7 +3222,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/CloudPOSConnectors/count",
+          url: urlBase + "/CloudConnectors/count",
           method: "GET"
         },
 
@@ -3259,7 +3259,7 @@ module.factory(
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/CloudPOSConnectors/:id",
+          url: urlBase + "/CloudConnectors/:id",
           method: "PUT"
         },
 
@@ -3296,66 +3296,66 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/CloudPOSConnectors/change-stream",
+          url: urlBase + "/CloudConnectors/change-stream",
           method: "POST"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.findById() instead.
-        "::findById::POSConnector::cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.findById() instead.
+        "::findById::POSConnector::cloudConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/:fk",
+          url: urlBase + "/Connectors/:id/cloudConnectors/:fk",
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.destroyById() instead.
-        "::destroyById::POSConnector::cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.destroyById() instead.
+        "::destroyById::POSConnector::cloudConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/:fk",
+          url: urlBase + "/Connectors/:id/cloudConnectors/:fk",
           method: "DELETE"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.updateById() instead.
-        "::updateById::POSConnector::cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.updateById() instead.
+        "::updateById::POSConnector::cloudConnectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/:fk",
+          url: urlBase + "/Connectors/:id/cloudConnectors/:fk",
           method: "PUT"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors() instead.
-        "::get::POSConnector::cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors() instead.
+        "::get::POSConnector::cloudConnectors": {
           isArray: true,
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "GET"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.create() instead.
-        "::create::POSConnector::cloudPOSConnectors": {
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+        // INTERNAL. Use POSConnector.cloudConnectors.create() instead.
+        "::create::POSConnector::cloudConnectors": {
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "POST"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.createMany() instead.
-        "::createMany::POSConnector::cloudPOSConnectors": {
+        // INTERNAL. Use POSConnector.cloudConnectors.createMany() instead.
+        "::createMany::POSConnector::cloudConnectors": {
           isArray: true,
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "POST"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.destroyAll() instead.
-        "::delete::POSConnector::cloudPOSConnectors": {
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors",
+        // INTERNAL. Use POSConnector.cloudConnectors.destroyAll() instead.
+        "::delete::POSConnector::cloudConnectors": {
+          url: urlBase + "/Connectors/:id/cloudConnectors",
           method: "DELETE"
         },
 
-        // INTERNAL. Use POSConnector.cloudPOSConnectors.count() instead.
-        "::count::POSConnector::cloudPOSConnectors": {
-          url: urlBase + "/POSConnectors/:id/cloudPOSConnectors/count",
+        // INTERNAL. Use POSConnector.cloudConnectors.count() instead.
+        "::count::POSConnector::cloudConnectors": {
+          url: urlBase + "/Connectors/:id/cloudConnectors/count",
           method: "GET"
         },
 
@@ -3584,13 +3584,13 @@ module.factory(
   "ResellerPOSConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/ResellerPOSConnectors/:id",
+      urlBase + "/ResellerConnectors/:id",
       { 'id': '@id' },
       {
 
         // INTERNAL. Use ResellerPOSConnector.cloud() instead.
         "prototype$__get__cloud": {
-          url: urlBase + "/ResellerPOSConnectors/:id/cloud",
+          url: urlBase + "/ResellerConnectors/:id/cloud",
           method: "GET"
         },
 
@@ -3628,7 +3628,7 @@ module.factory(
          * </em>
          */
         "create": {
-          url: urlBase + "/ResellerPOSConnectors",
+          url: urlBase + "/ResellerConnectors",
           method: "POST"
         },
 
@@ -3667,7 +3667,7 @@ module.factory(
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/ResellerPOSConnectors",
+          url: urlBase + "/ResellerConnectors",
           method: "POST"
         },
 
@@ -3705,7 +3705,7 @@ module.factory(
          * </em>
          */
         "upsert": {
-          url: urlBase + "/ResellerPOSConnectors",
+          url: urlBase + "/ResellerConnectors",
           method: "PUT"
         },
 
@@ -3737,7 +3737,7 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/ResellerPOSConnectors/:id/exists",
+          url: urlBase + "/ResellerConnectors/:id/exists",
           method: "GET"
         },
 
@@ -3772,7 +3772,7 @@ module.factory(
          * </em>
          */
         "findById": {
-          url: urlBase + "/ResellerPOSConnectors/:id",
+          url: urlBase + "/ResellerConnectors/:id",
           method: "GET"
         },
 
@@ -3806,7 +3806,7 @@ module.factory(
          */
         "find": {
           isArray: true,
-          url: urlBase + "/ResellerPOSConnectors",
+          url: urlBase + "/ResellerConnectors",
           method: "GET"
         },
 
@@ -3839,7 +3839,7 @@ module.factory(
          * </em>
          */
         "findOne": {
-          url: urlBase + "/ResellerPOSConnectors/findOne",
+          url: urlBase + "/ResellerConnectors/findOne",
           method: "GET"
         },
 
@@ -3873,7 +3873,7 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/ResellerPOSConnectors/update",
+          url: urlBase + "/ResellerConnectors/update",
           method: "POST"
         },
 
@@ -3906,7 +3906,7 @@ module.factory(
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/ResellerPOSConnectors/:id",
+          url: urlBase + "/ResellerConnectors/:id",
           method: "DELETE"
         },
 
@@ -3938,7 +3938,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/ResellerPOSConnectors/count",
+          url: urlBase + "/ResellerConnectors/count",
           method: "GET"
         },
 
@@ -3975,7 +3975,7 @@ module.factory(
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/ResellerPOSConnectors/:id",
+          url: urlBase + "/ResellerConnectors/:id",
           method: "PUT"
         },
 
@@ -4012,7 +4012,7 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/ResellerPOSConnectors/change-stream",
+          url: urlBase + "/ResellerConnectors/change-stream",
           method: "POST"
         },
       }
@@ -6016,7 +6016,7 @@ module.factory(
 
         // INTERNAL. Use ResellerPOSConnector.cloud() instead.
         "::get::ResellerPOSConnector::cloud": {
-          url: urlBase + "/ResellerPOSConnectors/:id/cloud",
+          url: urlBase + "/ResellerConnectors/:id/cloud",
           method: "GET"
         },
 
@@ -14831,7 +14831,7 @@ module.factory(
   "POSConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/posConnectors/:id",
+      urlBase + "/Connectors/:id",
       { 'id': '@id' },
       {
 
@@ -14869,7 +14869,7 @@ module.factory(
          * </em>
          */
         "create": {
-          url: urlBase + "/posConnectors",
+          url: urlBase + "/Connectors",
           method: "POST"
         },
 
@@ -14908,7 +14908,7 @@ module.factory(
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/posConnectors",
+          url: urlBase + "/Connectors",
           method: "POST"
         },
 
@@ -14946,7 +14946,7 @@ module.factory(
          * </em>
          */
         "upsert": {
-          url: urlBase + "/posConnectors",
+          url: urlBase + "/Connectors",
           method: "PUT"
         },
 
@@ -14978,7 +14978,7 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/posConnectors/:id/exists",
+          url: urlBase + "/Connectors/:id/exists",
           method: "GET"
         },
 
@@ -15013,7 +15013,7 @@ module.factory(
          * </em>
          */
         "findById": {
-          url: urlBase + "/posConnectors/:id",
+          url: urlBase + "/Connectors/:id",
           method: "GET"
         },
 
@@ -15047,7 +15047,7 @@ module.factory(
          */
         "find": {
           isArray: true,
-          url: urlBase + "/posConnectors",
+          url: urlBase + "/Connectors",
           method: "GET"
         },
 
@@ -15080,7 +15080,7 @@ module.factory(
          * </em>
          */
         "findOne": {
-          url: urlBase + "/posConnectors/findOne",
+          url: urlBase + "/Connectors/findOne",
           method: "GET"
         },
 
@@ -15114,7 +15114,7 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/posConnectors/update",
+          url: urlBase + "/Connectors/update",
           method: "POST"
         },
 
@@ -15147,7 +15147,7 @@ module.factory(
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/posConnectors/:id",
+          url: urlBase + "/Connectors/:id",
           method: "DELETE"
         },
 
@@ -15179,7 +15179,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/posConnectors/count",
+          url: urlBase + "/Connectors/count",
           method: "GET"
         },
 
@@ -15216,7 +15216,7 @@ module.factory(
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/posConnectors/:id",
+          url: urlBase + "/Connectors/:id",
           method: "PUT"
         },
 
@@ -15253,7 +15253,7 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/posConnectors/change-stream",
+          url: urlBase + "/Connectors/change-stream",
           method: "POST"
         },
       }

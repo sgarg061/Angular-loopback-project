@@ -14,6 +14,7 @@ angular
     $scope.logOffset = 0;
 
     $scope.sendingCheckin = null;
+    $scope.isSavingOverrideIpAddress = false;
 
     function watchForChanges() {
       // watch device for updates and save them when they're found
@@ -159,6 +160,26 @@ angular
 
   }
 
+  function setOverrideIpAddress(ipAddress) {
+    $scope.isSavingOverrideIpAddress = true;
+    Device
+      .prototype$updateAttributes(
+        {id: $scope.device.id},
+        {
+          overrideIpAddress: ipAddress,
+          ipAddress: ipAddress
+        }
+      )
+      .$promise
+      .then(function(d) {
+        setTimeout(function () {
+          $scope.$apply(function() {
+            $scope.isSavingOverrideIpAddress = false;
+          });
+        }, 300); // wrapped in a setTimeout just so people know this is doing something :)
+      });
+  }
+
   function checkin(device) {
     console.log('Checkin on device ' + device.id);
     $scope.sendingCheckin = device.id;
@@ -254,6 +275,7 @@ angular
 
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;
+  $scope.setOverrideIpAddress = setOverrideIpAddress;
   $scope.goHome = goHome;
 
   }]);

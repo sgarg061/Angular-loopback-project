@@ -103,5 +103,11 @@
   "POSCameraConnector": {
     "dataSource": "callHomeDb",
     "public": true
+  },
+  "Configuration": {
+    "dataSource": "restDataSource",
+    "public": true,
+    "$promise": {},
+    "$resolved": true  
   }
 }

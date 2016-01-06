@@ -8,5 +8,9 @@
     "name": "callHomeDb",
     "connector": "postgresql",
     "debug": true
+  },
+  "restDataSource": {
+    "name": "restDataSource",
+    "connector": "rest"
   }
 }

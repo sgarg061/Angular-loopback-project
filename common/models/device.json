@@ -93,6 +93,10 @@
     "ipAddress": {
       "type": "string",
       "required": false
+    },
+    "overrideIpAddress": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
@@ -127,7 +131,7 @@
       "model": "License"
     }
   },
-  "acls": 
+  "acls":
   [
    {
       "accessType": "*",

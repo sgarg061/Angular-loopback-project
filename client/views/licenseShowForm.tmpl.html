@@ -1,5 +1,5 @@
 <md-dialog aria-label="License">
-  
+
   <md-toolbar>
       <div class="md-toolbar-tools">
       <h2>{{license.activated ? "In Use" : "Available"}} License</h2>
@@ -12,7 +12,7 @@
 
   <md-dialog-content>
     <div layout="column">
-      
+
       <div layout="row" layout-fill layout-align="space-around center">
         <div><h2>{{license.key}}</h2></div>
         <div>
@@ -21,7 +21,7 @@
           </md-button>
         </div>
       </div>
-     
+
       <md-input-container ng-show="license.deviceId">
         <label>Device ID</label>
         <input ng-model="license.deviceId" disabled>
@@ -38,7 +38,6 @@
     </div>
   </md-dialog-content>
   <div class="md-actions">
-    <md-button ng-hide="license.activated" ng-click="activateLicense(license)" class="md-primary">Activate</md-button>
     <md-button ng-show="license.activated" ng-click="revokeLicense(license)" class="md-primary">Revoke</md-button>
     <md-button ng-click="close()" class="md-primary">Close</md-button>
   </div>
