@@ -11,8 +11,6 @@ angular
     $scope.device = null;
 
     $scope.logDataLimit = 100;
-    $scope.logOffset = 0;
-
     $scope.sendingCheckin = null;
     $scope.isSavingOverrideIpAddress = false;
 
@@ -67,8 +65,7 @@ angular
             }, {
               relation: 'logEntries',
               scope: {
-                fields: ['timestamp'],
-                skip: $scope.logOffset,
+                fields: ['id','timestamp'],
                 limit: $scope.logDataLimit,
                 order: 'timestamp DESC'
               }
@@ -92,8 +89,6 @@ angular
               $scope.device.noMoreLogs = false;
             }
           };
-          $scope.logOffset += $scope.logDataLimit
-
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
@@ -103,8 +98,6 @@ angular
           var device = $scope.device;
           var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
           device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
-
-          // console.log('$scope.device: ' + JSON.stringify($scope.device));
         });
     }
 
@@ -148,7 +141,7 @@ angular
     DeviceLogEntry
       .find({
           filter: {
-            where: {timestamp: anEntry.timestamp}
+            where: {id: anEntry.id}
           }
       })
       .$promise
@@ -205,12 +198,12 @@ angular
 
   function loadMore(value) {
     $scope.device.loadingMore = true;
+    var lastTimeStamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp
     DeviceLogEntry
       .find({
           filter: {
-            where: {deviceId: $stateParams.deviceId},
-            fields: ['timestamp', 'deviceId'],
-            skip: $scope.logOffset,
+            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}},
+            fields: ['id','timestamp', 'deviceId'],
             limit: value,
             order: 'timestamp DESC'
           }
@@ -218,7 +211,6 @@ angular
       .$promise
       .then(function(logs) {
         $scope.device.loadingMore = false;
-        $scope.logOffset += value;
 
         for(var i in logs){
           if (i > -1) {
