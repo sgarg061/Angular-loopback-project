@@ -320,17 +320,8 @@ module.exports = function(Device) {
     };
 
     function logCheckin(data) {
-        var deviceLogEntry = {checkinData: _.clone(data)};
-        if (deviceLogEntry.checkinData.id) {
-
-            // swap the id for deviceId attribute
-            deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
-            delete deviceLogEntry.checkinData.id;
-
-            // add a timestamp field
-            deviceLogEntry.timestamp = Date.now();
-            deviceLogEntry.checkinTime = Date.now();
-
+        if (data.id) {
+            var deviceLogEntry = createDeviceLogEntry(data);
             Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
                 if (err) {
                     logger.error('Failed to insert logEntry for device checkin: %s', err);
@@ -341,6 +332,45 @@ module.exports = function(Device) {
         } else {
             logger.error('Unable to checkin: data does not include device id: %s', data);
         }
+
+    }
+
+    function createDeviceLogEntry(data) {
+        var deviceLogEntry = {checkinData: _.clone(data)};
+
+        if (deviceLogEntry.checkinData.appVersion) {
+            deviceLogEntry.appVersion = deviceLogEntry.checkinData.appVersion;
+        }
+
+        if (deviceLogEntry.checkinData.deviceInformation.model) {
+            deviceLogEntry.deviceModel = deviceLogEntry.checkinData.deviceInformation.model;
+        }
+
+        if (deviceLogEntry.checkinData.deviceInformation.firmware) {
+            deviceLogEntry.deviceFirmware = deviceLogEntry.checkinData.deviceInformation.firmware;
+        }
+
+        if (deviceLogEntry.checkinData.deviceInformation.size) {
+            deviceLogEntry.diskSize = deviceLogEntry.checkinData.deviceInformation.size;
+        }
+
+        if (deviceLogEntry.checkinData.deviceInformation.used) {
+            deviceLogEntry.diskSpaceUsed = deviceLogEntry.checkinData.deviceInformation.used;
+        }
+
+        if (deviceLogEntry.checkinData.deviceInformation.availableCapacity) {
+            deviceLogEntry.diskSpaceFree = deviceLogEntry.checkinData.deviceInformation.availableCapacity;
+        }
+
+        // swap the id for deviceId attribute
+        deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
+        delete deviceLogEntry.checkinData.id;
+
+        // add a timestamp field
+        deviceLogEntry.timestamp = Date.now();
+        deviceLogEntry.checkinTime = Date.now();
+
+        return deviceLogEntry;
     }
 
     function checkinDevice (device, deviceData, cb) {
