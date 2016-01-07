@@ -24,7 +24,7 @@
         <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newReseller.password">
       </md-input-container>
       <md-input-container>  
-        <label>Retype Password</label>
+        <label>Retype Password <span ng-if="newReseller.password != newReseller.checkPassword && newReseller.password && newReseller.checkPassword" style="color:#ff6666">&#10006;</span></label>
         <input type="password" class="form-control" name="checkPassword" autocomplete="off" required ng-model="newReseller.checkPassword">
       </md-input-container>
     </div>
@@ -33,7 +33,7 @@
     <md-button ng-click="cancel()">
      Cancel
     </md-button>
-    <md-button ng-if="newReseller.password == newReseller.checkPassword" ng-click="create()" style="margin-right:20px;">
+    <md-button ng-disabled="newReseller.password != newReseller.checkPassword || !newReseller.name || !newReseller.email || !newReseller.password || !newReseller.checkPassword" ng-click="create()" style="margin-right:20px;">
       Create
     </md-button>
   </div>
