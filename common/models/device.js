@@ -351,15 +351,15 @@ module.exports = function(Device) {
         }
 
         if (deviceLogEntry.checkinData.deviceInformation.size) {
-            deviceLogEntry.diskSize = deviceLogEntry.checkinData.deviceInformation.size;
+            deviceLogEntry.diskSize = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.size);
         }
 
         if (deviceLogEntry.checkinData.deviceInformation.used) {
-            deviceLogEntry.diskSpaceUsed = deviceLogEntry.checkinData.deviceInformation.used;
+            deviceLogEntry.diskSpaceUsed = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.used);
         }
 
         if (deviceLogEntry.checkinData.deviceInformation.availableCapacity) {
-            deviceLogEntry.diskSpaceFree = deviceLogEntry.checkinData.deviceInformation.availableCapacity;
+            deviceLogEntry.diskSpaceFree = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.availableCapacity);
         }
 
         // swap the id for deviceId attribute
@@ -371,6 +371,10 @@ module.exports = function(Device) {
         deviceLogEntry.checkinTime = Date.now();
 
         return deviceLogEntry;
+    }
+
+    function convertBytesToGB(n) {
+        return (parseInt(n) / (1024 * 1024 * 1024)).toFixed(2);
     }
 
     function checkinDevice (device, deviceData, cb) {
