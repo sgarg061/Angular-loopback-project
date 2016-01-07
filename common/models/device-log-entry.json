@@ -35,6 +35,19 @@
       "required": false,
       "default": "interval"
     },
+    "reasonDescription": {
+      "type": "string",
+      "required": false,
+      "length": 5000
+    },
+    "onlineCameras":{
+      "type": "integer",
+      "required": false      
+    },
+    "totalCameras":{
+      "type": "integer",
+      "required": false      
+    },
     "deviceModel": {
       "type": "string",
       "required": false
