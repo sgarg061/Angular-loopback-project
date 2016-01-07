@@ -41,11 +41,11 @@
       "length": 5000
     },
     "onlineCameras":{
-      "type": "integer",
+      "type": "number",
       "required": false      
     },
     "totalCameras":{
-      "type": "integer",
+      "type": "number",
       "required": false      
     },
     "deviceModel": {
