@@ -142,6 +142,10 @@ describe('Checkin after initial device activation', function() {
           assert(typeof res.body === 'object');
           assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
           var logEntry = res.body.logEntries[0];
+
+          var getGB = function convertBytesToGB(n) {
+                return (parseInt(n) / (1024 * 1024 * 1024)).toFixed(2);
+          }
           assert(!logEntry.hasOwnProperty('checkinData'));
           assert.equal(logEntry.deviceId, deviceId);
           assert(logEntry.hasOwnProperty('timestamp'));
@@ -156,9 +160,9 @@ describe('Checkin after initial device activation', function() {
           assert.deepEqual(logEntry.appVersion, deviceCheckinData.appVersion);
           assert.deepEqual(logEntry.deviceModel, deviceCheckinData.deviceInformation.model);
           assert.deepEqual(logEntry.deviceFirmware, deviceCheckinData.deviceInformation.firmware);
-          assert.deepEqual(logEntry.diskSize, deviceCheckinData.deviceInformation.size);
-          assert.deepEqual(logEntry.diskSpaceFree, deviceCheckinData.deviceInformation.availableCapacity);
-          assert.deepEqual(logEntry.diskSpaceUsed, deviceCheckinData.deviceInformation.used);
+          assert.deepEqual(logEntry.diskSize, getGB(deviceCheckinData.deviceInformation.size));
+          assert.deepEqual(logEntry.diskSpaceFree, getGB(deviceCheckinData.deviceInformation.availableCapacity));
+          assert.deepEqual(logEntry.diskSpaceUsed, getGB(deviceCheckinData.deviceInformation.used));
           done();
         });
       });
