@@ -7,9 +7,14 @@
 
 ## Setup
 
-	git clone https://github.com/SolinkCorp/call-home-server.git
-	cd call-home-server
-	npm install
+	1. clone this repo
+	2. go into services and make sure the service SolinkLive is not running and set it to manual
+	3. use cmd line and navigate to the call-home-server repo
+	4. npm install -g bower
+
+	You could get some error where you have downloaded bower but the computer cannot detect it.
+	In this case, go add a path called: C:\Users\yourusername\AppData\Roaming\npm
+	and then try again.
 
 
 ## Running in Development

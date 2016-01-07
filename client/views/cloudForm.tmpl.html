@@ -24,6 +24,12 @@
         <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newCloud.password">
       </md-input-container>
       <md-input-container>
+        <label>Retype Password</label>
+        <input type="password" class="form-control" name="checkPassword" autocomplete="off" required ng-model="newCloud.checkPassword">
+        
+      </md-input-container>
+      <span ng-if="newCloud.password != newCloud.checkPassword">Passwords do not match</span>
+      <md-input-container>
         <label>Event Server URL</label>
         <input type="text" class="form-control" name="eventServerUrl" autocomplete="off" required ng-model="newCloud.eventServerUrl">
       </md-input-container>
@@ -56,7 +62,7 @@
     <md-button ng-click="cancel()">
      Cancel
     </md-button>
-    <md-button ng-click="create()" style="margin-right:20px;">
+    <md-button ng-if="newCloud.password == newCloud.checkPassword" ng-click="create()" style="margin-right:20px;">
       Create
     </md-button>
   </div>
