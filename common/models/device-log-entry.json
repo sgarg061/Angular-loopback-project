@@ -33,7 +33,7 @@
     "reason": {
       "type": "string",
       "required": false,
-      "default": "default"
+      "default": "interval"
     },
     "deviceModel": {
       "type": "string",
