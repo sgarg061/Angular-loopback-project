@@ -49,15 +49,24 @@
     },
     "diskSize": {
       "type": "number",
-      "required": false
+      "required": false,
+      "postgresql": {
+        "dataType": "NUMERIC(10,2)"
+      }
     },
     "diskSpaceFree": {
       "type": "number",
-      "required": false
+      "required": false,
+      "postgresql": {
+        "dataType": "NUMERIC(10,2)"
+      }
     },
     "diskSpaceUsed": {
       "type": "number",
-      "required": false
+      "required": false,
+      "postgresql": {
+        "dataType": "NUMERIC(10,2)"
+      }
     }
   },
   "validations": [],

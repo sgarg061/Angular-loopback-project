@@ -374,7 +374,7 @@ module.exports = function(Device) {
     }
 
     function convertBytesToGB(n) {
-        return (parseInt(n) / (1024 * 1024 * 1024)).toFixed(2);
+        return parseFloat((parseInt(n) / (1024 * 1024 * 1024)).toFixed(2));
     }
 
     function checkinDevice (device, deviceData, cb) {

@@ -144,7 +144,7 @@ describe('Checkin after initial device activation', function() {
           var logEntry = res.body.logEntries[0];
 
           var getGB = function convertBytesToGB(n) {
-                return (parseInt(n) / (1024 * 1024 * 1024)).toFixed(2);
+                return parseFloat((parseInt(n) / (1024 * 1024 * 1024)).toFixed(2));
           }
           assert(!logEntry.hasOwnProperty('checkinData'));
           assert.equal(logEntry.deviceId, deviceId);
