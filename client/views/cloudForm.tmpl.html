@@ -24,11 +24,10 @@
         <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newCloud.password">
       </md-input-container>
       <md-input-container>
-        <label>Retype Password</label>
+        <label>Retype Password <span ng-if="newCloud.password != newCloud.checkPassword && newCloud.password && newCloud.checkPassword" style="color:#ff6666">&#10006;</span></label>
         <input type="password" class="form-control" name="checkPassword" autocomplete="off" required ng-model="newCloud.checkPassword">
         
       </md-input-container>
-      <span ng-if="newCloud.password != newCloud.checkPassword && newCloud.password && newCloud.checkPassword" style="color:#ff6666">Passwords do not match</span>
       <md-input-container>
         <label>Event Server URL</label>
         <input type="text" class="form-control" name="eventServerUrl" autocomplete="off" required ng-model="newCloud.eventServerUrl">
@@ -47,7 +46,7 @@
       </md-input-container>
       <md-input-container>
         <label>Check-In Interval</label>
-        <input type="number" min="5" class="form-control" name="checkinInterval" autocomplete="off" required ng-model="newCloud.checkinInterval">
+        <input type="number" min="5" class="form-control" ng-init ="newCloud.checkinInterval =3600" name="checkinInterval" autocomplete="off" required ng-model="newCloud.checkinInterval">
       </md-input-container>
       <md-input-container>
         <label>Software Version</label>
@@ -62,7 +61,8 @@
     <md-button ng-click="cancel()">
      Cancel
     </md-button>
-    <md-button ng-if="newCloud.password == newCloud.checkPassword && newCloud.name && newCloud.email && newCloud.password &&newCloud.checkPassword" ng-click="create()" style="margin-right:20px;">
+    <md-button ng-disabled="newCloud.password != newCloud.checkPassword || !newCloud.name || !newCloud.email || !newCloud.password || !newCloud.checkPassword || !newCloud.eventServerUrl
+    || !newCloud.imageServerUrl || !newCloud.signallingServerUrl || !newCloud.updateUrl || !newCloud.checkinInterval || !newCloud.softwareVersionId" ng-click="create()" style="margin-right:20px;">
       Create
     </md-button>
   </div>
