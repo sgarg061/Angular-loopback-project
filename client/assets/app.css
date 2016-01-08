@@ -511,3 +511,51 @@ input:focus ~ label, input.used ~ label {
 .logEntries:last-child{
   border: 0px !important;
 }
+
+#timeline{
+  height: 150px;
+}
+
+#timeline.opened{
+  height: auto;
+}
+
+#data-points .check-in-point-shadow {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#data-points .check-in-point {
+  opacity: 0;
+  cursor: pointer;
+}
+#data-points .check-in-point:hover {
+  opacity: 0.3;
+}
+
+.check-in-point-tooltip {
+  font-size: 0.95em;
+}
+
+
+#detail-text {
+  position: absolute;
+  top: 325px;
+  width: 890px;
+  height: 200px;
+  left: 30px;
+  overflow-y: scroll;
+}
+
+#detail-text md-content{
+  opacity: 0;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+}
+#detail-text.opened md-content{
+  opacity: 1;  
+}
+
+pre.pretty-json{
+  background-color: #f1f1f1;
+  outline: 0px;
+}
