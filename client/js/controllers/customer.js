@@ -105,7 +105,49 @@ angular
           for (var i=0; i<$scope.devices.length; i++) {
             var device = $scope.devices[i];
 
-            device.onlineCameraCount = device.cameras ? device.cameras.filter(function(c) {return c.status == 'online';}).length : 0;
+            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+             var nowInSeconds = new Date().getTime() / 1000;
+ 
+             var checkinIntervalInSeconds = device.checkinInterval ||
+                                           $scope.customer.checkinInterval ||
+                                           $scope.customer.reseller.checkinInterval ||
+                                           $scope.customer.reseller.cloud.checkinInterval;
+ 
+             console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
+ 
+             var gracePeriodInSeconds = 30;
+             var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
+             if (hasCheckedInOnTime) {
+               device.onlineStatus = 'Online';
+             } else {
+               device.onlineStatus = 'Offline';
+             }
+             console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
+ 
+             device.onlineCameraCount = 0;
+             var allCamerasOnline = true;
+             if (device.cameras) {
+               for (var j=0; j<device.cameras.length; j++) {
+                 var camera = device.cameras[j];
+                 if (camera.status != 'online') {
+                   allCamerasOnline = false;
+                 } else {
+                   device.onlineCameraCount++;
+                 }
+               }
+             }
+ 
+             if (hasCheckedInOnTime) {
+               if (allCamerasOnline) {
+                 device.status = 'green';
+               } else {
+                 device.status = 'yellow';
+               }
+             } else {
+               device.status = 'red';
+             }
+
+           /* device.onlineCameraCount = device.cameras ? device.cameras.filter(function(c) {return c.status == 'online';}).length : 0;
             var allCamerasOnline = !device.cameras || device.onlineCameraCount == device.cameras.length;
             device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
             device.onlineStatus = device.status == 'online' ? 'Online' : 'Offline';

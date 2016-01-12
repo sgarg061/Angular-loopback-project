@@ -101,8 +101,45 @@ angular
           watchForChanges();
 
           var device = $scope.device;
-          var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
-          device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
+
+            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+           var nowInSeconds = new Date().getTime() / 1000;
+ 
+           var checkinIntervalInSeconds = device.checkinInterval ||
+                                         $scope.customer.checkinInterval ||
+                                         $scope.customer.reseller.checkinInterval ||
+                                         $scope.customer.reseller.cloud.checkinInterval;
+ 
+           console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
+ 
+           var gracePeriodInSeconds = 30;
+           var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
+           console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
+ 
+           var allCamerasOnline = true;
+           if (device.cameras) {
+             for (var j=0; j<device.cameras.length; j++) {
+               var camera = device.cameras[j];
+               if (camera.status != 'online') {
+                 allCamerasOnline = false;
+                 break;
+               }
+             }
+           }
+ 
+           if (hasCheckedInOnTime) {
+             if (allCamerasOnline) {
+               device.status = 'green';
+             } else {
+               device.status = 'yellow';
+             }
+           } else {
+             device.status = 'red';
+           }
+  //        var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
+    //      device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
+
+          console.log('$scope.device: ' + JSON.stringify($scope.device));
         });
     }
 
