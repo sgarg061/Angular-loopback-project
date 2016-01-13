@@ -150,11 +150,12 @@ angular
            /* device.onlineCameraCount = device.cameras ? device.cameras.filter(function(c) {return c.status == 'online';}).length : 0;
             var allCamerasOnline = !device.cameras || device.onlineCameraCount == device.cameras.length;
             device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
-            device.onlineStatus = device.status == 'online' ? 'Online' : 'Offline';
+            device.onlineStatus = device.status == 'online' ? 'Online' : 'Offline';*/
 
             // TODO: add marker here
-            if (device.location) {
-              var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';
+          /*  if (device.location) {
+              var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';*/
+              var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
 
               $scope.markers.push({
                 id: device.id,
