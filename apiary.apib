@@ -929,3 +929,40 @@ Remove or edit available software version numbers.
              count: 1
         }
 
+## Getting or Adding [/api/softwareversions]
+
+Get or add available software version numbers.
+
+### Get all software versions [GET]
+To get a specific version, include {id} in the url.
++ Response 200 (application/json) 
+
+    + Body
+    
+            [
+                {
+                    "id": "33721400-b491-11e5-ae4d-2db205d4c135",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+                },
+                {
+                    "id": "36ffcea0-b491-11e5-ae4d-2db205d4c135",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+                },
+                {
+                    "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2//",
+                },
+                {
+                    "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+                    "name": "v0.0.6",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+                }
+            ]
+
