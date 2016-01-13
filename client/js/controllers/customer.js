@@ -43,6 +43,9 @@ angular
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
+          if (newValue.customerName !== oldValue.customerName) {
+            updateCustomer(id, {customerName: newValue.customerName});
+          }
         }
       }, true);
     }
@@ -320,7 +323,7 @@ angular
   function deleteCustomer(customer) {
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
-          scope.customerName = '';
+         scope.customerName = '';
 
           scope.deleteCustomer = function() {
 
@@ -350,7 +353,41 @@ angular
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:false
-      })
+     })
+      .then(function(result) {
+      });
+  }
+
+ function renameCustomer(customer) {
+    $mdDialog.show({
+        controller: function (scope, $mdDialog) {
+          
+          scope.renameCustomer = function() {
+              Customer.prototype$updateAttributes({id: customer.id}, {
+                name: scope.customerRename
+              })
+              .$promise
+              .then
+              (function(customer) 
+                {
+                  $scope.customer.name = scope.customerRename
+                }, 
+                function (res) 
+                {
+                  toastr.error(res.data.error.message, 'Error');
+                }
+              );
+            $mdDialog.cancel();
+            toastr.info('Successful customer renaming to ' + scope.customerRename + ".");
+            $scope.selectCustomer($scope.customerId)
+          };
+
+        },
+        templateUrl: 'views/customerRename.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:false
+     })
       .then(function(result) {
       });
   }
@@ -619,6 +656,7 @@ angular
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
+  $scope.renameCustomer = renameCustomer;
   $scope.showCheckin = showCheckin;
   $scope.goHome = goHome;
 
