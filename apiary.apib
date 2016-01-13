@@ -891,3 +891,33 @@ Camera assignment is done through the following methods.
             "id": 4
           }
         ]
+
+## Group Software Versions
+
+Modify software version number used in clouds, resellers, tenants, and devices.
+
+## Deleting or Editing [/api/softwareversions/{id}]
+
+Remove or edit available software version numbers. 
+
++ Parameters
+    + id: 7d2c1010-b4b8-11e5-a32d-a56e80dc4179 - the ID of the version
+
+### Edit latest software version [PUT]
++ Request (application/json)
+
+        {
+            "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+            "name": "v.0.0.6",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+        }
+
++ Response 200 (application/json)
+
+        {
+             "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+             "name": "v0.0.6",
+             "code": 2,
+             "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }
