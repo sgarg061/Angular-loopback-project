@@ -23,8 +23,8 @@
         <label>Password</label>
         <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newCustomer.password">
       </md-input-container>
-      <md-input-container>
-        <label>Retype Password<span ng-if="newCustomer.password != newCustomer.checkPassword && newCustomer.password && newCustomer.checkPassword" style="color:#ff6666">&#10006;</span></label>
+      <md-input-container class="{{newCustomer.password != newCustomer.checkPassword && newCustomer.password && newCustomer.checkPassword ? 'md-input-invalid' : '' }}">
+        <label>Retype Password</label>
         <input type="password" class="form-control" name="checkPassword" autocomplete="off" required ng-model="newCustomer.checkPassword">
       </md-input-container>
     </div>

@@ -23,8 +23,8 @@
         <label>Password</label>
         <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newCloud.password">
       </md-input-container>
-      <md-input-container>
-        <label>Retype Password <span ng-if="newCloud.password != newCloud.checkPassword && newCloud.password && newCloud.checkPassword" style="color:#ff6666">&#10006;</span></label>
+      <md-input-container class="{{newCloud.password != newCloud.checkPassword && newCloud.password && newCloud.checkPassword ? 'md-input-invalid' : '' }}">
+        <label>Retype Password</label>
         <input type="password" class="form-control" name="checkPassword" autocomplete="off" required ng-model="newCloud.checkPassword">
         
       </md-input-container>
