@@ -463,112 +463,114 @@ A device object has the following attributes:
 
 + Request (application/json)
 
-            data: {
-                {
-                    "deviceId": "a3084250-4b37-11e5-8184-752d1c0476b3",
-                    "timestamp": "1449775377473",
-                    "id": 9103,
-                    "name": "20 E Chicago Ave",
-                    "address": "20 E Chicago Ave, Chicago, IL 60611, USA",
-                    "location": {
-                        "lat": 41.8969068,
-                        "lng": -87.6274042
-                },
-                    "password": "__connect__",
-                    "username": "solink-local",
-                    "locationName": "RR Chicago Avenue",
-                    "posInformation": [
-                        {
-                            "evt": "motion",
-                            "url": "http://localhost:8080/?username=solink-local&password=__connect__",
-                            "name": "Motion",
-                            "type": "socketio",
-                            "error": null,
-                            "posId": 0,
-                            "status": "online",
-                            "filter_id": "Bu2NuOPsjK3r4tLF"
-                        }
-                    ],
-                    "organizationPath": "United States/Illinois/Chicago",
-                    "cameraInformation": [
-                        {
-                            "ip": "10.10.0.123",
-                            "name": "Storage",
-                            "status": "online",
-                            "streams": [
-                                {
-                                    "id": "25790730-dc54-45dd-e379-bda82fdfe540",
-                                    "url": "rtsp://admin:admin@192.168.0.107/video1enc2",
-                                    "name": "SD",
-                                    "retention": "",
-                                    "latestThumb": "1449775341000_16216"
-                                },
-                                {
-                                    "id": "3db6dae2-912c-4ff9-fa79-470c8b41615d",
-                                    "url": "rtsp://admin:admin@192.168.0.107/video1enc1",
-                                    "name": "HD",
-                                    "retention": "",
-                                    "latestThumb": "1449775336000_17417"
-                                }
-                            ],
-                            "cameraId": "CsfA4LyDGSPVf6Z0",
-                            "password": "",
-                            "username": "",
-                            "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-CsfA4LyDGSPVf6Z0-thumbnail.jpg",
-                            "manufacturer": "unknown",
-                            "motionParams": {
-                                "roi": 1.111111111111111e+99,
-                                "enabled": true,
-                                "threshold": 120,
-                                "sensitivity": 50
-                            },
-                            "schedule_enabled": true
+            {
+                "data":
+                    {
+                        "deviceId": "a3084250-4b37-11e5-8184-752d1c0476b3",
+                        "timestamp": "1449775377473",
+                        "id": 9103,
+                        "name": "20 E Chicago Ave",
+                        "address": "20 E Chicago Ave, Chicago, IL 60611, USA",
+                        "location": {
+                            "lat": 41.8969068,
+                            "lng": -87.6274042
                         },
-                        {
-                            "ip": "10.10.0.127",
-                            "name": "Kitchen",
-                            "status": "offline",
-                            "streams": [
-                                {
-                                    "id": "38d7df81-166c-4d99-d754-a97d849f5082",
-                                    "url": "rtsp://admin:admin@192.168.0.104/video1enc2",
-                                    "name": "SD",
-                                    "retention": "",
-                                    "latestThumb": "1449739056000_11000"
+                        "password": "__connect__",
+                        "username": "solink-local",
+                        "locationName": "RR Chicago Avenue",
+                        "posInformation": [
+                            {
+                                "evt": "motion",
+                                "url": "http://localhost:8080/?username=solink-local&password=__connect__",
+                                "name": "Motion",
+                                "type": "socketio",
+                                "error": null,
+                                "posId": 0,
+                                "status": "online",
+                                "filter_id": "Bu2NuOPsjK3r4tLF"
+                            }
+                        ],
+                        "organizationPath": "United States/Illinois/Chicago",
+                        "cameraInformation": [
+                            {
+                                "ip": "10.10.0.123",
+                                "name": "Storage",
+                                "status": "online",
+                                "streams": [
+                                    {
+                                        "id": "25790730-dc54-45dd-e379-bda82fdfe540",
+                                        "url": "rtsp://admin:admin@192.168.0.107/video1enc2",
+                                        "name": "SD",
+                                        "retention": "",
+                                        "latestThumb": "1449775341000_16216"
+                                    },
+                                    {
+                                        "id": "3db6dae2-912c-4ff9-fa79-470c8b41615d",
+                                        "url": "rtsp://admin:admin@192.168.0.107/video1enc1",
+                                        "name": "HD",
+                                        "retention": "",
+                                        "latestThumb": "1449775336000_17417"
+                                    }
+                                ],
+                                "cameraId": "CsfA4LyDGSPVf6Z0",
+                                "password": "",
+                                "username": "",
+                                "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-CsfA4LyDGSPVf6Z0-thumbnail.jpg",
+                                "manufacturer": "unknown",
+                                "motionParams": {
+                                    "roi": 1.111111111111111e+99,
+                                    "enabled": true,
+                                    "threshold": 120,
+                                    "sensitivity": 50
                                 },
-                                {
-                                    "id": "b8ba9496-8534-44fa-d44d-06978a001a23",
-                                    "url": "rtsp://admin:admin@192.168.0.104/video1enc1",
-                                    "name": "HD",
-                                    "retention": "",
-                                    "latestThumb": "1449768356000_17417"
-                                }
-                            ],
-                            "cameraId": "cNzA9Qw6aIU4K5jR",
-                            "password": "",
-                            "username": "",
-                            "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-cNzA9Qw6aIU4K5jR-thumbnail.jpg",
-                            "manufacturer": "unknown",
-                            "motionParams": {
-                                "roi": 1.111111111111111e+99,
-                                "enabled": true,
-                                "threshold": 152,
-                                "sensitivity": 50
+                                "schedule_enabled": true
                             },
-                            "schedule_enabled": true
-                        }
-                    ],
-                    "deviceInformation": {
-                        "ip": "166.164.111.142",
-                        "name": "RRChicagoAve 2",
-                        "size": 3887985590272,
-                        "used": 440392482816,
-                        "model": "TS-X53",
-                        "firmware": "4.2.0",
-                        "deviceCapacity": 3887985590272,
-                        "availableCapacity": 3447593107456
-                    },
-                    "$$hashKey": "object:549"
+                            {
+                                "ip": "10.10.0.127",
+                                "name": "Kitchen",
+                                "status": "offline",
+                                "streams": [
+                                    {
+                                        "id": "38d7df81-166c-4d99-d754-a97d849f5082",
+                                        "url": "rtsp://admin:admin@192.168.0.104/video1enc2",
+                                        "name": "SD",
+                                        "retention": "",
+                                        "latestThumb": "1449739056000_11000"
+                                    },
+                                    {
+                                        "id": "b8ba9496-8534-44fa-d44d-06978a001a23",
+                                        "url": "rtsp://admin:admin@192.168.0.104/video1enc1",
+                                        "name": "HD",
+                                        "retention": "",
+                                        "latestThumb": "1449768356000_17417"
+                                    }
+                                ],
+                                "cameraId": "cNzA9Qw6aIU4K5jR",
+                                "password": "",
+                                "username": "",
+                                "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-cNzA9Qw6aIU4K5jR-thumbnail.jpg",
+                                "manufacturer": "unknown",
+                                "motionParams": {
+                                    "roi": 1.111111111111111e+99,
+                                    "enabled": true,
+                                    "threshold": 152,
+                                    "sensitivity": 50
+                                },
+                                "schedule_enabled": true
+                            }
+                        ],
+                        "deviceInformation": {
+                            "ip": "166.164.111.142",
+                            "name": "RRChicagoAve 2",
+                            "size": 3887985590272,
+                            "used": 440392482816,
+                            "model": "TS-X53",
+                            "firmware": "4.2.0",
+                            "deviceCapacity": 3887985590272,
+                            "availableCapacity": 3447593107456
+                        },
+                        "$$hashKey": "object:549"
+                    }
                 }
             }
 
@@ -576,18 +578,18 @@ A device object has the following attributes:
 
     + Body
 
-        {
-            "eventServerUrl": "https://myeventserver.com",
-            "imageServerUrl": "https://myimageserver.com",
-            "signallingServerUrl": "https://mysignallingserver.com",
-            "updateUrl": "https://myupdateurl.com",
-            "checkinInterval": "3600",
-            "ports": {
-                "vms": 8080,
-                "uploader": 3000,
-                "checkin": 1234
+            {
+                "eventServerUrl": "https://myeventserver.com",
+                "imageServerUrl": "https://myimageserver.com",
+                "signallingServerUrl": "https://mysignallingserver.com",
+                "updateUrl": "https://myupdateurl.com",
+                "checkinInterval": "3600",
+                "ports": {
+                    "vms": 8080,
+                    "uploader": 3000,
+                    "checkin": 1234
+                }
             }
-        }
 
 ## Group Licenses
 
