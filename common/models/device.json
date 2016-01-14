@@ -19,8 +19,8 @@
       "required": true
     },
     "status": {
-     "type": "string",
-     "required": false
+      "type": "string",
+      "required": false
     },
     "address": {
       "type": "string",
