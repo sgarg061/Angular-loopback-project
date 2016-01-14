@@ -14,7 +14,7 @@ angular
 
     $scope.logDataLimit = 100;
     $scope.sendingCheckin = null;
-    $scope.isSavingOverrideIpAddress = false;
+    $scope.isSavingSettings = false;
 
     function watchForChanges() {
       // watch device for updates and save them when they're found
@@ -90,7 +90,7 @@ angular
             else{
               $scope.device.noMoreLogs = false;
             }
-            
+
             $scope.checkinHeight = document.body.clientHeight - 450;
           };
 
@@ -195,21 +195,46 @@ angular
 
   }
 
-  function setOverrideIpAddress(ipAddress) {
-    $scope.isSavingOverrideIpAddress = true;
+  function modifySettings() {
+    $scope.isSavingSettings = true;
+    var updatedConfigObject = {};
+
+    if ($scope.device.overrideIpAddress) {
+      updatedConfigObject.overrideIpAddress = $scope.device.overrideIpAddress;
+      updatedConfigObject.ipAddress = $scope.device.overrideIpAddress;
+    }
+
+    if ($scope.device.vmsPort) {
+      updatedConfigObject.vmsPort = $scope.device.vmsPort;
+    }
+
+    if ($scope.device.connectPort) {
+      updatedConfigObject.connectPort = $scope.device.connectPort;
+    }
+
+    if ($scope.device.checkinPort) {
+      updatedConfigObject.checkinPort = $scope.device.checkinPort;
+    }
+
+    if ($scope.device.uploaderPort) {
+      updatedConfigObject.uploaderPort = $scope.device.uploaderPort;
+    }
+
+    if ($scope.device.listenerPort) {
+      updatedConfigObject.listenerPort = $scope.device.listenerPort;
+    }
+
+    if ($scope.device.configForwardPort) {
+      updatedConfigObject.configForwardPort = $scope.device.configForwardPort;
+    }
+
     Device
-      .prototype$updateAttributes(
-        {id: $scope.device.id},
-        {
-          overrideIpAddress: ipAddress,
-          ipAddress: ipAddress
-        }
-      )
+      .prototype$updateAttributes({id: $scope.device.id}, updatedConfigObject)
       .$promise
       .then(function(d) {
         setTimeout(function () {
           $scope.$apply(function() {
-            $scope.isSavingOverrideIpAddress = false;
+            $scope.isSavingSettings = false;
           });
         }, 300); // wrapped in a setTimeout just so people know this is doing something :)
       });
@@ -309,7 +334,7 @@ angular
 
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;
-  $scope.setOverrideIpAddress = setOverrideIpAddress;
+  $scope.modifySettings = modifySettings;
   $scope.goHome = goHome;
 
   }]);

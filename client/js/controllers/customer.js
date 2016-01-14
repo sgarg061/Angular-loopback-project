@@ -101,7 +101,20 @@ angular
           getFilters();
 
           watchForChanges();
-
+           /*   
+ -            Device status   
+ -    
+ -            green:    
+ -              - all cameras are green   
+ -              - all pos devices are green   
+ -              - device has checked in within expected interval    
+ -    
+ -            yellow:   
+ -              - one or more cameras or pos devices are red    
+ -              - device has checked in within expected interval    
+ -            red:    
+ -              - device has not checked in within expected interval    
+ -          */
           for (var i=0; i<$scope.devices.length; i++) {
             var device = $scope.devices[i];
 
@@ -150,11 +163,12 @@ angular
            /* device.onlineCameraCount = device.cameras ? device.cameras.filter(function(c) {return c.status == 'online';}).length : 0;
             var allCamerasOnline = !device.cameras || device.onlineCameraCount == device.cameras.length;
             device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
-            device.onlineStatus = device.status == 'online' ? 'Online' : 'Offline';
+            device.onlineStatus = device.status == 'online' ? 'Online' : 'Offline';*/
 
             // TODO: add marker here
             if (device.location) {
-              var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';
+           //   var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';*/
+              var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
 
               $scope.markers.push({
                 id: device.id,

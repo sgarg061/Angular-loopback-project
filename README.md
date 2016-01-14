@@ -20,10 +20,13 @@
 ## Running in Development
 
 ### Prerequisites
-- Elasticsearch (port: 9200) (able to run without this)
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
 - Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
+To set up PostgreSQL to run:
+	0. Install version 9.4 or higher from here: http://www.postgresql.org/download/
+	0. Download pgAdmin III on your computer and open it
+	0. To get /node ./ to run (as required below), create a new database called 'call-home': right-click "Databases" in your Object Browser on the left, click New Databases, enter name 'call-home'
 
 More specific config data stored in [server/datasources.json](server/datasources.json) and [config.js](config.js).
 

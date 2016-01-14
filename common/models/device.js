@@ -501,6 +501,35 @@ module.exports = function(Device) {
                     checkinInterval: checkinInterval
                 };
 
+                var ports = {};
+                if (device.connectPort) {
+                    ports.connect = device.connectPort;
+                }
+
+                if (device.vmsPort) {
+                    ports.vms = device.vmsPort;
+                }
+
+                if (device.checkinPort) {
+                    ports.checkin = device.checkinPort;
+                }
+
+                if (device.uploaderPort) {
+                    ports.uploader = device.uploaderPort;
+                }
+
+                if (device.listenerPort) {
+                    ports.listener = device.listenerPort;
+                }
+
+                if (device.configForwardPort) {
+                    ports.configForward = device.configForwardPort;
+                }
+
+                if (Object.keys(ports).length > 0) {
+                    result.ports = ports;
+                }
+
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                     if (err) {
                         logger.error('Failed to find software version by id: %s', softwareVersionId);
@@ -580,10 +609,9 @@ module.exports = function(Device) {
 
             var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
             for (var i = 0; i < res.length; i++) {
-                if(includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
-                 var removeCondition = {};
-                 removeCondition[componentIdName] = res[i][componentIdName];
-               
+                if (includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
+                    var removeCondition = {};
+                    removeCondition[componentIdName] = res[i][componentIdName];
                     Device.app.models[componentType].remove(removeCondition);
                 }
             }

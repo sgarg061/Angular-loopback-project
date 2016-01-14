@@ -18,6 +18,10 @@
       "type": "string",
       "required": true
     },
+    "status": {
+      "type": "string",
+      "required": false
+    },
     "address": {
       "type": "string",
       "required": false
@@ -92,6 +96,30 @@
     },
     "overrideIpAddress": {
       "type": "string",
+      "required": false
+    },
+    "connectPort": {
+      "type": "number",
+      "required": false
+    },
+    "vmsPort": {
+      "type": "number",
+      "required": false
+    },
+    "checkinPort": {
+      "type": "number",
+      "required": false
+    },
+    "uploaderPort": {
+      "type": "number",
+      "required": false
+    },
+    "listenerPort": {
+      "type": "number",
+      "required": false
+    },
+    "configForwardPort": {
+      "type": "number",
       "required": false
     }
   },

@@ -132,8 +132,8 @@ angular
                        }
                      }
 
-                    var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
-                    device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
+                   // var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
+                   // device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
 
                    if (hasCheckedInOnTime) {
                        if (allCamerasOnline) {
