@@ -896,9 +896,9 @@ Camera assignment is done through the following methods.
 
 Modify software version number used in clouds, resellers, tenants, and devices.
 
-## Deleting or Editing [/api/softwareversions/{id}]
+## Modifying specific versions [/api/softwareversions/{id}]
 
-Remove or edit available software version numbers. 
+Remove, edit, or get specific software versions.
 
 + Parameters
     + id: 7d2c1010-b4b8-11e5-a32d-a56e80dc4179 - the ID of the version
@@ -929,12 +929,21 @@ Remove or edit available software version numbers.
              count: 1
         }
 
+### Get specific software version [GET]
++ Response 200 (application/json)
+
+        {
+            "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://resources.solinkcloud.com/installers/solink-testing/v0.0.2/"
+        }
+
 ## Getting or Adding [/api/softwareversions]
 
 Get or add available software version numbers.
 
 ### Get all software versions [GET]
-To get a specific version, include {id} in the url.
 + Response 200 (application/json) 
 
     + Body
