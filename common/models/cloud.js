@@ -22,7 +22,7 @@ module.exports = function(Cloud) {
                             next(err);
                         });
                     }
-                })
+                });
             }
         } else {
             next();
