@@ -64,13 +64,13 @@
                           <pre pretty-json="device.currentEntry"></pre>
                         </md-content>
                       </md-tab>
-                      
+
                       <md-tab label="devices status">
                         <md-content style="height:{{checkinHeight-51}}px;">
                         <div layout="column" style="margin:20px;">
                           <div layout="row" layout-align="space-around center">
                             <div layout="column" layout-align="start start" layout-fill>
-                              
+
                               <div style="margin-bottom: 5px;"><b>Cameras</b></div>
                                 <div layout="row" layout-fill layout-align="space-between center" ng-repeat="camera in device.currentEntry.cameraInformation" style="padding-left: 25px;">
                                   <span>{{ camera.name }}</span>
@@ -93,7 +93,7 @@
 
                     </md-tabs>
                   </md-content>
-                </div> 
+                </div>
 
                 </div>
               </div>
@@ -186,9 +186,42 @@
             <md-tab label="SETTINGS">
               <div layout="column" style="margin: 20px;">
                 <div>
-                  <b>Override IP Address</b>
-                  <input type="text" id="override" ng-model="device.overrideIpAddress" />
-                  <md-button class="md-raised" ng-click="setOverrideIpAddress(device.overrideIpAddress)" ng-disabled="isSavingOverrideIpAddress">OK</md-button>
+                  <md-input-container>
+                    <label> Override IP Address</label>
+                    <input type="text" id="override" ng-model="device.overrideIpAddress" />
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>VMS Port</label>
+                    <input type="text" id="vmsPort" ng-model="device.vmsPort" />
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>Connect Port</label>
+                    <input type="text" id="vmsPort" ng-model="device.connectPort" />
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>Checkin Port</label>
+                    <input type="text" id="vmsPort" ng-model="device.checkinPort" />
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>Uploader Port</label>
+                    <input type="text" id="vmsPort" ng-model="device.uploaderPort" />
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>Listener Port</label>
+                    <input type="text" id="vmsPort" ng-model="device.listenerPort" />
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>Camera Config Forward Port</label>
+                    <input type="text" id="vmsPort" ng-model="device.configForwardPort" />
+                  </md-input-container>
+
+                  <md-button class="md-raised" ng-click="modifySettings()" ng-disabled="isSavingSettings">OK</md-button>
                 </div>
               </div>
             </md-tab>
@@ -197,7 +230,7 @@
                 <md-input-container>
                 <div layout="row" layout-align="space-around center">
                   <div layout="column" layout-align="start start" layout-fill>
-                    
+
                     <div style="margin-bottom: 5px;"><b>Listeners</b></div>
                     <md-content layout-fill style="height:200px; border: 1px solid rgba(0, 0, 0, 0.117647)">
                       <md-list layout-padding>
