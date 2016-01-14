@@ -1,25 +1,25 @@
 <!-- HTML for dialog box to rename customer -->
-+<md-dialog aria-label="Rename Customer">
-+  
-+  <md-toolbar>
-+      <div class="md-toolbar-tools">
-+      <h2>Rename Customer</h2>
-+      <span flex></span>
-+      <md-button class="md-icon-button" ng-click="close()">
-+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
-+      </md-button>
-+    </div>
-+  </md-toolbar>
-+
-+  <md-dialog-content>
-+    <p>Type in the new name of the customer to change</p>
-+    <md-input-container>
-+        <label>Customer New Name</label>
-+        <input type="text" class="form-control focus" name="rename" autocomplete="off" required ng-model="customerRename">
-+      </md-input-container>
-+  </md-dialog-content>
-+  <div class="md-actions">
-+    <md-button ng-click="close()" class="md-primary">Cancel</md-button>
-+    <md-button ng-click="renameCustomer()" class="md-primary">Rename</md-button>
-+  </div>
-+</md-dialog> 
+<md-dialog aria-label="Rename Customer">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>Rename Customer</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <p>Type in the new name of the customer to change</p>
+    <md-input-container>
+        <label>Customer New Name</label>
+        <input type="text" class="form-control focus" name="rename" autocomplete="off" required ng-model="customerRename">
+      </md-input-container>
+  </md-dialog-content>
+  <div class="md-actions">
+    <md-button ng-click="close()" class="md-primary">Cancel</md-button>
+    <md-button ng-click="renameCustomer()" class="md-primary">Rename</md-button>
+  </div>
+</md-dialog> 
