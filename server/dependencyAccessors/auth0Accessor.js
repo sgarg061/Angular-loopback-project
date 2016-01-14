@@ -117,8 +117,10 @@ Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
         if (error) {
             cb(error, '');
         } else if (response.statusCode !== 201) {
+            var body = JSON.parse(response.body);
             var e = new Error('Unable to create user');
             e.statusCode = response.statusCode;
+            e.message = body.message;
             cb(e, '');
         } else {
             cb(null, body);
