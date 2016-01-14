@@ -513,13 +513,13 @@ input:focus ~ label, input.used ~ label {
 }
 
 #timeline{
-  height: 150px;
+  /*height: 150px;*/
 }
 
 #timeline.opened{
   height: auto;
 }
-
+/*
 #data-points .check-in-point-shadow {
   opacity: 1;
   cursor: pointer;
@@ -536,7 +536,7 @@ input:focus ~ label, input.used ~ label {
 .check-in-point-tooltip {
   font-size: 0.95em;
 }
-
+*/
 
 #detail-text {
   position: absolute;
@@ -547,15 +547,47 @@ input:focus ~ label, input.used ~ label {
   overflow-y: scroll;
 }
 
-#detail-text md-content{
+#timeline-detail{
   opacity: 0;
   transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
-#detail-text.opened md-content{
+#timeline-detail.open{
   opacity: 1;  
 }
 
 pre.pretty-json{
   background-color: #f1f1f1;
   outline: 0px;
+}
+
+
+#data-points .check-in-point-shadow {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#data-points .check-in-point {
+  opacity: 0;
+  cursor: pointer;
+}
+#data-points .check-in-point:hover {
+  opacity: 0.3;
+}
+
+#detail-text {
+  /*top: 110px;*/
+}
+
+.check-in-point-tooltip {
+  font-size: 0.8em;
+}
+
+.nav-button {
+  font-size: 0.8em;
+  fill: #888;
+  cursor: pointer
+}
+
+.nav-button:hover {
+  fill: #333;
 }

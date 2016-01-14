@@ -43,7 +43,7 @@
                   <md-input-container style="margin-right: 10px;" flex="30">
                       <label>Only Show</label>
                       <md-select ng-model="selectedCheckinReason">
-                        <md-option ng-repeat="reason in checkinReasons" value="{{reason}}">{{reason | capitalize}} (123)</md-option>
+                        <md-option ng-repeat="reason in checkinReasons" value="{{reason.name}}">{{reason.name | capitalize}} ({{reason.count}})</md-option>
                       </md-select>
                     </md-input-container>
 
@@ -58,48 +58,51 @@
 
                 </div>
 
-                <div id="timeline" ng-show="timelineView">
-                  <h2 style="text-align: center; ">Timeline View</h2>
-                  <div id="detail-text">
-                  <md-content>
-                    <md-tabs md-dynamic-height md-border-bottom cla>
+                <div layout="column" ng-show="timelineView" id="checkin-list">
+                  <div layout="row">
+                    <md-button flex="15" class="md-raised" ng-click="loadPrevDay()" ng-if="device.id != sendingCheckin">Prev Day</md-button>
+                    <h2 style="text-align: center; ">Timeline View - {{currentDate | date: 'mediumDate' }}</h2>
+                    <md-button flex="15" class="md-raised" ng-click="loadNextDay()" ng-if="device.id != sendingCheckin">Next Day</md-button>
+                  </div>
 
-                      <md-tab label="devices status">
-                        <md-content style="height:{{checkinHeight-220}}px;">
-                        <div layout="column" style="margin:20px;">
-                          <div layout="row" layout-align="space-around center">
-                            <div layout="column" layout-align="start start" layout-fill>
-                              
-                              <div style="margin-bottom: 5px;"><b>Cameras</b></div>
-                                <div layout="row" layout-fill layout-align="space-between center" ng-repeat="camera in device.currentGraphEntry.cameraInformation" style="padding-left: 25px;">
-                                  <span>{{ camera.name }}</span>
-                                  <span flex="20"/>
-                                  <md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>
-                                </div>
-                              <br/>
+                  <div id="timeline">
 
-                              <div style="margin-bottom: 5px;"><b>POS Devices</b></div>
-                              <div layout="row" layout-fill layout-align="space-between center" ng-repeat="posDevice in device.currentGraphEntry.posInformation" style="padding-left: 25px;">
-                                <span>{{ posDevice.name }}</span>
+                  </div>
+
+                  <md-tabs md-dynamic-height md-border-bottom style="position:absolute; top: 320px; width: 90%; left: 38px;" id="timeline-detail">
+
+                    <md-tab label="devices status">
+                      <md-content style="height:{{checkinHeight-220}}px;">
+                      <div layout="column" style="margin:20px;">
+                        <div layout="row" layout-align="space-around center">
+                          <div layout="column" layout-align="start start" layout-fill>
+                            
+                            <div style="margin-bottom: 5px;"><b>Cameras</b></div>
+                              <div layout="row" layout-fill layout-align="space-between center" ng-repeat="camera in device.currentGraphEntry.cameraInformation" style="padding-left: 25px;">
+                                <span>{{ camera.name }}</span>
                                 <span flex="20"/>
-                                <md-icon md-svg-icon='indicator_{{posDevice.status === "online" ? "green" : posDevice.status === "offline" ? "red" : "yellow"}}'></md-icon>
+                                <md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>
                               </div>
+                            <br/>
+
+                            <div style="margin-bottom: 5px;"><b>POS Devices</b></div>
+                            <div layout="row" layout-fill layout-align="space-between center" ng-repeat="posDevice in device.currentGraphEntry.posInformation" style="padding-left: 25px;">
+                              <span>{{ posDevice.name }}</span>
+                              <span flex="20"/>
+                              <md-icon md-svg-icon='indicator_{{posDevice.status === "online" ? "green" : posDevice.status === "offline" ? "red" : "yellow"}}'></md-icon>
                             </div>
                           </div>
                         </div>
-                        </md-content>
-                      </md-tab>
+                      </div>
+                      </md-content>
+                    </md-tab>
 
-                      <md-tab label="raw data">
-                        <md-content style="height:{{checkinHeight-220}}px;">
-                          <pre pretty-json="device.currentGraphEntry"></pre>
-                        </md-content>
-                      </md-tab>
-                    </md-tabs>
-                  </md-content>
-
-                    <!-- <div pretty-json="device.currentGraphEntry"></div> -->
-                  </div>
+                    <md-tab label="raw data">
+                      <md-content style="height:{{checkinHeight-220}}px;">
+                        <pre pretty-json="device.currentGraphEntry"></pre>
+                      </md-content>
+                    </md-tab>
+                  </md-tabs>
                 </div>
 
                 <div layout="row" style="height:{{checkinHeight}}px;" ng-if="device.logEntries.length && !timelineView" layout-align="center stretch" id="checkin-list">

@@ -11,15 +11,25 @@ angular
     $scope.device = null;
 
     $scope.checkinHeight = 500;
-    $scope.timelineView = false;
+    $scope.timelineView = true;
 
     $scope.logCount = 0;
     $scope.logDataLimit = 100;
     $scope.sendingCheckin = null;
     $scope.isSavingOverrideIpAddress = false;
 
+    $scope.currentDate = new Date();
 
-    $scope.checkinReasons = ['all','restart','interval','force','shutdown'];
+
+    $scope.checkinReasons = [
+      {name: 'all', count: 0},
+      {name: 'default', count: 0},
+      {name: 'restart', count: 0},
+      {name: 'interval', count: 0},
+      {name: 'force', count: 0},
+      {name: 'shutdown', count: 0}
+    ];
+
     $scope.selectedCheckinReason = 'all';
 
 
@@ -131,27 +141,14 @@ angular
     }
 
     function getReasons() {
-      DeviceLogEntry
-        .find({
-          filter: {
-            fields: ['id', 'timestamp','reason']
-          },
-          groupBy: ['reason']
-        }, function(models) {
-          console.log('reasongs', models);
-        });
-
-      // var logCollection = DeviceLogEntry.getDataSource().connector.collection(DeviceLogEntry.modelName);
-      // logCollection.aggregate({
-      //   $group: {
-      //     _id: { reason: "$reason"},
-      //     total: { $sum: 1 }
-      //   }
-      // }, function(err, records) {
-      //   console.log('records',records);
-      // });
-
-      console.log('device logs', DeviceLogEntry);
+      $scope.checkinReasons.forEach(function (reason){
+        DeviceLogEntry
+          .count({
+              where: {reason: reason.name}
+          }, function(data) {
+            reason.count = data.count;
+          });
+      })
     }
 
     getDevice();
@@ -320,209 +317,45 @@ angular
     $state.go('home');
   };
 
-  function renderGraph() {
-
-    var detail = document.getElementById('timeline');
-
-    var _width = document.getElementById('device-tab').offsetWidth - 40;
-    var _height = $scope.checkinHeight - 40;
-    var _innerwidth = _width - 20;
-    var _innerheight = $scope.checkinHeight - 140;
-
-    var _marginLeft = 30;
-
-    var currentOpen = null;
-
-
-    var detailTextBox = document.getElementById('detail-text');
-    detailTextBox.setAttribute('style', `width: ${_innerwidth - 20}px; height: ${_innerheight - 20}px;`);
-
-    var svg = d3.select('#timeline').append('svg')
-      .attr('id', 'timeline-svg')
-      .attr('width', _width)
-      .attr('height', _height);
-
-    /**
-    * x scale
-    */
-
-    var start = new Date();
-    var end = new Date();
-
-    start.setHours(0,0,0,0);
-    end.setHours(23,59,59,999);
+  function renderGraph () {
 
     var checkInData = fakeCheckins(20);
 
+    var reasonOptions = ['default', 'restart', 'info'];
 
-    var _domain = [start, end];
-    var xScale = d3.time.scale.utc().domain(_domain).rangeRound([0, _innerwidth]);
-
-    /**
-    * x axis
-    */
-    var ticks = d3.time.hours;
-    var xAxis = {
-      class: 'main-x-axis',
-      tickFormat: {
-        Day: '%H:%M',
-        Week: '%B %d',
-      },
-      tick: 1,
-      tickPadding: 1,
-      tickSize: 1,
-      'font-size': '0.8em',
-      fill: '#fff',
-      scroll: {
-        class: 'main-x-axis small',
-      },
+    var reasonColorCode = {
+      default: '#0088cc',
+      restart: '#f54',
+      info: '#ffa000'
     };
 
+    var args = {
+      date: $scope.currentDate,
+      width: function() {
+        return window.innerWidth - 380;
+      },
+      height: function() {
+        return $scope.checkinHeight - 40;
+      },
+      margin: {
+        left: 10,
+        right: 10,
+        top: 0,
+        bottom: 0
+      },
+      data: checkInData,
+      reasonColorCode: reasonColorCode,
+      callback: function(data) {
+        /* insert the data into angular directive */
+        viewCheckin(data);
+        var angularDirectiveDOM = document.createElement('div');
+        return angularDirectiveDOM;
 
+      }
+    };
 
-    var xAxisFunc =
-      d3.svg.axis()
-        .scale(xScale)
-        .orient('bottom')
-        .tickFormat(d3.time.format('%H:%M'))
-        .ticks(d3.time.hours, getTick(_innerwidth))
-        .tickPadding(10)
-        .tickSize(1)
-        .tickSubdivide(1);
-
-    svg.append('g')
-      .attr('class', xAxis.class)
-      .attr('transform', `translate(0, 50)`)
-      .call(xAxisFunc)
-      .selectAll('text')
-        .attr('x', _innerwidth / 24 / 2)
-        .attr('y', 18)
-        .style('font-size', xAxis['font-size'])
-        .style('fill', '#888');
-
-    /**
-    * 
-    */
-    
-    var dataPointGroup = svg.append('g').attr('id', 'data-points');
-    checkInData.forEach(function(checkin) {
-      var id = checkin.id;
-      var cx = xScale(new Date(parseInt(checkin.timestamp)));
-      var cy = 30;
-      var r = 5;
-      var rHover = 8;
-      dataPointGroup.append('circle')
-        .attr('id', `circle-${id}-shadow`)
-        .attr('cx', cx)
-        .attr('cy', cy)
-        .attr('r', r)
-        .attr('class', 'check-in-point-shadow')
-        .attr('fill', checkin.reasonColor)
-    });
-
-    checkInData.forEach(function(checkin) {
-      var id = checkin.id;
-      var cx = xScale(new Date(parseInt(checkin.timestamp)));
-      var cy = 30;
-      var r = 5;
-      var rHover = 8;
-      dataPointGroup.append('circle')
-        .attr('id', `circle-${id}`)
-        .attr('cx', cx)
-        .attr('cy', cy)
-        .attr('r', rHover)
-        .attr('class', 'check-in-point')
-        .attr('fill', checkin.reasonColor)
-        .on('mouseover', function() {
-          d3.select(`#tooltip-${id}`).transition().duration(300).style('opacity', 1);
-        })
-        .on('mouseout', function() {
-          if(currentOpen !== id) {
-            d3.select(`#tooltip-${id}`).transition().duration(300).style('opacity', 0);
-          }
-        })
-        .on('click', function() {
-          if (currentOpen && currentOpen === id) {
-            currentOpen = null;
-            d3.select(`#check-in-detail`).transition().duration(300).attr('width', 0).attr('height', 0);
-            d3.select(`#check-in-detail-arrow-group`).transition().duration(300).attr('transform', `translate(0, 0)`);
-            d3.select(`#check-in-detail-arrow`).transition().duration(300).attr('width', 0).attr('height', 0);
-
-            d3.select(`#circle-${id}-shadow`).transition().duration(300).attr('r', r);
-            d3.select(`#check-in-detail div`).remove();
-            detailTextBox.classList.remove("opened");
-            detail.classList.remove("opened");
-          } else {
-            d3.select(`#circle-${currentOpen}-shadow`).transition().duration(300).attr('r', r);
-            d3.select(`#tooltip-${currentOpen}`).transition().duration(300).style('opacity', 0);
-            d3.select(`#check-in-detail div`).remove();
-
-            currentOpen = id;
-            d3.select(`#check-in-detail`).transition().duration(300).attr('width', _innerwidth).attr('height', _innerheight);
-            d3.select(`#check-in-detail-arrow-group`).transition().duration(300).attr('transform', `translate(${cx}, 80)`)
-            d3.select(`#check-in-detail-arrow`).transition().duration(300).attr('width', 40).attr('height', 40);
-            d3.select(`#circle-${currentOpen}-shadow`).transition().duration(300).attr('r', rHover);
-
-            // console.log('children',detailTextBox.childNodes);
-
-            detailTextBox.classList.add("opened");
-            detail.classList.add("opened");
-            viewCheckin(checkin);
-          }
-        });
-
-      // Create a new JavaScript Date object based on the timestamp
-      // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-      var date = new Date(checkin.timestamp*1000);
-      // Hours part from the timestamp
-      var hours = date.getHours();
-      // Minutes part from the timestamp
-      var minutes = "0" + date.getMinutes();
-      // Seconds part from the timestamp
-      var seconds = "0" + date.getSeconds();
-
-      // Will display time in 10:30:23 format
-      var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-
-      dataPointGroup.append('text')
-        .attr('id', `tooltip-${id}`)
-        .attr('x', cx - 30)
-        .attr('y', cy - 15)
-        .style('opacity', 0)
-        .attr('class', 'check-in-point-tooltip')
-        .attr('fill', '#555')
-        .text(formattedTime)
-    });
-
-    
-
-    var checkInDetailBox = svg.append('g');
-    
-    checkInDetailBox.append('g')
-      .attr('id', 'check-in-detail-arrow-group')
-      .append('rect')
-        .attr('id', 'check-in-detail-arrow')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', 0)
-        .attr('height', 0)
-        .attr('fill', '#f1f1f1')
-        .attr('transform', `rotate(45)`)
-    checkInDetailBox.append('rect')
-      .attr('id', 'check-in-detail')
-      .attr('x', 0)
-      .attr('y', 100)
-      .attr('width', 0)
-      .attr('height', 0)
-      .attr('fill', '#f1f1f1')
-    checkInDetailBox.append('text')
-      .attr('x', 10)
-      .attr('y', 120)
-      .attr('id', 'check-in-detail-text');
-
+    timeline(args);
   }
-
 
   function getTick(width) {
     if (width >= 1000) {
@@ -561,7 +394,7 @@ angular
 
 
     while(count > 0) {
-      var checkInTime = new Date(`Fri Jan 08 2016 ${Math.floor((Math.random() * 24) + 0)}:${Math.floor((Math.random() * 59) + 0)}:${Math.floor((Math.random() * 59) + 0)} GMT-0500 (EST)`);
+      var checkInTime = new Date(`Fri Jan 14 2016 ${Math.floor((Math.random() * 24) + 0)}:${Math.floor((Math.random() * 59) + 0)}:${Math.floor((Math.random() * 59) + 0)} GMT-0500 (EST)`);
       var reasonId = Math.floor((Math.random() * 3) + 0);
       var obj = {
         deviceId: `30a34860-b3e8-11e5-b146-fbfc0da4d611`,
@@ -577,6 +410,18 @@ angular
     }
 
     return points;
+  }
+
+  $scope.loadNextDay = function () {
+    document.getElementById('timeline-detail').classList.remove('open');
+    $scope.currentDate.setDate($scope.currentDate.getDate()+1);
+    renderGraph();
+  }
+
+  $scope.loadPrevDay = function () {
+    document.getElementById('timeline-detail').classList.remove('open');
+    $scope.currentDate.setDate($scope.currentDate.getDate()-1);
+    renderGraph();
   }
 
 
