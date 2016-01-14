@@ -1,8 +1,10 @@
 <div class="sidebar">
   
-    <div layout="row" layout-padding layout-align="space-between center">
-
-      <h2>{{model.name}}</h2>
+    <div layout="row" layout-padding layout-align="space-between center" style="padding-left:24px">
+      <div layout="column" layout-align="start start">
+        <h2 style="margin-bottom:0px">{{model.name}}</h2>
+        <p style="margin:2px 8px">{{model.email}}</p>
+      </div>
 
       <md-menu ng-show="type=='reseller'||type=='customer'">
         <md-button aria-label="interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
