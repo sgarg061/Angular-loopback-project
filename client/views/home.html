@@ -1,16 +1,19 @@
 <div class="breadcrumbs" ng-include src="'views/breadcrumb.html'"></div>
-
 <md-content>
-  
   <div class="background" layout="row" style="background-color: #f0f0f0;">
-
     <div class="col-md-8 main-content" layout-fill layout-padding>
-      <h2>Clouds</h2>
+      <div layout="row">
+        <h2>Clouds</h2>
+        <div>
+          <md-button class="md-fab md-mini" style = "position: absolute; left: auto;"
+            ng-click="openCloudForm($event)">
+            <md-icon md-font-library="material-icons">add</md-icon>
+          </md-button>
+        </div>
+      </div>
       <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
-
-        <md-grid-tile ng-repeat="cloud in clouds" class="card" 
+        <md-grid-tile ng-repeat="cloud in clouds" class="card"
           ng-click='selectCloud(cloud)' md-rowspan="0" md-colspan="1">
-
           <div layout-fill layout-align="start center" layout-padding>
             <span class="md-title" style="vertical-align: middle; line-height:50px;">{{cloud.name}}</span>
           </div>
@@ -18,10 +21,4 @@
       </md-grid-list>
     </div>
   </div>
-
 </md-content> 
-
-
-<md-button class="md-fab md-accent md-fab-bottom-right" style="background-color:white;" ng-click="openCloudForm($event)">
-  <md-icon md-font-library="material-icons">add</md-icon>
-</md-button>
