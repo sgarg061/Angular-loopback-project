@@ -171,4 +171,4 @@ Test that Strongloop PM is up
 From a local checkout of the project build and deploy the app to the new instance
 
 	slc build
-    slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
+  slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
