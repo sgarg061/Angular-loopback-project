@@ -900,3 +900,104 @@ Camera assignment is done through the following methods.
             "id": 4
           }
         ]
+
+## Group Software Versions
+
+Modify software version number used in clouds, resellers, tenants, and devices.
+
+## Modifying specific versions [/api/softwareversions/{id}]
+
+Remove, edit, or get specific software versions.
+
++ Parameters
+    + id: 7d2c1010-b4b8-11e5-a32d-a56e80dc4179 - the ID of the version
+
+### Edit latest software version [PUT]
++ Request (application/json)
+
+        {
+            "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+            "name": "v.0.0.6",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+        }
+
++ Response 200 (application/json)
+
+        {
+             "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+             "name": "v0.0.6",
+             "code": 2,
+             "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }
+
+### Delete software version [DELETE]
++ Response 200 (application/json)
+
+        {
+             count: 1
+        }
+
+### Get specific software version [GET]
++ Response 200 (application/json)
+
+        {
+            "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://resources.solinkcloud.com/installers/solink-testing/v0.0.2/"
+        }
+
+## Getting or Adding [/api/softwareversions]
+
+Get or add available software version numbers.
+
+### Get all software versions [GET]
++ Response 200 (application/json) 
+
+    + Body
+    
+            [
+                {
+                    "id": "33721400-b491-11e5-ae4d-2db205d4c135",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+                },
+                {
+                    "id": "36ffcea0-b491-11e5-ae4d-2db205d4c135",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+                },
+                {
+                    "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2//",
+                },
+                {
+                    "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+                    "name": "v0.0.6",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+                }
+            ]
+
+### Add software version [POST]
++ Request (application/json)
+
+        {
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }
