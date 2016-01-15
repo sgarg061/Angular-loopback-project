@@ -168,3 +168,11 @@ Test that Strongloop PM is up
 
 	curl -X GET http://localhost:8701
 
+---------------------------------------
+
+### Build and deploy the app 		
+ 		
+From a local checkout of the project build and deploy the app to the new instance		
+ 		
+    slc build		
+    slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
