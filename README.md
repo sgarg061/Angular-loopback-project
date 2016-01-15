@@ -7,18 +7,21 @@
 
 ## Setup
 
-	1. clone this repo: https://github.com/SolinkCorp/call-home-server.git
-	2. use cmd line and navigate to the call-home-server repo
-	3. npm install
+	git clone https://github.com/SolinkCorp/call-home-server.git
+	cd call-home-server
+	npm install
+
 
 ## Running in Development
 
 ### Prerequisites
-- Go into services and make sure the service SolinkLive is not running and set it to manual
-- Elasticsearch (port: 9200) (able to run without this)
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
 - Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
+To set up PostgreSQL to run:
+	0. Install version 9.4 or higher from here: http://www.postgresql.org/download/
+	0. Download pgAdmin III on your computer and open it
+	0. To get /node ./ to run (as required below), create a new database called 'call-home': right-click "Databases" in your Object Browser on the left, click New Databases, enter name 'call-home'
 
 More specific config data stored in [server/datasources.json](server/datasources.json) and [config.js](config.js).
 
