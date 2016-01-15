@@ -512,14 +512,3 @@ input:focus ~ label, input.used ~ label {
 .logEntries:last-child{
   border: 0px !important;
 }
-
-/*.resetButton {
-  vertical-align: right;
-  text-decoration: none;
-  color:#4c9ef1
-  padding: 0 6px 0 6px;
-  margin:3px 4px 3px 4px;
-  text-align:center;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-  border-radius: 10px 0 0 10px;
-}/*garbage*/
