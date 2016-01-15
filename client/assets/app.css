@@ -181,7 +181,8 @@ h2{
 }
 
 .sidebar md-input-container{
-  padding: 0px 8px 24px 8px;
+  padding: 0px 0px 0px 0px;
+  width:100%
 }
 
 .sidebar md-input-container .md-select-value{
@@ -419,7 +420,7 @@ span.name {
   padding-left:5px;
 }
 
-/* { box-sizing:border-box; } /*Angular Material 1.0.1.: centers the text in boxes.*/
+/*{ box-sizing:border-box; } /*Angular Material 1.0.1.: centers the text in boxes.*/
 
 form {
   width: 380px;
@@ -455,7 +456,7 @@ label {
   position: absolute;
   pointer-events: none;
   left: 5px;
-  /*top: 10px;/* Moves label to above input field*/
+ /*top: 10px;/*Angular 1.0.1.: Moves label to above input field*/
   transition: all 0.2s ease;
 }
 
@@ -511,3 +512,14 @@ input:focus ~ label, input.used ~ label {
 .logEntries:last-child{
   border: 0px !important;
 }
+
+/*.resetButton {
+  vertical-align: right;
+  text-decoration: none;
+  color:#4c9ef1
+  padding: 0 6px 0 6px;
+  margin:3px 4px 3px 4px;
+  text-align:center;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border-radius: 10px 0 0 10px;
+}/*garbage*/
