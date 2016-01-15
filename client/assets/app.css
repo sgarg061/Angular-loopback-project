@@ -508,35 +508,23 @@ input:focus ~ label, input.used ~ label {
   background-color: rgb(222, 222, 222) !important;
   border: 0px;
 }
-.logEntries:last-child{
-  border: 0px !important;
+
+.logEntries.active md-icon{
+  background-color: #8A8A8A;
+
 }
 
-#timeline{
-  /*height: 150px;*/
+
+.logEntries md-icon{
+  border: 1px solid #8A8A8A;
+  border-radius: 15px;
+  transition: background-color 0.15s ease;
 }
+
 
 #timeline.opened{
   height: auto;
 }
-/*
-#data-points .check-in-point-shadow {
-  opacity: 1;
-  cursor: pointer;
-}
-
-#data-points .check-in-point {
-  opacity: 0;
-  cursor: pointer;
-}
-#data-points .check-in-point:hover {
-  opacity: 0.3;
-}
-
-.check-in-point-tooltip {
-  font-size: 0.95em;
-}
-*/
 
 #detail-text {
   position: absolute;
@@ -574,9 +562,6 @@ pre.pretty-json{
   opacity: 0.3;
 }
 
-#detail-text {
-  /*top: 110px;*/
-}
 
 .check-in-point-tooltip {
   font-size: 0.8em;
@@ -590,4 +575,22 @@ pre.pretty-json{
 
 .nav-button:hover {
   fill: #333;
+}
+
+.checkin-label{
+  margin-left: 10px;
+  color: white !important;
+  width: 80px;
+  text-align: center;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-size: 12px !important;
+}
+
+.checkin-camera-numbers{
+  background-color: gray;
+  color: white;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 12px !important;
 }

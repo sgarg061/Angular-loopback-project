@@ -11,7 +11,8 @@ angular
     $scope.device = null;
 
     $scope.checkinHeight = 500;
-    $scope.timelineView = true;
+
+    $scope.timelineView = false;
 
     $scope.logCount = 0;
     $scope.logDataLimit = 100;
@@ -23,12 +24,19 @@ angular
 
     $scope.checkinReasons = [
       {name: 'all', count: 0},
-      {name: 'default', count: 0},
       {name: 'restart', count: 0},
       {name: 'interval', count: 0},
       {name: 'force', count: 0},
       {name: 'shutdown', count: 0}
     ];
+
+    $scope.checkinColors = {
+      interval: '#00bb00',
+      restart: '#f54',
+      shutdown: '#f54',
+      force: '#ffa000',
+      other: '#0088cc'
+    };
 
     $scope.selectedCheckinReason = 'all';
 
@@ -84,7 +92,7 @@ angular
             }, {
               relation: 'logEntries',
               scope: {
-                fields: ['id','timestamp'],
+                fields: ['id','timestamp', 'onlineCameras', 'totalCameras', 'reason'],
                 limit: $scope.logDataLimit,
                 order: 'timestamp DESC'
               }
@@ -140,20 +148,26 @@ angular
         })
     }
 
-    function getReasons() {
+    function getCountByReasons() {
       $scope.checkinReasons.forEach(function (reason){
+        
+        var reasonName = reason.name;
+        if (reason.name == 'all')
+          reasonName = {neq: null};
+
+
         DeviceLogEntry
           .count({
-              where: {reason: reason.name}
+              where: {reason: reasonName}
           }, function(data) {
             reason.count = data.count;
           });
-      })
+
+      });
     }
 
     getDevice();
-    getCheckinCount();
-    getReasons();
+    getCountByReasons();
     getSoftwareVersions();
 
     $scope.selectReseller = function(reseller) {
@@ -188,21 +202,6 @@ angular
         $scope.device.currentEntry = log[0];
       })
 
-
-  }
-
-  function getCheckinCount() {
-
-    DeviceLogEntry
-      .count({
-          filter: {
-            where: {deviceId: $stateParams.deviceId}
-          }
-      })
-      .$promise
-      .then(function(data) {
-        $scope.logCount = data.count;
-      })
 
   }
 
@@ -247,6 +246,8 @@ angular
       $scope.sendingCheckin = null;
       $scope.$digest();
     });
+
+
   }
 
   function loadMore(value) {
@@ -256,7 +257,7 @@ angular
       .find({
           filter: {
             where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}},
-            fields: ['id','timestamp', 'deviceId'],
+            fields: ['id','timestamp', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
             limit: value,
             order: 'timestamp DESC'
           }
@@ -317,44 +318,52 @@ angular
     $state.go('home');
   };
 
-  function renderGraph () {
+  function renderGraph() {
+    var start = new Date($scope.currentDate.toLocaleDateString());
+    var end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {deviceId: $stateParams.deviceId, checkinTime: {gt: start, lt: end}},
+            fields: ['id','timestamp', 'checkinTime', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
+            order: 'timestamp DESC'
+          }
+      })
+      .$promise
+      .then(function(logs) {
+        $scope.device.loadingMore = false;
 
-    var checkInData = fakeCheckins(20);
 
-    var reasonOptions = ['default', 'restart', 'info'];
+        var args = {
+          date: $scope.currentDate,
+          width: function() {
+            return window.innerWidth - 380;
+          },
+          height: function() {
+            return $scope.checkinHeight - 40;
+          },
+          margin: {
+            left: 10,
+            right: 10,
+            top: 0,
+            bottom: 0
+          },
+          data: logs,
+          reasonColorCode: $scope.checkinColors,
+          callback: function(data) {
+            /* insert the data into angular directive */
+            viewCheckin(data);
+            var angularDirectiveDOM = document.createElement('div');
+            return angularDirectiveDOM;
 
-    var reasonColorCode = {
-      default: '#0088cc',
-      restart: '#f54',
-      info: '#ffa000'
-    };
+          }
+        };
 
-    var args = {
-      date: $scope.currentDate,
-      width: function() {
-        return window.innerWidth - 380;
-      },
-      height: function() {
-        return $scope.checkinHeight - 40;
-      },
-      margin: {
-        left: 10,
-        right: 10,
-        top: 0,
-        bottom: 0
-      },
-      data: checkInData,
-      reasonColorCode: reasonColorCode,
-      callback: function(data) {
-        /* insert the data into angular directive */
-        viewCheckin(data);
-        var angularDirectiveDOM = document.createElement('div');
-        return angularDirectiveDOM;
+        timeline(args);
 
-      }
-    };
+      })
 
-    timeline(args);
+
   }
 
   function getTick(width) {
@@ -386,22 +395,15 @@ angular
 
     var reasonOptions = ['default', 'restart', 'info'];
 
-    var reasonColorCode = {
-      default: '#0088cc',
-      restart: '#f54',
-      info: '#ffa000'
-    };
-
 
     while(count > 0) {
-      var checkInTime = new Date(`Fri Jan 14 2016 ${Math.floor((Math.random() * 24) + 0)}:${Math.floor((Math.random() * 59) + 0)}:${Math.floor((Math.random() * 59) + 0)} GMT-0500 (EST)`);
+      var checkInTime = new Date(`Fri Jan 15 2016 ${Math.floor((Math.random() * 24) + 0)}:${Math.floor((Math.random() * 59) + 0)}:${Math.floor((Math.random() * 59) + 0)} GMT-0500 (EST)`);
       var reasonId = Math.floor((Math.random() * 3) + 0);
       var obj = {
         deviceId: `30a34860-b3e8-11e5-b146-fbfc0da4d611`,
         timestamp: checkInTime.getTime(),
         checkinTime: checkInTime,
         reason: reasonOptions[reasonId],
-        reasonColor: reasonColorCode[reasonOptions[reasonId]],
         id: count
       }
       points.push(obj);
@@ -423,7 +425,6 @@ angular
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
     renderGraph();
   }
-
 
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;

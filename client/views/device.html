@@ -40,7 +40,7 @@
                 <h3>Check-in History</h3>
 
                 <div layout="row">
-                  <md-input-container style="margin-right: 10px;" flex="30">
+                  <md-input-container style="margin-right: 10px;" flex="30" ng-show="!timelineView">
                       <label>Only Show</label>
                       <md-select ng-model="selectedCheckinReason">
                         <md-option ng-repeat="reason in checkinReasons" value="{{reason.name}}">{{reason.name | capitalize}} ({{reason.count}})</md-option>
@@ -51,7 +51,7 @@
                     <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false">
                       <md-icon md-svg-icon="list"></md-icon>
                     </md-button>
-                    <md-button class="md-icon-button md-primary" aria-label="Timeline" ng-click="timelineView = true">
+                    <md-button class="md-icon-button md-primary" aria-label="Timeline" ng-click="timelineView = true;">
                       <md-icon md-svg-icon="timeline"></md-icon>
                     </md-button>
                   </div>
@@ -60,9 +60,9 @@
 
                 <div layout="column" ng-show="timelineView" id="checkin-list">
                   <div layout="row">
-                    <md-button flex="15" class="md-raised" ng-click="loadPrevDay()" ng-if="device.id != sendingCheckin">Prev Day</md-button>
+                    <md-button flex="15" class="md-raised" ng-click="loadPrevDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore">Prev Day</md-button>
                     <h2 style="text-align: center; ">Timeline View - {{currentDate | date: 'mediumDate' }}</h2>
-                    <md-button flex="15" class="md-raised" ng-click="loadNextDay()" ng-if="device.id != sendingCheckin">Next Day</md-button>
+                    <md-button flex="15" class="md-raised" ng-click="loadNextDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore">Next Day</md-button>
                   </div>
 
                   <div id="timeline">
@@ -107,17 +107,34 @@
 
                 <div layout="row" style="height:{{checkinHeight}}px;" ng-if="device.logEntries.length && !timelineView" layout-align="center stretch" id="checkin-list">
 
-                  <md-content flex="30" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
+                  <md-content flex="35" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
                     <md-list layout-padding>
-                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}">
+                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-if="selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason">
                         
-                        <md-icon md-svg-icon='indicator_red'></md-icon>
+                        <md-icon md-svg-icon='indicator_green' ng-if='entry.onlineCameras == entry.totalCameras'>
+                          <md-tooltip md-direction="top">
+                            All cameras are online
+                          </md-tooltip>
+                        </md-icon>
+                        <md-icon md-svg-icon='indicator_yellow' ng-if='entry.onlineCameras < entry.totalCameras && entry.onlineCameras > 0'>
+                          <md-tooltip md-direction="top">
+                            {{entry.onlineCameras}} of {{entry.totalCameras}} cameras are online
+                          </md-tooltip>
+                        </md-icon>
+                        <md-icon md-svg-icon='indicator_red' ng-if='entry.onlineCameras == 0'>
+                          <md-tooltip md-direction="top">
+                            All cameras are offline
+                          </md-tooltip>
+                        </md-icon>
 
                         <div class="md-list-item-text" layout="column" style="padding: 5px 0;">
-                          <h4>{{ entry.timestamp | date: 'medium' }}</h4>
-                          <p class="md-body-2" style="color:red;">Restart</p>
-                          <p class="md-body-1">4/5 Cameras Online</p>
+                          <h4 style="font-weight:bold;font-size:12px;">{{ entry.timestamp | date: 'medium' }}</h4>
+                          <div layout="row" style="">
+                            <div class="md-body-1 checkin-camera-numbers">{{entry.onlineCameras}} of {{entry.totalCameras}} Cameras</div>
+                            <div class="md-body-2 checkin-label" style="background-color:{{checkinColors[entry.reason]}};">{{entry.reason | capitalize}}</div>
+                          </div>
                         </div>
+                        <md-divider ng-if="!$last"></md-divider>
                       </md-list-item>
 
                       <md-list-item class="md-3-line" ng-click="loadMore(100)" ng-if="!device.noMoreLogs">
