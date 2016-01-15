@@ -7,13 +7,14 @@
 
 ## Setup
 
-git clone https://github.com/SolinkCorp/call-home-server.git
-cd call-home-server
-npm install
+	1. clone this repo: https://github.com/SolinkCorp/call-home-server.git
+	2. use cmd line and navigate to the call-home-server repo
+	3. npm install 
 
 ## Running in Development
 
 ### Prerequisites
+- Go into services and make sure the service SolinkLive is not running and set it to manual
 - Elasticsearch (port: 9200) (able to run without this)
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
