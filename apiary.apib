@@ -464,123 +464,132 @@ A device object has the following attributes:
 + Request (application/json)
 
             {
-                "deviceId": "a3084250-4b37-11e5-8184-752d1c0476b3",
-                "timestamp": "1449775377473",
-                "id": 9103,
-                "name": "20 E Chicago Ave",
-                "address": "20 E Chicago Ave, Chicago, IL 60611, USA",
-                "location": {
-                    "lat": 41.8969068,
-                    "lng": -87.6274042
-            },
-                "password": "__connect__",
-                "username": "solink-local",
-                "locationName": "RR Chicago Avenue",
-                "posInformation": [
+                "data":
                     {
-                        "evt": "motion",
-                        "url": "http://localhost:8080/?username=solink-local&password=__connect__",
-                        "name": "Motion",
-                        "type": "socketio",
-                        "error": null,
-                        "posId": 0,
-                        "status": "online",
-                        "filter_id": "Bu2NuOPsjK3r4tLF"
-                    }
-                ],
-                "organizationPath": "United States/Illinois/Chicago",
-                "cameraInformation": [
-                    {
-                        "ip": "10.10.0.123",
-                        "name": "Storage",
-                        "status": "online",
-                        "streams": [
+                        "deviceId": "a3084250-4b37-11e5-8184-752d1c0476b3",
+                        "timestamp": "1449775377473",
+                        "id": 9103,
+                        "name": "20 E Chicago Ave",
+                        "address": "20 E Chicago Ave, Chicago, IL 60611, USA",
+                        "location": {
+                            "lat": 41.8969068,
+                            "lng": -87.6274042
+                        },
+                        "password": "__connect__",
+                        "username": "solink-local",
+                        "locationName": "RR Chicago Avenue",
+                        "posInformation": [
                             {
-                                "id": "25790730-dc54-45dd-e379-bda82fdfe540",
-                                "url": "rtsp://admin:admin@192.168.0.107/video1enc2",
-                                "name": "SD",
-                                "retention": "",
-                                "latestThumb": "1449775341000_16216"
-                            },
-                            {
-                                "id": "3db6dae2-912c-4ff9-fa79-470c8b41615d",
-                                "url": "rtsp://admin:admin@192.168.0.107/video1enc1",
-                                "name": "HD",
-                                "retention": "",
-                                "latestThumb": "1449775336000_17417"
+                                "evt": "motion",
+                                "url": "http://localhost:8080/?username=solink-local&password=__connect__",
+                                "name": "Motion",
+                                "type": "socketio",
+                                "error": null,
+                                "posId": 0,
+                                "status": "online",
+                                "filter_id": "Bu2NuOPsjK3r4tLF"
                             }
                         ],
-                        "cameraId": "CsfA4LyDGSPVf6Z0",
-                        "password": "",
-                        "username": "",
-                        "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-CsfA4LyDGSPVf6Z0-thumbnail.jpg",
-                        "manufacturer": "unknown",
-                        "motionParams": {
-                            "roi": 1.111111111111111e+99,
-                            "enabled": true,
-                            "threshold": 120,
-                            "sensitivity": 50
-                        },
-                        "schedule_enabled": true
-                    },
-                    {
-                        "ip": "10.10.0.127",
-                        "name": "Kitchen",
-                        "status": "offline",
-                        "streams": [
+                        "organizationPath": "United States/Illinois/Chicago",
+                        "cameraInformation": [
                             {
-                                "id": "38d7df81-166c-4d99-d754-a97d849f5082",
-                                "url": "rtsp://admin:admin@192.168.0.104/video1enc2",
-                                "name": "SD",
-                                "retention": "",
-                                "latestThumb": "1449739056000_11000"
+                                "ip": "10.10.0.123",
+                                "name": "Storage",
+                                "status": "online",
+                                "streams": [
+                                    {
+                                        "id": "25790730-dc54-45dd-e379-bda82fdfe540",
+                                        "url": "rtsp://admin:admin@192.168.0.107/video1enc2",
+                                        "name": "SD",
+                                        "retention": "",
+                                        "latestThumb": "1449775341000_16216"
+                                    },
+                                    {
+                                        "id": "3db6dae2-912c-4ff9-fa79-470c8b41615d",
+                                        "url": "rtsp://admin:admin@192.168.0.107/video1enc1",
+                                        "name": "HD",
+                                        "retention": "",
+                                        "latestThumb": "1449775336000_17417"
+                                    }
+                                ],
+                                "cameraId": "CsfA4LyDGSPVf6Z0",
+                                "password": "",
+                                "username": "",
+                                "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-CsfA4LyDGSPVf6Z0-thumbnail.jpg",
+                                "manufacturer": "unknown",
+                                "motionParams": {
+                                    "roi": 1.111111111111111e+99,
+                                    "enabled": true,
+                                    "threshold": 120,
+                                    "sensitivity": 50
+                                },
+                                "schedule_enabled": true
                             },
                             {
-                                "id": "b8ba9496-8534-44fa-d44d-06978a001a23",
-                                "url": "rtsp://admin:admin@192.168.0.104/video1enc1",
-                                "name": "HD",
-                                "retention": "",
-                                "latestThumb": "1449768356000_17417"
+                                "ip": "10.10.0.127",
+                                "name": "Kitchen",
+                                "status": "offline",
+                                "streams": [
+                                    {
+                                        "id": "38d7df81-166c-4d99-d754-a97d849f5082",
+                                        "url": "rtsp://admin:admin@192.168.0.104/video1enc2",
+                                        "name": "SD",
+                                        "retention": "",
+                                        "latestThumb": "1449739056000_11000"
+                                    },
+                                    {
+                                        "id": "b8ba9496-8534-44fa-d44d-06978a001a23",
+                                        "url": "rtsp://admin:admin@192.168.0.104/video1enc1",
+                                        "name": "HD",
+                                        "retention": "",
+                                        "latestThumb": "1449768356000_17417"
+                                    }
+                                ],
+                                "cameraId": "cNzA9Qw6aIU4K5jR",
+                                "password": "",
+                                "username": "",
+                                "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-cNzA9Qw6aIU4K5jR-thumbnail.jpg",
+                                "manufacturer": "unknown",
+                                "motionParams": {
+                                    "roi": 1.111111111111111e+99,
+                                    "enabled": true,
+                                    "threshold": 152,
+                                    "sensitivity": 50
+                                },
+                                "schedule_enabled": true
                             }
                         ],
-                        "cameraId": "cNzA9Qw6aIU4K5jR",
-                        "password": "",
-                        "username": "",
-                        "thumbnail": "d60cc0f0-97ab-11e5-a5dc-53f0fcbc3a18-cNzA9Qw6aIU4K5jR-thumbnail.jpg",
-                        "manufacturer": "unknown",
-                        "motionParams": {
-                            "roi": 1.111111111111111e+99,
-                            "enabled": true,
-                            "threshold": 152,
-                            "sensitivity": 50
+                        "deviceInformation": {
+                            "ip": "166.164.111.142",
+                            "name": "RRChicagoAve 2",
+                            "size": 3887985590272,
+                            "used": 440392482816,
+                            "model": "TS-X53",
+                            "firmware": "4.2.0",
+                            "deviceCapacity": 3887985590272,
+                            "availableCapacity": 3447593107456
                         },
-                        "schedule_enabled": true
+                        "$$hashKey": "object:549"
                     }
-                ],
-                "deviceInformation": {
-                    "ip": "166.164.111.142",
-                    "name": "RRChicagoAve 2",
-                    "size": 3887985590272,
-                    "used": 440392482816,
-                    "model": "TS-X53",
-                    "firmware": "4.2.0",
-                    "deviceCapacity": 3887985590272,
-                    "availableCapacity": 3447593107456
-                },
-                "$$hashKey": "object:549"
+                }
             }
 
 + Response 200 (application/json)
 
     + Body
-    
-        {
-            "eventServerUrl": "eventServerUrl or 'must have an eventServerUrl'",
-            "imageServerUrl": "imageServerUrl or 'must have a imageServerUrl'",
-            "signallingServerUrl": "signallingServerUrl or 'must have a signallingServerUrl'",
-            "updateUrl": "updateUrl or 'must have a updateUrl'",
-            "checkinInterval": "checkinInterval or 'must have a checkinInterval'"
-        }
+
+            {
+                "eventServerUrl": "https://myeventserver.com",
+                "imageServerUrl": "https://myimageserver.com",
+                "signallingServerUrl": "https://mysignallingserver.com",
+                "updateUrl": "https://myupdateurl.com",
+                "checkinInterval": "3600",
+                "ports": {
+                    "vms": 8080,
+                    "uploader": 3000,
+                    "checkin": 1234
+                }
+            }
 
 ## Group Licenses
 
@@ -728,7 +737,7 @@ A request from the platform is sent out with user's current email, current passw
         }
 
 + Response 202 (application/json)
-        
+
         {
             "response": "Password successfully updated."
         }
@@ -746,7 +755,7 @@ An email is sent to the user's current email to confirm changing the password
         }
 
 + Response 200 (application/json)
-        
+
         {
             "response": "Forgot password email successfully sent."
         }
@@ -779,7 +788,7 @@ POS Filter object has the following attributes:
               "description": null,
               "lastUpdated": ""
             }
-            
+
 ## Camera [/api/cameras/{cameraId}]
 
 Camera object has the following attributes:
@@ -799,7 +808,7 @@ Camera object has the following attributes:
 + Response 200 (application/json)
 
     + Body
-    
+
             {
               "id": "25a82790-a4f8-11e5-94a2-fd50a5ff3026",
               "cameraId": "98ee3640-a2a5-11e5-9e4c-31c6c5024ea1",
@@ -811,7 +820,7 @@ Camera object has the following attributes:
                     ],
               "thumbnail": "thumbnail.jpeg"
             }
-            
+
 ## POS Connectors [/api/connectors]
 
 POS Connector will provide POS Filters assigned to a provided device through auth0 token.
@@ -891,3 +900,104 @@ Camera assignment is done through the following methods.
             "id": 4
           }
         ]
+
+## Group Software Versions
+
+Modify software version number used in clouds, resellers, tenants, and devices.
+
+## Modifying specific versions [/api/softwareversions/{id}]
+
+Remove, edit, or get specific software versions.
+
++ Parameters
+    + id: 7d2c1010-b4b8-11e5-a32d-a56e80dc4179 - the ID of the version
+
+### Edit latest software version [PUT]
++ Request (application/json)
+
+        {
+            "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+            "name": "v.0.0.6",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+        }
+
++ Response 200 (application/json)
+
+        {
+             "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+             "name": "v0.0.6",
+             "code": 2,
+             "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }
+
+### Delete software version [DELETE]
++ Response 200 (application/json)
+
+        {
+             count: 1
+        }
+
+### Get specific software version [GET]
++ Response 200 (application/json)
+
+        {
+            "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://resources.solinkcloud.com/installers/solink-testing/v0.0.2/"
+        }
+
+## Getting or Adding [/api/softwareversions]
+
+Get or add available software version numbers.
+
+### Get all software versions [GET]
++ Response 200 (application/json) 
+
+    + Body
+    
+            [
+                {
+                    "id": "33721400-b491-11e5-ae4d-2db205d4c135",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+                },
+                {
+                    "id": "36ffcea0-b491-11e5-ae4d-2db205d4c135",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/",
+                },
+                {
+                    "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+                    "name": "v0.0.2",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2//",
+                },
+                {
+                    "id": "7d2c1010-b4b8-11e5-a32d-a56e80dc4179",
+                    "name": "v0.0.6",
+                    "code": 2,
+                    "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+                }
+            ]
+
+### Add software version [POST]
++ Request (application/json)
+
+        {
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
+            "name": "v0.0.2",
+            "code": 2,
+            "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
+        }

@@ -33,7 +33,20 @@
     "reason": {
       "type": "string",
       "required": false,
-      "default": "default"
+      "default": "interval"
+    },
+    "reasonDescription": {
+      "type": "string",
+      "required": false,
+      "length": 5000
+    },
+    "onlineCameras":{
+      "type": "number",
+      "required": false      
+    },
+    "totalCameras":{
+      "type": "number",
+      "required": false      
     },
     "deviceModel": {
       "type": "string",
@@ -49,15 +62,24 @@
     },
     "diskSize": {
       "type": "number",
-      "required": false
+      "required": false,
+      "postgresql": {
+        "dataType": "NUMERIC(10,2)"
+      }
     },
     "diskSpaceFree": {
       "type": "number",
-      "required": false
+      "required": false,
+      "postgresql": {
+        "dataType": "NUMERIC(10,2)"
+      }
     },
     "diskSpaceUsed": {
       "type": "number",
-      "required": false
+      "required": false,
+      "postgresql": {
+        "dataType": "NUMERIC(10,2)"
+      }
     }
   },
   "validations": [],

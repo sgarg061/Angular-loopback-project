@@ -351,15 +351,15 @@ module.exports = function(Device) {
         }
 
         if (deviceLogEntry.checkinData.deviceInformation.size) {
-            deviceLogEntry.diskSize = deviceLogEntry.checkinData.deviceInformation.size;
+            deviceLogEntry.diskSize = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.size);
         }
 
         if (deviceLogEntry.checkinData.deviceInformation.used) {
-            deviceLogEntry.diskSpaceUsed = deviceLogEntry.checkinData.deviceInformation.used;
+            deviceLogEntry.diskSpaceUsed = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.used);
         }
 
         if (deviceLogEntry.checkinData.deviceInformation.availableCapacity) {
-            deviceLogEntry.diskSpaceFree = deviceLogEntry.checkinData.deviceInformation.availableCapacity;
+            deviceLogEntry.diskSpaceFree = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.availableCapacity);
         }
 
         // swap the id for deviceId attribute
@@ -371,6 +371,10 @@ module.exports = function(Device) {
         deviceLogEntry.checkinTime = Date.now();
 
         return deviceLogEntry;
+    }
+
+    function convertBytesToGB(n) {
+        return parseFloat((parseInt(n) / (1024 * 1024 * 1024)).toFixed(2));
     }
 
     function checkinDevice (device, deviceData, cb) {
@@ -496,6 +500,35 @@ module.exports = function(Device) {
                     signallingServerUrl: cloud.signallingServerUrl,
                     checkinInterval: checkinInterval
                 };
+
+                var ports = {};
+                if (device.connectPort) {
+                    ports.connect = device.connectPort;
+                }
+
+                if (device.vmsPort) {
+                    ports.vms = device.vmsPort;
+                }
+
+                if (device.checkinPort) {
+                    ports.checkin = device.checkinPort;
+                }
+
+                if (device.uploaderPort) {
+                    ports.uploader = device.uploaderPort;
+                }
+
+                if (device.listenerPort) {
+                    ports.listener = device.listenerPort;
+                }
+
+                if (device.configForwardPort) {
+                    ports.configForward = device.configForwardPort;
+                }
+
+                if (Object.keys(ports).length > 0) {
+                    result.ports = ports;
+                }
 
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                     if (err) {

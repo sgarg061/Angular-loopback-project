@@ -9,16 +9,23 @@
 
 	git clone https://github.com/SolinkCorp/call-home-server.git
 	cd call-home-server
-	npm install
+	npm install 
+	npm install -g bower
 
 
 ## Running in Development
 
 ### Prerequisites
-- Elasticsearch (port: 9200) (able to run without this)
+-   You could get some error where you have downloaded bower but the computer cannot detect it.
+ 	In this case, go add a path called: C:\Users\yourusername\AppData\Roaming\npm
+ 	and then try again.
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
 - Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
+To set up PostgreSQL to run:
+	0. Install version 9.4 or higher from here: http://www.postgresql.org/download/
+	0. Download pgAdmin III on your computer and open it
+	0. To get /node ./ to run (as required below), create a new database called 'call-home': right-click "Databases" in your Object Browser on the left, click New Databases, enter name 'call-home'
 
 More specific config data stored in [server/datasources.json](server/datasources.json) and [config.js](config.js).
 
@@ -162,10 +169,10 @@ Test that Strongloop PM is up
 	curl -X GET http://localhost:8701
 
 ---------------------------------------
- 
-### Build and deploy the app 
 
-From a local checkout of the project build and deploy the app to the new instance
-
-	slc build
-	slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
+### Build and deploy the app 		
+ 		
+From a local checkout of the project build and deploy the app to the new instance		
+ 		
+    slc build		
+    slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
