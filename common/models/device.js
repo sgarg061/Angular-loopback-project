@@ -5,6 +5,7 @@ var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
+var config = require ('../../server/config.json');
 
 
 module.exports = function(Device) {
@@ -362,6 +363,11 @@ module.exports = function(Device) {
             deviceLogEntry.diskSpaceFree = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.availableCapacity);
         }
 
+        //add reason field
+        deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
+        if (config.remoting.reason_array.indexOf(deviceLogEntry.checkinData.reason) < 0)
+            deviceLogEntry.reason = 'other';
+        delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
         deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
         delete deviceLogEntry.checkinData.id;
@@ -416,6 +422,10 @@ module.exports = function(Device) {
 
         if (deviceData.location) {
             checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.lat, lng: deviceData.location.lng});
+        }
+
+        if (deviceData.reason) {
+            checkedInProperties.reason = deviceData.reason;
         }
 
         if (deviceData.locationName) {

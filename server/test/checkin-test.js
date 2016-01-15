@@ -7,6 +7,7 @@ var deviceCheckinData = {
     guid: deviceGuid,
     address: '479 March Road, Kanata, ON, K2K',
     appVersion: '4.0.9',
+    reason: 'forced',
     location: {
         lng: -75.9087814,
         lat: 45.3376177
@@ -164,6 +165,24 @@ describe('Checkin after initial device activation', function() {
           assert.deepEqual(logEntry.diskSize, getGB(deviceCheckinData.deviceInformation.size));
           assert.deepEqual(logEntry.diskSpaceFree, getGB(deviceCheckinData.deviceInformation.availableCapacity));
           assert.deepEqual(logEntry.diskSpaceUsed, getGB(deviceCheckinData.deviceInformation.used));
+          done();
+        });
+      });
+  });
+  it('should log correct reason in the database', function (done) {
+    common.login('solink', function (token) {
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+          assert(typeof res.body === 'object');
+          assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+          var logEntry = res.body.logEntries[0];
+          if (deviceCheckinData.reason === 'forced')
+            assert.deepEqual(logEntry.reason, deviceCheckinData.reason);
+          else
+            assert.deepEqual(logEntry.reason, 'other');
           done();
         });
       });
@@ -452,6 +471,29 @@ describe('Checkin address format', function () {
              });
         });
     });
+  });
+  it('should checkin with an incorrect reason, verify it gets changed to other', function(done) {
+    deviceCheckinData.id = deviceId;
+    deviceCheckinData.reason = 'solink';
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+      .send({data: deviceCheckinData})
+      .expect(200)
+      .end(function(err, res) {
+        common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+            if (err) throw err;
+            assert(typeof res.body === 'object');
+            var last = res.body.logEntries.length - 1;
+            var logEntry = res.body.logEntries[last];
+            assert.deepEqual(logEntry.reason, 'other');
+            done();
+          });
+      });  
+    });
+        
   });
 });
 
