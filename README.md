@@ -9,12 +9,16 @@
 
 	git clone https://github.com/SolinkCorp/call-home-server.git
 	cd call-home-server
-	npm install
+	npm install 
+	npm install -g bower
 
 
 ## Running in Development
 
 ### Prerequisites
+-   You could get some error where you have downloaded bower but the computer cannot detect it.
+ 	In this case, go add a path called: C:\Users\yourusername\AppData\Roaming\npm
+ 	and then try again.
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
 - Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
@@ -165,10 +169,10 @@ Test that Strongloop PM is up
 	curl -X GET http://localhost:8701
 
 ---------------------------------------
- 
-### Build and deploy the app 
 
-From a local checkout of the project build and deploy the app to the new instance
-
-	slc build
-	slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
+### Build and deploy the app 		
+ 		
+From a local checkout of the project build and deploy the app to the new instance		
+ 		
+    slc build		
+    slc deploy http://ec2-54-148-122-8.us-west-2.compute.amazonaws.com
