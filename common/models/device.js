@@ -364,16 +364,8 @@ module.exports = function(Device) {
 
         // swap the id for deviceId attribute
         var camera = deviceLogEntry.checkinData.cameraInformation;
-        var onlineCamerasCount = 0;
-        var totalCamerasCount = 0;
-
-        for (var i = 0; i < camera.length ; i++){
-            totalCamerasCount = totalCamerasCount + 1;
-            if (deviceLogEntry.checkinData.cameraInformation[i].status === 'online')
-                onlineCamerasCount = onlineCamerasCount + 1;
-        }
-        deviceLogEntry.onlineCameras = onlineCamerasCount;
-        deviceLogEntry.totalCameras = totalCamerasCount;
+        deviceLogEntry.onlineCameras = camera.filter(function(element){return element.status ==='online';}).length;
+        deviceLogEntry.totalCameras = camera.length;
 
 
         deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
