@@ -7,6 +7,7 @@ var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
 
 
+
 module.exports = function(Device) {
     'use strict';
     Device.observe('before save', function addId(ctx, next) {
@@ -362,6 +363,12 @@ module.exports = function(Device) {
             deviceLogEntry.diskSpaceFree = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.availableCapacity);
         }
 
+        //add reason field
+        var reasonArray = ['interval', 'status', 'forced', 'service', 'reboot'];
+        deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
+        if (reasonArray.indexOf(deviceLogEntry.checkinData.reason) < 0)
+            deviceLogEntry.reason = 'other';
+        delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
         var camera = deviceLogEntry.checkinData.cameraInformation;
         deviceLogEntry.onlineCameras = camera.filter(function(element){return element.status ==='online';}).length;
@@ -421,6 +428,10 @@ module.exports = function(Device) {
 
         if (deviceData.location) {
             checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.lat, lng: deviceData.location.lng});
+        }
+
+        if (deviceData.reason) {
+            checkedInProperties.reason = deviceData.reason;
         }
 
         if (deviceData.locationName) {

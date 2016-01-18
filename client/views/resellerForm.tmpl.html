@@ -23,13 +23,17 @@
         <label>Password</label>
         <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newReseller.password">
       </md-input-container>
+      <md-input-container class="{{newReseller.password != newReseller.checkPassword && newReseller.password && newReseller.checkPassword ? 'md-input-invalid' : '' }}">  
+        <label>Retype Password</label>
+        <input type="password" class="form-control" name="checkPassword" autocomplete="off" required ng-model="newReseller.checkPassword">
+      </md-input-container>
     </div>
   </md-dialog-content>
   <div class="md-actions" layout="row">
     <md-button ng-click="cancel()">
      Cancel
     </md-button>
-    <md-button ng-click="create()" style="margin-right:20px;">
+    <md-button ng-disabled="newReseller.password != newReseller.checkPassword || !newReseller.name || !newReseller.email || !newReseller.password || !newReseller.checkPassword" ng-click="create()" style="margin-right:20px;">
       Create
     </md-button>
   </div>

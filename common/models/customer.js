@@ -14,18 +14,29 @@ module.exports = function(Customer) {
             } else {
                 if (ctx.instance && !ctx.instance.id) {
                     ctx.instance.id = uuid.v1();
+
+                    if (ctx.isNewInstance) {
+                        ctx.instance.isValid(function (valid) {
+                            if (!valid) {
+                                var error = new Error('Invalid customer');
+                                error.statusCode = 400;
+                                next(error);
+                            } else {
+                                // customer is valid
+                                createCustomerAdminUser(ctx.instance, function (err) {
+                                    ctx.instance.unsetAttribute('password');
+                                    next(err);
+                                });
+                            }
+                        });
+                    } else {
+                        next();
+                    }
+                } else {
+                    next();
                 }
-                next();
             }
         });
-    });
-
-    Customer.observe('after save', function createUser(ctx, next) {
-        if (ctx.isNewInstance) {
-            createCustomerAdminUser(ctx.instance, next);
-        } else {
-            next();
-        }
     });
 
     Customer.remoteMethod('getOwnership', {
