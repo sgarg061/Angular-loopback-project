@@ -65,6 +65,12 @@ var deviceCheckinData = {
           type: 'camera_type_z',
           name: 'Back Camera',
           status: 'online'
+        },
+        {
+          cameraId: 'A8AA03AA-8A3E-4DBE-8E19-234EA0DD2909',
+          type: 'camera_type_x',
+          name: 'side Camera',
+          status: 'offline'
         }
     ]
 };
@@ -121,13 +127,42 @@ describe('Checkin after initial device activation', function() {
           if (err) throw err;
           assert(typeof res.body === 'object');
 
-          assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
+          assert.equal(res.body.cameras.length, 3 , 'must have 3 cameras associated');
           assert.equal(res.body.posDevices.length, 2,'must have 2 POS device associated');
           assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
           assert(res.body.lastCheckin, 'must have a lastCheckin');
 
           checkin = res.body.lastCheckin;
 
+          done();
+        });
+      });
+  });
+  it('ensures correct camera count is recored in the db', function (done) {
+    common.login('solink', function (token) {
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+          assert(typeof res.body === 'object');
+          assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+          var logEntry = res.body.logEntries[0];
+          var camera = deviceCheckinData.cameraInformation;
+          var count_Cameras = 0;
+          var count_OnlineCameras = 0;
+          for (var i = 0; i < camera.length; i++){
+            count_Cameras = count_Cameras + 1;
+            if (deviceCheckinData.cameraInformation[i].status === 'online')
+              count_OnlineCameras = count_OnlineCameras + 1;
+          }
+          
+          //ensure the cameras are counted correctly
+          assert.deepEqual(count_Cameras, 3);
+          assert.deepEqual(count_OnlineCameras , 2);
+          //ensure cameras are recored correctly in the database
+          assert.deepEqual(logEntry.onlineCameras, count_OnlineCameras);
+          assert.deepEqual(logEntry.totalCameras, count_Cameras);
           done();
         });
       });
@@ -217,7 +252,7 @@ describe('Checkin after initial device activation', function() {
           .end(function(err, res) {
             if (err) throw err;
             assert(typeof res.body === 'object');
-            assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
+            assert.equal(res.body.cameras.length, 3, 'must have 3 cameras associated');
             assert.equal(res.body.posDevices.length, 2,'must have 2 POS device associated');
             assert.equal(res.body.cameras[1].status, 'offline', 'camera 2 status must be offline');
 
@@ -491,8 +526,7 @@ describe('Checkin address format', function () {
       });  
     });
         
-  });
-});
+  });});
 
 describe('Stream date range format', function () {
   it('should not have values when date is missing', function (done) {
