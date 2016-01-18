@@ -5,7 +5,7 @@ var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
-var config = require ('../../server/config.json');
+
 
 
 module.exports = function(Device) {
@@ -364,8 +364,9 @@ module.exports = function(Device) {
         }
 
         //add reason field
+        var reason_array = ['periodic', 'status', 'forced', 'service', 'reboot'];
         deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
-        if (config.remoting.reason_array.indexOf(deviceLogEntry.checkinData.reason) < 0)
+        if (reason_array.indexOf(deviceLogEntry.checkinData.reason) < 0)
             deviceLogEntry.reason = 'other';
         delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
