@@ -1,18 +1,26 @@
 <div class="sidebar">
   
-    <div layout="row" layout-padding layout-align="space-between center">
+    <div layout="row" layout-padding layout-align="space-between center" style="padding-left:24px">
+      <div layout="column" layout-align="start start">
+        <h2 style="margin-bottom:0px">{{model.name}}</h2>
+        <p style="margin:2px 8px">{{model.email}}</p>
+      </div>
 
-      <h2>{{model.name}}</h2>
-
+      <div>
       <md-menu ng-show="type=='reseller'||type=='customer'">
         <md-button aria-label="interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
           <md-icon md-menu-origin md-svg-icon="drop_down" style="color:red;"></md-icon>
         </md-button>
         <md-menu-content width="4">
+          
+          <md-menu-item ng-show="type=='customer'">
+            <md-button ng-click="renameModel(model)">
+                Rename
+             </md-button>
+          </md-menu-item>
 
           <md-menu-item ng-show="type=='reseller'||type=='customer'">
             <md-button ng-click="deleteModel(model)">
-              <md-icon md-svg-icon="close" md-menu-align-target></md-icon>
               Delete
             </md-button>
           </md-menu-item>
@@ -26,7 +34,7 @@
 
         </md-menu-content>
       </md-menu>
-
+    </div>
     </div>
     
     <md-divider></md-divider>

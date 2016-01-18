@@ -96,11 +96,56 @@ angular
                 for (var j=0; j<customer.devices.length; j++) {
                   var device = customer.devices[j];
                   if (device.location) {
+                    // get device status
+                     /*
+                       Device status
+ 
+                       green:
+                         - all cameras are green
+                         - device has checked in within expected interval
+ 
+                       yellow:
+                         - one or more cameras are red
+                         - device has checked in within expected interval
+                       red:
+                         - device has not checked in within expected interval
+                     */
+                     var checkinIntervalInSeconds = device.checkinInterval ||
+                       customer.checkinInterval ||
+                       $scope.reseller.checkinInterval ||
+                       $scope.cloud.checkinInterval;
+ 
+                     var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+                     var nowInSeconds = new Date().getTime() / 1000;
+ 
+                     var gracePeriodInSeconds = 30;
+                     var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
+ 
+                     var allCamerasOnline = true;
+                     if (device.cameras) {
+                       for (var k = 0; k < device.cameras.length; k++) {
+                         var camera = device.cameras[k];
+                         if (camera.status != 'online') {
+                           allCamerasOnline = false;
+                           break;
+                         }
+                       }
+                     }
 
-                    var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
-                    device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
+                   // var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
+                   // device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
 
-                    var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';
+                   if (hasCheckedInOnTime) {
+                       if (allCamerasOnline) {
+                         device.status = 'green';
+                       } else {
+                         device.status = 'yellow';
+                       }
+                     } else {
+                       device.status = 'red';
+                     }
+                     var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
+                    //var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';
 
                     $scope.markers.push({
                       id: device.id,
