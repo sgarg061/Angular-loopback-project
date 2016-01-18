@@ -1,0 +1,48 @@
+{
+  "name": "SearchFilter",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "filter": {
+      "type": "object",
+      "required": true,
+      "default": {},
+      "postgresql": {
+        "dataType": "jsonb"
+      }
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "creatorId": {
+      "type": "string",
+      "required": true
+    },
+    "creatorType": {
+      "type": "string",
+      "required": true
+    },
+    "lastUpdated": {
+      "type": "date",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "searchFilterConnectors": {
+      "type": "hasMany",
+      "model": "SearchFilterConnector",
+      "foreignKey": "filterId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

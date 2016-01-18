@@ -13,8 +13,10 @@ angular
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
+        addSearchFilterFunction: "=addSearchFilterFunction",
         loadFilterFunction: "=loadFilterFunction",
         actionFilterFunction: "=actionFilterFunction",
+        actionSearchFilterFunction: "=actionSearchFilterFunction",
         selectConnectorFunction: "=selectConnectorFunction",
         deleteFunction: "=deleteFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
@@ -25,9 +27,12 @@ angular
         createSoftwareVersionFunction: "=createSoftwareVersionFunction",
         softwareVersions: "=softwareVersions",
         filters: "=filters",
+        searchFilters: "=searchFilters",
         children: "=children",
         ownedFilters: "=ownedFilters",
-        cascadedFilters: "=cascadedFilters"
+        cascadedFilters: "=cascadedFilters",
+        ownedSearchFilters: "=ownedSearchFilters",
+        cascadedSearchFilters: "=cascadedSearchFilters"
       },
       link: function (scope, element, attrs) {
         scope.openSoftwareVersionForm = scope.$parent.openSoftwareVersionForm,
@@ -37,6 +42,9 @@ angular
         scope.loadFilter = function(owner) {
           scope.loadFilterFunction(owner);
         }
+        scope.addSearchFilter = function(customerId) {
+          scope.addSearchFilterFunction(customerId);
+        }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
         }
@@ -45,6 +53,9 @@ angular
         }
         scope.actionFilter = function(filterId) {
           scope.actionFilterFunction(filterId);
+        }
+        scope.actionSearchFilter = function(filterId) {
+          scope.actionSearchFilterFunction(filterId);
         }
         scope.addLicense = function(customerId) {
           scope.addLicenseFunction(customerId);

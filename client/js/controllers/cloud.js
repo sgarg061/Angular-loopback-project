@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -13,9 +13,13 @@ angular
 
     $scope.children = [];
     $scope.filters = [];
+    $scope.searchFilters = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
+    
+    $scope.cascadedSearchFilters = [];
+    $scope.ownedSearchFilters = [];
     
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
@@ -120,6 +124,36 @@ angular
               $scope.filters.push(filter);
 
               filter.creatorType == 'cloud' ? $scope.ownedFilters.push(filter) :$scope.cascadedFilters.push(filter)
+            };
+          }
+
+        })
+
+    }
+
+    
+    function getSearchFilters(){
+      SearchFilter
+        .find({
+          filter: {
+            where: {
+              creatorId: $stateParams.cloudId,
+              creatorType: 'cloud'
+            }
+          }
+        })
+        .$promise
+        .then(function(connectors) {
+          $scope.searchFilters = [];
+          $scope.ownedSearchFilters = [];
+          $scope.cascadedSearchFilters = [];
+          for(var i in connectors){
+            var filter = connectors[i];
+            if (i > -1) {
+              filter.owner = (filter.creatorType == 'cloud' || userService.getUserType() == 'solink');
+              $scope.searchFilters.push(filter);
+
+              filter.creatorType == 'cloud' ? $scope.ownedSearchFilters.push(filter) :$scope.cascadedSearchFilters.push(filter)
             };
           }
 
@@ -398,5 +432,119 @@ angular
       }, function() {
     }); 
   };
-    
+   
+
+  $scope.addSearchFilter = function(connector) {
+    console.log('hello world');
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+                    $scope.newFilter = {
+                      name: '',
+                      filter: '{}',
+                      owner: true
+                    };
+                    $scope.create = function() {
+                      try{
+                        var script = JSON.parse($scope.newFilter.script);
+                      }
+                      catch(err){
+                        alert('invalid json object: ' +  err);
+                      }
+                      if (script) {
+                        SearchFilter.create({
+                          id: '',
+                          name: $scope.newFilter.name,
+                          description: $scope.newFilter.description,
+                          filter: script,
+                          creatorId: $stateParams.cloudId,
+                          creatorType: 'cloud' 
+                        })
+                        .$promise
+                        .then(function(customer) {
+                          getSearchFilters();
+                        }, function (res) {
+                          toastr.error(res.data.error.message, 'Error');
+                        });
+                        $mdDialog.cancel();
+                      }
+                    };
+                    $scope.cancel = function() {
+                      $mdDialog.cancel();
+                    };
+      },
+      templateUrl: 'views/filterForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+    }); 
+  };
+
+  $scope.actionSearchFilter = function(filter) {
+    $mdDialog.show({
+      controller: function DialogController($scope, $mdDialog) {
+        $scope.newFilter = filter
+
+        if (!$scope.newFilter.parsed_script){
+          try {
+            $scope.newFilter.script = JSON.parse(filter.script)
+          }
+          catch(err){
+            $scope.newFilter.script = filter.script
+          }
+          
+          $scope.newFilter.parsed_script = true
+        }
+
+        $scope.newFilter.$edit = true
+        $scope.create = function() {
+          var script = JSON.parse($scope.newFilter.script);
+          SearchFilter.prototype$updateAttributes({id: filter.id},
+          {
+            name: $scope.newFilter.name,
+            description: $scope.newFilter.description,
+            filter: script
+          })
+          .$promise
+          .then(function(customer) {
+            getFilters();
+          }, function (res) {
+            toastr.error(res.data.error.message, 'Error');
+          });
+          $mdDialog.cancel();
+        };
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };
+        $scope.destroy = function() {
+          var confirm = $mdDialog.confirm()
+            .title('Delete Filter')
+            .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
+            .ok('Yes')
+            .cancel('No');
+
+          $mdDialog.show(confirm).then(function() {
+            SearchFilter.deleteById($scope.newFilter)
+              .$promise
+              .then(function(customer) {
+                getFilters();
+              }, function (res) {
+                toastr.error(res.data.error.message, 'Error');
+              });
+          });
+
+
+        };
+      },
+      templateUrl: 'views/filterForm.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: event,
+      clickOutsideToClose:true
+      })
+      .then(function(result) {
+      }, function() {
+    }); 
+  }; 
   }]);
