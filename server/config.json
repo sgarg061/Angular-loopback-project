@@ -23,6 +23,7 @@
     "errorHandler": {
       "disableStackTrace": false
     }
+    
   },
   "legacyExplorer": false
 }

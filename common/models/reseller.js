@@ -14,26 +14,27 @@ module.exports = function(Reseller) {
             } else {
                 if (ctx.instance && !ctx.instance.id) {
                     ctx.instance.id = uuid.v1();
-                    if (!ctx.instance.password) {
-                        var e = new Error('Password not provided for reseller account');
-                        e.statusCode = 400;
-                        next(e);
-                    } else {
-                        next();
+
+                    if (ctx.isNewInstance) {
+                        ctx.instance.isValid(function (valid) {
+                            if (!valid) {
+                                var error = new Error ('Invalid reseller');
+                                error.statusCode = 400;
+                                next(error);
+                            } else {
+                                // reseller is valid...
+                                createResellerUser(ctx.instance, function (err) {
+                                    ctx.instance.unsetAttribute('password');
+                                    next(err);
+                                });
+                            }
+                        });
                     }
                 } else {
                     next();
                 }
             }
         });
-    });
-
-    Reseller.observe('after save', function createUser(ctx, next) {
-        if (ctx.isNewInstance) {
-            createResellerUser(ctx.instance, next);
-        } else {
-            next();
-        }
     });
 
     Reseller.observe('access', function resellerPermissions(ctx, next) {
