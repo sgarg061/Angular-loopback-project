@@ -33,7 +33,7 @@
     "reason": {
       "type": "string",
       "required": false,
-      "default": "interval"
+      "default": "other"
     },
     "reasonDescription": {
       "type": "string",
