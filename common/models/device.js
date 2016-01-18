@@ -370,10 +370,13 @@ module.exports = function(Device) {
             deviceLogEntry.reason = 'other';
         delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
-        var camera = deviceLogEntry.checkinData.cameraInformation;
-        deviceLogEntry.onlineCameras = camera.filter(function(element){return element.status ==='online';}).length;
-        deviceLogEntry.totalCameras = camera.length;
-
+        var cameras = deviceLogEntry.checkinData.cameraInformation;
+        if (typeof cameras !== undefined && cameras instanceof Array){
+            deviceLogEntry.onlineCameras = cameras.filter(function(element){return element.status === 'online';}).length;
+            deviceLogEntry.totalCameras = cameras.length;
+        }
+        else
+            logger.error('invalid cameras array');
 
         deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
         delete deviceLogEntry.checkinData.id;
