@@ -374,9 +374,9 @@ module.exports = function(Device) {
         if (typeof cameras !== undefined && cameras instanceof Array){
             deviceLogEntry.onlineCameras = cameras.filter(function(element){return element.status === 'online';}).length;
             deviceLogEntry.totalCameras = cameras.length;
-        }
-        else
+        } else {
             logger.error('invalid cameras array');
+        }
 
         deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
         delete deviceLogEntry.checkinData.id;
