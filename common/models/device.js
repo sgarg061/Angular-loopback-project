@@ -364,7 +364,7 @@ module.exports = function(Device) {
         }
 
         //add reason field
-        var reasonArray = ['periodic', 'status', 'forced', 'service', 'reboot'];
+        var reasonArray = ['interval', 'status', 'forced', 'service', 'reboot'];
         deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
         if (reasonArray.indexOf(deviceLogEntry.checkinData.reason) < 0)
             deviceLogEntry.reason = 'other';

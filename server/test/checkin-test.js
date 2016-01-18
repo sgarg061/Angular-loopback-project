@@ -179,10 +179,7 @@ describe('Checkin after initial device activation', function() {
           assert(typeof res.body === 'object');
           assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
           var logEntry = res.body.logEntries[0];
-          if (deviceCheckinData.reason === 'forced')
-            assert.deepEqual(logEntry.reason, deviceCheckinData.reason);
-          else
-            assert.deepEqual(logEntry.reason, 'other');
+          assert.deepEqual(logEntry.reason, deviceCheckinData.reason);
           done();
         });
       });
