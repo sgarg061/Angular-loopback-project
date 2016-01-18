@@ -7,6 +7,7 @@ var deviceCheckinData = {
     guid: deviceGuid,
     address: '479 March Road, Kanata, ON, K2K',
     appVersion: '4.0.9',
+    reason: 'forced',
     location: {
         lng: -75.9087814,
         lat: 45.3376177
@@ -72,7 +73,6 @@ var deviceId;
 var checkin;
 
 describe('Checkin after initial device activation', function() {
-
   it('should activate license and return a new device', function(done) {
     common.json('post', '/api/licenses/activate')
       .send({key: 'ETSHOWDOTHEYWORK'})
@@ -106,6 +106,7 @@ describe('Checkin after initial device activation', function() {
           assert(res.body.signallingServerUrl, 'must have a signallingServerUrl');
           assert(res.body.updateUrl, 'must have a updateUrl');
           assert(res.body.checkinInterval, 'must have a checkinInterval');
+          assert(!res.body.ports, 'must not have any value for ports yet');
           done();
         });
       });
@@ -145,7 +146,8 @@ describe('Checkin after initial device activation', function() {
 
           var getGB = function convertBytesToGB(n) {
                 return parseFloat((parseInt(n) / (1024 * 1024 * 1024)).toFixed(2));
-          }
+          };
+
           assert(!logEntry.hasOwnProperty('checkinData'));
           assert.equal(logEntry.deviceId, deviceId);
           assert(logEntry.hasOwnProperty('timestamp'));
@@ -163,6 +165,21 @@ describe('Checkin after initial device activation', function() {
           assert.deepEqual(logEntry.diskSize, getGB(deviceCheckinData.deviceInformation.size));
           assert.deepEqual(logEntry.diskSpaceFree, getGB(deviceCheckinData.deviceInformation.availableCapacity));
           assert.deepEqual(logEntry.diskSpaceUsed, getGB(deviceCheckinData.deviceInformation.used));
+          done();
+        });
+      });
+  });
+  it('should log correct reason in the database', function (done) {
+    common.login('solink', function (token) {
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+          assert(typeof res.body === 'object');
+          assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+          var logEntry = res.body.logEntries[0];
+          assert.deepEqual(logEntry.reason, deviceCheckinData.reason);
           done();
         });
       });
@@ -268,10 +285,8 @@ describe('Check-in of existing device with missing component', function() {
   });
 });
 
-describe('Override IP address should be set on checkin', function() {
+describe('Override settings', function() {
   it('should set the IP address to the override IP address', function(done) {
-
-
     common.login('solink', function (token) {
       common.json('put', '/api/devices/' + deviceId, token)
         .send({overrideIpAddress: 'overriden'})
@@ -283,14 +298,14 @@ describe('Override IP address should be set on checkin', function() {
           common.json('post', '/api/devices/' + deviceId + '/checkin', token)
             .send({data: deviceCheckinData})
             .expect(200)
-            .end(function(err, res) {
+            .end(function (err, res) {
               if (err) throw err;
 
               // now query for the device, and see the ip address is 'overriden'
               common.json('get', '/api/devices/' + deviceId, token)
                 .send({})
                 .expect(200)
-                .end(function(err, res) {
+                .end(function (err, res) {
                   if (err) throw err;
 
                   assert(typeof res.body === 'object');
@@ -298,6 +313,69 @@ describe('Override IP address should be set on checkin', function() {
                   done();
                 });
             });
+        });
+    });
+  });
+
+  it('should pass down only the vms port in the checkin message', function (done) {
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send({vmsPort: 1234})
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          // now check in
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+            .send({data: deviceCheckinData})
+            .expect(200)
+            .end(function (err, res) {
+              if (err) throw err;
+
+              assert(typeof res.body === 'object');
+
+              var ports = res.body.ports;
+              assert.equal(Object.keys(ports).length, 1);
+              assert.equal(ports.vms, 1234);
+              done();
+            });
+        });
+    });
+  });
+
+  it('should pass down all other ports in the checkin message', function (done) {
+    var newPorts = {
+      vmsPort: 1,
+      connectPort: 2,
+      uploaderPort: 3,
+      listenerPort: 4,
+      checkinPort: 5,
+      configForwardPort: 6
+    };
+
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send(newPorts)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+          .send({data: deviceCheckinData})
+          .expect(200)
+          .end(function (err, res) {
+            assert(typeof res.body === 'object');
+
+            var ports = res.body.ports;
+            assert.equal(Object.keys(ports).length, Object.keys(newPorts).length);
+            assert.equal(ports.vms, newPorts.vmsPort);
+            assert.equal(ports.connect, newPorts.connectPort);
+            assert.equal(ports.uploader, newPorts.uploaderPort);
+            assert.equal(ports.listener, newPorts.listenerPort);
+            assert.equal(ports.checkin, newPorts.checkinPort);
+            assert.equal(ports.configForward, newPorts.configForwardPort);
+            done();
+          });
         });
     });
   });
@@ -390,6 +468,29 @@ describe('Checkin address format', function () {
              });
         });
     });
+  });
+  it('should checkin with an incorrect reason, verify it gets changed to other', function(done) {
+    deviceCheckinData.id = deviceId;
+    deviceCheckinData.reason = 'solink';
+    common.login('solink', function (token) {
+      common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+      .send({data: deviceCheckinData})
+      .expect(200)
+      .end(function(err, res) {
+        common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+            if (err) throw err;
+            assert(typeof res.body === 'object');
+            var last = res.body.logEntries.length - 1;
+            var logEntry = res.body.logEntries[last];
+            assert.deepEqual(logEntry.reason, 'other');
+            done();
+          });
+      });  
+    });
+        
   });
 });
 

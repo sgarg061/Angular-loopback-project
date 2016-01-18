@@ -7,6 +7,7 @@ var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
 
 
+
 module.exports = function(Device) {
     'use strict';
     Device.observe('before save', function addId(ctx, next) {
@@ -362,6 +363,12 @@ module.exports = function(Device) {
             deviceLogEntry.diskSpaceFree = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.availableCapacity);
         }
 
+        //add reason field
+        var reasonArray = ['interval', 'status', 'forced', 'service', 'reboot'];
+        deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
+        if (reasonArray.indexOf(deviceLogEntry.checkinData.reason) < 0)
+            deviceLogEntry.reason = 'other';
+        delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
         deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
         delete deviceLogEntry.checkinData.id;
@@ -416,6 +423,10 @@ module.exports = function(Device) {
 
         if (deviceData.location) {
             checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.lat, lng: deviceData.location.lng});
+        }
+
+        if (deviceData.reason) {
+            checkedInProperties.reason = deviceData.reason;
         }
 
         if (deviceData.locationName) {
@@ -500,6 +511,35 @@ module.exports = function(Device) {
                     signallingServerUrl: cloud.signallingServerUrl,
                     checkinInterval: checkinInterval
                 };
+
+                var ports = {};
+                if (device.connectPort) {
+                    ports.connect = device.connectPort;
+                }
+
+                if (device.vmsPort) {
+                    ports.vms = device.vmsPort;
+                }
+
+                if (device.checkinPort) {
+                    ports.checkin = device.checkinPort;
+                }
+
+                if (device.uploaderPort) {
+                    ports.uploader = device.uploaderPort;
+                }
+
+                if (device.listenerPort) {
+                    ports.listener = device.listenerPort;
+                }
+
+                if (device.configForwardPort) {
+                    ports.configForward = device.configForwardPort;
+                }
+
+                if (Object.keys(ports).length > 0) {
+                    result.ports = ports;
+                }
 
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                     if (err) {

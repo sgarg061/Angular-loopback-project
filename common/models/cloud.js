@@ -8,21 +8,22 @@ module.exports = function(Cloud) {
     Cloud.observe('before save', function addId(ctx, next) {
         if (ctx.instance && !ctx.instance.id) {
             ctx.instance.id = uuid.v1();
-            if (!ctx.instance.password) {
-                var error = new Error('Password not provided for cloud account');
-                error.statusCode = 400;
-                next(error);
-            } else {
-                next();
-            }
-        } else {
-            next();
-        }
-    });
 
-    Cloud.observe('after save', function createUser(ctx, next) {
-        if (ctx.isNewInstance) {
-            createCloudUser(ctx.instance, next);
+            if (ctx.isNewInstance) {
+                ctx.instance.isValid(function (valid) {
+                    if (!valid) {
+                        var error = new Error('Invalid cloud');
+                        error.statusCode = 400;
+                        next(error);
+                    } else {
+                        // cloud is valid...
+                        createCloudUser(ctx.instance, function(err) {
+                            ctx.instance.unsetAttribute('password');
+                            next(err);
+                        });
+                    }
+                });
+            }
         } else {
             next();
         }
@@ -90,6 +91,8 @@ module.exports = function(Cloud) {
         };
 
         authService.createUser(cloud.email, cloud.password, userData, function (err, res) {
+            console.log('err:');
+            console.log(err);
             if (err) {
                 logger.error('Could not create cloud user');
                 logger.error(err);

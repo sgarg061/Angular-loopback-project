@@ -27,28 +27,27 @@
     </div>
 
     <div class="child-list col-md-8" class="main-content" layout-fill layout-padding>
-      <h2>Resellers</h2>
+      <div layout="row">
+        <h2>Resellers</h2>
+        <div>
+          <md-button class="md-fab md-mini" style = "position: absolute; left: auto;"
+            ng-click="openResellerForm($event, cloud)">
+            <md-icon md-font-library="material-icons">add</md-icon>
+          </md-button>
+        </div>
+      </div>
       <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
-
         <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card" 
           ng-click='selectReseller(reseller)' md-rowspan="0" md-colspan="1">
-
           <div layout-fill layout-align="start center" layout-padding>
-            <span class="md-title" style="vertical-align: middle; line-height:50px;">{{reseller.name}}</span>
+            <span class="md-title" style="vertical-align: middle; line-height:50px;">{{reseller.name}}
+            </span>
           </div>
         </md-grid-tile>
-
       </md-grid-list>
-        
     </div>
 
-    <!-- <pagination ng-model="currentPage" total-items="totalResellers" max-size="resellersPerPage" boundary-links="true" direction-links="false"></pagination> -->
-
   </div>
-
 </md-content> 
 
 
-<md-button class="md-fab md-accent md-fab-bottom-right" style="background-color:white;" ng-click="openResellerForm($event, cloud)">
-  <md-icon md-font-library="material-icons">add</md-icon>
-</md-button>
