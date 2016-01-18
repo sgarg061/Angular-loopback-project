@@ -22,8 +22,8 @@
     "cors": false,
     "errorHandler": {
       "disableStackTrace": false
-    },
-    "reason_array" : ["periodic", "status", "forced", "service", "reboot"]
+    }
+    
   },
   "legacyExplorer": false
 }
