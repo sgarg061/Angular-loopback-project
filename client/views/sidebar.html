@@ -69,13 +69,8 @@
           <md-option ng-repeat="softwareVersion in softwareVersions" 
             value="{{softwareVersion.id}}" 
             ng-selected="softwareVersion.id === model.softwareVersionId">
+            <span ng-show="defaultSoftwareVersion.name===softwareVersion.name">Default: </span>
             {{softwareVersion.name}}
-          </md-option>
-
-          <md-option 
-            value='' ng-show="type=='reseller' || type=='customer'">
-            Default: {{defaultSoftwareVersion.name}}
-                     <!--span ng-show="type=='customer'">{{model.reseller.softwareVersionId}}</span><!--fix-->
           </md-option>
         </md-select>
 
