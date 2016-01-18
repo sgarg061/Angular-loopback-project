@@ -438,6 +438,10 @@ angular
             $scope.selectCustomer($scope.customerId)
           };
 
+          scope.close = function() {
+            $mdDialog.cancel();
+          };
+          
         },
         templateUrl: 'views/customerRename.html',
         parent: angular.element(document.body),
