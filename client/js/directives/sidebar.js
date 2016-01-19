@@ -8,6 +8,7 @@ angular
         model: "=model",
         type: "=type",
         filterChangedFunction: "=filterChangedFunction",
+        searchFilterChangedFunction: "=searchFilterChangedFunction",
         assignFiltersFunction: "=assignFiltersFunction",
         selectedFilters: "=selectedFilters",
         addLicenseFunction: "=addLicenseFunction",
@@ -47,6 +48,9 @@ angular
         }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
+        }
+        scope.searchFilterChanged = function(filter) {
+          scope.searchFilterChangedFunction(filter);
         }
         scope.assignFilters = function(assignee, filters) {
           scope.assignFiltersFunction(assignee, filters);

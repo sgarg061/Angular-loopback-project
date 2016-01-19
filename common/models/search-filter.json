@@ -42,7 +42,7 @@
   },
   "validations": [],
   "relations": {
-    "searchFilterConnectors": {
+    "connectors": {
       "type": "hasMany",
       "model": "SearchFilterConnector",
       "foreignKey": "filterId"
