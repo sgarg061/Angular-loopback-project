@@ -4,7 +4,7 @@
 
   <div layout="row" class="background">
 
-    <div class="col-md-3  sidebar-container" layout-margin>
+    <div class="col-md-3  sidebar-container">
       <sidebar model="reseller" type="'reseller'"
         delete-function="deleteReseller"
         software-versions="softwareVersions"
@@ -28,7 +28,7 @@
         select-connector-function="selectConnector"/>
     </div>
 
-    <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
+    <div class="child-list col-md-8" layout-fill style="padding-left:16px" >
       <div layout="row">
         <h2>Customers</h2>
         <div>
@@ -43,7 +43,7 @@
           <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
             <md-grid-tile ng-repeat="customer in reseller.customers" class="card" 
               ng-click='selectCustomer(customer)' md-rowspan="0" md-colspan="1">
-              <div layout-fill layout-align="start center" layout-padding>
+              <div layout-fill style="margin-left:10px"layout-align="start center">
                 <span class="md-title" style="vertical-align: middle; line-height:50px;">{{customer.name}}</span>
               </div>
             </md-grid-tile>

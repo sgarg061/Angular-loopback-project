@@ -4,7 +4,7 @@
   
   <div layout="row" class="background">
 
-    <div class="col-md-3 sidebar-container" layout-margin>
+    <div class="col-md-3 sidebar-container">
       <sidebar model="cloud" type="'cloud'" 
         software-versions="softwareVersions"
         add-filter-function="addFilter"
@@ -39,7 +39,7 @@
       <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
         <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card" 
           ng-click='selectReseller(reseller)' md-rowspan="0" md-colspan="1">
-          <div layout-fill layout-align="start center" layout-padding>
+          <div layout-fill style="margin-left:10px" layout-align="start center">
             <span class="md-title" style="vertical-align: middle; line-height:50px;">{{reseller.name}}
             </span>
           </div>

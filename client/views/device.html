@@ -3,7 +3,7 @@
   <md-content>
     <div layout="row" class="background">
 
-      <div class="col-md-3  sidebar-container" layout-margin>
+      <div class="col-md-3  sidebar-container">
         <sidebar model="device" type="'device'"
           delete-function="deleteReseller"
           software-versions="softwareVersions"
@@ -18,8 +18,8 @@
       <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
 
         <md-content class="card">
-          <div layout="row" style="padding-left: 20px; padding-right: 20px;" layout-align="space-between center" layout-fill>
-            <h2 class="md-title">{{device.name}}</h2>
+          <div layout="row" layout-align="space-between center">
+            <h2 class="md-title" style="margin-left:10px">{{device.name}}</h2>
             <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
             <!--<md-icon md-svg-icon='indicator_{{device.statusIconColor}}' style="width:24px;margin:0px;"></md-icon>-->
           </div>

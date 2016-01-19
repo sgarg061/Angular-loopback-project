@@ -11,13 +11,15 @@
     </div>
   </md-toolbar>
 
+  <div layout-padding layout-margin>
   <md-dialog-content>
     <p>Type in the new name of the customer to change</p>
-    <md-input-container>
+    <md-input-container style="width:100%">
         <label>Customer New Name</label>
         <input type="text" class="form-control focus" name="rename" autocomplete="off" required ng-model="customerRename">
       </md-input-container>
   </md-dialog-content>
+  </div>
   <div class="md-actions">
     <md-button ng-click="close()" class="md-primary">Cancel</md-button>
     <md-button ng-click="renameCustomer()" class="md-primary">Rename</md-button>
