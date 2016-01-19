@@ -11,7 +11,7 @@
     </div>
   </md-toolbar>
   <md-dialog-content style="width:800px">
-    <div layout="column" layout-margin layout-padding style="margin-top:10px">
+    <div layout="column" layout-margin layout-padding class="dialog">
       <md-input-container>
         <label>Filter Name</label>
         <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newFilter.name" ng-disabled="!newFilter.owner">
@@ -22,7 +22,7 @@
         <textarea ng-model="newFilter.description" rows="1" ng-disabled="!newFilter.owner"></textarea>
       </md-input-container>
 
-      <md-input-container md-autogrow class="md-block">
+      <md-input-container class="md-block">
         <label>Filter Script</label>
         <textarea rows="22" ng-model="newFilter.script" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner"></textarea>
       </md-input-container>
