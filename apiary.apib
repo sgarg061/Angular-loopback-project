@@ -786,7 +786,7 @@ POS Filter object has the following attributes:
               "name": "Motion Parser",
               "script": "console.log(String.fromCharCode(0xD83D, 0xDE32));",
               "description": null,
-              "lastUpdated": ""
+              "lastUpdated": "2016-01-19T17:03:09.000Z"
             }
 
 ## Camera [/api/cameras/{cameraId}]
@@ -823,7 +823,7 @@ Camera object has the following attributes:
 
 ## POS Connectors [/api/connectors]
 
-POS Connector will provide POS Filters assigned to a provided device through auth0 token.
+POS Connector will provide POS Filters assigned to a provided customer through auth0 token.
 It has the following attributes:
 + filterId - POSFilter id, can be referenced to find the Filter.
 
@@ -1001,3 +1001,63 @@ Get or add available software version numbers.
             "code": 2,
             "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
         }
+
+
+## Group Search Filter Associations
+
+## Search Filters [/api/searchFilterConnectors/{searchFilterConnectorId}/filter]
+
+Search Filter object has the following attributes:
++ name - Filter name.
++ filter - JSON object of the filter
++ description - description of the script
++ lastUpdated - the date and time when the object last updated(through PUT/POST)
+
+
++ Parameters
+    + searchFilterConnectorId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
+
+
+### Get Search Filter [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "id": "41c47270-a28d-11e5-bad2-6fe88522b0fe",
+              "name": "Match All",
+              "filter": {
+                "query": {
+                    "match_all": {}
+                    }
+                },
+              "description": "match all filter",
+              "lastUpdated": "2016-01-19T17:03:09.000Z"
+            }
+
+## Search Connectors [/api/searchFilterConnectors]
+
+Search Filter Connector will provide Search Filters assigned to a provided customer through auth0 token.
+It has the following attributes:
++ filterId - SearchFilter id, can be referenced to find the Filter.
+
+
+### List available Search Filter Connectors [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+              {
+                "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
+                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
+              },
+              {
+                "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
+                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
+              }
+            ]
+            ## Group Customers
+
