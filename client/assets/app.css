@@ -173,10 +173,14 @@ h2{
 
 .sidebar h2{
   padding: 0px 2px;
+  width:200px;
+  overflow: hidden;
 }
 
 .sidebar p{
   margin:5px 10px 5px 10px;
+  width:200px;
+  overflow:hidden;
 }
 
 .sidebar .list-box{
@@ -520,4 +524,10 @@ input:focus ~ label, input.used ~ label {
 /* Dialog */
 #dialog {
   margin-top:10px;
+}
+
+/* Icons */
+i{
+  padding:10px 10px 10px 10px;
+  vertical-align: middle
 }

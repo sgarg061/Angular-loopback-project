@@ -431,15 +431,16 @@ angular
               (function(customer) 
                 {
                   $scope.customer.name = scope.customerRename
+                  toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
+                  $scope.selectCustomer($scope.customerId)
                 }, 
                 function (res) 
                 {
-                  toastr.error(res.data.error.message, 'Error');
+                  toastr.error('Error');
+                  console.log('FOO' + res.data.error.message);
                 }
               );
             $mdDialog.cancel();
-            toastr.info('Successful customer renaming to ' + scope.customerRename + ".");
-            $scope.selectCustomer($scope.customerId)
           };
 
           scope.close = function() {

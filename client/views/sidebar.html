@@ -8,20 +8,19 @@
 
         <div>
             <md-menu ng-show="type=='reseller'||type=='customer'">
-
-                <md-button aria-label="interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-                    <md-icon md-menu-origin md-svg-icon="drop_down" style="color:red;"></md-icon>
-                </md-button>
+                <i aria-label="interactions menu" ng-click="openMenu($mdOpenMenu, $event)" class="material-icons">menu</i>
 
                 <md-menu-content width="3">
                     <md-menu-item ng-show="type=='customer'">
                         <md-button ng-click="renameModel(model)">
+                            <i class="material-icons">mode_edit</i>
                             Rename
                         </md-button>
                     </md-menu-item>
 
                     <md-menu-item ng-show="type=='reseller'||type=='customer'">
-                        <md-button ng-click="deleteModel(model)">
+                        <md-button ng-click="deleteModel(model)" >
+                            <i style="vertical-align:middle" class="material-icons">delete</i>
                             Delete
                         </md-button>
                     </md-menu-item>

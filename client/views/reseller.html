@@ -29,13 +29,10 @@
     </div>
 
     <div class="child-list col-md-8" layout-fill style="padding-left:16px" >
-      <div layout="row">
+      <div layout="row" layout-align="start center">
         <h2>Customers</h2>
         <div>
-          <md-button class="md-fab md-mini" style = "position: absolute; left: auto;"
-              ng-click="openCustomerForm($event, reseller)">
-            <md-icon md-font-library="material-icons">add</md-icon>
-          </md-button>
+          <i class="material-icons"ng-click="openCustomerForm($event, reseller)">add_circle</i>
         </div>
       </div>
       <md-tabs md-dynamic-height>

@@ -27,13 +27,10 @@
     </div>
 
     <div class="child-list col-md-8" class="main-content" layout-fill layout-padding>
-      <div layout="row">
+      <div layout="row" layout-align="start center">
         <h2>Resellers</h2>
         <div>
-          <md-button class="md-fab md-mini" style = "position: absolute; left: auto;"
-            ng-click="openResellerForm($event, cloud)">
-            <md-icon md-font-library="material-icons">add</md-icon>
-          </md-button>
+          <i class="material-icons"ng-click="openResellerForm($event, cloud)">add_circle</i>
         </div>
       </div>
       <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
