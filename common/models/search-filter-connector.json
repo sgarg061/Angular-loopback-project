@@ -6,6 +6,10 @@
     "validateUpsert": true
   },
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
     "assigneeId": {
       "type": "string",
       "required": true
@@ -27,6 +31,24 @@
       "foreignKey": "filterId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "*"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isValidated",
+      "permission": "ALLOW",
+      "property": "*"
+    }],
   "methods": {}
 }

@@ -6,6 +6,11 @@
     "validateUpsert": true
   },
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "required": false
+    },
     "filter": {
       "type": "object",
       "required": true,
@@ -43,6 +48,13 @@
       "foreignKey": "filterId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "*"
+    }],
   "methods": {}
 }

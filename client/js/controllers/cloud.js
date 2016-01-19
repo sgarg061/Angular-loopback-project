@@ -143,20 +143,21 @@ angular
           }
         })
         .$promise
-        .then(function(connectors) {
+        .then(function(filters) {
           $scope.searchFilters = [];
           $scope.ownedSearchFilters = [];
           $scope.cascadedSearchFilters = [];
-          for(var i in connectors){
-            var filter = connectors[i];
+          for(var i in filters){
+            var filter = filters[i];
+            filter.filter = JSON.stringify(filter.filter);
             if (i > -1) {
               filter.owner = (filter.creatorType == 'cloud' || userService.getUserType() == 'solink');
               $scope.searchFilters.push(filter);
 
-              filter.creatorType == 'cloud' ? $scope.ownedSearchFilters.push(filter) :$scope.cascadedSearchFilters.push(filter)
+              filter.creatorType == 'cloud' ? $scope.ownedSearchFilters.push(filter) : $scope.cascadedSearchFilters.push(filter)
             };
           }
-
+          console.log('filters', $scope.searchFilters, $scope.ownedSearchFilters, $scope.cascadedSearchFilters);
         })
 
     }
@@ -168,6 +169,7 @@ angular
 
     if ($stateParams.cloudId) {
       getFilters();
+      getSearchFilters();
       getCloud();
       getSoftwareVersions();
     }
@@ -333,7 +335,8 @@ angular
                     $scope.newFilter = {
                       name: '',
                       script: '',
-                      owner: true
+                      owner: true,
+                      $title: 'POS Filter'
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
@@ -384,6 +387,7 @@ angular
         }
 
         $scope.newFilter.$edit = true
+        $scope.newFilter.$title = "POS Filter"
         $scope.create = function() {
           var script = JSON.stringify($scope.newFilter.script);
           POSFilter.prototype$updateAttributes({id: filter.id},
@@ -441,11 +445,12 @@ angular
                     $scope.newFilter = {
                       name: '',
                       filter: '{}',
-                      owner: true
+                      owner: true,
+                      $title: 'Search Filter'
                     };
                     $scope.create = function() {
                       try{
-                        var script = JSON.parse($scope.newFilter.script);
+                        var script = JSON.parse($scope.newFilter.filter);
                       }
                       catch(err){
                         alert('invalid json object: ' +  err);
@@ -482,38 +487,40 @@ angular
     }); 
   };
 
-  $scope.actionSearchFilter = function(filter) {
+  $scope.actionSearchFilter = function(thisFilter) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
-        $scope.newFilter = filter
+        $scope.newFilter = thisFilter
 
-        if (!$scope.newFilter.parsed_script){
-          try {
-            $scope.newFilter.script = JSON.parse(filter.script)
-          }
-          catch(err){
-            $scope.newFilter.script = filter.script
-          }
-          
-          $scope.newFilter.parsed_script = true
-        }
+        // $scope.newFilter.filter = JSON.stringify(thisFilter.filter);
 
         $scope.newFilter.$edit = true
+        $scope.newFilter.$title = "Search Filter"
         $scope.create = function() {
-          var script = JSON.parse($scope.newFilter.script);
-          SearchFilter.prototype$updateAttributes({id: filter.id},
-          {
-            name: $scope.newFilter.name,
-            description: $scope.newFilter.description,
-            filter: script
-          })
-          .$promise
-          .then(function(customer) {
-            getFilters();
-          }, function (res) {
-            toastr.error(res.data.error.message, 'Error');
-          });
-          $mdDialog.cancel();
+
+          try{
+            var script = JSON.parse($scope.newFilter.filter);
+          }
+          catch(err){
+            $scope.newFilter.filter.$error = {invalid: true};
+            alert('Invalid json object: ' +  err);
+          }
+
+          if (script) {
+            SearchFilter.prototype$updateAttributes({id: thisFilter.id},
+            {
+              name: $scope.newFilter.name,
+              description: $scope.newFilter.description,
+              filter: script
+            })
+            .$promise
+            .then(function(customer) {
+              getSearchFilters();
+            }, function (res) {
+              toastr.error(res.data.error.message, 'Error');
+            });
+            $mdDialog.cancel();
+          }
         };
         $scope.cancel = function() {
           $mdDialog.cancel();
@@ -529,7 +536,7 @@ angular
             SearchFilter.deleteById($scope.newFilter)
               .$promise
               .then(function(customer) {
-                getFilters();
+                getSearchFilters();
               }, function (res) {
                 toastr.error(res.data.error.message, 'Error');
               });
