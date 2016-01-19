@@ -89,7 +89,7 @@
 
         <!-- POS Filters -->
         <md-list style="max-height:300px; overflow-y: scroll;" ng-if="filters.length">
-          <md-subheader class="md-no-sticky" style="color:black;">POS Filters ({{filters.length}})</md-subheader>
+          <md-subheader class="md-no-sticky" style="color:black;">Connectors ({{filters.length}})</md-subheader>
           <md-list-item ng-repeat="filter in ownedFilters">
             <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="filter.selected" ng-change="filterChanged(filter)" aria-label="Check"></md-checkbox>
             <p>{{filter.name}}</p>
@@ -113,11 +113,11 @@
           <md-divider></md-divider>
         </md-list>
 
-        <md-button class="md-primary" ng-click="addFilter(model.id)">Add POS Filter</md-button>
+        <md-button class="md-primary" ng-click="addFilter(model.id)">Add Connector</md-button>
 
         <!-- Search Filters -->
         <md-list style="max-height:300px; overflow-y: scroll;" ng-if="searchFilters.length">
-          <md-subheader class="md-no-sticky" style="color:black;">Search Filters ({{searchFilters.length}})</md-subheader>
+          <md-subheader class="md-no-sticky" style="color:black;">Reports ({{searchFilters.length}})</md-subheader>
           <md-list-item ng-repeat="filter in ownedSearchFilters">
             <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="filter.selected" ng-change="searchFilterChanged(filter)" aria-label="Check"></md-checkbox>
             <p>{{filter.name}}</p>
@@ -141,7 +141,7 @@
           <md-divider></md-divider>
         </md-list>
 
-        <md-button class="md-primary" ng-click="addSearchFilter(model.id)">Add Search Filter</md-button>
+        <md-button class="md-primary" ng-click="addSearchFilter(model.id)">Add Report</md-button>
       </div>
     </div>
 </div>
