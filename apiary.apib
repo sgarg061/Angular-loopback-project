@@ -571,7 +571,6 @@ A device object has the following attributes:
                         },
                         "$$hashKey": "object:549"
                     }
-                }
             }
 
 + Response 200 (application/json)
@@ -579,16 +578,12 @@ A device object has the following attributes:
     + Body
 
             {
-                "eventServerUrl": "https://myeventserver.com",
-                "imageServerUrl": "https://myimageserver.com",
-                "signallingServerUrl": "https://mysignallingserver.com",
-                "updateUrl": "https://myupdateurl.com",
-                "checkinInterval": "3600",
-                "ports": {
-                    "vms": 8080,
-                    "uploader": 3000,
-                    "checkin": 1234
-                }
+                "eventServerUrl": "https://test-api.solinkcloud.com",
+                "imageServerUrl": "http://int-solinkcloud-images.s3.amazonaws.com",
+                "signallingServerUrl": "https://test-signaller.solinkcloud.com",
+                "checkinInterval": 123,
+                "updateUrl": "http://resources.solinkcloud.com/installers/solink-testing/v0.0.2/",
+                "updateVersion": "v0.0.2"
             }
 
 ## Group Licenses
