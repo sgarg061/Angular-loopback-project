@@ -405,12 +405,12 @@ describe('Override settings', function() {
 
             var ports = res.body.overridePorts;
             assert.equal(Object.keys(ports).length, Object.keys(newPorts).length);
-            assert.equal(ports.vms, newPorts.vmsPort);
-            assert.equal(ports.connect, newPorts.connectPort);
-            assert.equal(ports.uploader, newPorts.uploaderPort);
-            assert.equal(ports.listener, newPorts.listenerPort);
-            assert.equal(ports.checkin, newPorts.checkinPort);
-            assert.equal(ports.configForward, newPorts.configForwardPort);
+            assert.equal(ports.vms, newPorts.overrideVmsPort);
+            assert.equal(ports.connect, newPorts.overrideConnectPort);
+            assert.equal(ports.uploader, newPorts.overrideUploaderPort);
+            assert.equal(ports.listener, newPorts.overrideListenerPort);
+            assert.equal(ports.checkin, newPorts.overrideCheckinPort);
+            assert.equal(ports.configForward, newPorts.overrideConfigForwardPort);
             done();
           });
         });
