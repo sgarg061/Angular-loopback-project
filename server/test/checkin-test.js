@@ -111,6 +111,7 @@ describe('Checkin after initial device activation', function() {
           assert(res.body.imageServerUrl, 'must have a imageServerUrl');
           assert(res.body.signallingServerUrl, 'must have a signallingServerUrl');
           assert(res.body.updateUrl, 'must have a updateUrl');
+          assert(res.body.updateVersion, 'must have a updateVersion');
           assert(res.body.checkinInterval, 'must have a checkinInterval');
           assert(!res.body.ports, 'must not have any value for ports yet');
           done();
@@ -581,6 +582,7 @@ describe('Modification of inherited values at various locations in the object tr
                   assert.equal(res.body.eventServerUrl, '7000', 'eventServerUrl must be inherited from cloud');
                   assert.equal(res.body.imageServerUrl, '7000', 'imageServerUrl must be inherited from cloud');
                   assert.equal(res.body.updateUrl, versions[7].url, 'updateUrl must be inherited from cloud');
+                  assert.equal(res.body.updateVersion, versions[7].name, 'updateVersion must be inherited from cloud')
                   assert.equal(res.body.checkinInterval, 7000, 'checkinInterval must be inherited from cloud');
 
                   common.json('put', '/api/resellers/' + reseller.id, token).send(
@@ -590,6 +592,7 @@ describe('Modification of inherited values at various locations in the object tr
                       assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
                       assert.equal(res.body.imageServerUrl, '6000', 'imageServerUrl must be inherited from reseller');
                       assert.equal(res.body.updateUrl, versions[6].url, 'updateUrl must be inherited from reseller');
+                      assert.equal(res.body.updateVersion, versions[6].name, 'updateVersion must be inherited from reseller');
                       assert.equal(res.body.checkinInterval, 6000, 'checkinInterval must be inherited from reseller');
 
                       common.json('put', '/api/customers/' + customer.id, token).send(
@@ -599,6 +602,7 @@ describe('Modification of inherited values at various locations in the object tr
                           assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
                           assert.equal(res.body.imageServerUrl, '6000', 'imageServerUrl must be inherited from reseller');
                           assert.equal(res.body.updateUrl, versions[5].url, 'updateUrl must be inherited from customer');
+                          assert.equal(res.body.updateVersion, versions[5].name, 'updateVersion must be inherited from customer');
                           assert.equal(res.body.checkinInterval, 5000, 'checkinInterval must be inherited from customer');
 
                           common.json('put', '/api/devices/' + device.id, token).send(
@@ -608,6 +612,7 @@ describe('Modification of inherited values at various locations in the object tr
                               assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
                               assert.equal(res.body.imageServerUrl, '6000', 'imageServerUrl must be inherited from reseller');
                               assert.equal(res.body.updateUrl, versions[4].url, 'updateUrl must be set to device softwareVersionId.url');
+                              assert.equal(res.body.updateVersion, versions[4].name, 'updateVersion must be set to device softwareVersionId.url');
                               assert.equal(res.body.checkinInterval, 4000, 'checkinInterval must be set to device checkinInterval');
 
                               done();

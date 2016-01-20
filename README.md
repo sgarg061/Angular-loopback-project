@@ -72,19 +72,30 @@ Logging can be configured by changing parameters in the [config.js](config.js) f
 
 See [https://github.com/winstonjs/winston](https://github.com/winstonjs/winston) for full configuration details.
 
+
 ## Testing
+To edit SolinkBuilder, find the test file you need under	call-home-server/server/test. 
 
-To run the REST API test suite, execute:
+To install mocha, type in command prompt:
 
-	npm test
+	npm install -g mocha
+
+Then, run
+
+	set NODE_ENV=test
+
+To run the tests overall, execute:
+
+	mocha -R spec server/test
+
+If there are a lot of failed tests, try running again
+
+	set NODE_ENV=test
 	
-If jshint detects problems, the tests will fail. They can be forced past the jshint check by running:
-
-	npm test --force
-	
-To run a single test: 
-
-	NODE_ENV=test ./node_modules/mocha/bin/mocha -R spec server/test/checkin-test.js
+At the end of the test, there should be a line 
+		
+	XX passing
+	XX failing
 	
 ## Production Deployment
 
