@@ -12,9 +12,35 @@ angular
 
     $scope.checkinHeight = 500;
 
+    $scope.timelineView = false;
+
+    $scope.logCount = 0;
     $scope.logDataLimit = 100;
     $scope.sendingCheckin = null;
     $scope.isSavingSettings = false;
+
+    $scope.currentDate = new Date();
+
+
+    $scope.checkinReasons = [
+      {name: 'all', count: 0},
+      {name: 'interval', count: 0},
+      {name: 'status', count: 0},
+      {name: 'forced', count: 0},
+      {name: 'service', count: 0},
+      {name: 'reboot', count: 0}
+    ];
+
+    $scope.checkinColors = {
+      interval: '#00bb00',
+      status: 'yellow',
+      forced: '#ffa000',
+      service: '#0088cc',
+      reboot: '#f54'
+    };
+
+    $scope.selectedCheckinReason = 'all';
+
 
     function watchForChanges() {
       // watch device for updates and save them when they're found
@@ -67,7 +93,7 @@ angular
             }, {
               relation: 'logEntries',
               scope: {
-                fields: ['id','timestamp'],
+                fields: ['id','timestamp', 'onlineCameras', 'totalCameras', 'reason'],
                 limit: $scope.logDataLimit,
                 order: 'timestamp DESC'
               }
@@ -84,14 +110,15 @@ angular
           if ($scope.device.logEntries.length) {
             $scope.showCheckin($scope.device.logEntries[0]);
 
+
             if ($scope.device.logEntries.length < $scope.logDataLimit) {
               $scope.device.noMoreLogs = true;
             }
             else{
               $scope.device.noMoreLogs = false;
             }
-
-            $scope.checkinHeight = document.body.clientHeight - 450;
+            $scope.checkinHeight = document.body.clientHeight - 550;
+            renderGraph();
           };
 
           $scope.customer = devices[0].customer;
@@ -143,6 +170,7 @@ angular
         });
     }
 
+
     function getSoftwareVersions() {
       SoftwareVersion
         .find({
@@ -157,7 +185,26 @@ angular
         })
     }
 
+    function getCountByReasons() {
+      $scope.checkinReasons.forEach(function (reason){
+        
+        var reasonName = reason.name;
+        if (reason.name == 'all')
+          reasonName = {neq: null};
+
+
+        DeviceLogEntry
+          .count({
+              where: {reason: reasonName}
+          }, function(data) {
+            reason.count = data.count;
+          });
+
+      });
+    }
+
     getDevice();
+    getCountByReasons();
     getSoftwareVersions();
 
     $scope.selectReseller = function(reseller) {
@@ -261,6 +308,8 @@ angular
       $scope.sendingCheckin = null;
       $scope.$digest();
     });
+
+
   }
 
   function loadMore(value) {
@@ -270,7 +319,7 @@ angular
       .find({
           filter: {
             where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}},
-            fields: ['id','timestamp', 'deviceId'],
+            fields: ['id','timestamp', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
             limit: value,
             order: 'timestamp DESC'
           }
@@ -328,9 +377,116 @@ angular
   };
 
   function goHome() {
-      $state.go('home');
+    $state.go('home');
   };
 
+  function renderGraph() {
+    var start = new Date($scope.currentDate.toLocaleDateString());
+    var end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {deviceId: $stateParams.deviceId, checkinTime: {gt: start, lt: end}},
+            fields: ['id','timestamp', 'checkinTime', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
+            order: 'timestamp DESC'
+          }
+      })
+      .$promise
+      .then(function(logs) {
+        $scope.device.loadingMore = false;
+
+
+        var args = {
+          date: $scope.currentDate,
+          width: function() {
+            return window.innerWidth - 380;
+          },
+          height: function() {
+            return $scope.checkinHeight - 40;
+          },
+          margin: {
+            left: 10,
+            right: 10,
+            top: 0,
+            bottom: 0
+          },
+          data: logs,
+          reasonColorCode: $scope.checkinColors,
+          callback: function(data) {
+            /* insert the data into angular directive */
+            viewCheckin(data);
+            var angularDirectiveDOM = document.createElement('div');
+            return angularDirectiveDOM;
+
+          }
+        };
+
+        timeline(args);
+
+      })
+
+
+  }
+
+  function getTick(width) {
+    if (width >= 1000) {
+      return 1;
+    }
+
+    if (width >= 600) {
+      return 2;
+    }
+  }
+  function viewCheckin(checkin) {
+    $scope.device.loadingMore = true;
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {id: checkin.id}
+          }
+      })
+      .$promise
+      .then(function(log) {
+        $scope.device.loadingMore = false;
+        $scope.device.currentGraphEntry = log[0];
+      })
+  }
+
+  var fakeCheckins = function(count) {
+    var points = [];
+
+    var reasonOptions = ['default', 'restart', 'info'];
+
+
+    while(count > 0) {
+      var checkInTime = new Date(`Fri Jan 15 2016 ${Math.floor((Math.random() * 24) + 0)}:${Math.floor((Math.random() * 59) + 0)}:${Math.floor((Math.random() * 59) + 0)} GMT-0500 (EST)`);
+      var reasonId = Math.floor((Math.random() * 3) + 0);
+      var obj = {
+        deviceId: `30a34860-b3e8-11e5-b146-fbfc0da4d611`,
+        timestamp: checkInTime.getTime(),
+        checkinTime: checkInTime,
+        reason: reasonOptions[reasonId],
+        id: count
+      }
+      points.push(obj);
+
+      count--;
+    }
+
+    return points;
+  }
+
+  $scope.loadNextDay = function () {
+    document.getElementById('timeline-detail').classList.remove('open');
+    $scope.currentDate.setDate($scope.currentDate.getDate()+1);
+    renderGraph();
+  }
+
+  $scope.loadPrevDay = function () {
+    document.getElementById('timeline-detail').classList.remove('open');
+    $scope.currentDate.setDate($scope.currentDate.getDate()-1);
+    renderGraph();
+  }
 
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;
