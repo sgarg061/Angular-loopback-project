@@ -361,7 +361,7 @@ module.exports = function(Device) {
 
         if (deviceLogEntry.checkinData.deviceInformation.availableCapacity) {
             deviceLogEntry.diskSpaceFree = convertBytesToGB(deviceLogEntry.checkinData.deviceInformation.availableCapacity);
-        }        
+        }
 
         //add reason field
         var reasonArray = ['interval', 'status', 'forced', 'service', 'reboot'];
@@ -394,7 +394,7 @@ module.exports = function(Device) {
 
     function checkinDevice (device, deviceData, cb) {
         // update general metadata about the device
-        var checkedInProperties = generateCheckedInPropertiesObject(deviceData);            
+        var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
 
         // this code overrides the IP address (only in callhome) so that consumers of the callhome api know which port to use to access the device
         // useful in the case of tim hortons where the outbound ip is different than the inbound ip
