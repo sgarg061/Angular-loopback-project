@@ -4,7 +4,7 @@ var async = require('async');
 var app = require('../server');
 var authService = require('../services/authService');
 
-describe('POS tests', function() {
+describe('Reports tests', function() {
   'use strict';
   this.timeout(5000);
 
@@ -247,7 +247,7 @@ describe('POS tests', function() {
 
     it('pos connector shouldnt be accessible to reseller user on cloud user 2', function (done) {
       common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/searchfilterconnectors/' + connector3Id , token)
+        common.json('get', '/api/reports/' + connector3Id , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -261,7 +261,7 @@ describe('POS tests', function() {
 
     it('pos connector shouldnt be accessible to reseller user on cloud user 2', function (done) {
       common.login({username: reseller1Cloud2UserUsername, password: 'test'}, function (token) {
-        common.json('get', '/api/searchfilterconnectors/' + connector1Id , token)
+        common.json('get', '/api/reports/' + connector1Id , token)
         .send({})
         .expect(200)
         .end(function (err, res) {
@@ -314,7 +314,7 @@ describe('POS tests', function() {
           if (err) throw err;
 
           assert(typeof res.body=== 'object', 'ensure that the result is an object');
-          assert(res.body.description === 'my new description', 'ensure that the pos filter is updated with the new description');
+          assert(res.body.description === 'my new description', 'ensure that the search filter is updated with the new description');
 
           done();
         });

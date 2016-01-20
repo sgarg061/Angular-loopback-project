@@ -1005,7 +1005,7 @@ Get or add available software version numbers.
 
 ## Group Search Filter Associations
 
-## Search Filters [/api/searchFilterConnectors/{searchFilterConnectorId}/filter]
+## Search Filters [/api/reports/{reportId}/object]
 
 Search Filter object has the following attributes:
 + name - Filter name.
@@ -1015,7 +1015,7 @@ Search Filter object has the following attributes:
 
 
 + Parameters
-    + searchFilterConnectorId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
+    + reportId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
 
 
 ### Get Search Filter [GET]
@@ -1036,7 +1036,7 @@ Search Filter object has the following attributes:
               "lastUpdated": "2016-01-19T17:03:09.000Z"
             }
 
-## Search Connectors [/api/searchFilterConnectors]
+## Search Connectors [/api/reports]
 
 Search Filter Connector will provide Search Filters assigned to a provided customer through auth0 token.
 It has the following attributes:
