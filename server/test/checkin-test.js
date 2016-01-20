@@ -20,6 +20,7 @@ var deviceCheckinData = {
         firmware: '4.2.0',
         modelName: 'QNAP TS-221 2-bay Personal Cloud NAS',
         localIP: '10.126.140.204',
+        port: 1234,
         size: 1926755254272,
         used: 461314719744,
         deviceCapacity: 1926755254272,
@@ -200,6 +201,7 @@ describe('Checkin after initial device activation', function() {
           assert.deepEqual(logEntry.diskSize, getGB(deviceCheckinData.deviceInformation.size));
           assert.deepEqual(logEntry.diskSpaceFree, getGB(deviceCheckinData.deviceInformation.availableCapacity));
           assert.deepEqual(logEntry.diskSpaceUsed, getGB(deviceCheckinData.deviceInformation.used));
+          assert.deepEqual(logEntry.port, deviceCheckinData.deviceInformation.vmsPort);
           done();
         });
       });
@@ -355,7 +357,7 @@ describe('Override settings', function() {
   it('should pass down only the vms port in the checkin message', function (done) {
     common.login('solink', function (token) {
       common.json('put', '/api/devices/' + deviceId, token)
-        .send({vmsPort: 1234})
+        .send({overrideVmsPort: 1234})
         .expect(200)
         .end(function (err, res) {
           if (err) throw err;
@@ -369,7 +371,7 @@ describe('Override settings', function() {
 
               assert(typeof res.body === 'object');
 
-              var ports = res.body.ports;
+              var ports = res.body.overridePorts;
               assert.equal(Object.keys(ports).length, 1);
               assert.equal(ports.vms, 1234);
               done();
@@ -380,12 +382,12 @@ describe('Override settings', function() {
 
   it('should pass down all other ports in the checkin message', function (done) {
     var newPorts = {
-      vmsPort: 1,
-      connectPort: 2,
-      uploaderPort: 3,
-      listenerPort: 4,
-      checkinPort: 5,
-      configForwardPort: 6
+      overrideVmsPort: 1,
+      overrideConnectPort: 2,
+      overrideUploaderPort: 3,
+      overrideListenerPort: 4,
+      overrideCheckinPort: 5,
+      overrideConfigForwardPort: 6
     };
 
     common.login('solink', function (token) {
@@ -401,14 +403,14 @@ describe('Override settings', function() {
           .end(function (err, res) {
             assert(typeof res.body === 'object');
 
-            var ports = res.body.ports;
+            var ports = res.body.overridePorts;
             assert.equal(Object.keys(ports).length, Object.keys(newPorts).length);
-            assert.equal(ports.vms, newPorts.vmsPort);
-            assert.equal(ports.connect, newPorts.connectPort);
-            assert.equal(ports.uploader, newPorts.uploaderPort);
-            assert.equal(ports.listener, newPorts.listenerPort);
-            assert.equal(ports.checkin, newPorts.checkinPort);
-            assert.equal(ports.configForward, newPorts.configForwardPort);
+            assert.equal(ports.vms, newPorts.overrideVmsPort);
+            assert.equal(ports.connect, newPorts.overrideConnectPort);
+            assert.equal(ports.uploader, newPorts.overrideUploaderPort);
+            assert.equal(ports.listener, newPorts.overrideListenerPort);
+            assert.equal(ports.checkin, newPorts.overrideCheckinPort);
+            assert.equal(ports.configForward, newPorts.overrideConfigForwardPort);
             done();
           });
         });
