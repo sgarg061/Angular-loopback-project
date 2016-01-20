@@ -435,7 +435,7 @@ module.exports = function(Device) {
         }
 
         if (deviceData.locationName) {
-            checkedInProperties.name = deviceData.name;
+            checkedInProperties.name = deviceData.locationName;
         }
 
         if (deviceData.deviceInformation && deviceData.deviceInformation.localIP) {
