@@ -24,18 +24,19 @@ angular
 
     $scope.checkinReasons = [
       {name: 'all', count: 0},
-      {name: 'restart', count: 0},
       {name: 'interval', count: 0},
-      {name: 'force', count: 0},
-      {name: 'shutdown', count: 0}
+      {name: 'status', count: 0},
+      {name: 'forced', count: 0},
+      {name: 'service', count: 0},
+      {name: 'reboot', count: 0}
     ];
 
     $scope.checkinColors = {
       interval: '#00bb00',
-      restart: '#f54',
-      shutdown: '#f54',
-      force: '#ffa000',
-      other: '#0088cc'
+      status: 'yellow',
+      forced: '#ffa000',
+      service: '#0088cc',
+      reboot: '#f54'
     };
 
     $scope.selectedCheckinReason = 'all';
