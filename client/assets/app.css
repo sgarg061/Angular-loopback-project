@@ -535,3 +535,12 @@ i{
   padding:10px 10px 10px 10px;
   vertical-align: middle
 }
+
+.material-icons.add{
+  transition: color 0.15s ease-in;
+  color: #00BABA;
+  text-shadow: 2px 2px 2px #ccc;
+}
+.material-icons.add:hover{
+  color: #009999; 
+};
