@@ -33,7 +33,7 @@ angular
 
     $scope.checkinColors = {
       interval: '#00bb00',
-      status: 'yellow',
+      status: '#c400ff',
       forced: '#ffa000',
       service: '#0088cc',
       reboot: '#f54'
