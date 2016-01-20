@@ -74,7 +74,9 @@ See [https://github.com/winstonjs/winston](https://github.com/winstonjs/winston)
 
 
 ## Testing
-To edit SolinkBuilder, find the test file you need under	call-home-server/server/test. 
+To edit Solink Builder, find the test file you need under	call-home-server/server/test. 
+
+#### In Windows
 
 To install mocha, type in command prompt:
 
