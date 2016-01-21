@@ -110,7 +110,7 @@
 
                   <md-content flex="35" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
                     <md-list layout-padding>
-                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-if="selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason">
+                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-show="selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason">
                         
                         <md-icon md-svg-icon='indicator_green' ng-if='entry.onlineCameras == entry.totalCameras'>
                           <md-tooltip md-direction="top">

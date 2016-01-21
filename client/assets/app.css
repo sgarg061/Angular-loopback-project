@@ -511,6 +511,7 @@ input:focus ~ label, input.used ~ label {
 .logEntries.active{
   background-color: rgb(222, 222, 222) !important;
   border: 0px;
+
 }
 
 .logEntries.active md-icon{
@@ -597,4 +598,17 @@ pre.pretty-json{
   padding: 2px 7px;
   border-radius: 3px;
   font-size: 12px !important;
+}
+
+.logEntries{
+  min-height: 40px;
+  height: 60px;
+  transition: all linear 0.3s;
+}
+
+.logEntries.ng-hide {
+  opacity: 0;
+  padding: 0;
+  min-height: 0px;
+  height: 0px;
 }
