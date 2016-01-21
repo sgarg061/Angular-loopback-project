@@ -39,9 +39,6 @@ angular
       reboot: '#f54'
     };
 
-    $scope.selectedCheckinReason = 'all';
-
-
     function watchForChanges() {
       // watch device for updates and save them when they're found
       $scope.$watch("device", function(newValue, oldValue) {
@@ -166,7 +163,7 @@ angular
   //        var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
     //      device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
 
-          console.log('$scope.device: ' + JSON.stringify($scope.device));
+          // console.log('$scope.device: ' + JSON.stringify($scope.device));
         });
     }
 
@@ -186,7 +183,7 @@ angular
     }
 
     function getCountByReasons() {
-      $scope.checkinReasons.forEach(function (reason){
+      $scope.checkinReasons.forEach(function (reason, index){
         
         var reasonName = reason.name;
         if (reason.name == 'all')
@@ -198,9 +195,15 @@ angular
               where: {reason: reasonName}
           }, function(data) {
             reason.count = data.count;
+            if (index == $scope.checkinReasons.length-1) {
+              $scope.selectedCheckinReason = 'all';
+              console.log('reached the last one', $scope.checkinReasons);
+
+            };
           });
 
       });
+
     }
 
     getDevice();
@@ -450,30 +453,6 @@ angular
         $scope.device.loadingMore = false;
         $scope.device.currentGraphEntry = log[0];
       })
-  }
-
-  var fakeCheckins = function(count) {
-    var points = [];
-
-    var reasonOptions = ['default', 'restart', 'info'];
-
-
-    while(count > 0) {
-      var checkInTime = new Date(`Fri Jan 15 2016 ${Math.floor((Math.random() * 24) + 0)}:${Math.floor((Math.random() * 59) + 0)}:${Math.floor((Math.random() * 59) + 0)} GMT-0500 (EST)`);
-      var reasonId = Math.floor((Math.random() * 3) + 0);
-      var obj = {
-        deviceId: `30a34860-b3e8-11e5-b146-fbfc0da4d611`,
-        timestamp: checkInTime.getTime(),
-        checkinTime: checkInTime,
-        reason: reasonOptions[reasonId],
-        id: count
-      }
-      points.push(obj);
-
-      count--;
-    }
-
-    return points;
   }
 
   $scope.loadNextDay = function () {
