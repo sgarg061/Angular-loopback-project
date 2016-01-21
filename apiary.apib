@@ -566,6 +566,7 @@ A device object has the following attributes:
                             "used": 440392482816,
                             "model": "TS-X53",
                             "firmware": "4.2.0",
+                            "port": 8080,
                             "deviceCapacity": 3887985590272,
                             "availableCapacity": 3447593107456
                         },
@@ -578,11 +579,11 @@ A device object has the following attributes:
     + Body
 
             {
-                "eventServerUrl": "https://test-api.solinkcloud.com",
-                "imageServerUrl": "http://int-solinkcloud-images.s3.amazonaws.com",
-                "signallingServerUrl": "https://test-signaller.solinkcloud.com",
-                "checkinInterval": 123,
-                "updateUrl": "http://resources.solinkcloud.com/installers/solink-testing/v0.0.2/",
+                "eventServerUrl": "https://myeventserver.com",
+                "imageServerUrl": "https://myimageserver.com",
+                "signallingServerUrl": "https://mysignallingserver.com",
+                "checkinInterval": "3600",
+                "updateUrl": "https://myupdateurl.com",
                 "updateVersion": "v0.0.2"
                 "overridePorts": {
                     "vms": 8080,
