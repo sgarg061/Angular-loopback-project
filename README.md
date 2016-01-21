@@ -76,6 +76,21 @@ See [https://github.com/winstonjs/winston](https://github.com/winstonjs/winston)
 ## Testing
 To edit Solink Builder, find the test file you need under	call-home-server/server/test. 
 
+#### In Linux/OSX
+
+To run the REST API test suite, execute:
+
+	npm test
+	
+If jshint detects problems, the tests will fail. They can be forced past the jshint check by running:
+
+	npm test --force
+	
+To run a single test: 
+
+	NODE_ENV=test ./node_modules/mocha/bin/mocha -R spec server/test/checkin-test.js
+	
+
 #### In Windows
 
 To install mocha, type in command prompt:
