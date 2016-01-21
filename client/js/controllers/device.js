@@ -197,8 +197,6 @@ angular
             reason.count = data.count;
             if (index == $scope.checkinReasons.length-1) {
               $scope.selectedCheckinReason = 'all';
-              console.log('reached the last one', $scope.checkinReasons);
-
             };
           });
 
