@@ -530,17 +530,37 @@ input:focus ~ label, input.used ~ label {
   margin-top:10px;
 }
 
+.title-row {
+  width: 100%;
+}
+
+.create-button {
+  background: rgba(255,152,0, 0.8);
+  padding: 5px 10px;
+  color: #fff;
+  border-radius: 5px;
+  margin-left: 1em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.create-button:hover {
+  background: rgba(255,152,0, 1);
+}
+
 /* Icons */
 i{
-  padding:10px 10px 10px 10px;
+  /*padding:10px 10px 10px 10px;*/
+  padding: 0;
+  margin: 0;
   vertical-align: middle
 }
 
 .material-icons.add{
   transition: color 0.15s ease-in;
-  color: #00BABA;
-  text-shadow: 2px 2px 2px #ccc;
+  color: #fff;
+  /*text-shadow: 2px 2px 2px #ccc;*/
 }
-.material-icons.add:hover{
-  color: #009999; 
-};
+/*.material-icons.add:hover{
+  color: #E65100; 
+};*/

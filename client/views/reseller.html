@@ -29,10 +29,11 @@
     </div>
 
     <div class="child-list col-md-8" layout-fill style="padding-left:16px" >
-      <div layout="row" layout-align="start center">
+      <div layout="row" layout-align="space-between center" class="title-row">
         <h2>Customers</h2>
-        <div>
-          <i class="material-icons add"ng-click="openCustomerForm($event, reseller)">add_circle</i>
+        <div class='create-button' ng-click="openCustomerForm($event, reseller)">
+          <i class="material-icons add">add</i>
+          <span>Create new Customer</span>
         </div>
       </div>
       <md-tabs md-dynamic-height>
