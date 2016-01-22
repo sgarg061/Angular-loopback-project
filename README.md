@@ -74,7 +74,7 @@ See [https://github.com/winstonjs/winston](https://github.com/winstonjs/winston)
 
 
 ## Testing
-To edit Solink Builder, find the test file you need under	call-home-server/server/test. 
+Find the test file you need under	call-home-server/server/test. 
 
 #### In Linux/OSX
 
@@ -105,10 +105,6 @@ To run the tests overall, execute:
 
 	mocha -R spec server/test
 
-If there are a lot of failed tests, try running again
-
-	set NODE_ENV=test
-	
 At the end of the test, there should be a line 
 		
 	XX passing
