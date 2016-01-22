@@ -10,6 +10,7 @@ angular
         filterChangedFunction: "=filterChangedFunction",
         assignFiltersFunction: "=assignFiltersFunction",
         selectedFilters: "=selectedFilters",
+        updateVersionFunction: "=updateVersionFunction",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
@@ -41,6 +42,9 @@ angular
         }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
+        }
+        scope.updateVersion = function(model) {
+          scope.updateVersionFunction(model);
         }
         scope.assignFilters = function(assignee, filters) {
           scope.assignFiltersFunction(assignee, filters);

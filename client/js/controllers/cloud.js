@@ -17,12 +17,14 @@ angular
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
     
+    
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
+      
       $scope.$watch("cloud", function(newValue, oldValue) {
         if (newValue) {
           var id = $scope.cloud.id;
-          
+        
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateCloud(id, {eventServerUrl: newValue.eventServerUrl});
           }
@@ -38,17 +40,72 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateCloud(id, {checkinInterval: newValue.checkinInterval});
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-          //  console.log ('are you sure you want to update the version');
-            console.log ('test');
-            debugger;
+      }
 
-            confirmationMessage();
-            //updateCloud(id, {softwareVersionId: newValue.softwareVersionId});
-          }
-        }
+
       }, true);
     }
+    $scope.updateVersion = function (newValueSoftwareVersionId) {
+      var id = $scope.cloud.id;
+      
+      $mdDialog.show({
+        controller: function (scope, $mdDialog) {
+
+          scope.message = '';
+
+          var version = '';
+            SoftwareVersion
+              .find({
+                  filter: {
+                    where: {id: newValueSoftwareVersionId}
+                  }
+              })
+              .$promise
+              .then(function(softwareVersion) {
+                version = softwareVersion[0].name;
+                scope.softwareName = version;
+                
+              });
+              
+
+          scope.updateVersion = function() {
+                
+                if (scope.message === version) {
+                  updateCloud(id, {softwareVersionId: newValueSoftwareVersionId});
+                  $mdDialog.cancel();
+                  toastr.info('version successfully updated');
+                  
+                } else {
+                  
+                  getCloud();
+                  toastr.error('version not updated - invalid confirmation input');
+                  $mdDialog.cancel();
+                }
+                
+          };
+          scope.close = function() {
+            getCloud();
+            toastr.info('version not updated - you cancelled to update');
+            $mdDialog.cancel();
+          };
+          
+        },
+
+        
+        templateUrl: 'views/confirmationMessage.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose: false,
+        escapeToClose: false
+        
+        
+      })
+        .then(function(result) {
+
+       });
+
+    }
+
 
     function updateCloud(id, changedDictionary) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
@@ -82,7 +139,6 @@ angular
           watchForChanges();
         });
     }
-
     function getClouds() {
       Cloud
         .find({
@@ -101,6 +157,8 @@ angular
           }
         });
     }
+    
+
 
     
     function getFilters(){
@@ -129,7 +187,6 @@ angular
           }
 
         })
-
     }
 
 
@@ -273,7 +330,6 @@ angular
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
   };
-
   $scope.canModifyImageServerUrl = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
@@ -419,5 +475,5 @@ angular
       }, function() {
     }); 
   };
-    
+  
   }]);

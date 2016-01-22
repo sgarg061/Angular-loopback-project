@@ -34,13 +34,60 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateReseller(id, {checkinInterval: newValue.checkinInterval});
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateReseller(id, {softwareVersionId: newValue.softwareVersionId});
-          }
+          
         }
       }, true);
     }
+    $scope.updateVersion = function (newValueSoftwareVersionId) {
+      var id = $scope.reseller.id;
+      $mdDialog.show({
+        controller: function (scope, $mdDialog) {
+          scope.message = '';
+          var version = '';
+          SoftwareVersion
+          .find({
+              filter: {
+                where: {id: newValueSoftwareVersionId}
+              }
+          })
+          .$promise
+          .then(function(softwareVersion) {
+            version = softwareVersion[0].name;
+            scope.softwareName = version;
+          });
 
+          scope.updateVersion = function() {
+            if (scope.message === version) {
+              updateReseller(id, {softwareVersionId: newValueSoftwareVersionId});
+              $mdDialog.cancel();
+              toastr.info('version successfully updated');
+              
+            } else {
+              
+              getReseller();
+              toastr.error('version not updated - invalid confirmation input');
+              $mdDialog.cancel();
+            }
+                
+          };
+          scope.close = function() {
+            getReseller();
+            toastr.info('version not updated - you cancelled to update');
+            $mdDialog.cancel();
+          };
+        },
+        
+        templateUrl: 'views/confirmationMessage.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:false,
+        escapeToClose: false
+        
+      })
+        .then(function(result) {
+       });
+    }
+    
     function updateReseller(id, changedDictionary) {
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(reseller) {}, function (res) {
@@ -172,7 +219,7 @@ angular
           }
         });
     }
-
+    
     function getSoftwareVersions() {
       SoftwareVersion
         .find({

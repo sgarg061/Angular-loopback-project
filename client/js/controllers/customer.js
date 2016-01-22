@@ -37,9 +37,7 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateCustomer(id, {checkinInterval: newValue.checkinInterval});
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateCustomer(id, {softwareVersionId: newValue.softwareVersionId});
-          }
+          
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
@@ -55,6 +53,59 @@ angular
         .$promise.then(function(customer) {}, function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
+    }
+    $scope.updateVersion = function (newValueSoftwareVersionId) {
+      var id = $scope.cloud.id;
+      
+      $mdDialog.show({
+        controller: function (scope, $mdDialog) {
+          scope.message = '';
+
+          var version = '';
+             SoftwareVersion
+              .find({
+                  filter: {
+                    where: {id: newValueSoftwareVersionId}
+                  }
+              })
+              .$promise
+              .then(function(softwareVersion) {
+                version = softwareVersion[0].name;
+                scope.softwareName = version; 
+                
+              });
+
+          scope.updateVersion = function() {
+
+                if (scope.message === version) {
+                  updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId});
+                  $mdDialog.cancel();
+                  toastr.info('version successfully updated');
+                  
+                } else {
+                  
+                  getCustomer();
+                  toastr.error('version not updated - invalid confirmation input');
+                  $mdDialog.cancel();
+                }
+                
+          };
+          scope.close = function() {
+            getCustomer();
+            toastr.info('version not updated - you cancelled to update');
+            $mdDialog.cancel();
+          };
+        },
+        
+        templateUrl: 'views/confirmationMessage.html',
+        parent: angular.element(document.body),
+        targetEvent: event,
+        clickOutsideToClose:false,
+        escapeToClose: false
+        
+      })
+        .then(function(result) {
+       });
     }
 
     function getCustomer(cb) {
@@ -195,7 +246,7 @@ angular
           }
         });
     }
-
+    
     function getFilters(){
       POSFilter
         .find({
