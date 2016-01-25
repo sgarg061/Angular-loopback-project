@@ -23,6 +23,22 @@
       "type": "string",
       "required": true
     },
+    "turnServerUrl": {
+       "type": "object",
+       "required": false,
+       "default": {},
+       "postgresql": {
+         "dataType": "jsonb"
+       }
+     },
+     "stunServerUrl": {
+       "type": "object",
+       "required": false,
+       "default": {},
+       "postgresql": {
+        "dataType": "jsonb"
+       }
+    },
     "signallingServerUrl": {
       "type": "string",
       "required": true

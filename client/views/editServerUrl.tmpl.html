@@ -1,0 +1,18 @@
+<md-dialog aria-label="Edit URLs">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Add URLs</h2>
+			<span flex></span>
+			<i ng-click="close()" class="material-icons" aria-label="Close dialog">clear</i>
+		</div>
+	</md-toolbar>
+	<md-dialog-content style="max-width:800px;max-height:810px;">
+		<md-input-container>
+			<label>URLs</label>
+			<input ng-model="model.newTurnServerUrl" type="text" class="form-control focus" name="turnServerUrl" ng-model-options="{updateOn: 'default blur', debounce: {default:500, blur: 0}}"></input>
+		</md-input-container>
+	</md-dialog-content>
+	<div class="md-actions">
+		<md-button ng-click="edit(model.newTurnServerUrl)" class="md-primary">Finish</md-button>
+	</div>
+</md-dialog>

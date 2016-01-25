@@ -51,6 +51,15 @@
         <input type="text" class="form-control focus" name="imageServerUrl"  autocomplete="off" required ng-model="model.imageServerUrl" ng-disabled="!canModifyImageServerUrl(model)" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
       </md-input-container>
 
+      <div ng-show="type=='cloud'">
+         <md-subheader class="md-no-sticky">TURN Server URLs</md-subheader>
+         <md-divider></md-divider>
+         <md-list style="max-height:300px; overflow-y: scroll;">
+           <md-list-item ng-repeat="url in model.turnServerUrls">
+             <p>{{url}}</p>
+           </md-list-item>
+         </md-list>
+
       <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
         <label>Check-in Interval</label>
         <input type="number" min="5" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval" ng-disabled="!canModifyCheckinInterval(model)" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
