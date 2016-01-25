@@ -72,7 +72,11 @@ Logging can be configured by changing parameters in the [config.js](config.js) f
 
 See [https://github.com/winstonjs/winston](https://github.com/winstonjs/winston) for full configuration details.
 
+
 ## Testing
+Find the test file you need under	call-home-server/server/test. 
+
+#### In Linux/OSX
 
 To run the REST API test suite, execute:
 
@@ -85,6 +89,26 @@ If jshint detects problems, the tests will fail. They can be forced past the jsh
 To run a single test: 
 
 	NODE_ENV=test ./node_modules/mocha/bin/mocha -R spec server/test/checkin-test.js
+	
+
+#### In Windows
+
+To install mocha, type in command prompt:
+
+	npm install -g mocha
+
+Then, run
+
+	set NODE_ENV=test
+
+To run the tests overall, execute:
+
+	mocha -R spec server/test
+
+At the end of the test, there should be a line 
+		
+	XX passing
+	XX failing
 	
 ## Production Deployment
 
