@@ -20,6 +20,7 @@ angular
         renameFunction: "=renameFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
         canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
+        addTurnServerUrlFunction: "=addTurnServerUrlFunction",
         canModifyCheckinIntervalFunction: "=canModifyCheckinIntervalFunction",
         canModifySignallingServerFunction: "=canModifySignallingServerFunction",
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
@@ -70,6 +71,9 @@ angular
         }
         scope.canModifyImageServerUrl = function(model) {
           return scope.canModifyImageServerUrlFunction(model);
+        }
+        scope.addTurnServerUrlFunction = function(model) {
+          scope.addTurnServerUrlFunction(model);
         }
         scope.canModifyCheckinInterval = function(model) {
           return scope.canModifyCheckinIntervalFunction(model);

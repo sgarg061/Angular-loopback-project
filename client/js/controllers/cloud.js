@@ -274,6 +274,17 @@ angular
     return ['solink'].indexOf(userType) > -1;
   };
 
+  function addTurnServerUrl(model) {
+    $mdDialog.show({
+      controller: function(scope, $mdDialog){
+        $scope.newTurnServerUrl ='';
+        scope.create = function(newTurnServerUrl){
+          $scope.cloud.turnServerUrls.push(newTurnServerUrl);
+        }
+      }
+    })
+  }
+
   $scope.canModifyCheckinInterval = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
