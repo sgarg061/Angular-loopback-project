@@ -555,6 +555,7 @@ module.exports = function(Device) {
                         logger.error('Failed to find software version by id: %s', softwareVersionId);
                     } else {
                         result.updateUrl = softwareVersion.url;
+                        result.updateVersion = softwareVersion.name;
                     }
 
                     logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
