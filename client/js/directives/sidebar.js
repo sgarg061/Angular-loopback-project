@@ -8,16 +8,16 @@ angular
         model: "=model",
         type: "=type",
         filterChangedFunction: "=filterChangedFunction",
-        searchFilterChangedFunction: "=searchFilterChangedFunction",
+        reportChangedFunction: "=reportChangedFunction",
         assignFiltersFunction: "=assignFiltersFunction",
-        selectedFilters: "=selectedFilters",
+        reports: "=reports",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
-        addSearchFilterFunction: "=addSearchFilterFunction",
+        addReportFunction: "=addReportFunction",
         loadFilterFunction: "=loadFilterFunction",
         actionFilterFunction: "=actionFilterFunction",
-        actionSearchFilterFunction: "=actionSearchFilterFunction",
+        actionReportFunction: "=actionReportFunction",
         selectConnectorFunction: "=selectConnectorFunction",
         deleteFunction: "=deleteFunction",
         renameFunction: "=renameFunction",
@@ -29,12 +29,12 @@ angular
         createSoftwareVersionFunction: "=createSoftwareVersionFunction",
         softwareVersions: "=softwareVersions",
         filters: "=filters",
-        searchFilters: "=searchFilters",
+        reports: "=reports",
         children: "=children",
         ownedFilters: "=ownedFilters",
         cascadedFilters: "=cascadedFilters",
-        ownedSearchFilters: "=ownedSearchFilters",
-        cascadedSearchFilters: "=cascadedSearchFilters"
+        ownedReports: "=ownedReports",
+        cascadedReports: "=cascadedReports"
       },
       link: function (scope, element, attrs) {
         scope.openSoftwareVersionForm = scope.$parent.openSoftwareVersionForm,
@@ -44,14 +44,14 @@ angular
         scope.loadFilter = function(owner) {
           scope.loadFilterFunction(owner);
         }
-        scope.addSearchFilter = function(customerId) {
-          scope.addSearchFilterFunction(customerId);
+        scope.addReport = function(customerId) {
+          scope.addReportFunction(customerId);
         }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
         }
-        scope.searchFilterChanged = function(filter) {
-          scope.searchFilterChangedFunction(filter);
+        scope.reportChanged = function(filter) {
+          scope.reportChangedFunction(filter);
         }
         scope.assignFilters = function(assignee, filters) {
           scope.assignFiltersFunction(assignee, filters);
@@ -59,8 +59,8 @@ angular
         scope.actionFilter = function(filterId) {
           scope.actionFilterFunction(filterId);
         }
-        scope.actionSearchFilter = function(filterId) {
-          scope.actionSearchFilterFunction(filterId);
+        scope.actionReport = function(filterId) {
+          scope.actionReportFunction(filterId);
         }
         scope.addLicense = function(customerId) {
           scope.addLicenseFunction(customerId);

@@ -13,13 +13,13 @@ angular
 
     $scope.children = [];
     $scope.filters = [];
-    $scope.searchFilters = [];
+    $scope.reports = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
     
-    $scope.cascadedSearchFilters = [];
-    $scope.ownedSearchFilters = [];
+    $scope.cascadedReports = [];
+    $scope.ownedReports = [];
     
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
@@ -132,7 +132,7 @@ angular
     }
 
     
-    function getSearchFilters(){
+    function getReports(){
       SearchFilter
         .find({
           filter: {
@@ -144,20 +144,20 @@ angular
         })
         .$promise
         .then(function(filters) {
-          $scope.searchFilters = [];
-          $scope.ownedSearchFilters = [];
-          $scope.cascadedSearchFilters = [];
+          $scope.reports = [];
+          $scope.ownedReports = [];
+          $scope.cascadedReports = [];
           for(var i in filters){
             var filter = filters[i];
             filter.filter = JSON.stringify(filter.filter);
             if (i > -1) {
               filter.owner = (filter.creatorType == 'cloud' || userService.getUserType() == 'solink');
-              $scope.searchFilters.push(filter);
+              $scope.reports.push(filter);
 
-              filter.creatorType == 'cloud' ? $scope.ownedSearchFilters.push(filter) : $scope.cascadedSearchFilters.push(filter)
+              filter.creatorType == 'cloud' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
             };
           }
-          console.log('filters', $scope.searchFilters, $scope.ownedSearchFilters, $scope.cascadedSearchFilters);
+          console.log('filters', $scope.reports, $scope.ownedReports, $scope.cascadedReports);
         })
 
     }
@@ -169,7 +169,7 @@ angular
 
     if ($stateParams.cloudId) {
       getFilters();
-      getSearchFilters();
+      getReports();
       getCloud();
       getSoftwareVersions();
     }
@@ -336,7 +336,7 @@ angular
                       name: '',
                       script: '',
                       owner: true,
-                      $title: 'POS Filter'
+                      $title: 'Connector'
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
@@ -387,7 +387,7 @@ angular
         }
 
         $scope.newFilter.$edit = true
-        $scope.newFilter.$title = "POS Filter"
+        $scope.newFilter.$title = 'Connector'
         $scope.create = function() {
           var script = JSON.stringify($scope.newFilter.script);
           POSFilter.prototype$updateAttributes({id: filter.id},
@@ -438,15 +438,14 @@ angular
   };
    
 
-  $scope.addSearchFilter = function(connector) {
-    console.log('hello world');
+  $scope.addReport = function(connector) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
                     $scope.newFilter = {
                       name: '',
                       filter: '{}',
                       owner: true,
-                      $title: 'Search Filter'
+                      $title: 'Report'
                     };
                     $scope.create = function() {
                       try{
@@ -466,7 +465,7 @@ angular
                         })
                         .$promise
                         .then(function(customer) {
-                          getSearchFilters();
+                          getReports();
                         }, function (res) {
                           toastr.error(res.data.error.message, 'Error');
                         });
@@ -487,7 +486,7 @@ angular
     }); 
   };
 
-  $scope.actionSearchFilter = function(thisFilter) {
+  $scope.actionReport = function(thisFilter) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
         $scope.newFilter = thisFilter
@@ -495,7 +494,7 @@ angular
         // $scope.newFilter.filter = JSON.stringify(thisFilter.filter);
 
         $scope.newFilter.$edit = true
-        $scope.newFilter.$title = "Search Filter"
+        $scope.newFilter.$title = 'Report'
         $scope.create = function() {
 
           try{
@@ -515,7 +514,7 @@ angular
             })
             .$promise
             .then(function(customer) {
-              getSearchFilters();
+              getReports();
             }, function (res) {
               toastr.error(res.data.error.message, 'Error');
             });
@@ -536,7 +535,7 @@ angular
             SearchFilter.deleteById($scope.newFilter)
               .$promise
               .then(function(customer) {
-                getSearchFilters();
+                getReports();
               }, function (res) {
                 toastr.error(res.data.error.message, 'Error');
               });

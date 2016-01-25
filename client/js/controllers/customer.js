@@ -9,13 +9,13 @@ angular
     $scope.customer = {};
     $scope.devices = [];
     $scope.filters = [];
-    $scope.searchFilters = [];
+    $scope.reports = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
 
-    $scope.cascadedSearchFilters = [];
-    $scope.ownedSearchFilters = [];
+    $scope.cascadedReports = [];
+    $scope.ownedReports = [];
     
     $scope.cloud = null;
     $scope.reseller = null;
@@ -106,7 +106,7 @@ angular
           $scope.devices = customers[0].devices;
 
           getFilters();
-          getSearchFilters();
+          getReports();
 
 
           watchForChanges();
@@ -223,8 +223,8 @@ angular
           $scope.cascadedFilters = [];
           $scope.ownedFilters = [];
 
-          for(var i in connectors){
-            var filter = connectors[i];
+
+          connectors.forEach(function(filter, i){
             filter.selected = false;
             filter.owner = (filter.creatorType == 'customer'  || userService.getUserType() == 'solink');
             if (i > -1) {
@@ -250,13 +250,13 @@ angular
               }
             };
             
-          }
+          })
         })
     }
     
 
     
-    function getSearchFilters(){
+    function getReports(){
       SearchFilter
         .find({
           filter: {
@@ -275,12 +275,12 @@ angular
         })
         .$promise
         .then(function(connectors) {
-          $scope.searchFilters = [];
-          $scope.ownedSearchFilters = [];
-          $scope.cascadedSearchFilters = [];
+          $scope.reports = [];
+          $scope.ownedReports = [];
+          $scope.cascadedReports = [];
           
-          for(var i in connectors){
-            var filter = connectors[i];
+
+          connectors.forEach(function(filter, i){
             filter.filter = JSON.stringify(filter.filter);
             filter.selected = false;
             filter.owner = (filter.creatorType == 'customer'  || userService.getUserType() == 'solink');
@@ -293,21 +293,21 @@ angular
 
                 if (filter.connectors[index].assigneeType == 'customer') {
                   filter.selected = true;                  
-                  $scope.searchFilters.push(filter);
-                  filter.creatorType == 'customer' ? $scope.ownedSearchFilters.push(filter) : $scope.cascadedSearchFilters.push(filter)
+                  $scope.reports.push(filter);
+                  filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
                 }
                 else if (filter.connectors[index].assigneeType == 'reseller') {
-                  $scope.searchFilters.push(filter);  
-                  filter.creatorType == 'customer' ? $scope.ownedSearchFilters.push(filter) : $scope.cascadedSearchFilters.push(filter)
+                  $scope.reports.push(filter);  
+                  filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
                 }
               }
               else if(filter.creatorType == 'customer'){
-                $scope.searchFilters.push(filter);      
-                  filter.creatorType == 'customer' ? $scope.ownedSearchFilters.push(filter) : $scope.cascadedSearchFilters.push(filter)          
+                $scope.reports.push(filter);      
+                  filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)          
               }
             };
             
-          }
+          })
         })
     }
 
@@ -657,7 +657,7 @@ angular
     }
   };
 
-  $scope.searchFilterChanged = function (filter) {
+  $scope.reportChanged = function (filter) {
     if (filter.selected) {
       SearchFilterConnector.create({
         assigneeId: $stateParams.customerId,
@@ -716,7 +716,7 @@ angular
                       name: '',
                       script: '',
                       owner: true,
-                      $title: 'POS Filter'
+                      $title: 'Connector'
                     };
                     $scope.create = function() {
                       var script = JSON.stringify($scope.newFilter.script);
@@ -767,7 +767,7 @@ angular
         }
 
         $scope.newFilter.$edit = true
-        $scope.newFilter.$title = "POS Filter"
+        $scope.newFilter.$title = 'Connector'
         $scope.create = function() {
           var script = JSON.stringify($scope.newFilter.script);
           POSFilter.prototype$updateAttributes({id: filter.id},
@@ -818,15 +818,14 @@ angular
   };
    
 
-  $scope.addSearchFilter = function(connector) {
-    console.log('hello world');
+  $scope.addReport = function(connector) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
                     $scope.newFilter = {
                       name: '',
                       filter: '{}',
                       owner: true,
-                      $title: 'Search Filter'
+                      $title: 'Report'
                     };
                     $scope.create = function() {
                       try{
@@ -846,7 +845,7 @@ angular
                         })
                         .$promise
                         .then(function(customer) {
-                          getSearchFilters();
+                          getReports();
                         }, function (res) {
                           toastr.error(res.data.error.message, 'Error');
                         });
@@ -867,7 +866,7 @@ angular
     }); 
   };
 
-  $scope.actionSearchFilter = function(thisFilter) {
+  $scope.actionReport = function(thisFilter) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
         $scope.newFilter = thisFilter
@@ -895,7 +894,7 @@ angular
             })
             .$promise
             .then(function(customer) {
-              getSearchFilters();
+              getReports();
             }, function (res) {
               toastr.error(res.data.error.message, 'Error');
             });
@@ -916,7 +915,7 @@ angular
             SearchFilter.deleteById($scope.newFilter)
               .$promise
               .then(function(customer) {
-                getSearchFilters();
+                getReports();
               }, function (res) {
                 toastr.error(res.data.error.message, 'Error');
               });

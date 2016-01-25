@@ -22,14 +22,14 @@
         <textarea ng-model="newFilter.description" rows="1" ng-disabled="!newFilter.owner"></textarea>
       </md-input-container>
 
-      <md-input-container class="md-block" ng-if="newFilter.$title == 'POS Filter'">
+      <md-input-container class="md-block" ng-if="newFilter.$title == 'Connector'">
         <label>Filter Script</label>
-        <textarea ng-model="newFilter.script" rows="22" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner"></textarea>
+        <textarea ng-model="newFilter.script" rows="22" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
       </md-input-container>
 
-      <md-input-container class="md-block" ng-if="newFilter.$title == 'Search Filter'">
-        <label>Filter JSON Object</label>
-        <textarea ng-model="newFilter.filter" invalid rows="22" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner"></textarea>
+      <md-input-container class="md-block" ng-if="newFilter.$title == 'Report'">
+        <label>Search Query</label>
+        <textarea ng-model="newFilter.filter" invalid rows="22" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
       </md-input-container>
 
     </div>

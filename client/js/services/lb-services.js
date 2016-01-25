@@ -15119,55 +15119,55 @@ module.factory(
       { 'id': '@id' },
       {
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.findById() instead.
-        "prototype$__findById__searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.findById() instead.
+        "prototype$__findById__connectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/:fk",
+          url: urlBase + "/SearchFilters/:id/connectors/:fk",
           method: "GET"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.destroyById() instead.
-        "prototype$__destroyById__searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.destroyById() instead.
+        "prototype$__destroyById__connectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/:fk",
+          url: urlBase + "/SearchFilters/:id/connectors/:fk",
           method: "DELETE"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.updateById() instead.
-        "prototype$__updateById__searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.updateById() instead.
+        "prototype$__updateById__connectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/:fk",
+          url: urlBase + "/SearchFilters/:id/connectors/:fk",
           method: "PUT"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors() instead.
-        "prototype$__get__searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors() instead.
+        "prototype$__get__connectors": {
           isArray: true,
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "GET"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.create() instead.
-        "prototype$__create__searchFilterConnectors": {
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+        // INTERNAL. Use SearchFilter.connectors.create() instead.
+        "prototype$__create__connectors": {
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "POST"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.destroyAll() instead.
-        "prototype$__delete__searchFilterConnectors": {
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+        // INTERNAL. Use SearchFilter.connectors.destroyAll() instead.
+        "prototype$__delete__connectors": {
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "DELETE"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.count() instead.
-        "prototype$__count__searchFilterConnectors": {
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/count",
+        // INTERNAL. Use SearchFilter.connectors.count() instead.
+        "prototype$__count__connectors": {
+          url: urlBase + "/SearchFilters/:id/connectors/count",
           method: "GET"
         },
 
@@ -15593,9 +15593,9 @@ module.factory(
           method: "POST"
         },
 
-        // INTERNAL. Use SearchFilterConnector.searchFilter() instead.
-        "::get::SearchFilterConnector::searchFilter": {
-          url: urlBase + "/SearchFilterConnectors/:id/searchFilter",
+        // INTERNAL. Use SearchFilterConnector.query() instead.
+        "::get::SearchFilterConnector::query": {
+          url: urlBase + "/Reports/:id/query",
           method: "GET"
         },
       }
@@ -15742,27 +15742,27 @@ module.factory(
 
     /**
      * @ngdoc object
-     * @name lbServices.SearchFilter.searchFilterConnectors
-     * @header lbServices.SearchFilter.searchFilterConnectors
+     * @name lbServices.SearchFilter.connectors
+     * @header lbServices.SearchFilter.connectors
      * @object
      * @description
      *
-     * The object `SearchFilter.searchFilterConnectors` groups methods
+     * The object `SearchFilter.connectors` groups methods
      * manipulating `SearchFilterConnector` instances related to `SearchFilter`.
      *
-     * Call {@link lbServices.SearchFilter#searchFilterConnectors SearchFilter.searchFilterConnectors()}
+     * Call {@link lbServices.SearchFilter#connectors SearchFilter.connectors()}
      * to query all related instances.
      */
 
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter#searchFilterConnectors
+         * @name lbServices.SearchFilter#connectors
          * @methodOf lbServices.SearchFilter
          *
          * @description
          *
-         * Queries searchFilterConnectors of SearchFilter.
+         * Queries connectors of SearchFilter.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -15785,20 +15785,20 @@ module.factory(
          * This usually means the response is a `SearchFilterConnector` object.)
          * </em>
          */
-        R.searchFilterConnectors = function() {
+        R.connectors = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::get::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::get::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#count
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#count
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Counts searchFilterConnectors of SearchFilter.
+         * Counts connectors of SearchFilter.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -15820,20 +15820,20 @@ module.factory(
          *
          *  - `count` – `{number=}` - 
          */
-        R.searchFilterConnectors.count = function() {
+        R.connectors.count = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::count::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::count::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#create
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#create
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Creates a new instance in searchFilterConnectors of this model.
+         * Creates a new instance in connectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -15858,20 +15858,20 @@ module.factory(
          * This usually means the response is a `SearchFilterConnector` object.)
          * </em>
          */
-        R.searchFilterConnectors.create = function() {
+        R.connectors.create = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::create::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::create::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#createMany
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#createMany
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Creates a new instance in searchFilterConnectors of this model.
+         * Creates a new instance in connectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -15896,20 +15896,20 @@ module.factory(
          * This usually means the response is a `SearchFilterConnector` object.)
          * </em>
          */
-        R.searchFilterConnectors.createMany = function() {
+        R.connectors.createMany = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::createMany::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::createMany::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#destroyAll
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#destroyAll
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Deletes all searchFilterConnectors of this model.
+         * Deletes all connectors of this model.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -15927,26 +15927,26 @@ module.factory(
          *
          * This method returns no data.
          */
-        R.searchFilterConnectors.destroyAll = function() {
+        R.connectors.destroyAll = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::delete::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::delete::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#destroyById
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#destroyById
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Delete a related item by id for searchFilterConnectors.
+         * Delete a related item by id for connectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for searchFilterConnectors
+         *  - `fk` – `{*}` - Foreign key for connectors
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -15960,26 +15960,26 @@ module.factory(
          *
          * This method returns no data.
          */
-        R.searchFilterConnectors.destroyById = function() {
+        R.connectors.destroyById = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::destroyById::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::destroyById::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#findById
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#findById
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Find a related item by id for searchFilterConnectors.
+         * Find a related item by id for connectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for searchFilterConnectors
+         *  - `fk` – `{*}` - Foreign key for connectors
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -15996,26 +15996,26 @@ module.factory(
          * This usually means the response is a `SearchFilterConnector` object.)
          * </em>
          */
-        R.searchFilterConnectors.findById = function() {
+        R.connectors.findById = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::findById::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::findById::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilter.searchFilterConnectors#updateById
-         * @methodOf lbServices.SearchFilter.searchFilterConnectors
+         * @name lbServices.SearchFilter.connectors#updateById
+         * @methodOf lbServices.SearchFilter.connectors
          *
          * @description
          *
-         * Update a related item by id for searchFilterConnectors.
+         * Update a related item by id for connectors.
          *
          * @param {Object=} parameters Request parameters.
          *
          *  - `id` – `{*}` - PersistedModel id
          *
-         *  - `fk` – `{*}` - Foreign key for searchFilterConnectors
+         *  - `fk` – `{*}` - Foreign key for connectors
          *
          * @param {Object} postData Request data.
          *
@@ -16036,9 +16036,9 @@ module.factory(
          * This usually means the response is a `SearchFilterConnector` object.)
          * </em>
          */
-        R.searchFilterConnectors.updateById = function() {
+        R.connectors.updateById = function() {
           var TargetResource = $injector.get("SearchFilterConnector");
-          var action = TargetResource["::updateById::SearchFilter::searchFilterConnectors"];
+          var action = TargetResource["::updateById::SearchFilter::connectors"];
           return action.apply(R, arguments);
         };
 
@@ -16066,13 +16066,13 @@ module.factory(
   "SearchFilterConnector",
   ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
     var R = Resource(
-      urlBase + "/SearchFilterConnectors/:id",
+      urlBase + "/Reports/:id",
       { 'id': '@id' },
       {
 
-        // INTERNAL. Use SearchFilterConnector.searchFilter() instead.
-        "prototype$__get__searchFilter": {
-          url: urlBase + "/SearchFilterConnectors/:id/searchFilter",
+        // INTERNAL. Use SearchFilterConnector.query() instead.
+        "prototype$__get__query": {
+          url: urlBase + "/Reports/:id/query",
           method: "GET"
         },
 
@@ -16110,7 +16110,7 @@ module.factory(
          * </em>
          */
         "create": {
-          url: urlBase + "/SearchFilterConnectors",
+          url: urlBase + "/Reports",
           method: "POST"
         },
 
@@ -16149,7 +16149,7 @@ module.factory(
          */
         "createMany": {
           isArray: true,
-          url: urlBase + "/SearchFilterConnectors",
+          url: urlBase + "/Reports",
           method: "POST"
         },
 
@@ -16187,7 +16187,7 @@ module.factory(
          * </em>
          */
         "upsert": {
-          url: urlBase + "/SearchFilterConnectors",
+          url: urlBase + "/Reports",
           method: "PUT"
         },
 
@@ -16219,7 +16219,7 @@ module.factory(
          *  - `exists` – `{boolean=}` - 
          */
         "exists": {
-          url: urlBase + "/SearchFilterConnectors/:id/exists",
+          url: urlBase + "/Reports/:id/exists",
           method: "GET"
         },
 
@@ -16254,7 +16254,7 @@ module.factory(
          * </em>
          */
         "findById": {
-          url: urlBase + "/SearchFilterConnectors/:id",
+          url: urlBase + "/Reports/:id",
           method: "GET"
         },
 
@@ -16288,7 +16288,7 @@ module.factory(
          */
         "find": {
           isArray: true,
-          url: urlBase + "/SearchFilterConnectors",
+          url: urlBase + "/Reports",
           method: "GET"
         },
 
@@ -16321,7 +16321,7 @@ module.factory(
          * </em>
          */
         "findOne": {
-          url: urlBase + "/SearchFilterConnectors/findOne",
+          url: urlBase + "/Reports/findOne",
           method: "GET"
         },
 
@@ -16355,7 +16355,7 @@ module.factory(
          * The number of instances updated
          */
         "updateAll": {
-          url: urlBase + "/SearchFilterConnectors/update",
+          url: urlBase + "/Reports/update",
           method: "POST"
         },
 
@@ -16388,7 +16388,7 @@ module.factory(
          * </em>
          */
         "deleteById": {
-          url: urlBase + "/SearchFilterConnectors/:id",
+          url: urlBase + "/Reports/:id",
           method: "DELETE"
         },
 
@@ -16420,7 +16420,7 @@ module.factory(
          *  - `count` – `{number=}` - 
          */
         "count": {
-          url: urlBase + "/SearchFilterConnectors/count",
+          url: urlBase + "/Reports/count",
           method: "GET"
         },
 
@@ -16457,7 +16457,7 @@ module.factory(
          * </em>
          */
         "prototype$updateAttributes": {
-          url: urlBase + "/SearchFilterConnectors/:id",
+          url: urlBase + "/Reports/:id",
           method: "PUT"
         },
 
@@ -16494,66 +16494,66 @@ module.factory(
          *  - `changes` – `{ReadableStream=}` - 
          */
         "createChangeStream": {
-          url: urlBase + "/SearchFilterConnectors/change-stream",
+          url: urlBase + "/Reports/change-stream",
           method: "POST"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.findById() instead.
-        "::findById::SearchFilter::searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.findById() instead.
+        "::findById::SearchFilter::connectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/:fk",
+          url: urlBase + "/SearchFilters/:id/connectors/:fk",
           method: "GET"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.destroyById() instead.
-        "::destroyById::SearchFilter::searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.destroyById() instead.
+        "::destroyById::SearchFilter::connectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/:fk",
+          url: urlBase + "/SearchFilters/:id/connectors/:fk",
           method: "DELETE"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.updateById() instead.
-        "::updateById::SearchFilter::searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.updateById() instead.
+        "::updateById::SearchFilter::connectors": {
           params: {
           'fk': '@fk'
           },
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/:fk",
+          url: urlBase + "/SearchFilters/:id/connectors/:fk",
           method: "PUT"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors() instead.
-        "::get::SearchFilter::searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors() instead.
+        "::get::SearchFilter::connectors": {
           isArray: true,
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "GET"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.create() instead.
-        "::create::SearchFilter::searchFilterConnectors": {
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+        // INTERNAL. Use SearchFilter.connectors.create() instead.
+        "::create::SearchFilter::connectors": {
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "POST"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.createMany() instead.
-        "::createMany::SearchFilter::searchFilterConnectors": {
+        // INTERNAL. Use SearchFilter.connectors.createMany() instead.
+        "::createMany::SearchFilter::connectors": {
           isArray: true,
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "POST"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.destroyAll() instead.
-        "::delete::SearchFilter::searchFilterConnectors": {
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors",
+        // INTERNAL. Use SearchFilter.connectors.destroyAll() instead.
+        "::delete::SearchFilter::connectors": {
+          url: urlBase + "/SearchFilters/:id/connectors",
           method: "DELETE"
         },
 
-        // INTERNAL. Use SearchFilter.searchFilterConnectors.count() instead.
-        "::count::SearchFilter::searchFilterConnectors": {
-          url: urlBase + "/SearchFilters/:id/searchFilterConnectors/count",
+        // INTERNAL. Use SearchFilter.connectors.count() instead.
+        "::count::SearchFilter::connectors": {
+          url: urlBase + "/SearchFilters/:id/connectors/count",
           method: "GET"
         },
       }
@@ -16701,12 +16701,12 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.SearchFilterConnector#searchFilter
+         * @name lbServices.SearchFilterConnector#query
          * @methodOf lbServices.SearchFilterConnector
          *
          * @description
          *
-         * Fetches belongsTo relation searchFilter.
+         * Fetches belongsTo relation query.
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -16729,9 +16729,9 @@ module.factory(
          * This usually means the response is a `SearchFilter` object.)
          * </em>
          */
-        R.searchFilter = function() {
+        R.query = function() {
           var TargetResource = $injector.get("SearchFilter");
-          var action = TargetResource["::get::SearchFilterConnector::searchFilter"];
+          var action = TargetResource["::get::SearchFilterConnector::query"];
           return action.apply(R, arguments);
         };
 

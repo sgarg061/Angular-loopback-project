@@ -1004,22 +1004,22 @@ Get or add available software version numbers.
         }
 
 
-## Group Search Filter Associations
+## Group Report Associations
 
-## Search Filters [/api/reports/{reportId}/object]
+## Reports [/api/reports/{reportId}/query]
 
-Search Filter object has the following attributes:
-+ name - Filter name.
-+ filter - JSON object of the filter
+A Report has the following attributes:
++ name - Report name.
++ filter - ElasticSearch syntax. Must be in valid JSON format.
 + description - description of the script
-+ lastUpdated - the date and time when the object last updated(through PUT/POST)
++ lastUpdated - the date and time when the report last updated(through PUT/POST)
 
 
 + Parameters
     + reportId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
 
 
-### Get Search Filter [GET]
+### Get Report [GET]
 
 + Response 200 (application/json)
 
@@ -1039,12 +1039,12 @@ Search Filter object has the following attributes:
 
 ## Search Connectors [/api/reports]
 
-Search Filter Connector will provide Search Filters assigned to a provided customer through auth0 token.
+Report Connector will provide Reports assigned to a provided customer through auth0 token.
 It has the following attributes:
 + filterId - SearchFilter id, can be referenced to find the Filter.
 
 
-### List available Search Filter Connectors [GET]
+### List available Report Connectors [GET]
 
 + Response 200 (application/json)
 
