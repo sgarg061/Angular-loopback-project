@@ -584,7 +584,7 @@ describe('Modification of inherited values at various locations in the object tr
                   assert.equal(res.body.eventServerUrl, '7000', 'eventServerUrl must be inherited from cloud');
                   assert.equal(res.body.imageServerUrl, '7000', 'imageServerUrl must be inherited from cloud');
                   assert.equal(res.body.updateUrl, versions[7].url, 'updateUrl must be inherited from cloud');
-                  assert.equal(res.body.updateVersion, versions[7].name, 'updateVersion must be inherited from cloud')
+                  assert.equal(res.body.updateVersion, versions[7].name, 'updateVersion must be inherited from cloud');
                   assert.equal(res.body.checkinInterval, 7000, 'checkinInterval must be inherited from cloud');
 
                   common.json('put', '/api/resellers/' + reseller.id, token).send(
