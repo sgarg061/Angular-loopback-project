@@ -20,6 +20,7 @@ var deviceCheckinData = {
         firmware: '4.2.0',
         modelName: 'QNAP TS-221 2-bay Personal Cloud NAS',
         localIP: '10.126.140.204',
+        port: 1234,
         size: 1926755254272,
         used: 461314719744,
         deviceCapacity: 1926755254272,
@@ -65,6 +66,12 @@ var deviceCheckinData = {
           type: 'camera_type_z',
           name: 'Back Camera',
           status: 'online'
+        },
+        {
+          cameraId: 'A8AA03AA-8A3E-4DBE-8E19-234EA0DD2909',
+          type: 'camera_type_x',
+          name: 'side Camera',
+          status: 'offline'
         }
     ]
 };
@@ -121,13 +128,42 @@ describe('Checkin after initial device activation', function() {
           if (err) throw err;
           assert(typeof res.body === 'object');
 
-          assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
+          assert.equal(res.body.cameras.length, 3 , 'must have 3 cameras associated');
           assert.equal(res.body.posDevices.length, 2,'must have 2 POS device associated');
           assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
           assert(res.body.lastCheckin, 'must have a lastCheckin');
 
           checkin = res.body.lastCheckin;
 
+          done();
+        });
+      });
+  });
+  it('ensures correct camera count is recored in the db', function (done) {
+    common.login('solink', function (token) {
+      common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
+        .send({})
+        .expect(200)
+        .end(function(err, res) {
+          if (err) throw err;
+          assert(typeof res.body === 'object');
+          assert.equal(res.body.logEntries.length, 1, 'must have 1 log entry');
+          var logEntry = res.body.logEntries[0];
+          var camera = deviceCheckinData.cameraInformation;
+          var count_Cameras = 0;
+          var count_OnlineCameras = 0;
+          for (var i = 0; i < camera.length; i++){
+            count_Cameras = count_Cameras + 1;
+            if (deviceCheckinData.cameraInformation[i].status === 'online')
+              count_OnlineCameras = count_OnlineCameras + 1;
+          }
+          
+          //ensure the cameras are counted correctly
+          assert.deepEqual(count_Cameras, 3);
+          assert.deepEqual(count_OnlineCameras , 2);
+          //ensure cameras are recored correctly in the database
+          assert.deepEqual(logEntry.onlineCameras, count_OnlineCameras);
+          assert.deepEqual(logEntry.totalCameras, count_Cameras);
           done();
         });
       });
@@ -165,6 +201,7 @@ describe('Checkin after initial device activation', function() {
           assert.deepEqual(logEntry.diskSize, getGB(deviceCheckinData.deviceInformation.size));
           assert.deepEqual(logEntry.diskSpaceFree, getGB(deviceCheckinData.deviceInformation.availableCapacity));
           assert.deepEqual(logEntry.diskSpaceUsed, getGB(deviceCheckinData.deviceInformation.used));
+          assert.deepEqual(logEntry.port, deviceCheckinData.deviceInformation.vmsPort);
           done();
         });
       });
@@ -217,7 +254,7 @@ describe('Checkin after initial device activation', function() {
           .end(function(err, res) {
             if (err) throw err;
             assert(typeof res.body === 'object');
-            assert.equal(res.body.cameras.length, 2, 'must have 2 cameras associated');
+            assert.equal(res.body.cameras.length, 3, 'must have 3 cameras associated');
             assert.equal(res.body.posDevices.length, 2,'must have 2 POS device associated');
             assert.equal(res.body.cameras[1].status, 'offline', 'camera 2 status must be offline');
 
@@ -320,7 +357,7 @@ describe('Override settings', function() {
   it('should pass down only the vms port in the checkin message', function (done) {
     common.login('solink', function (token) {
       common.json('put', '/api/devices/' + deviceId, token)
-        .send({vmsPort: 1234})
+        .send({overrideVmsPort: 1234})
         .expect(200)
         .end(function (err, res) {
           if (err) throw err;
@@ -334,7 +371,7 @@ describe('Override settings', function() {
 
               assert(typeof res.body === 'object');
 
-              var ports = res.body.ports;
+              var ports = res.body.overridePorts;
               assert.equal(Object.keys(ports).length, 1);
               assert.equal(ports.vms, 1234);
               done();
@@ -345,12 +382,12 @@ describe('Override settings', function() {
 
   it('should pass down all other ports in the checkin message', function (done) {
     var newPorts = {
-      vmsPort: 1,
-      connectPort: 2,
-      uploaderPort: 3,
-      listenerPort: 4,
-      checkinPort: 5,
-      configForwardPort: 6
+      overrideVmsPort: 1,
+      overrideConnectPort: 2,
+      overrideUploaderPort: 3,
+      overrideListenerPort: 4,
+      overrideCheckinPort: 5,
+      overrideConfigForwardPort: 6
     };
 
     common.login('solink', function (token) {
@@ -366,14 +403,14 @@ describe('Override settings', function() {
           .end(function (err, res) {
             assert(typeof res.body === 'object');
 
-            var ports = res.body.ports;
+            var ports = res.body.overridePorts;
             assert.equal(Object.keys(ports).length, Object.keys(newPorts).length);
-            assert.equal(ports.vms, newPorts.vmsPort);
-            assert.equal(ports.connect, newPorts.connectPort);
-            assert.equal(ports.uploader, newPorts.uploaderPort);
-            assert.equal(ports.listener, newPorts.listenerPort);
-            assert.equal(ports.checkin, newPorts.checkinPort);
-            assert.equal(ports.configForward, newPorts.configForwardPort);
+            assert.equal(ports.vms, newPorts.overrideVmsPort);
+            assert.equal(ports.connect, newPorts.overrideConnectPort);
+            assert.equal(ports.uploader, newPorts.overrideUploaderPort);
+            assert.equal(ports.listener, newPorts.overrideListenerPort);
+            assert.equal(ports.checkin, newPorts.overrideCheckinPort);
+            assert.equal(ports.configForward, newPorts.overrideConfigForwardPort);
             done();
           });
         });
@@ -491,8 +528,7 @@ describe('Checkin address format', function () {
       });  
     });
         
-  });
-});
+  });});
 
 describe('Stream date range format', function () {
   it('should not have values when date is missing', function (done) {

@@ -20,6 +20,7 @@ angular
         actionSearchFilterFunction: "=actionSearchFilterFunction",
         selectConnectorFunction: "=selectConnectorFunction",
         deleteFunction: "=deleteFunction",
+        renameFunction: "=renameFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
         canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
         canModifyCheckinIntervalFunction: "=canModifyCheckinIntervalFunction",
@@ -75,6 +76,9 @@ angular
         }
         scope.deleteModel = function(model) {
           scope.deleteFunction(model);
+        }
+        scope.renameModel = function(model){
+          scope.renameFunction(model);
         }
         scope.canModifyEventUrl = function(model) {
           return scope.canModifyEventUrlFunction(model);

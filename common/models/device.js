@@ -370,6 +370,14 @@ module.exports = function(Device) {
             deviceLogEntry.reason = 'other';
         delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
+        var cameras = deviceLogEntry.checkinData.cameraInformation;
+        if (typeof cameras !== undefined && cameras instanceof Array){
+            deviceLogEntry.onlineCameras = cameras.filter(function(element){return element.status === 'online';}).length;
+            deviceLogEntry.totalCameras = cameras.length;
+        } else {
+            logger.error('invalid cameras array');
+        }
+
         deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
         delete deviceLogEntry.checkinData.id;
 
@@ -388,7 +396,8 @@ module.exports = function(Device) {
         // update general metadata about the device
         var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
 
-        // override ip address, if necessary
+        // this code overrides the IP address (only in callhome) so that consumers of the callhome api know which port to use to access the device
+        // useful in the case of tim hortons where the outbound ip is different than the inbound ip
         if (device.overrideIpAddress && device.overrideIpAddress.length > 0) {
             checkedInProperties.ipAddress = device.overrideIpAddress;
         }
@@ -425,16 +434,16 @@ module.exports = function(Device) {
             checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.lat, lng: deviceData.location.lng});
         }
 
-        if (deviceData.reason) {
-            checkedInProperties.reason = deviceData.reason;
-        }
-
         if (deviceData.locationName) {
             checkedInProperties.name = deviceData.locationName;
         }
 
-        if (deviceData.deviceInformation && deviceData.deviceInformation.ip) {
-            checkedInProperties.ipAddress = deviceData.deviceInformation.ip;
+        if (deviceData.deviceInformation && deviceData.deviceInformation.localIP) {
+            checkedInProperties.ipAddress = deviceData.deviceInformation.localIP;
+        }
+
+        if (deviceData.deviceInformation) {
+            checkedInProperties.vmsPort = deviceData.deviceInformation.port;
         }
 
         return checkedInProperties;
@@ -513,32 +522,32 @@ module.exports = function(Device) {
                 };
 
                 var ports = {};
-                if (device.connectPort) {
-                    ports.connect = device.connectPort;
+                if (device.overrideConnectPort) {
+                    ports.connect = device.overrideConnectPort;
                 }
 
-                if (device.vmsPort) {
-                    ports.vms = device.vmsPort;
+                if (device.overrideVmsPort) {
+                    ports.vms = device.overrideVmsPort;
                 }
 
-                if (device.checkinPort) {
-                    ports.checkin = device.checkinPort;
+                if (device.overrideCheckinPort) {
+                    ports.checkin = device.overrideCheckinPort;
                 }
 
-                if (device.uploaderPort) {
-                    ports.uploader = device.uploaderPort;
+                if (device.overrideUploaderPort) {
+                    ports.uploader = device.overrideUploaderPort;
                 }
 
-                if (device.listenerPort) {
-                    ports.listener = device.listenerPort;
+                if (device.overrideListenerPort) {
+                    ports.listener = device.overrideListenerPort;
                 }
 
-                if (device.configForwardPort) {
-                    ports.configForward = device.configForwardPort;
+                if (device.overrideConfigForwardPort) {
+                    ports.configForward = device.overrideConfigForwardPort;
                 }
 
                 if (Object.keys(ports).length > 0) {
-                    result.ports = ports;
+                    result.overridePorts = ports;
                 }
 
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {

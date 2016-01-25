@@ -94,31 +94,35 @@
       "type": "string",
       "required": false
     },
-    "overrideIpAddress": {
-      "type": "string",
-      "required": false
-    },
-    "connectPort": {
-      "type": "number",
-      "required": false
-    },
     "vmsPort": {
       "type": "number",
       "required": false
     },
-    "checkinPort": {
+    "overrideIpAddress": {
+      "type": "string",
+      "required": false
+    },
+    "overrideConnectPort": {
       "type": "number",
       "required": false
     },
-    "uploaderPort": {
+    "overrideVmsPort": {
       "type": "number",
       "required": false
     },
-    "listenerPort": {
+    "overrideCheckinPort": {
       "type": "number",
       "required": false
     },
-    "configForwardPort": {
+    "overrideUploaderPort": {
+      "type": "number",
+      "required": false
+    },
+    "overrideListenerPort": {
+      "type": "number",
+      "required": false
+    },
+    "overrideConfigForwardPort": {
       "type": "number",
       "required": false
     }
