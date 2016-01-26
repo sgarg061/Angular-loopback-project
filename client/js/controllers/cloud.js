@@ -71,7 +71,7 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
-
+          $scope.cloud.turnServerUrls = [];
           $scope.children = clouds[0].resellers;
 
           watchForChanges();
@@ -274,15 +274,39 @@ angular
     return ['solink'].indexOf(userType) > -1;
   };
 
-  function addTurnServerUrl(model) {
-    $mdDialog.show({
-      controller: function(scope, $mdDialog){
-        $scope.newTurnServerUrl ='';
-        scope.create = function(newTurnServerUrl){
-          $scope.cloud.turnServerUrls.push(newTurnServerUrl);
-        }
-      }
-    })
+  function addTurnServerUrl() {
+      $mdDialog.show({
+              controller: function(scope, $mdDialog) {
+                  $scope.newTurnServerUrl = '';
+                  $scope.create = function(newTurnServerUrl) {
+                      $scope.cloud.turnServerUrls.push(newTurnServerUrl);
+
+                      /*Cloud.prototype$updateAttributes({id: id},
+          {
+            
+          })
+          .$promise
+          .then(function(customer) {
+            getFilters();
+          }, function (res) {
+            toastr.error(res.data.error.message, 'Error');
+          });
+          $mdDialog.cancel();
+        };
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };*/
+                  }
+                  $scope.close = function() {
+                      $mdDialog.cancel();
+                  };
+              },
+              templateUrl: 'views/newTurnServerUrl.tmpl.html',
+              parent: angular.element(document.body),
+              targetEvent: event,
+              clickOutsideToClose: true
+          })
+          .then(function(result) {}, function() {});
   }
 
   $scope.canModifyCheckinInterval = function() {

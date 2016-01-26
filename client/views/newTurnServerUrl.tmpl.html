@@ -1,0 +1,23 @@
+<md-dialog aria-label="Add TURN Server URL">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>Add TURN Server URL</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <md-input-container>
+        <label>New TURN Server URL</label>
+        <input type="text" id="newUrl" class="form-control focus" name="name" autocomplete="off" required ng-model="model.turnServerUrl">
+      </md-input-container>
+  </md-dialog-content>
+  <div class="md-actions">
+    <md-button ng-click="close()" class="md-primary">Cancel</md-button>
+    <md-button ng-click="create(newUrl)" class="md-primary">Add</md-button>
+  </div>
+</md-dialog>
