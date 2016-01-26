@@ -396,7 +396,8 @@ module.exports = function(Device) {
         // update general metadata about the device
         var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
 
-        // override ip address, if necessary
+        // this code overrides the IP address (only in callhome) so that consumers of the callhome api know which port to use to access the device
+        // useful in the case of tim hortons where the outbound ip is different than the inbound ip
         if (device.overrideIpAddress && device.overrideIpAddress.length > 0) {
             checkedInProperties.ipAddress = device.overrideIpAddress;
         }
@@ -433,16 +434,16 @@ module.exports = function(Device) {
             checkedInProperties.location = new loopback.GeoPoint({lat: deviceData.location.lat, lng: deviceData.location.lng});
         }
 
-        if (deviceData.reason) {
-            checkedInProperties.reason = deviceData.reason;
-        }
-
         if (deviceData.locationName) {
             checkedInProperties.name = deviceData.locationName;
         }
 
-        if (deviceData.deviceInformation && deviceData.deviceInformation.ip) {
-            checkedInProperties.ipAddress = deviceData.deviceInformation.ip;
+        if (deviceData.deviceInformation && deviceData.deviceInformation.localIP) {
+            checkedInProperties.ipAddress = deviceData.deviceInformation.localIP;
+        }
+
+        if (deviceData.deviceInformation) {
+            checkedInProperties.vmsPort = deviceData.deviceInformation.port;
         }
 
         return checkedInProperties;
@@ -521,32 +522,32 @@ module.exports = function(Device) {
                 };
 
                 var ports = {};
-                if (device.connectPort) {
-                    ports.connect = device.connectPort;
+                if (device.overrideConnectPort) {
+                    ports.connect = device.overrideConnectPort;
                 }
 
-                if (device.vmsPort) {
-                    ports.vms = device.vmsPort;
+                if (device.overrideVmsPort) {
+                    ports.vms = device.overrideVmsPort;
                 }
 
-                if (device.checkinPort) {
-                    ports.checkin = device.checkinPort;
+                if (device.overrideCheckinPort) {
+                    ports.checkin = device.overrideCheckinPort;
                 }
 
-                if (device.uploaderPort) {
-                    ports.uploader = device.uploaderPort;
+                if (device.overrideUploaderPort) {
+                    ports.uploader = device.overrideUploaderPort;
                 }
 
-                if (device.listenerPort) {
-                    ports.listener = device.listenerPort;
+                if (device.overrideListenerPort) {
+                    ports.listener = device.overrideListenerPort;
                 }
 
-                if (device.configForwardPort) {
-                    ports.configForward = device.configForwardPort;
+                if (device.overrideConfigForwardPort) {
+                    ports.configForward = device.overrideConfigForwardPort;
                 }
 
                 if (Object.keys(ports).length > 0) {
-                    result.ports = ports;
+                    result.overridePorts = ports;
                 }
 
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
@@ -554,6 +555,7 @@ module.exports = function(Device) {
                         logger.error('Failed to find software version by id: %s', softwareVersionId);
                     } else {
                         result.updateUrl = softwareVersion.url;
+                        result.updateVersion = softwareVersion.name;
                     }
 
                     logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));

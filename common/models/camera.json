@@ -30,7 +30,8 @@
     },
     "streams": {
       "type": "Array",
-      "required": false
+      "required": false,
+      "length": "4096"
     },
     "thumbnail": {
       "type": "string",

@@ -104,7 +104,7 @@
                 </div>
               </div>
             </md-tab>
-            <md-tab label="EVENTS">
+            <!--<md-tab label="EVENTS">
               <div layout="column" style="margin: 20px;">
                 <div layout="row" layout-align="space-around center">
                   <md-input-container>
@@ -144,7 +144,7 @@
                   </md-input-container>
                 </div>
               </div>
-            </md-tab>
+            </md-tab>-->
             <md-tab label="DEVICES">
               <div layout="column" style="margin:20px;">
                 <md-input-container>
@@ -193,32 +193,32 @@
 
                   <md-input-container>
                     <label>VMS Port</label>
-                    <input type="text" id="vmsPort" ng-model="device.vmsPort" />
+                    <input type="text" id="overrideVmsPort" ng-model="device.overrideVmsPort" />
                   </md-input-container>
 
                   <md-input-container>
                     <label>Connect Port</label>
-                    <input type="text" id="vmsPort" ng-model="device.connectPort" />
+                    <input type="text" id="overrideConnectPort" ng-model="device.overrideConnectPort" />
                   </md-input-container>
 
                   <md-input-container>
                     <label>Checkin Port</label>
-                    <input type="text" id="vmsPort" ng-model="device.checkinPort" />
+                    <input type="text" id="overrideCheckinPort" ng-model="device.overrideCheckinPort" />
                   </md-input-container>
 
                   <md-input-container>
                     <label>Uploader Port</label>
-                    <input type="text" id="vmsPort" ng-model="device.uploaderPort" />
+                    <input type="text" id="overrideUploaderPort" ng-model="device.overrideUploaderPort" />
                   </md-input-container>
 
                   <md-input-container>
                     <label>Listener Port</label>
-                    <input type="text" id="vmsPort" ng-model="device.listenerPort" />
+                    <input type="text" id="overrideListenerPort" ng-model="device.overrideListenerPort" />
                   </md-input-container>
 
                   <md-input-container>
                     <label>Camera Config Forward Port</label>
-                    <input type="text" id="vmsPort" ng-model="device.configForwardPort" />
+                    <input type="text" id="overrideConfigForwardPort" ng-model="device.overrideConfigForwardPort" />
                   </md-input-container>
 
                   <md-button class="md-raised" ng-click="modifySettings()" ng-disabled="isSavingSettings">OK</md-button>
