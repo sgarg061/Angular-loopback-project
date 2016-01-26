@@ -32,6 +32,16 @@ angular
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
+          if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
+              var array = newValue.turnServerUrl.toString().split(",");
+              for (var i = 0; i < array.length; i++){//trim each url
+                array[i] = array[i].trim();
+                $scope.cloud.turnServerUrls[i] = array[i];
+                console.log($scope.cloud.turnServerUrls[i]);
+              }
+            var str = JSON.stringify(array);
+            updateCloud(id, {turnServerUrl: str});
+          }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl});
           }
@@ -274,29 +284,16 @@ angular
     return ['solink'].indexOf(userType) > -1;
   };
 
-  function addTurnServerUrl() {
+  $scope.addTurnServerUrl = function(cloud) {
       $mdDialog.show({
-              controller: function(scope, $mdDialog) {
-                  $scope.newTurnServerUrl = '';
+              controller: function DialogController ($scope, $mdDialog) {
+                  console.log("boom");
+                  $scope.cloud = cloud;
+                  console.log("bam");
                   $scope.create = function(newTurnServerUrl) {
                       $scope.cloud.turnServerUrls.push(newTurnServerUrl);
-
-                      /*Cloud.prototype$updateAttributes({id: id},
-          {
-            
-          })
-          .$promise
-          .then(function(customer) {
-            getFilters();
-          }, function (res) {
-            toastr.error(res.data.error.message, 'Error');
-          });
-          $mdDialog.cancel();
-        };
-        $scope.cancel = function() {
-          $mdDialog.cancel();
-        };*/
-                  }
+                      console.log("bim");
+                  };
                   $scope.close = function() {
                       $mdDialog.cancel();
                   };
@@ -306,7 +303,8 @@ angular
               targetEvent: event,
               clickOutsideToClose: true
           })
-          .then(function(result) {}, function() {});
+          .then(function(result) {
+          });
   }
 
   $scope.canModifyCheckinInterval = function() {
