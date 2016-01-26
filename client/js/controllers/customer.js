@@ -226,7 +226,7 @@ angular
 
           connectors.forEach(function(filter, i){
             filter.selected = false;
-            filter.owner = (filter.creatorType == 'customer'  || userService.getUserType() == 'solink');
+            filter.owner = (filter.creatorType == 'customer');
             if (i > -1) {
 
               if (filter.connectors.length) {
@@ -283,7 +283,7 @@ angular
           connectors.forEach(function(filter, i){
             filter.filter = JSON.stringify(filter.filter);
             filter.selected = false;
-            filter.owner = (filter.creatorType == 'customer'  || userService.getUserType() == 'solink');
+            filter.owner = (filter.creatorType == 'customer');
             if (i > -1) {
 
               if (filter.connectors.length) {

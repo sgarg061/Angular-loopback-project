@@ -215,7 +215,8 @@ angular
             var filter = connectors[i];
             if (i > -1) {
               filter.selected = (filter.connectors.length > 0)
-              filter.owner = (filter.creatorType == 'reseller' || userService.getUserType() == 'solink');
+              console.log('filter', filter);
+              filter.owner = (filter.creatorType == 'reseller');
               $scope.filters.push(filter);
               
               filter.creatorType == 'reseller' ? $scope.ownedFilters.push(filter) :$scope.cascadedFilters.push(filter)
@@ -253,7 +254,7 @@ angular
             filter.filter = JSON.stringify(filter.filter);
             if (i > -1) {
               filter.selected = (filter.connectors.length > 0)
-              filter.owner = (filter.creatorType == 'reseller' || userService.getUserType() == 'solink');
+              filter.owner = (filter.creatorType == 'reseller');
               $scope.reports.push(filter);
 
               filter.creatorType == 'reseller' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
