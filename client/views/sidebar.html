@@ -62,7 +62,7 @@
       <md-divider></md-divider>
       <md-list style="max-height:300px; overflow-y: scroll;">
         <md-list-item ng-repeat="url in model.turnServerUrls">
-          <p>{{url}}</p> Foo
+          <p id="url">{{url}}</p> <i class="material-icons" ng-model="model.deleteTurnServerUrl"ng-click="deleteTurnServerUrl(model,url)">delete</i>
         </md-list-item>
       </md-list>
 <!--END OF SHENANIGANS-->

@@ -33,14 +33,7 @@ angular
             updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
           if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
-              var array = newValue.turnServerUrl.toString().split(",");
-              for (var i = 0; i < array.length; i++){//trim each url
-                array[i] = array[i].trim();
-                $scope.cloud.turnServerUrls[i] = array[i];
-                console.log($scope.cloud.turnServerUrls[i]);
-              }
-            var str = JSON.stringify(array);
-            updateCloud(id, {turnServerUrl: str});
+             updateCloud(id, {turnServerUrl: newValue.turnServerUrl});
           }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl});
@@ -81,7 +74,7 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
-          $scope.cloud.turnServerUrls = [];
+          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
           $scope.children = clouds[0].resellers;
 
           watchForChanges();
@@ -285,14 +278,12 @@ angular
   };
 
   $scope.addTurnServerUrl = function(cloud) {
+    var tempCloud = cloud;
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
-                  console.log("boom");
-                  $scope.cloud = cloud;
-                  console.log("bam");
-                  $scope.create = function(newTurnServerUrl) {
-                      $scope.cloud.turnServerUrls.push(newTurnServerUrl);
-                      console.log("bim");
+                  $scope.create = function() {
+                      tempCloud.turnServerUrl.push($scope.model.turnServerUrl);
+                      $mdDialog.cancel();
                   };
                   $scope.close = function() {
                       $mdDialog.cancel();
@@ -304,8 +295,18 @@ angular
               clickOutsideToClose: true
           })
           .then(function(result) {
-          });
-  }
+      }, function() {
+    });
+  };
+
+  $scope.deleteTurnServerUrl = function(cloud, deleteUrl) {
+      var deleteIndex = cloud.turnServerUrl.indexOf(deleteUrl);
+
+      if(deleteIndex > -1){
+        cloud.turnServerUrl.splice(deleteIndex, 1);
+      }
+  };
+
 
   $scope.canModifyCheckinInterval = function() {
     var userType = userService.getUserType();

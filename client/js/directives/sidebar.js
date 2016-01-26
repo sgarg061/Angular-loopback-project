@@ -21,6 +21,7 @@ angular
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
         canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
         addTurnServerUrlFunction: "=addTurnServerUrlFunction",
+        deleteTurnServerUrlFunction: "=deleteTurnServerUrlFunction",
         canModifyCheckinIntervalFunction: "=canModifyCheckinIntervalFunction",
         canModifySignallingServerFunction: "=canModifySignallingServerFunction",
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
@@ -72,8 +73,11 @@ angular
         scope.canModifyImageServerUrl = function(model) {
           return scope.canModifyImageServerUrlFunction(model);
         }
-        scope.addTurnServerUrlFunction = function(model) {
+        scope.addTurnServerUrl = function(model) {
           scope.addTurnServerUrlFunction(model);
+        }
+        scope.deleteTurnServerUrl = function(model, url) {
+          scope.deleteTurnServerUrlFunction (model, url);
         }
         scope.canModifyCheckinInterval = function(model) {
           return scope.canModifyCheckinIntervalFunction(model);
