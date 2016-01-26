@@ -520,4 +520,9 @@ md-input-container .md-input.scripted{
   font-size: 12px;
   border: 1px solid rgba(0, 0, 0, 0.117647);
   line-height: 18px;
+
+}
+
+md-input-container .md-input.scripted:disabled{
+  color: rgb(0, 0, 0) !important;
 }
