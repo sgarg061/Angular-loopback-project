@@ -1,16 +1,16 @@
 <div ng-include src="'views/breadcrumb.html'"></div>
 
 <md-content>
-  
+
   <div layout="row" class="background">
 
     <div class="col-md-3 sidebar-container" layout-margin>
-      <sidebar model="cloud" type="'cloud'" 
+      <sidebar model="cloud" type="'cloud'"
         software-versions="softwareVersions"
         add-filter-function="addFilter"
         action-filter-function="actionFilter"
         edit-filter-function="editFilter"
-        can-modify-event-url-function="canModifyEventUrl" 
+        can-modify-event-url-function="canModifyEventUrl"
         can-modify-image-server-url-function="canModifyImageServerUrl"
         create-software-version-function="openSoftwareVersionForm"
         can-modify-software-version-function="canModifySoftwareVersion"
@@ -36,18 +36,25 @@
           </md-button>
         </div>
       </div>
-      <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
-        <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card" 
-          ng-click='selectReseller(reseller)' md-rowspan="0" md-colspan="1">
-          <div layout-fill layout-align="start center" layout-padding>
-            <span class="md-title" style="vertical-align: middle; line-height:50px;">{{reseller.name}}
-            </span>
-          </div>
-        </md-grid-tile>
-      </md-grid-list>
+      <md-tabs md-dynamic-height>
+        <md-tab label="LIST">
+          <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
+            <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card"
+              ng-click='selectReseller(reseller)' md-rowspan="0" md-colspan="1">
+              <div layout-fill layout-align="start center" layout-padding>
+                <span class="md-title" style="vertical-align: middle; line-height:50px;">{{reseller.name}}
+                </span>
+              </div>
+            </md-grid-tile>
+          </md-grid-list>
+        </md-tab>
+        <md-tab label="MAP">
+          <map devices="allDevices"></map>
+        </md-tab>
+      </md-tabs>
     </div>
 
   </div>
-</md-content> 
+</md-content>
 
 

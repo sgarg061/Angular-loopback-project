@@ -11,18 +11,20 @@ angular
     $scope.cloudId = null;
     $scope.cloud = null;
 
+    $scope.allDevices = [];
+
     $scope.children = [];
     $scope.filters = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
-    
+
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
       $scope.$watch("cloud", function(newValue, oldValue) {
         if (newValue) {
           var id = $scope.cloud.id;
-          
+
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateCloud(id, {eventServerUrl: newValue.eventServerUrl});
           }
@@ -88,8 +90,8 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          $scope.clouds    = [].concat(clouds);          
-          
+          $scope.clouds    = [].concat(clouds);
+
           // select the first by default
           if (!$stateParams.cloudId && clouds.length > 0) {
             $scope.selectCloud(clouds[0]);
@@ -97,7 +99,7 @@ angular
         });
     }
 
-    
+
     function getFilters(){
       POSFilter
         .find({
@@ -309,7 +311,7 @@ angular
                         description: $scope.newFilter.description,
                         script: script,
                         creatorId: $stateParams.cloudId,
-                        creatorType: 'cloud' 
+                        creatorType: 'cloud'
                       })
                       .$promise
                       .then(function(customer) {
@@ -330,7 +332,7 @@ angular
       })
       .then(function(result) {
       }, function() {
-    }); 
+    });
   };
 
   $scope.actionFilter = function(filter) {
@@ -345,7 +347,7 @@ angular
           catch(err){
             $scope.newFilter.script = filter.script
           }
-          
+
           $scope.newFilter.parsed_script = true
         }
 
@@ -396,7 +398,7 @@ angular
       })
       .then(function(result) {
       }, function() {
-    }); 
+    });
   };
-    
+
   }]);
