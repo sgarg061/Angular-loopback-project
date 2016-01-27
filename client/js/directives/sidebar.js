@@ -29,6 +29,7 @@ angular
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
         createSoftwareVersionFunction: "=createSoftwareVersionFunction",
         softwareVersions: "=softwareVersions",
+        defaultSoftwareVersion: "=defaultSoftwareVersion",
         filters: "=filters",
         children: "=children",
         ownedFilters: "=ownedFilters",

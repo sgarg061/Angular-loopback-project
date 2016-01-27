@@ -3,7 +3,7 @@
   <md-content>
     <div layout="row" class="background">
 
-      <div class="col-md-3  sidebar-container" layout-margin>
+      <div class="col-md-3  sidebar-container">
         <sidebar model="device" type="'device'"
           delete-function="deleteReseller"
           software-versions="softwareVersions"
@@ -15,16 +15,16 @@
           can-modify-signalling-server-function="canModifySignallingServer"/>
       </div>
 
-      <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
+      <div class="child-list col-md-8" layout-margin layout-fill layout-padding style="height:auto">
 
         <md-content class="card">
-          <div layout="row" style="padding-left: 20px; padding-right: 20px;" layout-align="space-between center" layout-fill>
-            <h2 class="md-title">{{device.name}}</h2>
-            <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:0px;"></md-icon>
+          <div layout="row" layout-align="space-between center">
+            <h2 class="md-title" style="margin-left:10px">{{device.name}}</h2>
+            <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:10px;"></md-icon>
             <!--<md-icon md-svg-icon='indicator_{{device.statusIconColor}}' style="width:24px;margin:0px;"></md-icon>-->
           </div>
 
-          <div layout="row" layout-fill layout-padding>
+          <div layout="row" style="margin-left:10px;margin-right:10px" >
             <md-input-container flex>
               <label>License</label>
                 <input ng-model="device.license.key" disabled>
@@ -104,7 +104,7 @@
                 </div>
               </div>
             </md-tab>
-            <md-tab label="EVENTS">
+            <!--<md-tab label="EVENTS">
               <div layout="column" style="margin: 20px;">
                 <div layout="row" layout-align="space-around center">
                   <md-input-container>
@@ -144,7 +144,7 @@
                   </md-input-container>
                 </div>
               </div>
-            </md-tab>
+            </md-tab>-->
             <md-tab label="DEVICES">
               <div layout="column" style="margin:20px;">
                 <md-input-container>
@@ -184,8 +184,8 @@
               </div>
             </md-tab>
             <md-tab label="SETTINGS">
-              <div layout="column" style="margin: 20px;">
-                <div>
+              <div >
+                <div layout="column" style="margin: 10px;">
                   <md-input-container>
                     <label> Override IP Address</label>
                     <input type="text" id="override" ng-model="device.overrideIpAddress" />
@@ -220,9 +220,9 @@
                     <label>Camera Config Forward Port</label>
                     <input type="text" id="overrideConfigForwardPort" ng-model="device.overrideConfigForwardPort" />
                   </md-input-container>
-
-                  <md-button class="md-raised" ng-click="modifySettings()" ng-disabled="isSavingSettings">OK</md-button>
-                </div>
+                  
+                </div> 
+                <md-button class="md-raised" ng-click="modifySettings()" ng-disabled="isSavingSettings">OK</md-button>
               </div>
             </md-tab>
             <md-tab label="CONNECTORS">
@@ -255,6 +255,7 @@
               </div>
             </md-tab>
           </md-tabs>
+        </md-content>
       </div>
     </div>
   </md-content>

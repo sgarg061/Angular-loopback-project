@@ -1,45 +1,43 @@
 <div class="sidebar">
-
-  
   <md-content>
     <div layout="row" layout-padding layout-align="space-between center" style="padding-left:24px">
-      <div layout="column" layout-align="start start">
-        <h2 style="margin-bottom:0px">{{model.name}}</h2>
-        <p style="margin:2px 8px">{{model.email}}</p>
-      </div>
+        <div layout="column" layout-align="start start">
+            <h2 style="margin-bottom:0px">{{model.name}}</h2>
+            <p style="margin:2px 2px">{{model.email}}</p>
+        </div>
 
-      <div>
-      <md-menu ng-show="type=='reseller'||type=='customer'">
-        <md-button aria-label="interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-          <md-icon md-menu-origin md-svg-icon="drop_down" style="color:red;"></md-icon>
-        </md-button>
-        <md-menu-content width="4">
-          
-          <md-menu-item ng-show="type=='customer'">
-            <md-button ng-click="renameModel(model)">
-                Rename
-             </md-button>
-          </md-menu-item>
+        <div>
+            <md-menu ng-show="type=='reseller'||type=='customer'">
+                <i aria-label="interactions menu" ng-click="openMenu($mdOpenMenu, $event)" class="material-icons">arrow_drop_down_circle</i>
 
-          <md-menu-item ng-show="type=='reseller'||type=='customer'">
-            <md-button ng-click="deleteModel(model)">
-              Delete
-            </md-button>
-          </md-menu-item>
+                <md-menu-content width="3">
+                    <md-menu-item ng-show="type=='customer'">
+                        <md-button ng-click="renameModel(model)">
+                            <i class="material-icons">mode_edit</i>
+                            Rename
+                        </md-button>
+                    </md-menu-item>
 
-          <md-menu-item ng-show="type=='device'">
-            <md-button ng-click="sendCommand(model)">
-              <md-icon md-svg-icon="upload" md-menu-align-target></md-icon>
-              Send Command
-            </md-button>
-          </md-menu-item>
+                    <md-menu-item ng-show="type=='reseller'||type=='customer'">
+                        <md-button ng-click="deleteModel(model)" >
+                            <i style="vertical-align:middle" class="material-icons">delete</i>
+                            Delete
+                        </md-button>
+                    </md-menu-item>
 
-        </md-menu-content>
-      </md-menu>
+                    <md-menu-item ng-show="type=='device'">
+                        <md-button ng-click="sendCommand(model)">
+                            <md-icon md-svg-icon="upload" md-menu-align-target></md-icon>
+                            Send Command
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+
+            </md-menu>
+        </div>
     </div>
-    </div>
-    
-    <md-divider></md-divider>
+
+    <md-divider style="margin-bottom:10px"></md-divider>
     <div layout-padding>
       <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
         <label>Check-in Interval</label>
@@ -151,7 +149,5 @@
         </md-list-item>
       </md-list>
     </span>
-    </div>
-
   </md-content>
 </div>
