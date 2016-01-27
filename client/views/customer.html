@@ -4,7 +4,7 @@
 
   <div layout="row" class="background">
 
-    <div class="col-md-3  sidebar-container" layout-margin>
+    <div class="col-md-3  sidebar-container">
       <sidebar style="height:100%" model="customer" type="'customer'"
         add-license-function="addLicense"
         show-license-function="showLicense"
@@ -14,6 +14,7 @@
         delete-function="deleteCustomer"
         rename-function="renameCustomer"
         software-versions="softwareVersions"
+        default-software-version="defaultSoftwareVersion"
         filters="filters"
         can-modify-event-url-function="canModifyEventUrl"
         can-modify-image-server-url-function="canModifyImageServerUrl"
@@ -31,8 +32,7 @@
 
     <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
       <h2>Devices</h2>
-      <input type="text" class="device-search form-control" placeholder="Search" ng-model="searchFilter">
-
+      <input type="text" placeholder="Search" ng-model="searchFilter" class="device-search form-control">
       <md-tabs md-dynamic-height>
         <md-tab label="LIST">
           <md-content class="card">

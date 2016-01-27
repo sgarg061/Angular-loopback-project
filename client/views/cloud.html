@@ -4,7 +4,7 @@
   
   <div layout="row" class="background">
 
-    <div class="col-md-3 sidebar-container" layout-margin>
+    <div class="col-md-3 sidebar-container">
       <sidebar model="cloud" type="'cloud'" 
         software-versions="softwareVersions"
         add-filter-function="addFilter"
@@ -26,20 +26,18 @@
         select-connector-function="selectConnector"/>
     </div>
 
-    <div class="child-list col-md-8" class="main-content" layout-fill layout-padding>
-      <div layout="row">
+    <div class="child-list col-md-8 main-content" layout-fill layout-padding>
+      <div layout="row" layout-align="space-between center" class='title-row'>
         <h2>Resellers</h2>
-        <div>
-          <md-button class="md-fab md-mini" style = "position: absolute; left: auto;"
-            ng-click="openResellerForm($event, cloud)">
-            <md-icon md-font-library="material-icons">add</md-icon>
-          </md-button>
+        <div class='create-button' ng-click="openResellerForm($event, cloud)">
+          <i class="material-icons add">add</i>
+          <span>Create new Reseller</span>
         </div>
       </div>
       <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
         <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card" 
           ng-click='selectReseller(reseller)' md-rowspan="0" md-colspan="1">
-          <div layout-fill layout-align="start center" layout-padding>
+          <div layout-fill style="margin-left:10px" layout-align="start center">
             <span class="md-title" style="vertical-align: middle; line-height:50px;">{{reseller.name}}
             </span>
           </div>
