@@ -13,11 +13,11 @@
   <md-dialog-content>
     <md-input-container>
         <label>New TURN Server URL</label>
-        <input type="text" id="newUrl" class="form-control focus" name="name" autocomplete="off" required ng-model="model.turnServerUrl">
+        <input type="url" class="form-control focus" name="name" autocomplete="off" required ng-model="model.turnServerUrl">
       </md-input-container>
   </md-dialog-content>
   <div class="md-actions">
     <md-button ng-click="close()" class="md-primary">Cancel</md-button>
-    <md-button ng-click="create()" class="md-primary">Add</md-button>
+    <md-button ng-click="create()" class="md-primary" ng-disabled="!model.turnServerUrl">Add</md-button>
   </div>
 </md-dialog>
