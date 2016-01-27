@@ -11,7 +11,7 @@
     </div>
   </md-toolbar>
   <md-dialog-content style="width:800px">
-    <div>
+    <div layout="column" layout-margin layout-padding class="dialog">
       <md-input-container>
         <label>Filter Name</label>
         <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="newFilter.name" ng-disabled="!newFilter.owner">
