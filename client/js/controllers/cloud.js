@@ -34,7 +34,6 @@ angular
           }
           if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
              updateCloud(id, {turnServerUrl: newValue.turnServerUrl});
-             console.log("watchForChanges is working");
           }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl});
@@ -280,12 +279,25 @@ angular
 
   $scope.addTurnServerUrl = function(cloud) {
     var tempCloud = cloud;
-    debugger;
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
-                    debugger;
-                      tempCloud.turnServerUrl.push($scope.model.turnServerUrl);
+                      if(tempCloud.turnServerUrl === null)
+                      {
+                        tempCloud.turnServerUrl = [];
+                        tempCloud.turnServerUrl[1] = $scope.model.turnServerUrl;
+                      }
+                      else
+                      {
+                        if(tempCloud.turnServerUrl.indexOf($scope.model.turnServerUrl) === -1) //check for duplicate entry
+                        {
+                           tempCloud.turnServerUrl.push($scope.model.turnServerUrl);
+                        }
+                        else
+                        {
+                          toastr.error("Duplicate URL entry. Please enter a unique URL.");
+                        }
+                      }
                       $mdDialog.cancel();
                   };
                   $scope.close = function() {
