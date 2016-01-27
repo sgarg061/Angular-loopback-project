@@ -242,8 +242,8 @@ angular
       $state.go('cloud', {cloudId: (typeof cloud  === 'string') ? cloud : cloud.id}, {reload: true});
     }
 
-    $scope.selectCustomer = function(customer) {
-      $state.go('customer', {customerId: (typeof customer === 'string') ? customer : customer.id}, {reload: true});
+    $scope.selectCustomer = function() {
+      $state.go('customer', {customerId: (typeof customer === 'string') ? customer : $scope.customer.id}, {reload: true});
     }
 
     $scope.selectDevice = function(device) {
@@ -278,28 +278,28 @@ angular
       updatedConfigObject.ipAddress = $scope.device.overrideIpAddress;
     }
 
-    if ($scope.device.vmsPort) {
-      updatedConfigObject.vmsPort = $scope.device.vmsPort;
+    if ($scope.device.overrideVmsPort) {
+      updatedConfigObject.overrideVmsPort = $scope.device.overrideVmsPort;
     }
 
-    if ($scope.device.connectPort) {
-      updatedConfigObject.connectPort = $scope.device.connectPort;
+    if ($scope.device.overrideConnectPort) {
+      updatedConfigObject.overrideConnectPort = $scope.device.overrideConnectPort;
     }
 
-    if ($scope.device.checkinPort) {
-      updatedConfigObject.checkinPort = $scope.device.checkinPort;
+    if ($scope.device.overrideCheckinPort) {
+      updatedConfigObject.overrideCheckinPort = $scope.device.overrideCheckinPort;
     }
 
-    if ($scope.device.uploaderPort) {
-      updatedConfigObject.uploaderPort = $scope.device.uploaderPort;
+    if ($scope.device.overrideUploaderPort) {
+      updatedConfigObject.overrideUploaderPort = $scope.device.overrideUploaderPort;
     }
 
-    if ($scope.device.listenerPort) {
-      updatedConfigObject.listenerPort = $scope.device.listenerPort;
+    if ($scope.device.overrideListenerPort) {
+      updatedConfigObject.overrideListenerPort = $scope.device.overrideListenerPort;
     }
 
-    if ($scope.device.configForwardPort) {
-      updatedConfigObject.configForwardPort = $scope.device.configForwardPort;
+    if ($scope.device.overrideConfigForwardPort) {
+      updatedConfigObject.overrideConfigForwardPort = $scope.device.overrideConfigForwardPort;
     }
 
     Device

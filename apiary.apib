@@ -35,79 +35,39 @@ A device object has the following attributes:
 
             {
                 "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
-                "name": "Amazing Connect #1",
+                "guid": null,
+                "name": "Store #210",
                 "status": "offline",
-                "address": "221B Baker Street, London, England",
+                "address": "St. John's, NL, Canada",
+                "phoneNumber": "2268884444",
+                "organizationPath": "Canada/Ontario/Ottawa",
                 "location": {
-                    "lat": -31.42,
-                    "lng": 41.99
+                    "lat": 46.1234586,
+                    "lng": 7.211228
                 },
-                "organizationPath": "Canada/Ontario/Kanata",
-                "lastCheckin": "2015-08-25T20:11:46.370Z",
-                "username": "christopher",
-                "password": "test",
-                "ipAddress": "54.1.1.3",
-                "cameras": [
-                    {
-                        "id":"c5084250-4b37-11e5-8184-752d1c0476b3",
-                        "name":"axis camera",
-                        "thumbnail": "12/thumbnails/hello.jpg",
-                        "streams": [
-                            {
-                                "id": "streamabc",
-                                "name": "HD",
-                                "earliestSegmentDate": 1450211609000,
-                                "latestSegmentDate": 1550211609000
-                            },
-                            {
-                                "id": "streamdef",
-                                "name": "SD",
-                                "earliestSegmentDate": 1450211609000,
-                                "latestSegmentDate": 1550211609000
-                            }
-                        ]
-                    },
-                    {
-                        "id":"d5084250-4b37-11e5-8184-752d1c0476b3",
-                        "name":" POS camera",
-                        "thumbnail": "12/thumbnails/hello.jpg",
-                        "streams": [
-                            {
-                                "id": "streamabc",
-                                "name": "HD",
-                                "earliestSegmentDate": 1450211609000,
-                                "latestSegmentDate": 1550211609000
-                            },
-                            {
-                                "id": "streamdef",
-                                "name": "SD",
-                                "earliestSegmentDate": 1450211609000,
-                                "latestSegmentDate": 1550211609000
-                            }
-                        ]
-                    },
-                    {
-                        "id":"e5084250-4b37-11e5-8184-752d1c0476b3",
-                        "name":"Door camera",
-                        "thumbnail": "12/thumbnails/hello.jpg",
-                        "streams": [
-                            {
-                                "id": "streamabc",
-                                "name": "HD",
-                                "earliestSegmentDate": 1450211609000,
-                                "latestSegmentDate": 1550211609000
-                            },
-                            {
-                                "id": "streamdef",
-                                "name": "SD",
-                                "earliestSegmentDate": 1450211609000,
-                                "latestSegmentDate": 1550211609000
-                            }
-                        ]
-                    }
-                ]
+                "osVersion": "4.2.0",
+                "currentSoftwareVersion": "4.0.11",
+                "signallingServerUrl": "http://localhost:3000",
+                "model": "TS-X53U",
+                "modelName": "Rackmount Turbo NAS",
+                "deviceCapacity": "832.31",
+                "availableCapacity": "400.01",
+                "checkinInterval": 120,
+                "lastCheckin": "2016-01-25T14:49:19.588Z",
+                "customerId": "b4132x23-8y42-00t1-75y4-b1234u545c3c",
+                "softwareVersionId": "99a1d2f0-be3d-11e5-a6d3-75b5c9a8178b",
+                "username": "solink-local",
+                "password": "__connect__",
+                "ipAddress": "10.126.140.203",
+                "vmsPort": 18080,
+                "overrideIpAddress": "192.168.1.1" ,
+                "overrideConnectPort": 8080,
+                "overrideVmsPort": 8081,
+                "overrideCheckinPort": 8082,
+                "overrideUploaderPort": 8082,
+                "overrideListenerPort": 8083,
+                "overrideConfigForwardPort": 8084
             }
-
 ## List All Devices [/api/devices{?filter%5Boffset%5D,filter%5Blimit%5D,filter%5Binclude%5D}]
 
 + Parameters
@@ -566,12 +526,12 @@ A device object has the following attributes:
                             "used": 440392482816,
                             "model": "TS-X53",
                             "firmware": "4.2.0",
+                            "port": 8080,
                             "deviceCapacity": 3887985590272,
                             "availableCapacity": 3447593107456
                         },
                         "$$hashKey": "object:549"
                     }
-                }
             }
 
 + Response 200 (application/json)
@@ -582,13 +542,14 @@ A device object has the following attributes:
                 "eventServerUrl": "https://myeventserver.com",
                 "imageServerUrl": "https://myimageserver.com",
                 "signallingServerUrl": "https://mysignallingserver.com",
-                "updateUrl": "https://myupdateurl.com",
                 "checkinInterval": "3600",
-                "ports": {
+                "updateUrl": "https://myupdateurl.com",
+                "updateVersion": "v0.0.2"
+                "overridePorts": {
                     "vms": 8080,
                     "uploader": 3000,
                     "checkin": 1234
-                }
+                }    
             }
 
 ## Group Licenses
@@ -973,7 +934,7 @@ Get or add available software version numbers.
                 {
                     "id": "4bd2c330-b4a7-11e5-ae04-4ff0e0c012ca",
                     "name": "v0.0.2",
-                    "code": 2,
+                    "code":2 ,
                     "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2//",
                 },
                 {
@@ -1001,3 +962,16 @@ Get or add available software version numbers.
             "code": 2,
             "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
         }
+
+###Group Configuration
+
+## Retrieve IP [/api/configuration/whatismyip]
+
+
+### Get IP Address [GET]
+
+ + Response 200 (application/json)
+ 
+     + Body
+ 
+             "207.35.173.122"

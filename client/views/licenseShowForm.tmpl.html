@@ -13,13 +13,11 @@
   <md-dialog-content>
     <div layout="column">
 
-      <div layout="row" layout-fill layout-align="space-around center">
+      <div layout="row" layout-fill layout-padding layout-align="space-around center">
         <div><h2>{{license.key}}</h2></div>
-        <div>
           <md-button clip-copy="license.key" class="md-primary">
             <md-icon md-svg-icon='content_copy' aria-label="Copy to Clipboard"></md-icon>
           </md-button>
-        </div>
       </div>
 
       <md-input-container ng-show="license.deviceId">

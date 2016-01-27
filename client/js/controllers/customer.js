@@ -57,7 +57,7 @@ angular
         });
     }
 
-    function getCustomer() {
+    function getCustomer(cb) {
       Customer
         .find({
           filter: {
@@ -190,6 +190,9 @@ angular
               });
             }
           }
+          if(cb){
+            cb();
+          }
         });
     }
 
@@ -247,9 +250,10 @@ angular
           }
         })
     }
-    
-    getCustomer();
-    getSoftwareVersions();
+
+    getCustomer(function(){
+      getSoftwareVersions();
+    });
 
     $scope.loadFilters = function(owner){
 
@@ -261,7 +265,7 @@ angular
     }
 
     $scope.selectReseller = function(reseller) {
-      $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
+      $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : $scope.reseller.id}, {reload: true});
     }
 
     $scope.selectCloud = function(cloud) {
@@ -274,8 +278,8 @@ angular
       }
     }
 
-    $scope.selectCustomer = function(customer) {
-      $state.go('customer', {customerId: (typeof customer === 'string') ? customer : customer.id}, {reload: true});
+    $scope.selectCustomer = function() {
+      $state.go('customer', {customerId: (typeof customer === 'string') ? customer : $scope.customer.id}, {reload: true});
     }
 
     $scope.selectDevice = function(device) {
@@ -427,15 +431,16 @@ angular
               (function(customer) 
                 {
                   $scope.customer.name = scope.customerRename
+                  toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
+                  $scope.selectCustomer()
                 }, 
                 function (res) 
                 {
-                  toastr.error(res.data.error.message, 'Error');
+                  toastr.error('Error');
+                  console.log('FOO' + res.data.error.message);
                 }
               );
             $mdDialog.cancel();
-            toastr.info('Successful customer renaming to ' + scope.customerRename + ".");
-            $scope.selectCustomer($scope.customerId)
           };
 
           scope.close = function() {
@@ -477,6 +482,12 @@ angular
       .$promise
       .then(function(versions) {
         $scope.softwareVersions = [].concat(versions);
+
+        //Getting the default software version name
+        function currentSoftwareVersion(testVersion){ //used in filter
+            return (testVersion.id===$scope.reseller.softwareVersionId || testVersion.id===$scope.cloud.softwareVersionId);
+        }
+        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
       })
   }
 
