@@ -95,9 +95,9 @@ angular
                  $scope.cloud.checkinInterval;
 
               $scope.allDevices.push(device);
-              });
             });
           });
+        });
     }
 
     function getSoftwareVersions() {
