@@ -15,7 +15,7 @@ angular
     $scope.timelineView = false;
 
     $scope.logCount = 0;
-    $scope.logDataLimit = 100;
+    $scope.logDataLimit = 25;
     $scope.sendingCheckin = null;
     $scope.isSavingSettings = false;
 
@@ -28,15 +28,17 @@ angular
       {name: 'status', count: 0},
       {name: 'forced', count: 0},
       {name: 'service', count: 0},
-      {name: 'reboot', count: 0}
+      {name: 'reboot', count: 0},
+      {name: 'other', count: 0}
     ];
 
     $scope.checkinColors = {
       interval: '#00bb00',
       status: '#c400ff',
       forced: '#ffa000',
-      service: '#0088cc',
-      reboot: '#f54'
+      service: '#ff8a80',
+      reboot: '#f54',
+      other: '#0088cc'
     };
 
     function watchForChanges() {
@@ -58,6 +60,30 @@ angular
           }
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateDevice(id, {eventServerUrl: newValue.eventServerUrl});
+          }
+          if (newValue.selectedCheckinReason !== oldValue.selectedCheckinReason) {
+            console.log('checkin value selected', selectedCheckinReason);
+          }
+        }
+      }, true);
+
+      // watch device for updates and save them when they're found
+      $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
+        if (newValue) {
+          if (newValue !== oldValue) {
+            $scope.checkinReasons.forEach(function (reason) {
+              if (reason.name == newValue) {
+
+                if ($scope.device.logEntries.length) {
+                  var current_checkins = $scope.device.logEntries.filter(function (el) {
+                    console.log('element',el.reason, newValue);
+                    return el.reason == newValue;
+                  });
+
+                  console.log('new to load new data',newValue, current_checkins.count);
+                };
+              };
+            })
           }
         }
       }, true);

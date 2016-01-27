@@ -583,8 +583,6 @@ pre.pretty-json{
 }
 
 .checkin-label{
-  margin-left: 10px;
-  color: white !important;
   width: 80px;
   text-align: center;
   border-radius: 3px;
@@ -593,6 +591,7 @@ pre.pretty-json{
 }
 
 .checkin-camera-numbers{
+  margin-right: 8px;
   background-color: gray;
   color: white;
   padding: 2px 7px;
@@ -612,3 +611,9 @@ pre.pretty-json{
   min-height: 0px;
   height: 0px;
 }
+
+.check-in-point-tooltip{
+  background-color: AliceBlue;
+
+}
+.background-color: AliceBlue
