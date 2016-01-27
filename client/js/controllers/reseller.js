@@ -47,7 +47,7 @@ angular
       });
     }
 
-    function getReseller() {
+    function getReseller(cb) {
       Reseller
         .find({
           filter: {
@@ -97,6 +97,9 @@ angular
               $scope.allDevices.push(device);
             });
           });
+          if (cb){
+            cb();
+          }
         });
     }
 
@@ -111,6 +114,12 @@ angular
         .$promise
         .then(function(versions) {
           $scope.softwareVersions = [].concat(versions);
+
+          //Getting the default software version name
+          function currentSoftwareVersion(testVersion){ //used in filter
+            return testVersion.id===$scope.cloud.softwareVersionId;
+          }
+          $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
         })
     }
 
@@ -151,8 +160,9 @@ angular
     }
 
 
-    getReseller();
-    getSoftwareVersions();
+    getReseller(function(){
+      getSoftwareVersions();
+    });
 
 
     $scope.selectReseller = function(reseller) {

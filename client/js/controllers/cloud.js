@@ -190,8 +190,8 @@ angular
       $state.go('cloud', {cloudId: cloud.id}, {reload: true});
     }
 
-    $scope.selectCustomer = function(customer) {
-      $state.go('customer', {customerId: (typeof customer === 'string') ? customer : customer.id}, {reload: true});
+    $scope.selectCustomer = function() {
+      $state.go('customer', {customerId: (typeof customer === 'string') ? customer : $scope.customer.id}, {reload: true});
     }
 
     $scope.selectDevice = function(device) {
