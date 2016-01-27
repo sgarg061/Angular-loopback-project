@@ -34,6 +34,7 @@ angular
           }
           if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
              updateCloud(id, {turnServerUrl: newValue.turnServerUrl});
+             console.log("watchForChanges is working");
           }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl});
@@ -74,7 +75,7 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
-          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
+          $scope.cloud.turnServerUrl = clouds[0].turnServerUrl;
           $scope.children = clouds[0].resellers;
 
           watchForChanges();
@@ -279,9 +280,11 @@ angular
 
   $scope.addTurnServerUrl = function(cloud) {
     var tempCloud = cloud;
+    debugger;
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
+                    debugger;
                       tempCloud.turnServerUrl.push($scope.model.turnServerUrl);
                       $mdDialog.cancel();
                   };

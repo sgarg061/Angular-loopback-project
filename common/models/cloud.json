@@ -24,7 +24,7 @@
       "required": true
     },
     "turnServerUrl": {
-       "type": "object",
+       "type": "Array",
        "required": false,
        "default": {},
        "postgresql": {
