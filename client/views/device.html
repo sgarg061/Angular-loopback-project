@@ -138,7 +138,7 @@
                           <h4 style="font-weight:bold;font-size:12px;">{{ entry.timestamp | date: 'medium' }}</h4>
                           <div layout="row" style="">
                             <div class="md-body-1 checkin-camera-numbers" ng-if="entry.totalCameras">{{entry.onlineCameras}} of {{entry.totalCameras}} Cameras</div>
-                            <div class="md-body-2 checkin-label" style="border:1px solid {{checkinColors[entry.reason]}};color:{{checkinColors[entry.reason]}};">{{entry.reason | capitalize}}</div>
+                            <div class="md-body-2 checkin-label" style="border:1px solid {{checkinColors[entry.reason]}};color:{{checkinColors[entry.reason]}};" ng-if="entry.reason">{{entry.reason | capitalize}}</div>
                           </div>
                         </div>
                         <md-divider ng-if="!$last || !device.noMoreLogs"></md-divider>
