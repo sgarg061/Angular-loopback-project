@@ -102,7 +102,7 @@
         </div>
 
         <div ng-show="type=='cloud'||type=='reseller'||type=='customer'">
-            <md-list style="max-height:300px; overflow-y: scroll;" ng-if="filters.length">
+            <md-list style="max-height:300px; overflow-y: scroll; overflow-x: hidden;" ng-if="filters.length">
                 <md-subheader class="md-no-sticky">POS Filters ({{filters.length}})</md-subheader>
                 <md-divider class="md-default-theme"></md-divider>
                 <md-list-item ng-repeat="filter in ownedFilters">

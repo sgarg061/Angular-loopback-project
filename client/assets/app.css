@@ -535,17 +535,18 @@ input:focus ~ label, input.used ~ label {
 }
 
 .create-button {
-  background: rgba(255,152,0, 0.8);
+  background: #2196F3;
   padding: 5px 10px;
   color: #fff;
   border-radius: 5px;
   margin-left: 1em;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
 }
 
 .create-button:hover {
-  background: rgba(255,152,0, 1);
+  background:#BBDEFB;
 }
 
 /* Icons */

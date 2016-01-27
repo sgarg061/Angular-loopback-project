@@ -10,7 +10,7 @@
     </div>
   </md-toolbar>
   <md-dialog-content>
-    <div layout="column" layout-margin layout-padding layout-align="space-between center" class="dialog">
+    <div layout="column" layout-margin layout-padding layout-align="space-between" class="dialog">
       <md-input-container>
         <label>Name</label>
         <input type="text" class="form-control focus" name="name" md-maxlength="15" autocomplete="off" required ng-model="newCustomer.name">
@@ -29,7 +29,7 @@
       </md-input-container>
     </div>
   </md-dialog-content>
-  <div class="md-actions" layout="row">
+  <div class="md-actions" layout="row" layout-align="center">
     <md-button ng-click="cancel()">
      Cancel
     </md-button>
