@@ -32,7 +32,7 @@
        }
      },
      "stunServerUrl": {
-       "type": "object",
+       "type": "Array",
        "required": false,
        "default": {},
        "postgresql": {

@@ -35,6 +35,9 @@ angular
           if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
              updateCloud(id, {turnServerUrl: newValue.turnServerUrl});
           }
+          if (newValue.stunServerUrl !== oldValue.stunServerUrl) {
+             updateCloud(id, {stunServerUrl: newValue.stunServerUrl});
+          }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl});
           }
@@ -75,6 +78,7 @@ angular
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
           $scope.cloud.turnServerUrl = clouds[0].turnServerUrl;
+          $scope.cloud.stunServerUrl = clouds[0].stunServerUrl;
           $scope.children = clouds[0].resellers;
 
           watchForChanges();
@@ -284,7 +288,6 @@ angular
                   $scope.create = function() {
                       if(tempCloud.turnServerUrl === null)
                       {
-                        tempCloud.turnServerUrl = [];
                         tempCloud.turnServerUrl[1] = $scope.model.turnServerUrl;
                       }
                       else
@@ -322,6 +325,49 @@ angular
       }
   };
 
+ $scope.addStunServerUrl = function(cloud) {
+    var tempCloud = cloud;
+      $mdDialog.show({
+              controller: function DialogController ($scope, $mdDialog) {
+                  $scope.create = function() {
+                      if(tempCloud.stunServerUrl === null)
+                      {
+                        tempCloud.stunServerUrl[1] = $scope.model.stunServerUrl;
+                      }
+                      else
+                      {
+                        if(tempCloud.stunServerUrl.indexOf($scope.model.stunServerUrl) === -1) //check for duplicate entry
+                        {
+                           tempCloud.stunServerUrl.push($scope.model.stunServerUrl);
+                        }
+                        else
+                        {
+                          toastr.error("Duplicate URL entry. Please enter a unique URL.");
+                        }
+                      }
+                      $mdDialog.cancel();
+                  };
+                  $scope.close = function() {
+                      $mdDialog.cancel();
+                  };
+              },
+              templateUrl: 'views/newStunServerUrl.tmpl.html',
+              parent: angular.element(document.body),
+              targetEvent: event,
+              clickOutsideToClose: true
+          })
+          .then(function(result) {
+      }, function() {
+    });
+  };
+
+  $scope.deleteStunServerUrl = function(cloud, deleteUrl) {
+      var deleteIndex = cloud.stunServerUrl.indexOf(deleteUrl);
+
+      if(deleteIndex > -1){
+        cloud.stunServerUrl.splice(deleteIndex, 1);
+      }
+  };
 
   $scope.canModifyCheckinInterval = function() {
     var userType = userService.getUserType();
