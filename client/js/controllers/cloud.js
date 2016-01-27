@@ -64,7 +64,23 @@ angular
               scope: {
                 order: 'name ASC',
                 limit: $scope.currentResellerPage,
-                skip: $scope.currentResellerPage * $scope.resellersPerPage
+                skip: $scope.currentResellerPage * $scope.resellersPerPage,
+                include: {
+                  relation: 'customers',
+                  scope: {
+                    include: {
+                      relation: 'devices',
+                      scope: {
+                        include: {
+                          relation: 'cameras',
+                          scope: {
+                            fields: ['id', 'name', 'status']
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }]
           }
@@ -75,6 +91,21 @@ angular
           $scope.cloudId = clouds[0].id;
 
           $scope.children = clouds[0].resellers;
+
+          // get all devices
+          $scope.cloud.resellers.forEach(function (reseller) {
+            reseller.customers.forEach(function (customer) {
+              customer.devices.forEach(function (device) {
+                device.customerName = customer.name;
+                device.checkinInterval = device.checkinInterval ||
+                   customer.checkinInterval ||
+                   reseller.checkinInterval ||
+                   $scope.cloud.checkinInterval;
+
+                $scope.allDevices.push(device);
+              });
+            });
+          });
 
           watchForChanges();
         });
