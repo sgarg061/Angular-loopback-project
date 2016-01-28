@@ -77,7 +77,7 @@ angular
         .$promise
         .then(function(devices) {
           $scope.device = devices[0];
-          
+
           $scope.device.loadingMore = false;
           $scope.device.logDataLimit = $scope.logDataLimit;
 
