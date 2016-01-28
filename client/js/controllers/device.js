@@ -97,7 +97,6 @@ angular
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
-          debugger;  
           watchForChanges();
 
           var device = $scope.device;
@@ -157,9 +156,7 @@ angular
         .$promise
         .then(function(versions) {
           $scope.softwareVersions = [].concat(versions);
-          debugger;
           function currentSoftwareVersion(testVersion){ //used in filter
-            debugger;
             return (testVersion.id===$scope.customer.softwareVersionId || 
                     testVersion.id===$scope.reseller.softwareVersionId || 
                     testVersion.id===$scope.cloud.softwareVersionId);
