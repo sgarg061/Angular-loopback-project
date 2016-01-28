@@ -47,7 +47,7 @@ angular
         });
     }
 
-    function getDevice() {
+    function getDevice(cb) {
       Device
         .find({
           filter: {
@@ -97,7 +97,7 @@ angular
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
-
+          debugger;  
           watchForChanges();
 
           var device = $scope.device;
@@ -140,6 +140,9 @@ angular
     //      device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
 
           console.log('$scope.device: ' + JSON.stringify($scope.device));
+          if(cb){
+            cb();
+          }
         });
     }
 
@@ -154,11 +157,20 @@ angular
         .$promise
         .then(function(versions) {
           $scope.softwareVersions = [].concat(versions);
+          debugger;
+          function currentSoftwareVersion(testVersion){ //used in filter
+            debugger;
+            return (testVersion.id===$scope.customer.softwareVersionId || 
+                    testVersion.id===$scope.reseller.softwareVersionId || 
+                    testVersion.id===$scope.cloud.softwareVersionId);
+        }
+        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
         })
     }
 
-    getDevice();
-    getSoftwareVersions();
+    getDevice(function(){
+      getSoftwareVersions();
+    });
 
     $scope.selectReseller = function(reseller) {
       $state.go('reseller', {resellerId: (typeof reseller  === 'string') ? reseller : reseller.id}, {reload: true});
