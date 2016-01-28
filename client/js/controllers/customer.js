@@ -312,7 +312,6 @@ angular
         })
     }
 
-    getSoftwareVersions();
     getCustomer(function(){
       getSoftwareVersions();
     });

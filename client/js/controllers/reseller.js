@@ -271,7 +271,6 @@ angular
     }
 
 
-    getSoftwareVersions();
     getReseller(function(){
       getSoftwareVersions();
     });
