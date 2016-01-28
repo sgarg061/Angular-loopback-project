@@ -883,7 +883,7 @@ angular
         // $scope.newFilter.filter = JSON.stringify(thisFilter.filter);
 
         $scope.newFilter.$edit = true
-        $scope.newFilter.$title = "Search Filter"
+        $scope.newFilter.$title = "Report"
         $scope.create = function() {
 
           try{

@@ -965,45 +965,18 @@ Get or add available software version numbers.
 
 ## Group Report Associations
 
-## Reports [/api/reports/{reportId}/query]
+## Reports [/api/reports]
 
-A Report has the following attributes:
-+ name - Report name.
-+ filter - ElasticSearch syntax. Must be in valid JSON format.
-+ description - description of the script
-+ lastUpdated - the date and time when the report last updated(through PUT/POST)
-
-
-+ Parameters
-    + reportId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
-
-
-### Get Report [GET]
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-              "id": "41c47270-a28d-11e5-bad2-6fe88522b0fe",
-              "name": "Match All",
-              "filter": {
-                "query": {
-                    "match_all": {}
-                    }
-                },
-              "description": "match all filter",
-              "lastUpdated": "2016-01-19T17:03:09.000Z"
-            }
-
-## Search Connectors [/api/reports]
-
-Report Connector will provide Reports assigned to a provided customer through auth0 token.
+Report Connector will provide Reports assigned to a provided customer token.
 It has the following attributes:
 + filterId - SearchFilter id, can be referenced to find the Filter.
++ query - the report object
+    + name - Report name.
+    + filter - ElasticSearch syntax. Must be in valid JSON format.
+    + description - description of the script
+    + lastUpdated - the date and time when the report last updated(through PUT/POST)
 
-
-### List available Report Connectors [GET]
+### List available Reports [GET]
 
 + Response 200 (application/json)
 
@@ -1012,11 +985,31 @@ It has the following attributes:
             [
               {
                 "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
-                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
+                "query": {
+                  "id": "6152b650-c534-11e5-b06d-cb4d92913333",
+                  "filter": {
+                    "hello": "hello2"
+                  },
+                  "name": "Test Filter",
+                  "description": "Hello world.",
+                  "creatorId": "882d39c0-a4fb-11e5-9486-456a3a47e617",
+                  "creatorType": "customer",
+                  "lastUpdated": "2016-01-27T20:27:26.000Z"
+                }
               },
               {
                 "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
-                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
+                "query": {
+                  "id": "6152b650-c534-11e5-b06d-cb4d92913333",
+                  "filter": {
+                    "hello": "hello2"
+                  },
+                  "name": "Test Filter",
+                  "description": "Hello world.",
+                  "creatorId": "882d39c0-a4fb-11e5-9486-456a3a47e617",
+                  "creatorType": "customer",
+                  "lastUpdated": "2016-01-27T20:27:26.000Z"
+                }
               }
             ]
             ## Group Customers
