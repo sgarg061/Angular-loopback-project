@@ -288,7 +288,8 @@ angular
                   $scope.create = function() {
                       if(tempCloud.turnServerUrl === null)
                       {
-                        tempCloud.turnServerUrl[1] = $scope.model.turnServerUrl;
+                        tempCloud.turnServerUrl = []; 
+                        tempCloud.turnServerUrl[0] = $scope.model.turnServerUrl;
                       }
                       else
                       {
@@ -332,7 +333,8 @@ angular
                   $scope.create = function() {
                       if(tempCloud.stunServerUrl === null)
                       {
-                        tempCloud.stunServerUrl[1] = $scope.model.stunServerUrl;
+                        tempCloud.stunServerUrl = [];
+                        tempCloud.stunServerUrl [0] = $scope.model.stunServerUrl;
                       }
                       else
                       {
