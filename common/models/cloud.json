@@ -26,7 +26,6 @@
     "turnServerUrl": {
        "type": "Array",
        "required": false,
-       "default": {},
        "postgresql": {
          "dataType": "jsonb"
        }
@@ -34,7 +33,6 @@
      "stunServerUrl": {
        "type": "Array",
        "required": false,
-       "default": {},
        "postgresql": {
         "dataType": "jsonb"
        }

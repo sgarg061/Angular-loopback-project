@@ -288,7 +288,7 @@ angular
                   $scope.create = function() {
                       if(tempCloud.turnServerUrl === null)
                       {
-                        tempCloud.turnServerUrl = []; 
+                        tempCloud.turnServerUrl = new Array(); 
                         tempCloud.turnServerUrl[0] = $scope.model.turnServerUrl;
                       }
                       else
