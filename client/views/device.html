@@ -49,10 +49,10 @@
                     </md-input-container>
 
                   <div style="margin-right: 10px; text-align:right;" flex>
-                    <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false">
+                    <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false" style="{{!timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="list"></md-icon>
                     </md-button>
-                    <md-button class="md-icon-button md-primary" aria-label="Timeline" ng-click="timelineView = true;">
+                    <md-button class="md-icon-button md-primary" aria-label="Timeline" ng-click="timelineView = true;" style="{{timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="timeline"></md-icon>
                     </md-button>
                   </div>

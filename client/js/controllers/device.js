@@ -209,11 +209,16 @@ angular
     }
 
     function getCountByReasons() {
+      var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
+
       $scope.checkinReasons.forEach(function (reason, index){
         
         var reasonName = reason.name;
         if (reason.name == 'all')
           reasonName = {neq: null};
+        else if(reason.name == 'other')
+          reasonName = {neq: arrayReasons};
+
 
 
         DeviceLogEntry
