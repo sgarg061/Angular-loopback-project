@@ -12,6 +12,7 @@
     "console": "$(npm bin)/loopback-console ."
   },
   "dependencies": {
+    "angular-toastr": "^1.7.0",
     "async": "^1.4.0",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
