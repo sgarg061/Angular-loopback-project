@@ -26,7 +26,7 @@
 
           <div layout="row" style="margin-left:10px;margin-right:10px" >
             <md-input-container flex>
-              <label>License - activated on {{device.license.activationDate}}</label>
+              <label>License - activated on {{device.license.activationDate | date:'yyyy/MM/dd'}}</label>
                 <input ng-model="device.license.key" disabled>
               </md-input-container>
               <md-input-container flex>
