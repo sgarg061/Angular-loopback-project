@@ -147,6 +147,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
             var deviceId = res.id;
             var username = 'device+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
             var password = randToken.generate(16);
+            var activationDate = new Date (); //SHENANIGANS
 
             var userData = {
                 deviceId: deviceId,
@@ -154,7 +155,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                 customerId: license.customerId,
                 email_verified: true
             };
-            authService.createUser(username, password, userData, function (err, res) {
+            authService.createUser(username, password, userData, activationDate, function (err, res) {
                 if (err) {
                     logger.error('Error while creating user for new device');
                     logger.error(err);
@@ -162,7 +163,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                 } else {
                     license.updateAttributes({
                         activated: true,
-                        actiationDate: new Date(),
+                        activationDate: activationDate,
                         username: username,
                         password: password,
                         deviceId: deviceId

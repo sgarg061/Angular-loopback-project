@@ -77,7 +77,6 @@ angular
         .$promise
         .then(function(devices) {
           $scope.device = devices[0];
-
           $scope.device.loadingMore = false;
           $scope.device.logDataLimit = $scope.logDataLimit;
 
@@ -101,8 +100,7 @@ angular
           watchForChanges();
 
           var device = $scope.device;
-
-            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+           var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
            var nowInSeconds = new Date().getTime() / 1000;
  
            var checkinIntervalInSeconds = device.checkinInterval ||
