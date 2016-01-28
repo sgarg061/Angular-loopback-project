@@ -145,7 +145,6 @@ function performActivationTasks(License, license, deviceInfo, cb) {
             var deviceId = res.id;
             var username = 'device+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
             var password = randToken.generate(16);
-            var activationDate = new Date (); //SHENANIGANS
 
             var userData = {
                 deviceId: deviceId,
@@ -161,7 +160,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                 } else {
                     license.updateAttributes({
                         activated: true,
-                        activationDate: activationDate,
+                        activationDate: new Date(),
                         username: username,
                         password: password,
                         deviceId: deviceId

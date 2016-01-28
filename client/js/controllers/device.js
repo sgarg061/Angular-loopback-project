@@ -101,7 +101,8 @@ angular
 
           var device = $scope.device;
            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
-           var nowInSeconds = new Date().getTime() / 1000;
+           
+            var nowInSeconds = new Date().getTime() / 1000;
  
            var checkinIntervalInSeconds = device.checkinInterval ||
                                          $scope.customer.checkinInterval ||
