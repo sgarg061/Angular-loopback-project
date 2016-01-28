@@ -97,6 +97,7 @@ angular
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
+
           watchForChanges();
 
           var device = $scope.device;
