@@ -140,6 +140,17 @@ module.exports = function(SearchFilterConnector) {
         });
     }
 
+    SearchFilterConnector.observe('access', function(ctx, next) {
+        if (ctx.query)
+        {
+            ctx.query.include = 'query';
+        }
+        else
+        {
+            ctx.query = {include: 'query'};
+        }
+        next();
+    });
 
     SearchFilterConnector.prototype.toJSON = function() {
         var connector = this.toObject(false, true, false);
