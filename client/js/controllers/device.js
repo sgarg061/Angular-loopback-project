@@ -218,7 +218,7 @@ angular
 
         DeviceLogEntry
           .count({
-              where: {reason: reasonName}
+              where: {deviceId: $stateParams.deviceId, reason: reasonName}
           }, function(data) {
             reason.count = data.count;
             if (index == $scope.checkinReasons.length-1) {
