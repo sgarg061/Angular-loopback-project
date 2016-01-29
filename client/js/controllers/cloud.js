@@ -305,6 +305,10 @@ angular
                       }
                       $mdDialog.cancel();
                   };
+                  $scope.duplicate = function () {
+                    eval('tempCloud.' + tempServerUrl + '.isDuplicate = ' + (eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.' + tempServerUrl + ') !== -1')));
+                    return tempCloud.tempServerUrl.isDuplicate;
+                  };
                   $scope.close = function() {
                       $mdDialog.cancel();
                   };
