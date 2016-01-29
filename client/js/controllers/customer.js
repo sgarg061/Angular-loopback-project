@@ -317,6 +317,7 @@ angular
 
                 if (~licenseIndex) {
                   $scope.customer.licenses[licenseIndex].activated = true;
+                  $scope.customer.licenses[licenseIndex].activationDate = new Date();
                   $scope.customer.licenses[licenseIndex].username = activationResult.username;
                   $scope.customer.licenses[licenseIndex].password = activationResult.password;
                   $scope.customer.licenses[licenseIndex].deviceId = activationResult.deviceId;
