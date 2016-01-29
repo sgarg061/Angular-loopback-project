@@ -138,29 +138,30 @@
       <div layout="row" layout-align="space-between center">
         <md-subheader class="md-no-sticky">TURN Server URLs</md-subheader>
         <div>
-          <i class="material-icons" ng-click="addTurnServerUrl(model)">add_circle</i> 
+          <i class="material-icons" ng-click="addServerUrl(model, 'turnServerUrl')">add_circle</i> 
         </div>
       </div>
       <md-divider></md-divider>
       <md-list style="max-height:300px; overflow-y: scroll;">
         <md-list-item ng-repeat="url in model.turnServerUrl">
-          <p id="url">{{url}}</p> <i class="material-icons" ng-model="model.deleteTurnServerUrl"ng-click="deleteTurnServerUrl(model,url)">delete</i>
+          <p id="url">{{url}}</p> <i class="material-icons" ng-model="model.deleteServerUrl"ng-click="deleteServerUrl(model,'turnServerUrl',url)">delete</i>
         </md-list-item>
       </md-list>
 
       <div layout="row" layout-align="space-between center" ng-show="type=='cloud'">
         <md-subheader class="md-no-sticky">STUN Server URLs</md-subheader>
         <div>
-          <i class="material-icons" ng-click="addStunServerUrl(model)">add_circle</i> 
+          <i class="material-icons" ng-click="addServerUrl(model,'stunServerUrl')">add_circle</i> 
         </div>
       </div>
       <md-divider></md-divider>
       <md-list style="max-height:300px; overflow-y: scroll;">
         <md-list-item ng-repeat="url in model.stunServerUrl">
-          <p id="url">{{url}}</p> <i class="material-icons" ng-model="model.deleteStunServerUrl"ng-click="deleteStunServerUrl(model,url)">delete</i>
+          <p id="url">{{url}}</p> <i class="material-icons" ng-model="model.deleteServerUrl"ng-click="deleteServerUrl(model,'stunServerUrl',url)">delete</i>
         </md-list-item>
       </md-list>
     </span>
+
   </div>
   </md-content>
 </div>

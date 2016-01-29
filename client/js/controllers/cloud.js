@@ -281,21 +281,22 @@ angular
     return ['solink'].indexOf(userType) > -1;
   };
 
-  $scope.addTurnServerUrl = function(cloud) {
+  $scope.addServerUrl = function(cloud, serverUrl) {
     var tempCloud = cloud;
+    var tempServerUrl = serverUrl;
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
-                      if(tempCloud.turnServerUrl === null)
+                      if(eval('tempCloud.' + tempServerUrl + '=== null'))
                       {
-                        tempCloud.turnServerUrl = new Array(); 
-                        tempCloud.turnServerUrl[0] = $scope.model.turnServerUrl;
+                        eval('tempCloud.' + tempServerUrl + '= new Array()'); 
+                        eval('tempCloud.' + tempServerUrl + '[0] = $scope.model.tempServerUrl');
                       }
                       else
                       {
-                        if(tempCloud.turnServerUrl.indexOf($scope.model.turnServerUrl) === -1) //check for duplicate entry
+                        if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.' + tempServerUrl + ') === -1')) //check for duplicate entry
                         {
-                           tempCloud.turnServerUrl.push($scope.model.turnServerUrl);
+                           eval('tempCloud.' + tempServerUrl +' .push($scope.model.tempServerUrl)');
                         }
                         else
                         {
@@ -308,7 +309,7 @@ angular
                       $mdDialog.cancel();
                   };
               },
-              templateUrl: 'views/newTurnServerUrl.tmpl.html',
+              templateUrl: 'views/newServerUrl.tmpl.html',
               parent: angular.element(document.body),
               targetEvent: event,
               clickOutsideToClose: true
@@ -318,56 +319,11 @@ angular
     });
   };
 
-  $scope.deleteTurnServerUrl = function(cloud, deleteUrl) {
-      var deleteIndex = cloud.turnServerUrl.indexOf(deleteUrl);
+  $scope.deleteServerUrl = function(cloud, serverUrl, deleteUrl) {
+      eval ('var deleteIndex = cloud.' + serverUrl + '.indexOf(deleteUrl)');
 
       if(deleteIndex > -1){
-        cloud.turnServerUrl.splice(deleteIndex, 1);
-      }
-  };
-
- $scope.addStunServerUrl = function(cloud) {
-    var tempCloud = cloud;
-      $mdDialog.show({
-              controller: function DialogController ($scope, $mdDialog) {
-                  $scope.create = function() {
-                      if(tempCloud.stunServerUrl === null)
-                      {
-                        tempCloud.stunServerUrl = [];
-                        tempCloud.stunServerUrl [0] = $scope.model.stunServerUrl;
-                      }
-                      else
-                      {
-                        if(tempCloud.stunServerUrl.indexOf($scope.model.stunServerUrl) === -1) //check for duplicate entry
-                        {
-                           tempCloud.stunServerUrl.push($scope.model.stunServerUrl);
-                        }
-                        else
-                        {
-                          toastr.error("Duplicate URL entry. Please enter a unique URL.");
-                        }
-                      }
-                      $mdDialog.cancel();
-                  };
-                  $scope.close = function() {
-                      $mdDialog.cancel();
-                  };
-              },
-              templateUrl: 'views/newStunServerUrl.tmpl.html',
-              parent: angular.element(document.body),
-              targetEvent: event,
-              clickOutsideToClose: true
-          })
-          .then(function(result) {
-      }, function() {
-    });
-  };
-
-  $scope.deleteStunServerUrl = function(cloud, deleteUrl) {
-      var deleteIndex = cloud.stunServerUrl.indexOf(deleteUrl);
-
-      if(deleteIndex > -1){
-        cloud.stunServerUrl.splice(deleteIndex, 1);
+        eval('cloud.' + serverUrl + '.splice(deleteIndex, 1)');
       }
   };
 

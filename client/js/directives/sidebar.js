@@ -20,10 +20,8 @@ angular
         renameFunction: "=renameFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
         canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
-        addTurnServerUrlFunction: "=addTurnServerUrlFunction",
-        deleteTurnServerUrlFunction: "=deleteTurnServerUrlFunction",
-        addStunServerUrlFunction: "=addStunServerUrlFunction",
-        deleteStunServerUrlFunction: "=deleteStunServerUrlFunction",
+        addServerUrlFunction: "=addServerUrlFunction",
+        deleteServerUrlFunction: "=deleteServerUrlFunction",
         canModifyCheckinIntervalFunction: "=canModifyCheckinIntervalFunction",
         canModifySignallingServerFunction: "=canModifySignallingServerFunction",
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
@@ -76,17 +74,11 @@ angular
         scope.canModifyImageServerUrl = function(model) {
           return scope.canModifyImageServerUrlFunction(model);
         }
-        scope.addTurnServerUrl = function(model) {
-          scope.addTurnServerUrlFunction(model);
+        scope.addServerUrl = function(model, url) {
+          scope.addServerUrlFunction(model, url);
         }
-        scope.deleteTurnServerUrl = function(model, url) {
-          scope.deleteTurnServerUrlFunction (model, url);
-        }
-        scope.addStunServerUrl = function(model) {
-          scope.addStunServerUrlFunction (model);
-        }
-        scope.deleteStunServerUrl = function(model, url){
-          scope.deleteStunServerUrlFunction (model, url);
+        scope.deleteServerUrl = function(model, url, deleteUrl) {
+          scope.deleteServerUrlFunction (model, url, deleteUrl);
         }
         scope.canModifyCheckinInterval = function(model) {
           return scope.canModifyCheckinIntervalFunction(model);
