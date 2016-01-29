@@ -582,8 +582,8 @@ angular
         };
         $scope.destroy = function() {
           var confirm = $mdDialog.confirm()
-            .title('Delete Filter')
-            .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
+            .title('Delete ' + $scope.newFilter.$title)
+            .content('Are you sure you want to delete ' + $scope.newFilter.name + '?')
             .ok('Yes')
             .cancel('No');
 
@@ -699,8 +699,8 @@ angular
         };
         $scope.destroy = function() {
           var confirm = $mdDialog.confirm()
-            .title('Delete Filter')
-            .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
+            .title('Delete ' + $scope.newFilter.$title)
+            .content('Are you sure you want to delete ' + $scope.newFilter.name + '?')
             .ok('Yes')
             .cancel('No');
 
