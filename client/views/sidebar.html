@@ -64,7 +64,7 @@
 
             <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
                 <label>Software Version</label>
-                <md-select ng-change = "updateVersion(model.softwareVersionId)" ng-model="model.softwareVersionId" ng-disabled="!canModifySoftwareVersion(model)">
+                <md-select ng-model="model.softwareVersionId" ng-disabled="!canModifySoftwareVersion(model)">
                     <md-option value='' ng-show="type=='reseller' || type=='customer' || type=='device'">Default: {{defaultSoftwareVersion.name}}
                     </md-option>
                     <md-option ng-repeat="softwareVersion in softwareVersions" value="{{softwareVersion.id}}" ng-selected="softwareVersion.id === model.softwareVersionId">{{softwareVersion.name}}
