@@ -72,25 +72,13 @@ angular
       }, true);
 
       // watch device for updates and save them when they're found
-      // $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
-      //   if (newValue) {
-      //     if (newValue !== oldValue) {
-      //       $scope.checkinReasons.forEach(function (reason) {
-      //         if (reason.name == newValue) {
-
-      //           if ($scope.device.logEntries.length) {
-      //             var current_checkins = $scope.device.logEntries.filter(function (el) {
-      //               console.log('element',el.reason, newValue);
-      //               return el.reason == newValue;
-      //             });
-
-      //             console.log('new to load new data',newValue, current_checkins.count);
-      //           };
-      //         };
-      //       })
-      //     }
-      //   }
-      // }, true);
+      $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
+        if (newValue) {
+          if (newValue !== oldValue) {
+            $scope.device.noMoreLogs = false;
+          }
+        }
+      }, true);
 
     }
 
@@ -367,11 +355,21 @@ angular
 
   function loadMore(value) {
     $scope.device.loadingMore = true;
+    var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
+
+    var reasonName = $scope.selectedCheckinReason;
+
+    if (reasonName == 'all')
+      reasonName = {neq: null};
+    else if(reasonName == 'other')
+      reasonName = {neq: arrayReasons};
+
+
     var lastTimeStamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp
     DeviceLogEntry
       .find({
           filter: {
-            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}},
+            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}, reason: reasonName},
             fields: ['id','timestamp', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
             limit: value,
             order: 'timestamp DESC'
