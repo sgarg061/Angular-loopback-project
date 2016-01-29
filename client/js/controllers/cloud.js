@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', '$mdDialog', 'toastr', 'userService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, $mdDialog, toastr, userService, softwareService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -47,69 +47,40 @@ angular
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.cloud.id;
-      
+      console.log('test');
       $mdDialog.show({
         controller: function (scope, $mdDialog) {
-
           scope.message = '';
-
-          var version = '';
-            SoftwareVersion
-              .find({
-                  filter: {
-                    where: {id: newValueSoftwareVersionId}
-                  }
-              })
-              .$promise
-              .then(function(softwareVersion) {
-                version = softwareVersion[0].name;
-                scope.softwareName = version;
-                
-              });
-              
-
+          scope.softwareVersion = '';
+          softwareService.findVersion($scope.cloud.id, newValueSoftwareVersionId)
+          .$promise
+          .then(function(softwareVersion) {
+            scope.softwareVersion = softwareVersion[0].name;
+          });
           scope.updateVersion = function() {
-                
-                if (scope.message === version) {
-                  updateCloud(id, {softwareVersionId: newValueSoftwareVersionId});
-                  $mdDialog.cancel();
-                  toastr.info('version successfully updated');
-                  
-                } else {
-                  
-                  getCloud();
-                  toastr.error('version not updated - invalid confirmation input');
-                  $mdDialog.cancel();
-                }
-                
+                if (scope.message ===  scope.softwareVersion) {
+                  updateCloud(id, {softwareVersionId: newValueSoftwareVersionId} , scope.softwareVersion);
+                } 
+                $mdDialog.cancel();
           };
           scope.close = function() {
-            getCloud();
-            toastr.info('version not updated - you cancelled to update');
-            $mdDialog.cancel();
+            $scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;
+            softwareService.close();
           };
-          
         },
-
-        
         templateUrl: 'views/confirmationMessage.html',
-        parent: angular.element(document.body),
-        targetEvent: event,
         clickOutsideToClose: false,
         escapeToClose: false
-        
-        
       })
         .then(function(result) {
 
        });
-
     }
 
 
-    function updateCloud(id, changedDictionary) {
+    function updateCloud(id, changedDictionary, version) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(cloud) {}, function (res) {
+        .$promise.then(function(cloud) {toastr.info('software version has been successfully updated to ' + version);}, function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
     }
@@ -133,6 +104,7 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
+          $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
 
           $scope.children = clouds[0].resellers;
 

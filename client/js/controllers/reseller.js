@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService, softwareService) {
 
     $scope.reseller = {};
 
@@ -43,43 +43,25 @@ angular
       $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.message = '';
-          var version = '';
-          SoftwareVersion
-          .find({
-              filter: {
-                where: {id: newValueSoftwareVersionId}
-              }
-          })
+          scope.softwareVersion = '';
+          softwareService.findVersion($scope.reseller.id, newValueSoftwareVersionId)
           .$promise
           .then(function(softwareVersion) {
-            version = softwareVersion[0].name;
-            scope.softwareName = version;
+            scope.softwareVersion = softwareVersion[0].name;
+            
           });
-
           scope.updateVersion = function() {
-            if (scope.message === version) {
-              updateReseller(id, {softwareVersionId: newValueSoftwareVersionId});
-              $mdDialog.cancel();
-              toastr.info('version successfully updated');
-              
-            } else {
-              
-              getReseller();
-              toastr.error('version not updated - invalid confirmation input');
-              $mdDialog.cancel();
+            if (scope.message === scope.softwareVersion) {
+              updateReseller(id, {softwareVersionId: newValueSoftwareVersionId}, scope.softwareVersion);
             }
-                
+            $mdDialog.cancel(); 
           };
           scope.close = function() {
-            getReseller();
-            toastr.info('version not updated - you cancelled to update');
-            $mdDialog.cancel();
+            $scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;
+            softwareService.close();
           };
         },
-        
         templateUrl: 'views/confirmationMessage.html',
-        parent: angular.element(document.body),
-        targetEvent: event,
         clickOutsideToClose:false,
         escapeToClose: false
         
@@ -88,9 +70,9 @@ angular
        });
     }
     
-    function updateReseller(id, changedDictionary) {
+    function updateReseller(id, changedDictionary, version) {
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(reseller) {}, function (res) {
+        .$promise.then(function(reseller) {toastr.info('software version has been successfully updated to ' + version);}, function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
     }
@@ -128,6 +110,7 @@ angular
           $scope.cloudId = resellers[0].cloud.id;
           $scope.cloud = resellers[0].cloud;
           $scope.resellerId = resellers[0].id;
+          $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
 
           $scope.children = $scope.reseller.customers;
 

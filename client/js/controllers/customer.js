@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService, softwareService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -48,61 +48,37 @@ angular
       }, true);
     }
 
-    function updateCustomer(id, changedDictionary) {
+    function updateCustomer(id, changedDictionary, version) {
       Customer.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(customer) {}, function (res) {
+        .$promise.then(function(customer) {toastr.info('software version has been successfully updated to ' + version);}, function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
-      var id = $scope.cloud.id;
-      
+      var id = $scope.customer.id;
       $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.message = '';
-
-          var version = '';
-             SoftwareVersion
-              .find({
-                  filter: {
-                    where: {id: newValueSoftwareVersionId}
-                  }
-              })
-              .$promise
-              .then(function(softwareVersion) {
-                version = softwareVersion[0].name;
-                scope.softwareName = version; 
-                
-              });
-
+          scope.softwareVersionversion = '';
+          softwareService.findVersion($scope.customer.id, newValueSoftwareVersionId)
+          .$promise
+          .then(function(softwareVersion) {
+            scope.softwareVersion = softwareVersion[0].name;
+          });
           scope.updateVersion = function() {
-
-                if (scope.message === version) {
-                  updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId});
-                  $mdDialog.cancel();
-                  toastr.info('version successfully updated');
-                  
-                } else {
-                  
-                  getCustomer();
-                  toastr.error('version not updated - invalid confirmation input');
-                  $mdDialog.cancel();
-                }
-                
+            if (scope.message === scope.softwareVersionversion) {
+            updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId},scope.softwareVersion);
+            } 
+           $mdDialog.cancel();
           };
           scope.close = function() {
-            getCustomer();
-            toastr.info('version not updated - you cancelled to update');
-            $mdDialog.cancel();
+            $scope.customer.softwareVersionId = $scope.currentSoftwareVersion;
+            softwareService.close();
           };
         },
-        
         templateUrl: 'views/confirmationMessage.html',
-        parent: angular.element(document.body),
-        targetEvent: event,
         clickOutsideToClose:false,
         escapeToClose: false
-        
       })
         .then(function(result) {
        });
@@ -149,6 +125,7 @@ angular
 
           $scope.cloud = customers[0].reseller.cloud;
           $scope.reseller = customers[0].reseller;
+          $scope.currentSoftwareVersion = customers[0].softwareVersionId;
 
           $scope.devices = customers[0].devices;
 
