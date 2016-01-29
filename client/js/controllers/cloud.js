@@ -421,22 +421,6 @@ angular
 
 
         };
-        $scope.confirmationMessage = function() {
-          var message = $mdDialog.confirm()
-            .title('Delete Filter')
-            .content('Are you sure you want to update the software version as it will affect other devices')
-            .ok('Yes')
-            .cancel('No');
-
-          $mdDialog.show(confirm).then(function(softwareVersion) {
-            getSoftwareVersions();
-            }, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-              });
-        };
-
-
-      
       },
       templateUrl: 'views/filterForm.tmpl.html',
       parent: angular.element(document.body),
