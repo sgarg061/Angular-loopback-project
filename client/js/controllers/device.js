@@ -149,7 +149,7 @@ angular
               return $scope.checkinTypes[2]
             }
             else{
-              return ''
+              return $scope.checkinTypes[0]
             }
           }
 
