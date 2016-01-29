@@ -32,6 +32,10 @@ angular
       {name: 'other', count: 0}
     ];
 
+    $scope.checkinTypes = ['show all', 'all down', 'some down', 'all online']
+
+    $scope.selectedCheckinType = 'show all'
+
     $scope.checkinColors = {
       interval: '#00bb00',
       status: '#c400ff',
@@ -68,25 +72,26 @@ angular
       }, true);
 
       // watch device for updates and save them when they're found
-      $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
-        if (newValue) {
-          if (newValue !== oldValue) {
-            $scope.checkinReasons.forEach(function (reason) {
-              if (reason.name == newValue) {
+      // $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
+      //   if (newValue) {
+      //     if (newValue !== oldValue) {
+      //       $scope.checkinReasons.forEach(function (reason) {
+      //         if (reason.name == newValue) {
 
-                if ($scope.device.logEntries.length) {
-                  var current_checkins = $scope.device.logEntries.filter(function (el) {
-                    console.log('element',el.reason, newValue);
-                    return el.reason == newValue;
-                  });
+      //           if ($scope.device.logEntries.length) {
+      //             var current_checkins = $scope.device.logEntries.filter(function (el) {
+      //               console.log('element',el.reason, newValue);
+      //               return el.reason == newValue;
+      //             });
 
-                  console.log('new to load new data',newValue, current_checkins.count);
-                };
-              };
-            })
-          }
-        }
-      }, true);
+      //             console.log('new to load new data',newValue, current_checkins.count);
+      //           };
+      //         };
+      //       })
+      //     }
+      //   }
+      // }, true);
+
     }
 
     function updateDevice(id, changedDictionary) {
@@ -143,6 +148,22 @@ angular
             $scope.checkinHeight = document.body.clientHeight - 550;
             renderGraph();
           };
+
+          $scope.device.cameraStatus = function (log) {
+
+            if (log.onlineCameras === log.totalCameras){
+              return $scope.checkinTypes[3]
+            }
+            else if(log.onlineCameras === 0){
+              return $scope.checkinTypes[1]
+            }
+            else if(log.onlineCameras < log.totalCameras){
+              return $scope.checkinTypes[2]
+            }
+            else{
+              return ''
+            }
+          }
 
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;

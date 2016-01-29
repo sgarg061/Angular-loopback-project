@@ -208,7 +208,6 @@ var timeline = function(params) {
           .attr('class', 'check-in-point-tooltip')
           .attr('fill', '#555')
           .text(new Date(checkin.timestamp * 1000).toLocaleTimeString())
-          console.log('timestamp', checkin.timestamp);
       });
     }
     

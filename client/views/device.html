@@ -41,12 +41,21 @@
                 <h3>Check-in History</h3>
 
                 <div layout="row">
-                  <md-input-container style="margin-right: 10px;" flex="30" ng-show="!timelineView">
-                      <label>Only Show</label>
-                      <md-select ng-model="selectedCheckinReason">
-                        <md-option ng-repeat="reason in checkinReasons" value="{{reason.name}}">{{reason.name | capitalize}} ({{reason.count}})</md-option>
+
+                  <md-input-container style="margin-right: 10px;" flex="15" ng-show="!timelineView">
+                      <label>Filter Status</label>
+                      <md-select ng-model="selectedCheckinType">
+                        <md-option ng-repeat="type in checkinTypes" value="{{type}}">{{type | capitalize}}</md-option>
                       </md-select>
                     </md-input-container>
+
+                  <md-input-container style="margin-right: 10px;" flex="15" ng-show="!timelineView">
+                      <label>Filter Reasons</label>
+                      <md-select ng-model="selectedCheckinReason">
+                        <md-option ng-repeat="reason in checkinReasons" value="{{reason.name}}">{{reason.name | capitalize}} ({{reason.count}})</md-option ng-disabled="reason.count == 0">
+                      </md-select>
+                    </md-input-container>
+
 
                   <div style="margin-right: 10px; text-align:right;" flex>
                     <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false" style="{{!timelineView ? 'background-color:#2196F3': ''}}">
@@ -106,11 +115,11 @@
                   </md-tabs>
                 </div>
 
-                <div layout="row" style="height:{{checkinHeight}}px;" ng-if="device.logEntries.length && !timelineView" layout-align="center stretch" id="checkin-list">
+                <div layout="row" style="height:{{checkinHeight}}px;" ng-show="device.logEntries.length && !timelineView" layout-align="center stretch" id="checkin-list">
 
                   <md-content flex="35" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
                     <md-list layout-padding>
-                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-show="selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason">
+                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-show="(selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason) && (selectedCheckinType == 'show all' || selectedCheckinType == device.cameraStatus(entry))">
                         
                         <md-icon md-svg-icon='indicator_green' ng-if='entry.totalCameras && entry.onlineCameras == entry.totalCameras'>
                           <md-tooltip md-direction="top">

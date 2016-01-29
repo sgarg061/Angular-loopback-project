@@ -608,7 +608,7 @@ pre.pretty-json{
   border-radius: 3px;
   font-size: 12px !important;
 }
-
+/*
 .logEntries{
   min-height: 40px;
   height: 60px;
@@ -621,7 +621,7 @@ pre.pretty-json{
   min-height: 0px;
   height: 0px;
 }
-
+*/
 /* Dialog */
 #dialog {
   margin-top:10px;
