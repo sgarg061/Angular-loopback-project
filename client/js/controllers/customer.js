@@ -2,14 +2,15 @@ angular
   .module('app')
   .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService',
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService) {
-
+    
     $scope.clouds = [];
     $scope.resellers = [];
+    $scope.numberofActivatedLicenses = 0;
     $scope.customers = [];
     $scope.customer = {};
     $scope.devices = [];
     $scope.filters = [];
-
+    
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
 
@@ -55,8 +56,9 @@ angular
         .$promise.then(function(customer) {}, function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
-    }
 
+    }
+    
     function getCustomer(cb) {
       Customer
         .find({
@@ -92,7 +94,8 @@ angular
         .$promise
         .then(function(customers) {
           $scope.customer = customers[0];
-
+          $scope.numberofActivatedLicenses = $scope.customer.licenses.length;
+          console.log($scope.customer);
           $scope.reseller = customers[0].reseller;
           $scope.cloud = customers[0].reseller.cloud;
 
@@ -299,6 +302,16 @@ angular
       return thisEleObj;
     }
 
+    function licensesAvailable(Licenses) {
+      $scope.availableLicenses = "";
+      $scope.numberofLicenses = Licenses.filter(function(value, index){return String(value.activated) === 'false';});
+      for(var i = 0; i < $scope.numberofLicenses.length; i++) {
+        $scope.availableLicenses +=  $scope.numberofLicenses[i].key + "\n";
+      }
+      toastr.info($scope.numberofLicenses.length + ' licenses copied');
+      $scope.numberofActivatedLicenses = $scope.numberofLicenses.length;
+      return $scope.availableLicenses;
+    }
     function showLicense(aLicense) {
       $mdDialog.show({
         parent: angular.element(document.body),
@@ -355,6 +368,7 @@ angular
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
+                  $scope.numberofActivatedLicenses += scope.licenseKeys.length; 
 
                   next(undefined, license)
                 }, function(err) {
@@ -493,6 +507,7 @@ angular
 
   // TODO: refactor these permissions
   // so much code replication :/
+  
   $scope.canModifyEventUrl = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
@@ -723,12 +738,13 @@ angular
       });
     }
 
-
+  
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.renameCustomer = renameCustomer;
   $scope.showCheckin = showCheckin;
   $scope.goHome = goHome;
+  $scope.licensesAvailable = licensesAvailable;
 
 }]);

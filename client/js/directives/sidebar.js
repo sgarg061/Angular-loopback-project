@@ -8,9 +8,11 @@ angular
         model: "=model",
         type: "=type",
         filterChangedFunction: "=filterChangedFunction",
+        numberofActivatedLicenses: "=numberofActivatedLicenses",
         assignFiltersFunction: "=assignFiltersFunction",
         selectedFilters: "=selectedFilters",
-        licensesAvailable: "=licensesAvailable",
+        licensesAvailable: "=licensesAvailableFunction",
+        getTotalLicenses: "=getTotalLicensesFunction",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
@@ -34,17 +36,6 @@ angular
       },
       link: function (scope, element, attrs) {
         scope.openSoftwareVersionForm = scope.$parent.openSoftwareVersionForm,
-        scope.licensesAvailable = function(Licenses){
-          var licenseActivated;
-          scope.availableLicenses = "";
-          for(var i = 0; i < Licenses.length; i++)
-            {
-              licenseActivated = String(Licenses[i].activated);
-              if (licenseActivated === 'false'){
-                scope.availableLicenses +=  Licenses[i].key + "\n";
-              }
-            }
-        } 
         scope.addFilter = function(customerId) {
           scope.addFilterFunction(customerId);
         }
