@@ -1,17 +1,36 @@
 (function() {
-    angular.module('softwareServiceTest', ['ngMaterial'])
-    .factory('softwareService', function ($mdDialog, toastr, SoftwareVersion) {
+    angular.module('dialogBox', ['ngMaterial'])
+    .factory('softwareService', function ($mdDialog, toastr, SoftwareVersion, Cloud) {
         return {
-          
-            findVersion: function(id, newValueSoftwareVersionId, cb){
-              return  SoftwareVersion.find({filter:{where: {id: newValueSoftwareVersionId}}});  
+
+          dialog : function (id, newValueSoftwareVersionId){
+            return ($mdDialog.show({
+              controller: function (scope, $mdDialog){
+                scope.message = '';
+                scope.softwareVersion = '';
+                SoftwareVersion.find({filter:{where: {id: newValueSoftwareVersionId}}})
+                .$promise
+                .then(function(softwareVersion) {
+                  if(String(_.isEmpty(softwareVersion)) === 'false'){
+                    scope.softwareVersion = softwareVersion[0].name;
+                  } else{toastr.error('invalid array');}
+                });
+                scope.updateVersion = function() {
+                 $mdDialog.hide(); 
+                }; 
+                scope.close = function() {
+                  toastr.info('Version not updated since you cancelled')
+                  $mdDialog.cancel();
+                };
               
+              },
+              templateUrl: 'views/confirmationMessage.html',
+            }));
             },
-            close: function (cb) {
-                toastr.info('Canceled update. No changes made');
-                $mdDialog.cancel();
-                cb();
-            },
+        
+          
+          
+          
         };
     });
 })();

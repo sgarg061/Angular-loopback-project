@@ -12,7 +12,7 @@ angular
     'ngPrettyJson',
     'uiGmapgoogle-maps',
     'customUserService',
-    'softwareServiceTest',
+    'dialogBox',
     'angular-momentjs'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',

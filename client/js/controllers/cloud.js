@@ -47,39 +47,16 @@ angular
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.cloud.id;
-      $mdDialog.show({
-        controller: function (scope, $mdDialog) {
-          scope.message = '';
-          scope.softwareVersion = '';
-          softwareService.findVersion($scope.cloud.id, newValueSoftwareVersionId)
-          .$promise
-          .then(function(softwareVersion) {
-            scope.softwareVersion = softwareVersion[0].name;
-          });
-          scope.updateVersion = function() {
-                if (scope.message ===  scope.softwareVersion) {
-                  updateCloud(id, {softwareVersionId: newValueSoftwareVersionId} , scope.softwareVersion);
-                } 
-                $mdDialog.cancel();
-          };
-          scope.close = function() {
-            $scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;
-            softwareService.close();
-          };
-        },
-        templateUrl: 'views/confirmationMessage.html',
-        clickOutsideToClose: false,
-        escapeToClose: false
-      })
-        .then(function(result) {
-
-       });
+      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
+       updateCloud(id, {softwareVersionId: newValueSoftwareVersionId});
+      }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
 
-    function updateCloud(id, changedDictionary, version) {
+    function updateCloud(id, changedDictionary) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(cloud) {toastr.info('software version has been successfully updated to ' + version);}, function (res) {
+        .$promise.then(function(cloud) {toastr.info('Software version has been successfully updated');}, 
+          function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
     }
@@ -101,11 +78,16 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          $scope.cloud = clouds[0];
-          $scope.cloudId = clouds[0].id;
-          $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
+          if(String(_.isEmpty(clouds)) === 'false'){
+            $scope.cloud = clouds[0];
+            $scope.cloudId = clouds[0].id;
+            $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
 
-          $scope.children = clouds[0].resellers;
+            $scope.children = clouds[0].resellers;
+          } else {
+            toastr.error('invalid arrray');
+          }
+
 
           watchForChanges();
         });
@@ -432,3 +414,4 @@ angular
   };
   
   }]);
+

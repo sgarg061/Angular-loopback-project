@@ -50,38 +50,16 @@ angular
 
     function updateCustomer(id, changedDictionary, version) {
       Customer.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(customer) {toastr.info('software version has been successfully updated to ' + version);}, function (res) {
+        .$promise.then(function(customer) {toastr.info('software version has been successfully updated');}, 
+          function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.customer.id;
-      $mdDialog.show({
-        controller: function (scope, $mdDialog) {
-          scope.message = '';
-          scope.softwareVersionversion = '';
-          softwareService.findVersion($scope.customer.id, newValueSoftwareVersionId)
-          .$promise
-          .then(function(softwareVersion) {
-            scope.softwareVersion = softwareVersion[0].name;
-          });
-          scope.updateVersion = function() {
-            if (scope.message === scope.softwareVersionversion) {
-            updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId},scope.softwareVersion);
-            } 
-           $mdDialog.cancel();
-          };
-          scope.close = function() {
-            $scope.customer.softwareVersionId = $scope.currentSoftwareVersion;
-            softwareService.close();
-          };
-        },
-        templateUrl: 'views/confirmationMessage.html',
-        clickOutsideToClose:false,
-        escapeToClose: false
-      })
-        .then(function(result) {
-       });
+      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
+       updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId});
+      }, function(result){$scope.customer.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
     function getCustomer(cb) {
@@ -118,16 +96,20 @@ angular
         })
         .$promise
         .then(function(customers) {
-          $scope.customer = customers[0];
+          if(String(_.isEmpty(customers)) === 'false'){
+            $scope.customer = customers[0];
 
-          $scope.reseller = customers[0].reseller;
-          $scope.cloud = customers[0].reseller.cloud;
+            $scope.reseller = customers[0].reseller;
+            $scope.cloud = customers[0].reseller.cloud;
 
-          $scope.cloud = customers[0].reseller.cloud;
-          $scope.reseller = customers[0].reseller;
-          $scope.currentSoftwareVersion = customers[0].softwareVersionId;
+            $scope.cloud = customers[0].reseller.cloud;
+            $scope.reseller = customers[0].reseller;
+            $scope.currentSoftwareVersion = customers[0].softwareVersionId;
 
-          $scope.devices = customers[0].devices;
+            $scope.devices = customers[0].devices;
+          } else {
+            toastr.error('invalid array');
+          }
 
           getFilters();
 

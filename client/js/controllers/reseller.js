@@ -40,39 +40,15 @@ angular
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.reseller.id;
-      $mdDialog.show({
-        controller: function (scope, $mdDialog) {
-          scope.message = '';
-          scope.softwareVersion = '';
-          softwareService.findVersion($scope.reseller.id, newValueSoftwareVersionId)
-          .$promise
-          .then(function(softwareVersion) {
-            scope.softwareVersion = softwareVersion[0].name;
-            
-          });
-          scope.updateVersion = function() {
-            if (scope.message === scope.softwareVersion) {
-              updateReseller(id, {softwareVersionId: newValueSoftwareVersionId}, scope.softwareVersion);
-            }
-            $mdDialog.cancel(); 
-          };
-          scope.close = function() {
-            $scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;
-            softwareService.close();
-          };
-        },
-        templateUrl: 'views/confirmationMessage.html',
-        clickOutsideToClose:false,
-        escapeToClose: false
-        
-      })
-        .then(function(result) {
-       });
+      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
+       updateReseller(id, {softwareVersionId: newValueSoftwareVersionId});
+      }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
     }
     
     function updateReseller(id, changedDictionary, version) {
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(reseller) {toastr.info('software version has been successfully updated to ' + version);}, function (res) {
+        .$promise.then(function(reseller) {toastr.info('Software version has been successfully updated');}, 
+          function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
     }
@@ -104,15 +80,18 @@ angular
         .$promise
         .then(function(resellers) {
 
+          if(String(_.isEmpty(resellers)) === 'false'){
+            $scope.reseller = resellers[0];
 
-          $scope.reseller = resellers[0];
+            $scope.cloudId = resellers[0].cloud.id;
+            $scope.cloud = resellers[0].cloud;
+            $scope.resellerId = resellers[0].id;
+            $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
 
-          $scope.cloudId = resellers[0].cloud.id;
-          $scope.cloud = resellers[0].cloud;
-          $scope.resellerId = resellers[0].id;
-          $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
-
-          $scope.children = $scope.reseller.customers;
+            $scope.children = $scope.reseller.customers;
+          } else {
+            toastr.error('invalid array');
+          }
 
 
           getFilters();
