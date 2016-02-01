@@ -308,12 +308,13 @@ angular
                   $scope.verifyDuplicate = function () {
                     if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) !== -1')){
                       console.log("Duplicate");
-                      $scope.model.tempServerUrl.$setValidity("isDuplicate", false);
+                      ngModel.$setValidity("isDuplicate", false);
+                      return true;
                     }
                     else{
                       console.log("Unique");
+                      return false;
                     }
-                    return(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) !== -1'));
                   };
                   $scope.close = function() {
                       $mdDialog.cancel();
