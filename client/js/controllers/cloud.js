@@ -305,9 +305,15 @@ angular
                       }
                       $mdDialog.cancel();
                   };
-                  $scope.duplicate = function () {
-                    eval('tempCloud.' + tempServerUrl + '.isDuplicate = ' + (eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.' + tempServerUrl + ') !== -1')));
-                    return tempCloud.tempServerUrl.isDuplicate;
+                  $scope.verifyDuplicate = function () {
+                    if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) !== -1')){
+                      console.log("Duplicate");
+                      $scope.model.tempServerUrl.$setValidity("isDuplicate", false);
+                    }
+                    else{
+                      console.log("Unique");
+                    }
+                    return(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) !== -1'));
                   };
                   $scope.close = function() {
                       $mdDialog.cancel();
