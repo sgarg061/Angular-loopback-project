@@ -37,7 +37,6 @@ module.exports = function(SearchFilterConnector) {
 		        Reseller.find({ where: {id: resellerId}, fields: ['cloudId']}, function (err, res) {
 		            if (err) {
 		                logger.error('Error querying reseller with id ' + resellerId);
-		                logger.error(err);
 		                next(err);
 		            } else {
 		            	var ids = [resellerId];
@@ -46,7 +45,6 @@ module.exports = function(SearchFilterConnector) {
 					        Customer.find({ where: {resellerId: resellerId}, fields: ['id']}, function (errCustomer, resCustomer) {
 								if (errCustomer) {
 					                logger.error('Error querying customer with tenantId ' + tenantId);
-					                logger.error(errCustomer);
 					                next(errCustomer);
 					            } else {
 					            	for (var i = 0; i < resCustomer.length; i++) {
@@ -98,7 +96,6 @@ module.exports = function(SearchFilterConnector) {
         Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
             if (err) {
                 logger.error('Error querying resellers with cloud id ' + cloudId);
-                logger.error(err);
                 next(err);
             } else {
             	var resellerIds = [];
@@ -111,7 +108,6 @@ module.exports = function(SearchFilterConnector) {
                     Customer.find({where: {resellerId: resellerId}}, function (err, res) {
                         if (err) {
                             logger.error('Error querying customers with reseller id ' + resellerId);
-                            logger.error(err);
                             cb(err);
                         } else {
                             for (var i = 0; i < res.length; i++) {

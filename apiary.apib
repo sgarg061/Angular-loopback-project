@@ -721,11 +721,11 @@ An email is sent to the user's current email to confirm changing the password
             "response": "Forgot password email successfully sent."
         }
 
-## Group POS Association
+## Group Connectors
 
-## POS Filters [/api/connectors/{connectorId}/filter]
+## Connectors [/api/connectors/{connectorId}/filter]
 
-POS Filter object has the following attributes:
+Connector object has the following attributes:
 + name - Filter name.
 + script - Javascript blob of the script for the listener
 + description - description of the script
@@ -736,7 +736,7 @@ POS Filter object has the following attributes:
     + connectorId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
 
 
-### Get POS Filter [GET]
+### Get Connector [GET]
 
 + Response 200 (application/json)
 
@@ -781,31 +781,6 @@ Camera object has the following attributes:
                     ],
               "thumbnail": "thumbnail.jpeg"
             }
-
-## POS Connectors [/api/connectors]
-
-POS Connector will provide POS Filters assigned to a provided customer through auth0 token.
-It has the following attributes:
-+ filterId - POSFilter id, can be referenced to find the Filter.
-
-
-### List available POS Connectors [GET]
-
-+ Response 200 (application/json)
-
-    + Body
-
-            [
-              {
-                "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
-                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
-              },
-              {
-                "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
-                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
-              }
-            ]
-            ## Group Customers
 
 
 ## Camera Assignment [/api/connectors/{connectorId}/cameraConnectors]
@@ -1005,7 +980,12 @@ It has the following attributes:
                 }
               }
             ]
-        
+
+## Create a Report [/api/searchfilters]
+
+
+
+
 ###Group Configuration
 
 ## Retrieve IP [/api/configuration/whatismyip]
