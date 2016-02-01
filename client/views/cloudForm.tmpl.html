@@ -52,14 +52,7 @@
         <label>Update Server URL</label>
         <input type="text" class="form-control" name="updateServerUrl" autocomplete="off" required ng-model="newCloud.updateUrl">
       </md-input-container>
-      <md-input-container>
-        <label>TURN Server URL</label>
-        <input type="text" class="form-control" name="turnServerUrl" autocomplete="off" required ng-model="newCloud.turnServerUrl">
-      </md-input-container>
-      <md-input-container>
-        <label>STUN Server URL</label>
-        <input type="text" class="form-control" name="stnuServerUrl" autocomplete="off" required ng-model="newCloud.stunServerUrl">
-      </md-input-container>
+
       <md-input-container>
         <label>Check-In Interval</label>
         <input type="number" min="5" class="form-control" ng-init ="newCloud.checkinInterval =3600" name="checkinInterval" autocomplete="off" required ng-model="newCloud.checkinInterval">
