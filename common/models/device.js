@@ -439,7 +439,7 @@ module.exports = function(Device) {
         }
 
         if (deviceData.deviceInformation) {
-            if deviceData.deviceInformation.ip) {
+            if (deviceData.deviceInformation.ip) {
                 checkedInProperties.ipAddress = deviceData.deviceInformation.ip;
             }
 
