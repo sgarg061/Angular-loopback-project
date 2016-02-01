@@ -294,7 +294,7 @@ angular
                       }
                       else
                       {
-                        if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.' + tempServerUrl + ') === -1')) //check for duplicate entry
+                        if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) === -1')) //check for duplicate entry
                         {
                            eval('tempCloud.' + tempServerUrl +' .push($scope.model.tempServerUrl)');
                         }
