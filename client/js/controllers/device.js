@@ -446,7 +446,7 @@ angular
       .find({
           filter: {
             where: {deviceId: $stateParams.deviceId, checkinTime: {gt: start, lt: end}},
-            fields: ['id','timestamp', 'checkinTime', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
+            fields: ['id','timestamp','reason'],
             order: 'timestamp DESC'
           }
       })
