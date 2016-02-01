@@ -625,7 +625,7 @@ angular
                         var script = JSON.parse($scope.newFilter.filter);
                       }
                       catch(err){
-                        alert('invalid json object: ' +  err);
+                        $scope.newFilter.$error = true;
                       }
                       if (script) {
                         SearchFilter.create({
@@ -674,8 +674,7 @@ angular
             var script = JSON.parse($scope.newFilter.filter);
           }
           catch(err){
-            $scope.newFilter.filter.$error = {invalid: true};
-            alert('Invalid json object: ' +  err);
+            $scope.newFilter.$error = true;
           }
 
           if (script) {

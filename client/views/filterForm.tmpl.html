@@ -24,12 +24,20 @@
 
       <md-input-container class="md-block" ng-if="newFilter.$title == 'Connector'">
         <label>Filter Script</label>
+        <div ng-messages="newFilter.script.$error" ng-show="newFilter.script.$error">
+          <div ng-message="invalid">Invalid Javascript Sytax!</div>
+        </div>
         <textarea ng-model="newFilter.script" rows="22" class="scripted" ng-disabled="!newFilter.owner" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
       </md-input-container>
 
       <md-input-container class="md-block" ng-if="newFilter.$title == 'Report'">
         <label>Search Query</label>
         <textarea ng-model="newFilter.filter" invalid rows="22" class="scripted" ng-disabled="!newFilter.owner" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
+        <span ng-show="newFilter.filter.$error">This email format is invalid!</span>
+
+        <div ng-messages="newFilter.$error" ng-show="newFilter.$error">
+          <div ng-message="invalid" >Invalid JSON Object!</div>
+        </div>
       </md-input-container>
 
     </div>

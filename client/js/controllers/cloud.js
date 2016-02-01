@@ -364,10 +364,7 @@ angular
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
+      }); 
   };
 
   $scope.actionFilter = function(filter) {
@@ -431,10 +428,7 @@ angular
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
+      }); 
   };
    
 
@@ -452,7 +446,7 @@ angular
                         var script = JSON.parse($scope.newFilter.filter);
                       }
                       catch(err){
-                        alert('invalid json object: ' +  err);
+                        $scope.newFilter.$error = true;
                       }
                       if (script) {
                         SearchFilter.create({
@@ -480,19 +474,13 @@ angular
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
+      }); 
   };
 
   $scope.actionReport = function(thisFilter) {
     $mdDialog.show({
       controller: function DialogController($scope, $mdDialog) {
         $scope.newFilter = thisFilter
-
-        // $scope.newFilter.filter = JSON.stringify(thisFilter.filter);
-
         $scope.newFilter.$edit = true
         $scope.newFilter.$title = 'Report'
         $scope.create = function() {
@@ -501,8 +489,7 @@ angular
             var script = JSON.parse($scope.newFilter.filter);
           }
           catch(err){
-            $scope.newFilter.filter.$error = {invalid: true};
-            alert('Invalid json object: ' +  err);
+            $scope.newFilter.$error = true;
           }
 
           if (script) {
@@ -548,9 +535,6 @@ angular
       parent: angular.element(document.body),
       targetEvent: event,
       clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
+      }); 
   }; 
   }]);

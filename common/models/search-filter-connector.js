@@ -143,17 +143,31 @@ module.exports = function(SearchFilterConnector) {
     SearchFilterConnector.observe('access', function(ctx, next) {
         if (ctx.query)
         {
-            ctx.query.include = 'query';
+            ctx.query.include = {
+                relation: 'query',
+                scope: {
+                    fields: ['id', 'filter', 'name', 'description', 'lastUpdated']
+                }
+            }
         }
         else
         {
-            ctx.query = {include: 'query'};
+            ctx.query = {
+                include: {
+                    relation: 'query',
+                    scope: {
+                        fields: ['id', 'filter', 'name', 'description', 'lastUpdated']
+                    }
+                }
+            };
         }
         next();
     });
 
     SearchFilterConnector.prototype.toJSON = function() {
         var connector = this.toObject(false, true, false);
+        delete connector.id;
+        delete connector.filterId;
         delete connector.assigneeId;
         delete connector.assigneeType;
         return connector;
