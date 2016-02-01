@@ -95,7 +95,6 @@ angular
         .then(function(customers) {
           $scope.customer = customers[0];
           $scope.numberofActivatedLicenses = $scope.customer.licenses.length;
-          console.log($scope.customer);
           $scope.reseller = customers[0].reseller;
           $scope.cloud = customers[0].reseller.cloud;
 
@@ -304,12 +303,11 @@ angular
 
     function licensesAvailable(Licenses) {
       $scope.availableLicenses = "";
-      $scope.numberofLicenses = Licenses.filter(function(value, index){return String(value.activated) === 'false';});
-      for(var i = 0; i < $scope.numberofLicenses.length; i++) {
-        $scope.availableLicenses +=  $scope.numberofLicenses[i].key + "\n";
+      $scope.licensesArray = Licenses.filter(function(value, index){return String(value.activated) === 'false';});
+      for(var i = 0; i < $scope.licensesArray.length; i++) {
+        $scope.availableLicenses +=  $scope.licensesArray[i].key + "\n";
       }
-      toastr.info($scope.numberofLicenses.length + ' licenses copied');
-      $scope.numberofActivatedLicenses = $scope.numberofLicenses.length;
+      toastr.info($scope.licensesArray.length + ' licenses copied');
       return $scope.availableLicenses;
     }
     function showLicense(aLicense) {

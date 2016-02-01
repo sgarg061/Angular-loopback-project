@@ -12,7 +12,6 @@ angular
         assignFiltersFunction: "=assignFiltersFunction",
         selectedFilters: "=selectedFilters",
         licensesAvailable: "=licensesAvailableFunction",
-        getTotalLicenses: "=getTotalLicensesFunction",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
