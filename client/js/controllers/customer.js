@@ -317,6 +317,7 @@ angular
 
                 if (~licenseIndex) {
                   $scope.customer.licenses[licenseIndex].activated = true;
+                  $scope.customer.licenses[licenseIndex].activationDate = new Date();
                   $scope.customer.licenses[licenseIndex].username = activationResult.username;
                   $scope.customer.licenses[licenseIndex].password = activationResult.password;
                   $scope.customer.licenses[licenseIndex].deviceId = activationResult.deviceId;
@@ -485,20 +486,16 @@ angular
 
         //Getting the default software version name
         function currentSoftwareVersion(testVersion){ //used in filter
-            return (testVersion.id===$scope.reseller.softwareVersionId || testVersion.id===$scope.cloud.softwareVersionId);
+            return (testVersion.id===$scope.reseller.softwareVersionId || 
+                    testVersion.id===$scope.cloud.softwareVersionId);
         }
-        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
+        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
       })
   }
 
   // TODO: refactor these permissions
   // so much code replication :/
   $scope.canModifyEventUrl = function() {
-    var userType = userService.getUserType();
-    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
-  };
-
-  $scope.canModifyImageServerUrl = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
   };
