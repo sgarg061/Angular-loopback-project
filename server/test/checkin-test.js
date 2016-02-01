@@ -268,6 +268,32 @@ describe('Checkin after initial device activation', function() {
           });
       });
     });
+    it('should update device information with checkin data', function(done) {
+
+      deviceCheckinData.id = deviceId;
+
+      // set the local IP of the device
+      deviceCheckinData.deviceInformation.localIP = '20.20.1.12';
+
+      common.login('solink', function (token) {
+        common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+          .send({data: deviceCheckinData})
+          .expect(200)
+          .end(function(err, res) {
+            if (err) throw err;
+            common.json('get', '/api/devices/' + deviceId, token)
+              .send({})
+              .expect(200)
+              .end(function (err, res) {
+                if (err) throw err;
+
+                assert(typeof res.body === 'object');
+                assert.equal(res.body.localIP, '20.20.1.12', 'the local ip address must be set to the checked in localIP: 20.20.1.12');
+                done();
+              });
+          });
+        });
+    });
   });
 });
 
@@ -289,7 +315,7 @@ describe('Check-in of existing device with missing component', function() {
                if (err) throw err;
                assert(typeof res.body === 'object');
                assert.equal(res.body.cameras.length, 1, 'must have 1 cameras associated');
-               assert.equal(res.body.logEntries.length, 3, 'must have 3 log entries');
+               assert.equal(res.body.logEntries.length, 3, 'must have 4 log entries');
                assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
                done();
              });
@@ -314,7 +340,7 @@ describe('Check-in of existing device with missing component', function() {
                if (err) throw err;
                assert(typeof res.body === 'object');
                assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
-               assert.equal(res.body.logEntries.length, 4, 'must have 4 log entries');
+               assert.equal(res.body.logEntries.length, 4, 'must have 5 log entries');
                assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
                done();
              });
@@ -584,7 +610,7 @@ describe('Modification of inherited values at various locations in the object tr
                   assert.equal(res.body.eventServerUrl, '7000', 'eventServerUrl must be inherited from cloud');
                   assert.equal(res.body.imageServerUrl, '7000', 'imageServerUrl must be inherited from cloud');
                   assert.equal(res.body.updateUrl, versions[7].url, 'updateUrl must be inherited from cloud');
-                  assert.equal(res.body.updateVersion, versions[7].name, 'updateVersion must be inherited from cloud')
+                  assert.equal(res.body.updateVersion, versions[7].name, 'updateVersion must be inherited from cloud');
                   assert.equal(res.body.checkinInterval, 7000, 'checkinInterval must be inherited from cloud');
 
                   common.json('put', '/api/resellers/' + reseller.id, token).send(
