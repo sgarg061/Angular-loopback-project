@@ -125,6 +125,10 @@
     "overrideConfigForwardPort": {
       "type": "number",
       "required": false
+    },
+    "localIP": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
