@@ -315,7 +315,7 @@ describe('Check-in of existing device with missing component', function() {
                if (err) throw err;
                assert(typeof res.body === 'object');
                assert.equal(res.body.cameras.length, 1, 'must have 1 cameras associated');
-               assert.equal(res.body.logEntries.length, 3, 'must have 4 log entries');
+               assert.equal(res.body.logEntries.length, 4, 'must have 4 log entries');
                assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
                done();
              });
@@ -340,7 +340,7 @@ describe('Check-in of existing device with missing component', function() {
                if (err) throw err;
                assert(typeof res.body === 'object');
                assert.equal(res.body.posDevices.length, 1,'must have 1 POS device associated');
-               assert.equal(res.body.logEntries.length, 4, 'must have 5 log entries');
+               assert.equal(res.body.logEntries.length, 5, 'must have 5 log entries');
                assert(res.body.lastCheckin > checkin, 'latest checkin must be later than previous checkin');
                done();
              });
