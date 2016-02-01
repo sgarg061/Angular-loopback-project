@@ -158,11 +158,16 @@ angular
         controller: function DialogController($scope, $mdDialog) {
                       $scope.softwareVersions = softwareVersions; // transfer to new scope
                       $scope.Cloud = {};
+
+
                       $scope.create = function() {
-                        Cloud.create($scope.newCloud)
+                       $scope.newCloud.turnServerUrl = $scope.newCloud.turnServerUrl.split(',');
+                       $scope.newCloud.stunServerUrl = $scope.newCloud.stunServerUrl.split(',');
+                       Cloud.create($scope.newCloud)
                         .$promise
                         .then(function(cloud) {
-                          $state.go('cloud', {cloudId: cloud.id}, {reload: true});
+                          $state.go('cloud', {cloudId: cloud.id}, {reload: true});  
+
                         }, function (res) {
                           toastr.error(res.data.error.message, 'Error');
                         });
