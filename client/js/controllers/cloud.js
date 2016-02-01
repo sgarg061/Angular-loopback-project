@@ -47,7 +47,6 @@ angular
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.cloud.id;
-      console.log('test');
       $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.message = '';
