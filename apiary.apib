@@ -66,8 +66,68 @@ A device object has the following attributes:
                 "overrideCheckinPort": 8082,
                 "overrideUploaderPort": 8082,
                 "overrideListenerPort": 8083,
-                "overrideConfigForwardPort": 8084
+                "overrideConfigForwardPort": 8084,
+                "cameras": [
+                     {
+                         "id":"c5084250-4b37-11e5-8184-752d1c0476b3",    
+                         "name":"axis camera",    
+                         "thumbnail": "12/thumbnails/hello.jpg",    
+                         "streams": [     
+                             {   
+                                 "id": "streamabc",    
+                                 "name": "HD",   
+                                 "earliestSegmentDate": 1450211609000,   
+                                 "latestSegmentDate": 1550211609000
+                             },     
+                             {    
+                                 "id": "streamdef",
+                                 "name": "SD",    
+                                 "earliestSegmentDate": 1450211609000,   
+                                 "latestSegmentDate": 1550211609000     
+                             }   
+                         ]   
+                     },    
+                     {   
+                         "id":"d5084250-4b37-11e5-8184-752d1c0476b3",    
+                         "name":" POS camera",   
+                         "thumbnail": "12/thumbnails/hello.jpg",   
+                         "streams": [    
+                             {   
+                                 "id": "streamabc",    
+                                 "name": "HD",   
+                                 "earliestSegmentDate": 1450211609000,   
+                                 "latestSegmentDate": 1550211609000    
+                             },    
+                             {   
+                                 "id": "streamdef",    
+                                 "name": "SD",   
+                                 "earliestSegmentDate": 1450211609000,   
+                                 "latestSegmentDate": 1550211609000    
+                             }   
+                         ]   
+                     },    
+                     {   
+                         "id":"e5084250-4b37-11e5-8184-752d1c0476b3",    
+                         "name":"Door camera",   
+                         "thumbnail": "12/thumbnails/hello.jpg",   
+                         "streams": [    
+                            {   
+                                 "id": "streamabc",    
+                                 "name": "HD",   
+                                 "earliestSegmentDate": 1450211609000,   
+                                 "latestSegmentDate": 1550211609000    
+                             },    
+                             {   
+                                 "id": "streamdef",    
+                                 "name": "SD",   
+                                 "earliestSegmentDate": 1450211609000,   
+                                 "latestSegmentDate": 1550211609000    
+                             }   
+                         ]   
+                     }   
+                 ]
             }
+
 ## List All Devices [/api/devices{?filter%5Boffset%5D,filter%5Blimit%5D,filter%5Binclude%5D}]
 
 + Parameters

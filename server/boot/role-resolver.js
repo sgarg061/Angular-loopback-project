@@ -37,8 +37,6 @@ module.exports = function (app) {
 
         tokenValidator.validateToken(jwt.token, function (err, msg) {
             if (err) {
-                logger.error('Error validating token');
-                logger.error(err);
                 cb(err, false);
             } else {
                 if (jwt.userType === 'solink') {
@@ -96,7 +94,7 @@ function isOwnerOfFilter(context, token, cb) {
             cb(null, userId !== null);
             break;
     }
-    
+
 }
 function getUserId(token){
     if (token.userType === 'cloud') {
@@ -289,7 +287,7 @@ function isOwnerOfReseller(context, token, cb) {
         default:
             invalidMethod(cb);
             break;
-            
+
     }
 }
 
