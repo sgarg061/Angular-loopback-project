@@ -1,9 +1,9 @@
-<md-dialog aria-label="New POS Filter">
+<md-dialog aria-label="{{newFilter.$edit ? 'Edit' : 'New'}} {{newFilter.$title}}">
   
   <md-toolbar>
       <div class="md-toolbar-tools">
-      <h2 ng-if="newFilter.owner">{{newFilter.$edit ? 'Edit' : 'New'}} POS Filter</h2>
-      <h2 ng-if="!newFilter.owner">View POS Filter</h2>
+      <h2 ng-if="newFilter.owner">{{newFilter.$edit ? 'Edit' : 'New'}} {{newFilter.$title}}</h2>
+      <h2 ng-if="!newFilter.owner">View {{newFilter.$title}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cancel()">
         <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
@@ -22,10 +22,23 @@
         <textarea ng-model="newFilter.description" rows="1" ng-disabled="!newFilter.owner"></textarea>
       </md-input-container>
 
-      <md-input-container class="md-block">
+      <md-input-container class="md-block" ng-if="newFilter.$title == 'Connector'">
         <label>Filter Script</label>
-        <textarea rows="22" ng-model="newFilter.script" style="font-family: monospace; font-size: 13px;" ng-disabled="!newFilter.owner"></textarea>
+        <div ng-messages="newFilter.script.$error" ng-show="newFilter.script.$error">
+          <div ng-message="invalid">Invalid Javascript Sytax!</div>
+        </div>
+        <textarea ng-model="newFilter.script" rows="22" class="scripted" ng-disabled="!newFilter.owner" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
       </md-input-container>
+
+      <md-input-container class="md-block" ng-if="newFilter.$title == 'Report'">
+        <label>Search Query</label>
+        <textarea ng-model="newFilter.filter" invalid rows="22" class="scripted" ng-disabled="!newFilter.owner" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"></textarea>
+        
+        <div ng-messages="newFilter.$error" ng-show="newFilter.$error">
+          <div ng-message="invalid" >Invalid JSON Object!</div>
+        </div>
+      </md-input-container>
+
     </div>
   </md-dialog-content>
   <div class="md-actions" layout="row" ng-if="newFilter.owner">

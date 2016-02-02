@@ -1,0 +1,55 @@
+{
+  "name": "SearchFilterConnector",
+  "plural": "Reports",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "assigneeId": {
+      "type": "string",
+      "required": true
+    },
+    "assigneeType": {
+      "type": "string",
+      "required": true
+    },
+    "filterId": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "query": {
+      "type": "belongsTo",
+      "model": "SearchFilter",
+      "foreignKey": "filterId"
+    }
+  },
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "*"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isValidated",
+      "permission": "ALLOW",
+      "property": "*"
+    }],
+  "methods": {}
+}

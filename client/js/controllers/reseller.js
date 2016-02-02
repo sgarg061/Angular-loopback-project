@@ -1,7 +1,12 @@
 angular
   .module('app')
+<<<<<<< HEAD
   .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'softwareService',
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService, softwareService) {
+=======
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService) {
+>>>>>>> master
 
     $scope.reseller = {};
 
@@ -10,12 +15,16 @@ angular
     $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
     $scope.markers = [];
     $scope.filters = [];
+    $scope.reports = [];
+
     $scope.children = [];
-    $scope.selectedFilters = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
 
+    $scope.cascadedReports = [];
+    $scope.ownedReports = [];
+    
 
     function watchForChanges() {
       // watch reseller for updates and save them when they're found
@@ -95,6 +104,7 @@ angular
 
 
           getFilters();
+          getReports();
 
           watchForChanges();
 
@@ -196,9 +206,9 @@ angular
 
           //Getting the default software version name
           function currentSoftwareVersion(testVersion){ //used in filter
-            return testVersion.id===$scope.cloud.softwareVersionId;
+            return testVersion.id === $scope.cloud.softwareVersionId;
           }
-          $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
+          $scope.defaultSoftwareVersion = $scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
         })
     }
 
@@ -228,7 +238,7 @@ angular
             var filter = connectors[i];
             if (i > -1) {
               filter.selected = (filter.connectors.length > 0)
-              filter.owner = (filter.creatorType == 'reseller' || userService.getUserType() == 'solink');
+              filter.owner = (filter.creatorType == 'reseller');
               $scope.filters.push(filter);
               
               filter.creatorType == 'reseller' ? $scope.ownedFilters.push(filter) :$scope.cascadedFilters.push(filter)
@@ -236,6 +246,42 @@ angular
 
           }
         })
+    }
+
+    
+    function getReports(){
+      SearchFilter
+        .find({
+          filter: {
+            where: {
+              or: [{'creatorId': $stateParams.resellerId},{'creatorId': $scope.cloudId}]
+            },
+            include: {
+              relation: 'connectors',
+              scope: {
+                where: {assigneeId: $stateParams.resellerId}
+              }
+            }
+          }
+        })
+        .$promise
+        .then(function(filters) {
+          $scope.reports = [];
+          $scope.ownedReports = [];
+          $scope.cascadedReports = [];
+          for(var i in filters){
+            var filter = filters[i];
+            filter.filter = JSON.stringify(filter.filter);
+            if (i > -1) {
+              filter.selected = (filter.connectors.length > 0)
+              filter.owner = (filter.creatorType == 'reseller');
+              $scope.reports.push(filter);
+
+              filter.creatorType == 'reseller' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
+            };
+          }
+        })
+
     }
 
 
@@ -357,8 +403,6 @@ angular
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:false
-      })
-      .then(function(result) {
       });
     }
 
@@ -397,116 +441,8 @@ angular
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
       });    
     }
-
-    $scope.addFilter = function(connector) {
-      $mdDialog.show({
-        controller: function DialogController($scope, $mdDialog) {
-                      $scope.newFilter = {
-                        name: '',
-                        script: '',
-                        owner: true
-
-                      };
-                      $scope.create = function() {
-                        var script = JSON.stringify($scope.newFilter.script);
-                        POSFilter.create({
-                          id: '',
-                          name: $scope.newFilter.name,
-                          description: $scope.newFilter.description,
-                          script: script,
-                          creatorId: $stateParams.resellerId,
-                          creatorType: 'reseller' 
-                        })
-                        .$promise
-                        .then(function(customer) {
-                          getFilters();
-                        }, function (res) {
-                          toastr.error(res.data.error.message, 'Error');
-                        });
-                        $mdDialog.cancel();
-                      };
-                      $scope.cancel = function() {
-                        $mdDialog.cancel();
-                      };
-        },
-        templateUrl: 'views/filterForm.tmpl.html',
-        parent: angular.element(document.body),
-        targetEvent: event,
-        clickOutsideToClose:true
-        })
-        .then(function(result) {
-        }, function() {
-      }); 
-    };
-
-    $scope.actionFilter = function(filter) {
-      $mdDialog.show({
-        controller: function DialogController($scope, $mdDialog) {
-          $scope.newFilter = filter
-
-          if (!$scope.newFilter.parsed_script){
-            try {
-              $scope.newFilter.script = JSON.parse(filter.script)
-            }
-            catch(err){
-              $scope.newFilter.script = filter.script
-            }
-            $scope.newFilter.parsed_script = true
-          }
-
-          $scope.newFilter.$edit = true
-          $scope.create = function() {
-            var script = JSON.stringify($scope.newFilter.script);
-            POSFilter.prototype$updateAttributes({id: filter.id}, {
-              name: $scope.newFilter.name,
-              description: $scope.newFilter.description,
-              script: script
-            })
-            .$promise
-            .then(function(customer) {
-              getFilters();
-            }, function (res) {
-              toastr.error(res.data.error.message, 'Error');
-            });
-            $mdDialog.cancel();
-          };
-          $scope.cancel = function() {
-            $mdDialog.cancel();
-          };
-          $scope.destroy = function() {
-            var confirm = $mdDialog.confirm()
-              .title('Delete Filter')
-              .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
-              .ok('Yes')
-              .cancel('No');
-
-            $mdDialog.show(confirm).then(function() {
-              POSFilter.deleteById($scope.newFilter)
-                .$promise
-                .then(function(customer) {
-                  getFilters();
-                }, function (res) {
-                  toastr.error(res.data.error.message, 'Error');
-                });
-            });
-
-
-          };
-        },
-        templateUrl: 'views/filterForm.tmpl.html',
-        parent: angular.element(document.body),
-        targetEvent: event,
-        clickOutsideToClose:true
-        })
-        .then(function(result) {
-        }, function() {
-      }); 
-    };
 
     $scope.filterChanged = function (filter) {
       if (filter.selected) {
@@ -541,6 +477,64 @@ angular
     }
 
 
+    $scope.reportChanged = function (filter) {
+      if (filter.selected) {
+        SearchFilterConnector.create({
+          filterId: filter.id,
+          assigneeId: $stateParams.resellerId,
+          assigneeType: 'reseller'
+        })
+        .$promise
+        .then(function(data) {
+          filter.connectors.push(data)
+          toastr.success('Assigned filter successfully!', 'Filter Assigned')
+        }, function (res) {
+          toastr.error(res.data.error.message, 'Error');
+        });
+      }
+      else{
+        if (filter.connectors.length) {
+          deletesearchFilterById(filter.connectors[0].id);
+        }
+      }
+    }
+
+    function deletesearchFilterById (id) {
+      SearchFilterConnector.deleteById({id: id})
+      .$promise
+      .then(function(data) {
+        toastr.success('Unassigned filter successfully!', 'Filter Unassigned')
+      }, function (res) {
+        toastr.error(res.data.error.message, 'Error');
+      });
+    }
+
+
+
+    $scope.addFilter = function(connector) {
+      filterService.addFilter('reseller', $stateParams.resellerId, function(){
+        getFilters();
+      });
+    };
+
+    $scope.actionFilter = function(filter) {
+      filterService.actionFilter(filter, function(){
+        getFilters();
+      });
+    };
+     
+
+    $scope.addReport = function(connector) {
+      filterService.addReport('reseller', $stateParams.resellerId, function(){
+        getReports();
+      });
+    };
+
+    $scope.actionReport = function(filter) {
+      filterService.actionReport(filter, function(){
+        getReports();
+      });
+    }; 
 
 
     $scope.deleteReseller = deleteReseller;
