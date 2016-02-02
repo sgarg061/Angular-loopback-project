@@ -363,7 +363,6 @@ angular
     }
 
     function licensesAvailable(Licenses) {
-      $scope.availableLicenses = "";
       $scope.licensesArray = Licenses.filter(function(value, index){return String(value.activated) === 'false';});
       toastr.info($scope.licensesArray.length + ' licenses copied');
       return $scope.licensesArray.map(function(elem) { return elem.key; }).join('\n');
