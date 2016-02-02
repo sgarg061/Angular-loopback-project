@@ -425,10 +425,11 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
+                  $scope.numberofActivatedLicenses += 1;
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
-                  $scope.numberofActivatedLicenses += scope.licenseKeys.length; 
+                   
 
                   next(undefined, license)
                 }, function(err) {
