@@ -438,11 +438,15 @@ module.exports = function(Device) {
             checkedInProperties.name = deviceData.locationName;
         }
 
-        if (deviceData.deviceInformation && deviceData.deviceInformation.localIP) {
-            checkedInProperties.ipAddress = deviceData.deviceInformation.localIP;
-        }
-
         if (deviceData.deviceInformation) {
+            if (deviceData.deviceInformation.ip) {
+                checkedInProperties.ipAddress = deviceData.deviceInformation.ip;
+            }
+
+            if (deviceData.deviceInformation.localIP) {
+                checkedInProperties.localIP = deviceData.deviceInformation.localIP;
+            }
+
             checkedInProperties.vmsPort = deviceData.deviceInformation.port;
         }
 
