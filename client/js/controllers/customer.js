@@ -484,17 +484,26 @@ angular
         controller: function (scope, $mdDialog) {
           scope.renameCustomer = function() {
               var iRecur = 0;
-              debugger;
-              for(var i = 0; i < $scope.customers.length; i++){ //check for duplicate name
-                if($scope.customers[i].name === $scope.customerRename){
+              console.log("Boom 1");
+              Customer
+                .find({
+                  filter: {
+                    where: {and: [{'resellerId':$scope.reseller.id}, {'name':scope.customerRename}]}
+                  }
+                })
+                .$promise
+                .then(function(!result){
                   iRecur++;
-                  console.log(iRecur);
+                  console.log("Found it! ", iRecur);
                 }
-              }
+                );
+
+              console.log("Boom 2");                
               if(iRecur > 0){
                 toastr.info("Customer already exists (counts:" + iRecur + "); please enter a unique name.");
               }
               else {
+                console.log("boom3");
                 Customer.prototype$updateAttributes({id: customer.id}, {
                   name: scope.customerRename
                 })
