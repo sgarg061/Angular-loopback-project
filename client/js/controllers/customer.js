@@ -98,7 +98,7 @@ angular
         .$promise
         .then(function(customers) {
           $scope.customer = customers[0];
-          $scope.numberofActivatedLicenses = $scope.customer.licenses.length;
+          $scope.numberofActivatedLicenses = $scope.customer.licenses.filter(function(value,inded){return String(value.activated) === 'false';}).length;
           $scope.reseller = customers[0].reseller;
           $scope.cloud = customers[0].reseller.cloud;
 
