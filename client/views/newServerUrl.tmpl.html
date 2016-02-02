@@ -12,9 +12,9 @@
 
   <md-dialog-content>
    <div layout="column" layout-margin layout-padding class="dialog">
-    <md-input-container>
+    <md-input-container class="form-group" name="input">
         <label>New Server URL</label>
-        <input type="url" class="form-control focus" name="name" autocomplete="off" required ng-model="model.tempServerUrl">
+        <input type="url" class="form-control focus" name="serverUrl" autocomplete="off" required ng-model="model.tempServerUrl" value="" >
     </md-input-container>
   </div>
   </md-dialog-content>
