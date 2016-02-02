@@ -133,7 +133,6 @@ function performActivationTasks(License, license, deviceInfo, cb) {
     var Device = License.app.models.Device;
 
     var deviceData = deviceDataParser.parseDeviceData(deviceInfo, license.customerId);
-
     Device.create(deviceData, function createUser(err, res) {
         if (err) {
             logger.error('Error creating device at activation time');
@@ -143,7 +142,6 @@ function performActivationTasks(License, license, deviceInfo, cb) {
             var randToken = require('rand-token').generator({
                 source: crypto.randomBytes
             });
-
             var deviceId = res.id;
             var username = 'device+' + deviceId.replace(/-/g, '') + '@solinkcorp.com';
             var password = randToken.generate(16);
@@ -162,7 +160,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                 } else {
                     license.updateAttributes({
                         activated: true,
-                        actiationDate: new Date(),
+                        activationDate: new Date(),
                         username: username,
                         password: password,
                         deviceId: deviceId
