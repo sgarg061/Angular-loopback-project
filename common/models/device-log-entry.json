@@ -42,21 +42,13 @@
     },
     "onlineCameras": {
       "type": "number",
-<<<<<<< HEAD
       "required": false,
-      "default": 0   
-=======
-      "required": false
->>>>>>> 9a82a93fcb676ab4fdba78d9cdcde3dc66862fbf
+      "default": 0
     },
     "totalCameras": {
       "type": "number",
-<<<<<<< HEAD
       "required": false,
-      "default": 0     
-=======
-      "required": false
->>>>>>> 9a82a93fcb676ab4fdba78d9cdcde3dc66862fbf
+      "default": 0
     },
     "deviceModel": {
       "type": "string",
