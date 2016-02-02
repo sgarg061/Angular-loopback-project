@@ -480,6 +480,7 @@ angular
   }
 
  function renameCustomer(customer) {
+    $scope.currentCustomer = customer;
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.renameCustomer = function() {
@@ -492,39 +493,37 @@ angular
                   }
                 })
                 .$promise
-                .then(function(!result){
-                  iRecur++;
-                  console.log("Found it! ", iRecur);
+                .then(function(customer){ //if the customer already exists
+                  if(customer && customer.length > 0)
+                    {
+                      toastr.error("Customer already exists; please enter a unique name.");
+                    }
+                  else
+                    {
+                      Customer.prototype$updateAttributes({id: $scope.currentCustomer.id}, {
+                        name: scope.customerRename
+                      })
+                      .$promise
+                      .then
+                     (function(currentCustomer) 
+                      {
+                        console.log("boom");
+                        $scope.currentCustomer.name = scope.customerRename
+                        toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
+                        $scope.selectCustomer()
+                        $mdDialog.cancel();
+
+                      }, 
+                      function (res) 
+                      {
+                        toastr.error('Error');
+                        console.log(res.data.error.message);
+                      }
+                     );
+                    }
                 }
                 );
-
-              console.log("Boom 2");                
-              if(iRecur > 0){
-                toastr.info("Customer already exists (counts:" + iRecur + "); please enter a unique name.");
-              }
-              else {
-                console.log("boom3");
-                Customer.prototype$updateAttributes({id: customer.id}, {
-                  name: scope.customerRename
-                })
-                .$promise
-                .then
-                (function(customer) 
-                  {
-                    $scope.customer.name = scope.customerRename
-                    toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
-                    $scope.selectCustomer()
-                  }, 
-                  function (res) 
-                  {
-                    toastr.error('Error');
-                    console.log(res.data.error.message);
-                  }
-                );
-              }
-            $mdDialog.cancel();
           };
-
           scope.close = function() {
             $mdDialog.cancel();
           };
