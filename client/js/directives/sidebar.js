@@ -8,13 +8,16 @@ angular
         model: "=model",
         type: "=type",
         filterChangedFunction: "=filterChangedFunction",
+        reportChangedFunction: "=reportChangedFunction",
         assignFiltersFunction: "=assignFiltersFunction",
-        selectedFilters: "=selectedFilters",
+        reports: "=reports",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
+        addReportFunction: "=addReportFunction",
         loadFilterFunction: "=loadFilterFunction",
         actionFilterFunction: "=actionFilterFunction",
+        actionReportFunction: "=actionReportFunction",
         selectConnectorFunction: "=selectConnectorFunction",
         deleteFunction: "=deleteFunction",
         renameFunction: "=renameFunction",
@@ -27,9 +30,12 @@ angular
         softwareVersions: "=softwareVersions",
         defaultSoftwareVersion: "=defaultSoftwareVersion",
         filters: "=filters",
+        reports: "=reports",
         children: "=children",
         ownedFilters: "=ownedFilters",
-        cascadedFilters: "=cascadedFilters"
+        cascadedFilters: "=cascadedFilters",
+        ownedReports: "=ownedReports",
+        cascadedReports: "=cascadedReports"
       },
       link: function (scope, element, attrs) {
         scope.openSoftwareVersionForm = scope.$parent.openSoftwareVersionForm,
@@ -39,14 +45,23 @@ angular
         scope.loadFilter = function(owner) {
           scope.loadFilterFunction(owner);
         }
+        scope.addReport = function(customerId) {
+          scope.addReportFunction(customerId);
+        }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
+        }
+        scope.reportChanged = function(filter) {
+          scope.reportChangedFunction(filter);
         }
         scope.assignFilters = function(assignee, filters) {
           scope.assignFiltersFunction(assignee, filters);
         }
         scope.actionFilter = function(filterId) {
           scope.actionFilterFunction(filterId);
+        }
+        scope.actionReport = function(filterId) {
+          scope.actionReportFunction(filterId);
         }
         scope.addLicense = function(customerId) {
           scope.addLicenseFunction(customerId);
