@@ -13,7 +13,7 @@ angular
     'uiGmapgoogle-maps',
     'customUserService',
     'angular-momentjs',
-    'd3'
+    'd3',
     'filterService'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',

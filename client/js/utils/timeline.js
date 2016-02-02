@@ -217,7 +217,7 @@ var timeline = function(params) {
           .style('opacity', 0)
           .attr('class', 'check-in-point-tooltip')
           .attr('fill', '#555')
-          .text(new Date(checkin.timestamp * 1000).toLocaleTimeString())
+          .text(new Date(parseInt(checkin.timestamp)).toLocaleTimeString())
       });
     }
     
