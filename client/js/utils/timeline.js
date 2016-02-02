@@ -73,9 +73,19 @@ var timeline = function(params) {
     renderAxis();
 
     /**
+    * pinned box
+    */
+    renderPinBox();
+
+
+    /**
     * data points
     */
-    var dataPointGroup = svg.append('g').attr('id', 'data-points');
+    var dataPointGroup = 
+      svg.append('g')
+        .attr('id', 'data-points')
+        .attr('transform', `translate(0, 15)`);
+
     renderDataPoints();
     
     /**
@@ -122,7 +132,7 @@ var timeline = function(params) {
 
       svg.append('g')
         .attr('class', xAxis.class)
-        .attr('transform', `translate(0, 50)`)
+        .attr('transform', `translate(0, 65)`)
         .call(xAxisFunc)
         .selectAll('text')
           .attr('x', _innerwidth / 24 / 2)
@@ -211,12 +221,34 @@ var timeline = function(params) {
       });
     }
     
+    function renderPinBox() {
+      var pinBox = svg.append('g').attr('id', 'pin-box');
+      var x = currentOpen ? d3.select(`#tooltip-${currentOpen}`).attr('x') : 0;
+      var y = currentOpen ? d3.select(`#tooltip-${currentOpen}`).attr('y') : 0;
+      pinBox.attr('opacity', 0)
+
+      pinBox.append('rect')
+        .attr('width', 70)
+        .attr('height', 20)
+        .attr('fill', '#f1f1f1')
+        .attr('x', x)
+        .attr('y', y);
+
+      pinBox.append('rect')
+        .attr('id', 'pin-box-arrow')
+        .attr('x', 32)
+        .attr('y', -20)
+        .attr('width', 15)
+        .attr('height', 15)
+        .attr('fill', '#f1f1f1')
+        .attr('transform', `rotate(45)`);
+    }
 
     function renderCheckInDetailBox() {
       checkInDetailBox.append('rect')
         .attr('id', 'check-in-detail')
         .attr('x', 0)
-        .attr('y', 105)
+        .attr('y', 120)
         .attr('width', 0)
         .attr('height', 0)
         .attr('fill', '#f1f1f1')
@@ -281,16 +313,17 @@ var timeline = function(params) {
     function hideCheckInDetailPanel(currentOpen) {
       var r = 5;
       d3.select(`#circle-${currentOpen}-shadow`).transition().duration(300).attr('r', r);
-      d3.select(`#tooltip-${currentOpen}`).transition().duration(300).style('opacity', 0);
+      d3.select(`#tooltip-${currentOpen}`).transition().duration(300).style('opacity', 0).attr('transform', `translate(0, 0)`).style('fill', '#555').style('font-weight', 'normal');
       d3.select(`#check-in-detail div`).remove();
     }
 
     function showCheckInDetailPanel(cx) {
       var rHover = 8;
       d3.select(`#check-in-detail`).transition().duration(300).attr('width', _innerwidth).attr('height', _innerheight);
-      d3.select(`#check-in-detail-arrow-group`).transition().duration(300).attr('transform', `translate(${cx}, 80)`).attr('style', 'opacity: 1');
+      d3.select(`#check-in-detail-arrow-group`).transition().duration(300).attr('style', 'opacity: 1').duration(600).attr('transform', `translate(${cx}, 95)`);
       d3.select(`#check-in-detail-arrow`).transition().duration(300).attr('width', 40).attr('height', 40);
-      d3.select(`#tooltip-${currentOpen}`).transition().duration(300).style('opacity', 1);
+      d3.select(`#tooltip-${currentOpen}`).transition().duration(300).style('opacity', 1).duration(600).attr('transform', `translate(-2, -16)`).style('fill', '#0088cc').style('font-weight', 'bold')
+      d3.select(`#pin-box`).transition().duration(300).attr('opacity', 1).duration(600).attr('transform', `translate(${cx - 36}, 0)`);
       d3.select(`#circle-${currentOpen}-shadow`).transition().duration(300).attr('r', rHover);
     }
 
