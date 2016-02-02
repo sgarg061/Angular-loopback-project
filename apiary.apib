@@ -67,6 +67,7 @@ A device object has the following attributes:
                 "overrideUploaderPort": 8082,
                 "overrideListenerPort": 8083,
                 "overrideConfigForwardPort": 8084,
+                "localIP": "10.1.1.2",
                 "cameras": [
                      {
                          "id":"c5084250-4b37-11e5-8184-752d1c0476b3",    
@@ -160,6 +161,7 @@ A device object has the following attributes:
                     "username": "christopher",
                     "password": "test",
                     "ipAddress": "54.1.1.3",
+                    "localIP": "10.1.1.2",
                     "cameras": [
                         {
                             "id":"c5084250-4b37-11e5-8184-752d1c0476b3",
@@ -234,6 +236,7 @@ A device object has the following attributes:
                     "username": "christopher",
                     "password": "test",
                     "ipAddress": "54.1.1.3",
+                    "localIP": "10.1.1.3",
                     "cameras": [
                         {
                             "id":"a3084250-4b37-11e5-8184-752d1c0476b3",
@@ -294,6 +297,7 @@ A device object has the following attributes:
                     "username": "christopher",
                     "password": "test",
                     "ipAddress": "54.1.1.3",
+                    "localIP": "10.1.1.4",
                     "cameras": [
                         {
                             "id":"53",
@@ -339,6 +343,7 @@ A device object has the following attributes:
                     "username": "christopher",
                     "password": "test",
                     "ipAddress": "54.1.1.3",
+                    "localIP": "10.1.1.6",
                     "cameras": [
                         {
                             "id":"43",
@@ -382,6 +387,7 @@ A device object has the following attributes:
                     "username": "christopher",
                     "password": "test",
                     "ipAddress": "54.1.1.3",
+                    "localIP": "10.1.1.8",
                     "cameras": [
                         {
                             "id":"13",
@@ -588,7 +594,8 @@ A device object has the following attributes:
                             "firmware": "4.2.0",
                             "port": 8080,
                             "deviceCapacity": 3887985590272,
-                            "availableCapacity": 3447593107456
+                            "availableCapacity": 3447593107456,
+                            "localIP": "10.1.1.2"
                         },
                         "$$hashKey": "object:549"
                     }
@@ -781,11 +788,11 @@ An email is sent to the user's current email to confirm changing the password
             "response": "Forgot password email successfully sent."
         }
 
-## Group POS Association
+## Group Connectors
 
-## POS Filters [/api/connectors/{connectorId}/filter]
+## Connectors [/api/connectors/{connectorId}/filter]
 
-POS Filter object has the following attributes:
+Connector object has the following attributes:
 + name - Filter name.
 + script - Javascript blob of the script for the listener
 + description - description of the script
@@ -796,7 +803,7 @@ POS Filter object has the following attributes:
     + connectorId: asdas-a2a5-11e5-9e4c-asdfasassdf (required, string) - The ID of the device
 
 
-### Get POS Filter [GET]
+### Get Connector [GET]
 
 + Response 200 (application/json)
 
@@ -807,7 +814,7 @@ POS Filter object has the following attributes:
               "name": "Motion Parser",
               "script": "console.log(String.fromCharCode(0xD83D, 0xDE32));",
               "description": null,
-              "lastUpdated": ""
+              "lastUpdated": "2016-01-19T17:03:09.000Z"
             }
 
 ## Camera [/api/cameras/{cameraId}]
@@ -841,31 +848,6 @@ Camera object has the following attributes:
                     ],
               "thumbnail": "thumbnail.jpeg"
             }
-
-## POS Connectors [/api/connectors]
-
-POS Connector will provide POS Filters assigned to a provided device through auth0 token.
-It has the following attributes:
-+ filterId - POSFilter id, can be referenced to find the Filter.
-
-
-### List available POS Connectors [GET]
-
-+ Response 200 (application/json)
-
-    + Body
-
-            [
-              {
-                "id": "0afdc7f0-a29c-11e5-9e4c-31c6c5024ea1",
-                "filterId": "41c47270-a28d-11e5-bad2-6fe88522b0fe"
-              },
-              {
-                "id": "a9ac7040-a297-11e5-9e4c-31c6c5024ea1",
-                "filterId": "41c44b60-a28d-11e5-bad2-6fe88522b0fe"
-              }
-            ]
-            ## Group Customers
 
 
 ## Camera Assignment [/api/connectors/{connectorId}/cameraConnectors]
@@ -1022,6 +1004,54 @@ Get or add available software version numbers.
             "code": 2,
             "url": "http://solink.softwareversion.test.com/test/software-version/v0.0.2/"
         }
+
+## Group Report Associations
+
+## Reports [/api/reports]
+
+Report Connector will provide Reports assigned to a provided customer token.
+It has the following attributes:
++ query - the report object
+    + name - Report name.
+    + filter - ElasticSearch syntax. Must be in valid JSON format.
+    + description - description of the script
+    + lastUpdated - the date and time when the report last updated(through PUT/POST)
+
+### List available Reports [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+              {
+                "query": {
+                  "id": "6152b650-c534-11e5-b06d-cb4d92913333",
+                  "filter": {
+                    "hello": "hello2"
+                  },
+                  "name": "Test Filter",
+                  "description": "Hello world.",
+                  "lastUpdated": "2016-01-27T20:27:26.000Z"
+                }
+              },
+              {
+                "query": {
+                  "id": "6152b650-c534-11e5-b06d-cb4d92913333",
+                  "filter": {
+                    "hello": "hello2"
+                  },
+                  "name": "Test Filter",
+                  "description": "Hello world.",
+                  "lastUpdated": "2016-01-27T20:27:26.000Z"
+                }
+              }
+            ]
+
+## Create a Report [/api/searchfilters]
+
+
+
 
 ###Group Configuration
 

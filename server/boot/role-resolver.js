@@ -54,6 +54,7 @@ module.exports = function (app) {
                     case 'License':
                         return isOwnerOfLicense(context, jwt, cb);
                     case 'POSFilter':
+                    case 'SearchFilter':
                         return isOwnerOfFilter(context, jwt, cb);
                     default:
                         invalidMethod(cb);

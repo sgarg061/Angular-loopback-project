@@ -108,6 +108,14 @@
     "dataSource": "restDataSource",
     "public": true,
     "$promise": {},
-    "$resolved": true  
+    "$resolved": true
+  },
+  "SearchFilter": {
+    "dataSource": "callHomeDb",
+    "public": true
+  },
+  "SearchFilterConnector": {
+    "dataSource": "callHomeDb",
+    "public": true
   }
 }

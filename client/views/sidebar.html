@@ -79,36 +79,64 @@
         <md-button class="md-primary" ng-click="addLicense(model.id)">Add Licenses</md-button>
       </div>
 
-      <div ng-show="type=='cloud'||type=='reseller'||type=='customer'">
+        <div ng-show="type=='cloud'||type=='reseller'||type=='customer'">
 
+          <!-- POS Filters -->
+          <md-list style="max-height:300px; overflow-y: scroll;" ng-if="filters.length">
+            <md-subheader class="md-no-sticky" style="color:black;">Connectors ({{filters.length}})</md-subheader>
+            <md-list-item ng-repeat="filter in ownedFilters">
+              <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="filter.selected" ng-change="filterChanged(filter)" aria-label="Check"></md-checkbox>
+              <p>{{filter.name}}</p>
 
-        <md-list style="max-height:300px; overflow-y: scroll;" ng-if="filters.length">
-          <md-subheader class="md-no-sticky">POS Filters ({{filters.length}})</md-subheader>
-          <md-list-item ng-repeat="filter in ownedFilters">
-            <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="filter.selected" ng-change="filterChanged(filter)" aria-label="Check"></md-checkbox>
-            <p>{{filter.name}}</p>
+              <div class="actions" >
+                <md-icon class="md-secondary material-icons" ng-click="actionFilter(filter)" aria-label="{{filter.owner ? 'edit': 'show'}}" md-svg-icon="{{filter.owner ? 'edit': 'info'}}">
+                </md-icon>
+              </div>
+            </md-list-item>
 
-            <div class="actions" >
-              <md-icon class="md-secondary material-icons" ng-click="actionFilter(filter)" aria-label="{{filter.owner ? 'edit': 'show'}}" md-svg-icon="{{filter.owner ? 'edit': 'info'}}">
-              </md-icon>
-            </div>
-          </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="filter in cascadedFilters">
+              <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="filter.selected" ng-change="filterChanged(filter)" aria-label="Check"></md-checkbox>
+              <p>{{filter.name}}</p>
 
-          <md-divider></md-divider>
-          <md-list-item ng-repeat="filter in cascadedFilters">
-            <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="filter.selected" ng-change="filterChanged(filter)" aria-label="Check"></md-checkbox>
-            <p>{{filter.name}}</p>
+              <div class="actions" >
+                <md-icon class="md-secondary material-icons" ng-click="actionFilter(filter)" aria-label="{{filter.owner ? 'edit': 'show'}}" md-svg-icon="{{filter.owner ? 'edit': 'info'}}">
+                </md-icon>
+              </div>
+            </md-list-item>
+            <md-divider></md-divider>
+          </md-list>
 
-            <div class="actions" >
-              <md-icon class="md-secondary material-icons" ng-click="actionFilter(filter)" aria-label="{{filter.owner ? 'edit': 'show'}}" md-svg-icon="{{filter.owner ? 'edit': 'info'}}">
-              </md-icon>
-            </div>
-          </md-list-item>
-          <md-divider></md-divider>
-        </md-list>
+          <md-button class="md-primary" ng-click="addFilter(model.id)">Add Connector</md-button>
 
-        <md-button class="md-primary" ng-click="addFilter(model.id)">Add POS Filter</md-button>
-      </div>
+          <!-- Reports -->
+          <md-list style="max-height:300px; overflow-y: scroll;" ng-if="reports.length">
+            <md-subheader class="md-no-sticky" style="color:black;">Reports ({{reports.length}})</md-subheader>
+            <md-list-item ng-repeat="report in ownedReports">
+              <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="report.selected" ng-change="reportChanged(report)" aria-label="Check"></md-checkbox>
+              <p>{{report.name}}</p>
+
+              <div class="actions" >
+                <md-icon class="md-secondary material-icons" ng-click="actionReport(report)" aria-label="{{report.owner ? 'edit': 'show'}}" md-svg-icon="{{report.owner ? 'edit': 'info'}}">
+                </md-icon>
+              </div>
+            </md-list-item>
+
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="report in cascadedReports">
+              <md-checkbox class="md-primary" ng-if="type!='cloud'" ng-model="report.selected" ng-change="reportChanged(report)" aria-label="Check"></md-checkbox>
+              <p>{{report.name}}</p>
+
+              <div class="actions" >
+                <md-icon class="md-secondary material-icons" ng-click="actionReport(report)" aria-label="{{report.owner ? 'edit': 'show'}}" md-svg-icon="{{filter.owner ? 'edit': 'info'}}">
+                </md-icon>
+              </div>
+            </md-list-item>
+            <md-divider></md-divider>
+          </md-list>
+
+          <md-button class="md-primary" ng-click="addReport(model.id)">Add Report</md-button>
+        </div>
 
 <!-- URLS -->
 <md-divider></md-divider>
@@ -153,7 +181,7 @@
         <div>
           <i class="material-icons" ng-click="addServerUrl(model,'stunServerUrl')">add_circle</i> 
         </div>
-      </div>
+    </div>
       <md-divider></md-divider>
       <md-list style="max-height:300px; overflow-y: scroll;">
         <md-list-item ng-repeat="url in model.stunServerUrl">

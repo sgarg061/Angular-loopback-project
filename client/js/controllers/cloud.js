@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', '$mdDialog', 'toastr', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, $mdDialog, toastr, userService) {
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -13,9 +13,13 @@ angular
 
     $scope.children = [];
     $scope.filters = [];
+    $scope.reports = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
+    
+    $scope.cascadedReports = [];
+    $scope.ownedReports = [];
     
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
@@ -134,6 +138,36 @@ angular
 
     }
 
+    
+    function getReports(){
+      SearchFilter
+        .find({
+          filter: {
+            where: {
+              creatorId: $stateParams.cloudId,
+              creatorType: 'cloud'
+            }
+          }
+        })
+        .$promise
+        .then(function(filters) {
+          $scope.reports = [];
+          $scope.ownedReports = [];
+          $scope.cascadedReports = [];
+          for(var i in filters){
+            var filter = filters[i];
+            filter.filter = JSON.stringify(filter.filter);
+            if (i > -1) {
+              filter.owner = (filter.creatorType == 'cloud' || userService.getUserType() == 'solink');
+              $scope.reports.push(filter);
+
+              filter.creatorType == 'cloud' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
+            };
+          }
+        })
+
+    }
+
 
     $scope.goHome = function () {
       $state.go('home');
@@ -141,6 +175,7 @@ angular
 
     if ($stateParams.cloudId) {
       getFilters();
+      getReports();
       getCloud();
       getSoftwareVersions();
     }
@@ -347,109 +382,28 @@ angular
 
 
   $scope.addFilter = function(connector) {
-    $mdDialog.show({
-      controller: function DialogController($scope, $mdDialog) {
-                    $scope.newFilter = {
-                      name: '',
-                      script: '',
-                      owner: true
-                    };
-                    $scope.create = function() {
-                      var script = JSON.stringify($scope.newFilter.script);
-                      POSFilter.create({
-                        id: '',
-                        name: $scope.newFilter.name,
-                        description: $scope.newFilter.description,
-                        script: script,
-                        creatorId: $stateParams.cloudId,
-                        creatorType: 'cloud' 
-                      })
-                      .$promise
-                      .then(function(customer) {
-                        getFilters();
-                      }, function (res) {
-                        toastr.error(res.data.error.message, 'Error');
-                      });
-                      $mdDialog.cancel();
-                    };
-                    $scope.cancel = function() {
-                      $mdDialog.cancel();
-                    };
-      },
-      templateUrl: 'views/filterForm.tmpl.html',
-      parent: angular.element(document.body),
-      targetEvent: event,
-      clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
+    filterService.addFilter('cloud', $stateParams.cloudId, function(){
+      getFilters();
+    });
   };
 
   $scope.actionFilter = function(filter) {
-    $mdDialog.show({
-      controller: function DialogController($scope, $mdDialog) {
-        $scope.newFilter = filter
-
-        if (!$scope.newFilter.parsed_script){
-          try {
-            $scope.newFilter.script = JSON.parse(filter.script)
-          }
-          catch(err){
-            $scope.newFilter.script = filter.script
-          }
-          
-          $scope.newFilter.parsed_script = true
-        }
-
-        $scope.newFilter.$edit = true
-        $scope.create = function() {
-          var script = JSON.stringify($scope.newFilter.script);
-          POSFilter.prototype$updateAttributes({id: filter.id},
-          {
-            name: $scope.newFilter.name,
-            description: $scope.newFilter.description,
-            script: script
-          })
-          .$promise
-          .then(function(customer) {
-            getFilters();
-          }, function (res) {
-            toastr.error(res.data.error.message, 'Error');
-          });
-          $mdDialog.cancel();
-        };
-        $scope.cancel = function() {
-          $mdDialog.cancel();
-        };
-        $scope.destroy = function() {
-          var confirm = $mdDialog.confirm()
-            .title('Delete Filter')
-            .content('Are you sure you want to delete filter ' + $scope.newFilter.name + '?')
-            .ok('Yes')
-            .cancel('No');
-
-          $mdDialog.show(confirm).then(function() {
-            POSFilter.deleteById($scope.newFilter)
-              .$promise
-              .then(function(customer) {
-                getFilters();
-              }, function (res) {
-                toastr.error(res.data.error.message, 'Error');
-              });
-          });
-
-
-        };
-      },
-      templateUrl: 'views/filterForm.tmpl.html',
-      parent: angular.element(document.body),
-      targetEvent: event,
-      clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
+    filterService.actionFilter(filter, function(){
+      getFilters();
+    });
   };
-    
+   
+
+  $scope.addReport = function(connector) {
+    filterService.addReport('cloud', $stateParams.cloudId, function(){
+      getReports();
+    });
+  };
+
+  $scope.actionReport = function(filter) {
+    filterService.actionReport(filter, function(){
+      getReports();
+    });
+  }; 
+
   }]);
