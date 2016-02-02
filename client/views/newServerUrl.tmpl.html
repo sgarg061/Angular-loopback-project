@@ -14,10 +14,9 @@
    <div layout="column" layout-margin layout-padding class="dialog">
     <md-input-container class="form-group" name="input">
         <label>New Server URL</label>
-        <input type="url" class="form-control focus" name="serverUrl" autocomplete="off" required ng-model="model.tempServerUrl" ng-change="verifyDuplicate()" value="" >
+        <input type="url" class="form-control focus" name="serverUrl" autocomplete="off" required ng-model="model.tempServerUrl" value="" >
     </md-input-container>
   </div>
-<span class="error" ng-show="input.serverUrl.$error.isDuplicate">Please enter a unique URL.</span>
   </md-dialog-content>
   <div class="md-actions">
     <md-button ng-click="close()" class="md-primary">Cancel</md-button>

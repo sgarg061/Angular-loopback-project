@@ -291,30 +291,20 @@ angular
                       {
                         eval('tempCloud.' + tempServerUrl + '= new Array()'); 
                         eval('tempCloud.' + tempServerUrl + '[0] = $scope.model.tempServerUrl');
+                        $mdDialog.cancel();
                       }
                       else
                       {
                         if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) === -1')) //check for duplicate entry
                         {
                            eval('tempCloud.' + tempServerUrl +' .push($scope.model.tempServerUrl)');
+                           $mdDialog.cancel();
                         }
                         else
                         {
                           toastr.error("Duplicate URL entry. Please enter a unique URL.");
                         }
                       }
-                      $mdDialog.cancel();
-                  };
-                  $scope.verifyDuplicate = function () {
-                    if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) !== -1')){
-                      console.log("Duplicate");
-                      ngModel.$setValidity("isDuplicate", false);
-                      return true;
-                    }
-                    else{
-                      console.log("Unique");
-                      return false;
-                    }
                   };
                   $scope.close = function() {
                       $mdDialog.cancel();
