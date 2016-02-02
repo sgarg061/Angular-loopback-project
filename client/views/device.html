@@ -21,16 +21,18 @@
         <md-content class="card">
           <div layout="row" layout-align="space-between center">
             <h2 class="md-title" style="margin-left:10px">{{device.name}}</h2>
+            <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin || device.loadingMore" md-diameter="30"></md-progress-circular>
+            <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
             <md-icon md-svg-icon='indicator_{{device.status}}' style="width:24px;margin:10px;"></md-icon>
             <!--<md-icon md-svg-icon='indicator_{{device.statusIconColor}}' style="width:24px;margin:0px;"></md-icon>-->
           </div>
 
-          <div layout="row" style="margin-left:10px;margin-right:10px" >
-            <md-input-container flex>
+          <div layout="row" style="margin-left:10px;margin-right:10px; height:40px;" >
+            <md-input-container flex style="margin: 5px 0px;">
               <label>License - activated on {{device.license.activationDate | date:'yyyy/MM/dd'}}</label>
                 <input ng-model="device.license.key" disabled>
               </md-input-container>
-              <md-input-container flex>
+              <md-input-container flex style="margin: 5px 0px;">
                 <label>Device ID</label>
                 <input ng-model="device.id" disabled>
               </md-input-container>
@@ -39,8 +41,6 @@
           <md-tabs md-dynamic-height id="device-tab">
             <md-tab label="CHECK-IN">
               <div layout="column" style="margin:20px 20px 10px 20px;">
-                <h3>Check-in History</h3>
-
                 <div layout="row">
 
                   <md-input-container style="margin-right: 10px;" flex="15" ng-show="!timelineView">
@@ -58,6 +58,10 @@
                     </md-input-container>
 
 
+                    <md-button flex="15" class="md-primary" ng-click="loadPrevDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore" ng-show="timelineView">Prev Day</md-button>
+                    <h3 style="text-align: center; " ng-show="timelineView" flex="30">{{currentDate | date: 'mediumDate' }}</h3>
+                    <md-button flex="15" class="md-primary" ng-click="loadNextDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore" ng-show="timelineView">Next Day</md-button>
+
                   <div style="margin-right: 10px; text-align:right;" flex>
                     <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false" style="{{!timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="list"></md-icon>
@@ -70,20 +74,14 @@
                 </div>
 
                 <div layout="column" ng-show="timelineView" id="checkin-list">
-                  <div layout="row">
-                    <md-button flex="15" class="md-raised" ng-click="loadPrevDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore">Prev Day</md-button>
-                    <h2 style="text-align: center; ">Timeline View - {{currentDate | date: 'mediumDate' }}</h2>
-                    <md-button flex="15" class="md-raised" ng-click="loadNextDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore">Next Day</md-button>
-                  </div>
-
                   <div id="timeline">
 
                   </div>
 
-                  <md-tabs md-dynamic-height md-border-bottom style="position:absolute; top: 320px; width: 88%; left: 38px;" id="timeline-detail">
+                  <md-tabs md-dynamic-height md-border-bottom style="position:absolute; top: 195px; width: 88%; left: 38px;" id="timeline-detail">
 
                     <md-tab label="devices status">
-                      <md-content style="height:{{checkinHeight-280}}px;">
+                      <md-content style="height:{{checkinHeight-250}}px;">
                       <div layout="column" style="margin:20px;">
                         <div layout="row" layout-align="space-around center">
                           <div layout="column" layout-align="start start" layout-fill>
@@ -109,7 +107,7 @@
                     </md-tab>
 
                     <md-tab label="raw data">
-                      <md-content style="height:{{checkinHeight-280}}px;">
+                      <md-content style="height:{{checkinHeight-250}}px;">
                         <pre pretty-json="device.currentGraphEntry"></pre>
                       </md-content>
                     </md-tab>
@@ -118,7 +116,7 @@
 
                 <div layout="row" style="height:{{checkinHeight}}px;" ng-show="device.logEntries.length && !timelineView" layout-align="center stretch" id="checkin-list">
 
-                  <md-content flex="35" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
+                  <md-content flex="40" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
                     <md-list layout-padding>
                       <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-show="(selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason) && (selectedCheckinType == 'show all' || selectedCheckinType == device.cameraStatus(entry))">
                         
@@ -205,12 +203,6 @@
 
                 </div>
 
-              </div>
-              <div style="margin:0px 20px 20px 12px">
-                <div layout="row" style="height: 55px;">
-                  <md-button flex="15" class="md-raised" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
-                  <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin || device.loadingMore" md-diameter="30"></md-progress-circular>
-                </div>
               </div>
             </md-tab>
             <!--<md-tab label="EVENTS">

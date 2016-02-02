@@ -133,7 +133,12 @@ angular
             else{
               $scope.device.noMoreLogs = false;
             }
-            $scope.checkinHeight = document.body.clientHeight - 550;
+            var height = document.body.clientHeight - 370;
+
+            if (height < 650) {
+              height = 650;
+            };
+            $scope.checkinHeight = height
             renderGraph();
           };
 
