@@ -477,10 +477,8 @@ textarea { height:auto;}
 .buttonBlue:hover { background: #357bd8; }
 
 
-.logEntries.active{
+.logEntries.active button{
   background-color: rgb(222, 222, 222) !important;
-  border: 0px;
-
 }
 
 .logEntries.active md-icon{
@@ -495,6 +493,15 @@ textarea { height:auto;}
   transition: background-color 0.15s ease;
 }
 
+.logEntries {
+  height: 70px !important;
+  min-height: 10px !important;
+}
+
+.logEntries button, .load-more-logs button{
+  height: 70px !important;
+  min-height: 10px !important;
+}
 
 #timeline.opened{
   height: auto;

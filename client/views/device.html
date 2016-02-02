@@ -83,7 +83,7 @@
                   <md-tabs md-dynamic-height md-border-bottom style="position:absolute; top: 320px; width: 88%; left: 38px;" id="timeline-detail">
 
                     <md-tab label="devices status">
-                      <md-content style="height:{{checkinHeight-250}}px;">
+                      <md-content style="height:{{checkinHeight-280}}px;">
                       <div layout="column" style="margin:20px;">
                         <div layout="row" layout-align="space-around center">
                           <div layout="column" layout-align="start start" layout-fill>
@@ -109,7 +109,7 @@
                     </md-tab>
 
                     <md-tab label="raw data">
-                      <md-content style="height:{{checkinHeight-250}}px;">
+                      <md-content style="height:{{checkinHeight-280}}px;">
                         <pre pretty-json="device.currentGraphEntry"></pre>
                       </md-content>
                     </md-tab>
@@ -154,7 +154,7 @@
                         <md-divider ng-if="!$last || !device.noMoreLogs"></md-divider>
                       </md-list-item>
 
-                      <md-list-item class="md-3-line" ng-click="loadMore(100)" ng-if="!device.noMoreLogs">
+                      <md-list-item class="md-3-line load-more-logs" ng-click="loadMore(100)" ng-if="!device.noMoreLogs">
                         <md-icon md-svg-icon='cached'></md-icon>
                         <div class="md-list-item-text" layout="column" style="padding: 5px 0;">
                           Load more...
