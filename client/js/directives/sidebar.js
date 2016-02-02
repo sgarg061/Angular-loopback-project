@@ -9,7 +9,7 @@ angular
         type: "=type",
         filterChangedFunction: "=filterChangedFunction",
         reportChangedFunction: "=reportChangedFunction",
-        numberofActivatedLicenses: "=numberofActivatedLicenses",
+        numberofAvailableLicenses: "=numberofAvailableLicenses",
         assignFiltersFunction: "=assignFiltersFunction",
         reports: "=reports",
         licensesAvailable: "=licensesAvailableFunction",
