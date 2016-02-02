@@ -308,14 +308,25 @@ angular
                       };
                       $scope.create = function() {
                         $scope.newCustomer['resellerId'] = reseller.id;
-                        Customer.create($scope.newCustomer)
-                        .$promise
-                        .then(function(customer) {
-                          getReseller();
-                        }, function (res) {
-                          toastr.error(res.data.error.message, 'Error');
-                        });
-                        $mdDialog.cancel();
+
+                        var iRecur = 0;
+                        for(var i = 0; i < reseller.customers.length; i++){ //check for duplicate name
+                          if(reseller.customers[i].name === $scope.newCustomer.name){
+                            iRecur++;
+                          }
+                        }
+                        if(iRecur > 0){
+                          toastr.info("Customer already exists (counts:" + iRecur + "); please enter a unique name.");}
+                        else{
+                          Customer.create($scope.newCustomer)
+                          .$promise
+                          .then(function(customer) {
+                            getReseller();
+                          }, function (res) {
+                            toastr.error(res.data.error.message, 'Error');
+                          });
+                          $mdDialog.cancel();
+                        }
                       };
                       $scope.cancel = function() {
                         $mdDialog.cancel();
