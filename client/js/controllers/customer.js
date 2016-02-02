@@ -40,22 +40,22 @@ angular
           var id = $scope.customer.id;
 
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateCustomer(id, {checkinInterval: newValue.checkinInterval});
+            updateCustomer(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
           
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.customerName !== oldValue.customerName) {
-            updateCustomer(id, {customerName: newValue.customerName});
+            updateCustomer(id, {customerName: newValue.customerName}, 'Check in interval has been updated');
           }
         }
       }, true);
     }
 
-    function updateCustomer(id, changedDictionary, version) {
+    function updateCustomer(id, changedDictionary, message) {
       Customer.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(customer) {toastr.info('software version has been successfully updated');}, 
+        .$promise.then(function(customer) {toastr.info(' ', message);}, 
           function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
@@ -63,7 +63,7 @@ angular
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.customer.id;
       softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
-       updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId});
+       updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
       }, function(result){getCustomer();});
     }
 

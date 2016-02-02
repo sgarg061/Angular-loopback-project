@@ -28,16 +28,16 @@ angular
         if (newValue) {
           var id = $scope.reseller.id;
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateReseller(id, {eventServerUrl: newValue.eventServerUrl});
+            updateReseller(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
-            updateReseller(id, {imageServerUrl: newValue.imageServerUrl});
+            updateReseller(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateReseller(id, {checkinInterval: newValue.checkinInterval});
+            updateReseller(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
           
         }
@@ -46,13 +46,13 @@ angular
     $scope.updateVersion = function (newValueSoftwareVersionId) {
       var id = $scope.reseller.id;
       softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
-       updateReseller(id, {softwareVersionId: newValueSoftwareVersionId});
+       updateReseller(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
       }, function(result){getReseller();});
     }
     
-    function updateReseller(id, changedDictionary, version) {
+    function updateReseller(id, changedDictionary, message) {
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(reseller) {toastr.info('Software version has been successfully updated');}, 
+        .$promise.then(function(reseller) {toastr.info(' ' + message);}, 
           function (res) {
         toastr.error(res.data.error.message, 'Error');
       });

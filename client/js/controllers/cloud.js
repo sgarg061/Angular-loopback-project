@@ -28,19 +28,19 @@ angular
           var id = $scope.cloud.id;
         
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateCloud(id, {eventServerUrl: newValue.eventServerUrl});
+            updateCloud(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
-            updateCloud(id, {imageServerUrl: newValue.imageServerUrl});
+            updateCloud(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.updateUrl !== oldValue.updateUrl) {
-            updateCloud(id, {updateUrl: newValue.updateUrl});
+            updateCloud(id, {updateUrl: newValue.updateUrl}, 'URL has been updated');
           }
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateCloud(id, {checkinInterval: newValue.checkinInterval});
+            updateCloud(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
       }
 
@@ -48,16 +48,17 @@ angular
       }, true);
     }
     $scope.updateVersion = function (newValueSoftwareVersionId) {
+      
       var id = $scope.cloud.id;
       softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
-       updateCloud(id, {softwareVersionId: newValueSoftwareVersionId});
+       updateCloud(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
       }, function(result){getCloud();});
     }
 
 
-    function updateCloud(id, changedDictionary) {
+    function updateCloud(id, changedDictionary, message) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(cloud) {toastr.info('Software version has been successfully updated');}, 
+        .$promise.then(function(cloud) {toastr.info(' ' + message);}, 
           function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
