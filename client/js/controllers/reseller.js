@@ -43,10 +43,10 @@ angular
         }
       }, true);
     }
-    $scope.updateVersion = function (newValueSoftwareVersionId) {
+    $scope.updateVersion = function (defaultValue, newValueSoftwareVersionId) {
       var id = $scope.reseller.id;
-      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
-       updateReseller(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
+      softwareService.dialog(id,defaultValue, newValueSoftwareVersionId).then(function(result) {
+      updateReseller(id, {softwareVersionId: defaultValue}, 'Software version has been updated');
       }, function(result){getReseller();});
     }
     
@@ -205,6 +205,7 @@ angular
             return testVersion.id === $scope.cloud.softwareVersionId;
           }
           $scope.defaultSoftwareVersion = $scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
+           
         })
     }
 

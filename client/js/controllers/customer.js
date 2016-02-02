@@ -60,9 +60,9 @@ angular
           toastr.error(res.data.error.message, 'Error');
         });
     }
-    $scope.updateVersion = function (newValueSoftwareVersionId) {
+    $scope.updateVersion = function (defaultValue, newValueSoftwareVersionId) {
       var id = $scope.customer.id;
-      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
+      softwareService.dialog(id,defaultValue, newValueSoftwareVersionId).then(function(result) {
        updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
       }, function(result){getCustomer();});
     }
