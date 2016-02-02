@@ -34,8 +34,6 @@ module.exports = function (Auth) {
     Auth.disableRemoteMethod('createChangeStream', true);
 
     Auth.validate = function (token, cb) {
-        logger.debug('Validating token: ' + token);
-        logger.debug('validation request has come from solink. validating...');
         tokenValidator.validateToken(token, cb);
     };
 

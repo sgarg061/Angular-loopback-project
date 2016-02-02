@@ -7,9 +7,9 @@ var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
 
 
-module.exports = function(POSFilter) {
+module.exports = function(SearchFilter) {
     'use strict';
-	POSFilter.observe('before save', function addId(ctx, next) {
+	SearchFilter.observe('before save', function addId(ctx, next) {
 		if (ctx.instance && !ctx.instance.id) {
 			ctx.instance.id = uuid.v1();
 		}
@@ -21,10 +21,10 @@ module.exports = function(POSFilter) {
 	});
 
 
-    POSFilter.observe('access', function limitToTenant(ctx, next) {
+    SearchFilter.observe('access', function limitToTenant(ctx, next) {
         var context = loopback.getCurrentContext();
-        var Customer = POSFilter.app.models.Customer;
-        var Reseller = POSFilter.app.models.Reseller;
+        var Customer = SearchFilter.app.models.Customer;
+        var Reseller = SearchFilter.app.models.Reseller;
 
         if (context && context.get('jwt')) {
             var resellerId = context.get('jwt').resellerId;
@@ -36,7 +36,7 @@ module.exports = function(POSFilter) {
                 next();
             }
             else if (cloudId){
-                cloudPermissions(POSFilter, ctx, cloudId, next);        	
+                cloudPermissions(SearchFilter, ctx, cloudId, next);        	
             }
 
             else if (resellerId){
@@ -123,9 +123,9 @@ module.exports = function(POSFilter) {
 
 
 
-    function cloudPermissions(POSFilter, ctx, cloudId, next) {
-        var Reseller = POSFilter.app.models.Reseller;
-        var Customer = POSFilter.app.models.Customer;
+    function cloudPermissions(SearchFilter, ctx, cloudId, next) {
+        var Reseller = SearchFilter.app.models.Reseller;
+        var Customer = SearchFilter.app.models.Customer;
         var ids = [cloudId];
 
         Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
@@ -172,4 +172,5 @@ module.exports = function(POSFilter) {
             }
         });
     }
+
 };

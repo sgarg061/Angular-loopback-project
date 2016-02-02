@@ -40,15 +40,23 @@
       "required": false,
       "length": 5000
     },
-    "onlineCameras":{
+    "onlineCameras": {
       "type": "number",
+<<<<<<< HEAD
       "required": false,
       "default": 0   
+=======
+      "required": false
+>>>>>>> 9a82a93fcb676ab4fdba78d9cdcde3dc66862fbf
     },
-    "totalCameras":{
+    "totalCameras": {
       "type": "number",
+<<<<<<< HEAD
       "required": false,
       "default": 0     
+=======
+      "required": false
+>>>>>>> 9a82a93fcb676ab4fdba78d9cdcde3dc66862fbf
     },
     "deviceModel": {
       "type": "string",
