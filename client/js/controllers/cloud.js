@@ -1,10 +1,7 @@
 angular
   .module('app')
-<<<<<<< .mine  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', '$mdDialog', 'toastr', 'userService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, $mdDialog, toastr, userService, softwareService) {
-=======  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService) {
->>>>>>> .theirs
+  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService) {
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
     $scope.totalResellers = 0;
@@ -54,7 +51,7 @@ angular
       var id = $scope.cloud.id;
       softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
        updateCloud(id, {softwareVersionId: newValueSoftwareVersionId});
-      }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
+      }, function(result){getCloud();});
     }
 
 
@@ -368,28 +365,5 @@ angular
     });
   }; 
 
-<<<<<<< .mine          $mdDialog.show(confirm).then(function() {
-            POSFilter.deleteById($scope.newFilter)
-              .$promise
-              .then(function(customer) {
-                getFilters();
-              }, function (res) {
-                toastr.error(res.data.error.message, 'Error');
-              });
-          });
-
-
-        };
-      },
-      templateUrl: 'views/filterForm.tmpl.html',
-      parent: angular.element(document.body),
-      targetEvent: event,
-      clickOutsideToClose:true
-      })
-      .then(function(result) {
-      }, function() {
-    }); 
-  };
-  
-=======>>>>>>> .theirs  }]);
+}]);
 

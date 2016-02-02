@@ -1,12 +1,8 @@
 angular
   .module('app')
-<<<<<<< HEAD
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService, softwareService) {
-=======
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService) {
->>>>>>> master
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -68,7 +64,7 @@ angular
       var id = $scope.customer.id;
       softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
        updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId});
-      }, function(result){$scope.customer.softwareVersionId = $scope.currentSoftwareVersion;});
+      }, function(result){getCustomer();});
     }
 
     function getCustomer(cb) {

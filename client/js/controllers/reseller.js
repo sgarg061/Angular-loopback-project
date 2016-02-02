@@ -1,12 +1,8 @@
 angular
   .module('app')
-<<<<<<< HEAD
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SoftwareVersion, $mdDialog, toastr, userService, softwareService) {
-=======
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService) {
->>>>>>> master
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+
 
     $scope.reseller = {};
 
@@ -51,7 +47,7 @@ angular
       var id = $scope.reseller.id;
       softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
        updateReseller(id, {softwareVersionId: newValueSoftwareVersionId});
-      }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
+      }, function(result){getReseller();});
     }
     
     function updateReseller(id, changedDictionary, version) {
