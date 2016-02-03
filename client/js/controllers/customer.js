@@ -60,10 +60,10 @@ angular
           toastr.error(res.data.error.message, 'Error');
         });
     }
-    $scope.updateVersion = function (defaultValue, newValueSoftwareVersionId) {
+    $scope.updateVersion = function (softwareVersion, defaultSoftwareVersionId) {
       var id = $scope.customer.id;
-      softwareService.dialog(id,defaultValue, newValueSoftwareVersionId).then(function(result) {
-       updateCustomer(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
+      softwareService.dialog(id,softwareVersion).then(function(result) {
+        updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated'); 
       }, function(result){getCustomer();});
     }
 
@@ -561,7 +561,7 @@ angular
             return (testVersion.id===$scope.reseller.softwareVersionId || 
                     testVersion.id===$scope.cloud.softwareVersionId);
         }
-        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
+        $scope.defaultSoftwareVersion=null; //filtering versions for one that matches the most immediate parent version for default
       })
   }
 

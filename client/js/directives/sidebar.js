@@ -52,8 +52,8 @@ angular
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
         }
-        scope.updateVersion = function(defaultValue, model) {
-          scope.updateVersionFunction(defaultValue, model);
+        scope.updateVersion = function(model) {
+          scope.updateVersionFunction(model);
         }
         scope.reportChanged = function(filter) {
           scope.reportChangedFunction(filter);
