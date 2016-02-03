@@ -12,8 +12,9 @@ angular
     'ngPrettyJson',
     'uiGmapgoogle-maps',
     'customUserService',
-    'filterService',
-    'angular-momentjs'
+    'angular-momentjs',
+    'd3',
+    'filterService'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',
     function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider, uiGmapGoogleMapApiProvider) {
@@ -38,7 +39,12 @@ angular
                     .icon("right_arrow", "./assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24)
                     .icon("edit", "./assets/svg/ic_border_color_black_24px.svg", 24)
                     .icon("info", "./assets/svg/ic_info_outline_black_24px.svg", 24)
-                    .icon("show", "./assets/svg/ic_pageview_black_24px.svg", 24);
+                    .icon("show", "./assets/svg/ic_pageview_black_24px.svg", 24)
+                    .icon("timeline", "./assets/svg/ic_timeline_black_24px.svg", 24)
+                    .icon("cached", "./assets/svg/ic_cached_black_24px.svg", 24)
+                    .icon("list", "./assets/svg/ic_view_list_black_24px.svg", 24);
+
+
 
 
       $locationProvider.html5Mode(true);
