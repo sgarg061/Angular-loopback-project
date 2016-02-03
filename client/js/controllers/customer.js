@@ -96,11 +96,9 @@ angular
         .$promise
         .then(function(customers) {
           $scope.customer = customers[0];
-          $scope.customers    = [].concat(customers);          
 
-
-          $scope.reseller = customers[0].reseller;
           $scope.cloud = customers[0].reseller.cloud;
+          $scope.reseller = customers[0].reseller;
 
           $scope.devices = customers[0].devices;
 
