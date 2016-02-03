@@ -255,23 +255,6 @@ md-toolbar h1 {
 }
 
 
-/* Sidenav area */
-
-md-list .md-button {
-  color: inherit;
-  font-weight: 500;
-  text-align: left;
-  width: 100%;
-}
-md-list .md-button.selected {
-  color: #03a9f4;
-}
-
-md-sidenav  md-list {
-  padding: 0px 0px 0px 0px;
-}
-
-
 /* Content */
 
 .view-toggle{
@@ -459,29 +442,6 @@ input {
 input:focus { outline: none; }
 
 textarea { height:auto;}
-/* Label */
-
-label {
-  color: #999; 
-  /*font-size: 14px;*/
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 20px;
- /*top: 10px;/*Angular Update: Moves label to above input field*/
-  transition: all 0.2s ease;
-}
-
-
-/* active */
-
-input:focus ~ label, input.used ~ label {
-  top: -20px;
-  transform: scale(.75); left: -2px;
-  /* font-size: 14px; */
-  color: #4a89dc;
-}
-
 
 /* Button */
 
@@ -517,12 +477,129 @@ input:focus ~ label, input.used ~ label {
 .buttonBlue:hover { background: #357bd8; }
 
 
-.logEntries.active{
+.logEntries.active button{
   background-color: rgb(222, 222, 222) !important;
-  border: 0px;
 }
-.logEntries:last-child{
-  border: 0px !important;
+
+.logEntries.active md-icon{
+  background-color: #8A8A8A;
+
+}
+
+
+.logEntries md-icon{
+  border: 1px solid #8A8A8A;
+  border-radius: 15px;
+  transition: background-color 0.15s ease;
+}
+
+.logEntries {
+  height: 70px !important;
+  min-height: 10px !important;
+}
+
+.logEntries button, .load-more-logs button{
+  height: 70px !important;
+  min-height: 10px !important;
+}
+
+#timeline.opened{
+  height: auto;
+}
+
+#detail-text {
+  position: absolute;
+  top: 325px;
+  width: 890px;
+  height: 200px;
+  left: 30px;
+  overflow-y: scroll;
+}
+
+#timeline-detail{
+  opacity: 0;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+}
+#timeline-detail.open{
+  opacity: 1;  
+}
+
+pre.pretty-json{
+  background-color: #f1f1f1;
+  outline: 0px;
+}
+
+
+#data-points .check-in-point-shadow {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#data-points .check-in-point {
+  opacity: 0;
+  cursor: pointer;
+}
+#data-points .check-in-point:hover {
+  opacity: 0.3;
+}
+
+
+.check-in-point-tooltip {
+  font-size: 0.8em;
+}
+
+.nav-button {
+  font-size: 0.8em;
+  fill: #888;
+  cursor: pointer
+}
+
+.nav-button:hover {
+  fill: #333;
+}
+
+.checkin-label{
+  width: 80px;
+  text-align: center;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-size: 12px !important;
+  background-color: white;
+}
+
+.checkin-camera-numbers{
+  margin-right: 8px;
+  background-color: gray;
+  color: white;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 12px !important;
+}
+/*
+.logEntries{
+  min-height: 40px;
+  height: 60px;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s;
+}
+
+.logEntries.ng-hide {
+  opacity: 0;
+  padding: 0;
+  min-height: 0px;
+  height: 0px;
+}
+*/
+
+md-input-container .md-input.scripted{
+  font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.117647);
+  line-height: 18px;
+
+}
+
+md-input-container .md-input.scripted:disabled{
+  color: rgb(0, 0, 0) !important;
 }
 
 /* Dialog */
