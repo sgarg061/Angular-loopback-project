@@ -81,8 +81,8 @@ angular
         .then(function(clouds) {
           $scope.cloud = clouds[0];
           $scope.cloudId = clouds[0].id;
-          $scope.cloud.turnServerUrl = clouds[0].turnServerUrl;
-          $scope.cloud.stunServerUrl = clouds[0].stunServerUrl;
+          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
+          $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
           $scope.children = clouds[0].resellers;
 
           watchForChanges();
