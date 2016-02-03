@@ -12,8 +12,8 @@ angular
     'ngPrettyJson',
     'uiGmapgoogle-maps',
     'customUserService',
-    'dialogBox',
     'angular-momentjs',
+    'dialogBox',
     'd3',
     'filterService'
 
