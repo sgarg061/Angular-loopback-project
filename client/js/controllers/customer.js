@@ -47,7 +47,7 @@ angular
             updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.customerName !== oldValue.customerName) {
-            updateCustomer(id, {customerName: newValue.customerName}, 'Check in interval has been updated');
+            updateCustomer(id, {customerName: newValue.customerName}, 'Customer name has been updated');
           }
         }
       }, true);
