@@ -317,22 +317,20 @@ angular
   };
 
   $scope.addServerUrl = function(cloud, serverUrl) {
-    var tempCloud = cloud;
-    var tempServerUrl = serverUrl;
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
-                      if(eval('tempCloud.' + tempServerUrl + '=== null'))
+                      if(eval('cloud.' + serverUrl + '=== null'))
                       {
-                        eval('tempCloud.' + tempServerUrl + '= new Array()'); 
-                        eval('tempCloud.' + tempServerUrl + '[0] = $scope.model.tempServerUrl');
+                        eval('cloud.' + serverUrl + '= new Array()'); 
+                        eval('cloud.' + serverUrl + '[0] = $scope.model.tempServerUrl');
                         $mdDialog.cancel();
                       }
                       else
                       {
-                        if(eval('tempCloud.' + tempServerUrl + '.indexOf($scope.model.tempServerUrl) === -1')) //check for duplicate entry
+                        if(eval('cloud.' + serverUrl + '.indexOf($scope.model.tempServerUrl) === -1')) //check for duplicate entry
                         {
-                           eval('tempCloud.' + tempServerUrl +' .push($scope.model.tempServerUrl)');
+                           eval('cloud.' + serverUrl +' .push($scope.model.tempServerUrl)');
                            $mdDialog.cancel();
                         }
                         else

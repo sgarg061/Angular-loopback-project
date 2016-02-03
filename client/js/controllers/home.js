@@ -161,8 +161,12 @@ angular
 
 
                       $scope.create = function() {
-                       $scope.newCloud.turnServerUrl = $scope.newCloud.turnServerUrl.split(',');
-                       $scope.newCloud.stunServerUrl = $scope.newCloud.stunServerUrl.split(',');
+                        if($scope.newCloud.turnServerUrl){
+                          $scope.newCloud.turnServerUrl = $scope.newCloud.turnServerUrl.split(',');
+                        }
+                        if($scope.newCloud.stunServerUrl){
+                          $scope.newCloud.stunServerUrl = $scope.newCloud.stunServerUrl.split(',');
+                        }
                        Cloud.create($scope.newCloud)
                         .$promise
                         .then(function(cloud) {
