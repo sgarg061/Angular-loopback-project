@@ -316,7 +316,7 @@ angular
                           }
                         }
                         if(iRecur > 0){
-                          toastr.info("Customer already exists (counts:" + iRecur + "); please enter a unique name.");}
+                          toastr.error("Customer already exists (counts:" + iRecur + "); please enter a unique name.");}
                         else{
                           Customer.create($scope.newCustomer)
                           .$promise

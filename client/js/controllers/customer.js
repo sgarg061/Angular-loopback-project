@@ -484,8 +484,6 @@ angular
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
           scope.renameCustomer = function() {
-              var iRecur = 0;
-              console.log("Boom 1");
               Customer
                 .find({
                   filter: {
@@ -507,7 +505,6 @@ angular
                       .then
                      (function(currentCustomer) 
                       {
-                        console.log("boom");
                         $scope.currentCustomer.name = scope.customerRename
                         toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
                         $scope.selectCustomer()
