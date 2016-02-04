@@ -2,6 +2,7 @@ angular
   .module('app')
   .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
     function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService) {
+
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
     $scope.totalResellers = 0;
@@ -22,13 +23,12 @@ angular
     
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
-      
       $scope.$watch("cloud", function(newValue, oldValue) {
         if (newValue) {
           var id = $scope.cloud.id;
-        
+          
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateCloud(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
+            updateCloud(id, {eventServerUrl: newValue.eventServerUrl},  'Event server URL has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
             updateCloud(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
@@ -42,28 +42,26 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateCloud(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
-      }
-
-
+          
+        }
       }, true);
     }
-    $scope.updateVersion = function (newValueSoftwareVersionId) {
-      
+    $scope.updateVersion = function (softwareVersion) {
       var id = $scope.cloud.id;
-      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
-       updateCloud(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
-      }, function(result){getCloud();});
+      softwareService.dialog(id,softwareVersion, '').then(function(result) {
+        updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+        $scope.currentSoftwareVersion = softwareVersion;
+      }, function(result){
+        $scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;
+      
+      });
     }
-
-
     function updateCloud(id, changedDictionary, message) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(cloud) {toastr.info(' ' + message);}, 
-          function (res) {
+        .$promise.then(function(cloud) {toastr.info('' + message);}, function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
     }
-
     function getCloud() {
       Cloud
         .find({
@@ -81,20 +79,16 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          if(String(_.isEmpty(clouds)) === 'false'){
-            $scope.cloud = clouds[0];
-            $scope.cloudId = clouds[0].id;
-            $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
+          $scope.cloud = clouds[0];
+          $scope.cloudId = clouds[0].id;
+          $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
 
-            $scope.children = clouds[0].resellers;
-          } else {
-            toastr.error('invalid arrray');
-          }
-
+          $scope.children = clouds[0].resellers;
 
           watchForChanges();
         });
     }
+
     function getClouds() {
       Cloud
         .find({
@@ -113,8 +107,6 @@ angular
           }
         });
     }
-    
-
 
     
     function getFilters(){
@@ -143,6 +135,7 @@ angular
           }
 
         })
+
     }
 
     
@@ -317,6 +310,7 @@ angular
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
   };
+
   $scope.canModifyImageServerUrl = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
@@ -366,5 +360,4 @@ angular
     });
   }; 
 
-}]);
-
+  }]);
