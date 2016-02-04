@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('map', function($state) {
+  .directive('map', ['$state', 'DeviceLogEntry', function($state, DeviceLogEntry) {
     return {
       restrict: 'E',
       templateUrl: '/views/map.html',
@@ -8,9 +8,58 @@ angular
         devices: '=devices'
       },
       link: function (scope, element, attrs) {
+        var smallMarkerRadius = 7.5;
+        var bigMarkerRadius = 10;
         scope.markers = [];
         scope.filteredMarkers = [];
         loadMarkers();
+        getUpdates(new Date());
+
+        var colourTransitionMapping = {
+          red: '#DE0808',
+          green: 'green',
+          yellow: '#F7CC05'
+        }; // yeah, this sucks.  not sure how to do this yet...
+
+        var attempts = 0;
+        function getUpdates(lastDate) {
+          console.log('querying...', lastDate);
+          var newLastDate = new Date();
+          DeviceLogEntry.find({
+            filter: {
+              where: {checkinTime: {gt: lastDate}},
+              fields: ['id', 'deviceId', 'onlineCameras', 'totalCameras']
+            }
+          })
+          .$promise
+          .then(function(checkins) {
+              if  (checkins.length > 0) {
+                checkins.forEach(function(c) {
+                  console.log('new checkin from ', c);
+                  pulse(c.deviceId);
+                });
+              }
+
+              setTimeout(function() {
+                getUpdates(newLastDate);
+              }, 5000);
+          });
+        }
+
+        function pulse(id) {
+          try {
+            var elem = d3.select('#marker-' + id);
+            var originalColour = colourTransitionMapping[elem.data()[0].status];
+            elem.transition().duration(500).style('fill', 'blue');
+            elem.selectAll('circle').transition().duration(500).attr('r', bigMarkerRadius);
+
+            setTimeout(function() {
+              elem.transition().duration(500).style('fill', originalColour);
+              elem.selectAll('circle').transition().duration(500).attr('r', smallMarkerRadius);
+            }, 1000);
+          } catch (err) {
+          }
+        }
 
         function loadMarkers() {
           if (scope.devices.length <= 0) {
@@ -18,7 +67,7 @@ angular
               loadMarkers();
             }, 100); // TODO: this is hacky.  how can we get a signal on change?
           } else {
-            var map = new google.maps.Map(d3.select("#map").node(), {
+            var map = new google.maps.Map(d3.select('#map').node(), {
               zoom: 8,
               center: new google.maps.LatLng(45, -73),
               mapTypeId: google.maps.MapTypeId.TERRAIN
@@ -35,46 +84,56 @@ angular
 
             // Add the container when the overlay is added to the map.
             overlay.onAdd = function() {
-              var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
-                  .attr("class", "locations");
+              var layer = d3.select(this.getPanes().overlayMouseTarget).append('div')
+                .attr('class', 'locations');
 
               // Draw each marker as a separate SVG element.
               overlay.draw = function() {
-                var projection = this.getProjection(),
-                    padding = 15;
+                var projection = this.getProjection(),padding = 15;
 
                 var markers = layer.selectAll("svg")
-                    .data(d3.entries(data))
-                    .each(transform) // update existing markers
-                  .enter().append("svg:svg")
-                    .each(transform)
+                  .data(d3.entries(data))
+                  .each(transform) // update existing markers
+                  .enter().append('svg:svg')
+                  .each(transform)
 
                 // Add a circle.
-                markers.append("svg:circle")
-                    .attr("r", 7.5)
-                    .attr("cx", padding)
-                    .attr("cy", padding)
-                    .style("cursor", "pointer")
-                    .on('mouseover', function(d) {
-                      d3.select(this).transition().duration(500).attr('r', 10);
-                    })
-                    .on('mouseout', function (d) {
-                      d3.select(this).transition().duration(500).attr('r', 7.5);
-                    })
-                    .on('click', function(d) {
-                      scope.selectDevice(d.value[2]);
-                    });
+                markers.append('svg:circle')
+                  .attr('r', 7.5)
+                  .attr('cx', padding)
+                  .attr('cy', padding)
+                  .style('cursor', 'pointer')
+                  .on('mouseover', function(d) {
+                    d3.select(this).transition().duration(500).attr('r', bigMarkerRadius);
+                  })
+                  .on('mouseout', function (d) {
+                    d3.select(this).transition().duration(500).attr('r', smallMarkerRadius);
+                  })
+                  .on('click', function(d) {
+                    scope.selectDevice(d);
+                  });
+
+                // Add a label.
+                /*markers.append("svg:text")
+                  .attr("x", padding + 7)
+                  .attr("y", padding + 10)
+                  .attr("dy", ".31em")
+                  .text(function(d) { return d.key; });*/
 
                 function transform(d) {
+                  var device = d.value[2];
                   var status = d.value[2].status;
+                  var id = d.value[2].id;
                   d = new google.maps.LatLng(d.value[1], d.value[0]);
                   d = projection.fromLatLngToDivPixel(d);
                   d.status = status;
 
                   return d3.select(this)
-                      .style("left", (d.x - padding) + "px")
-                      .style("top", (d.y - padding) + "px")
-                      .attr('class', 'marker-' + status);
+                      .style('left', (d.x - padding) + 'px')
+                      .style('top', (d.y - padding) + 'px')
+                      .attr('class', 'marker-' + status)
+                      .attr('id', 'marker-' + id)
+                      .datum(device);
                 }
               };
             };
@@ -131,4 +190,4 @@ angular
         }
       }
     }
-  });
+  }]);
