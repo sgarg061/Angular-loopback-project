@@ -26,7 +26,6 @@ angular
       $scope.$watch("reseller", function(newValue, oldValue) {
         if (newValue) {
           var id = $scope.reseller.id;
-          
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateReseller(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
@@ -45,15 +44,9 @@ angular
     }
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.reseller.id;
-      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
-        if (result === 'Default ' + $scope.defaultSoftwareVersion.name){
-          updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version'); 
-          
-        } else {
-          updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-          $scope.currentSoftwareVersion = softwareVersion;
-        } 
-      }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
+      softwareService.dialog(id,softwareVersion).then(function(result) {
+        updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated'); 
+      }, function(result){getReseller();});
     }
     
     function updateReseller(id, changedDictionary, message) {
@@ -63,6 +56,7 @@ angular
         toastr.error(res.data.error.message, 'Error');
       });
     }
+
     function getReseller(cb) {
       Reseller
         .find({
@@ -94,7 +88,6 @@ angular
             $scope.cloud = resellers[0].cloud;
             $scope.resellerId = resellers[0].id;
             $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
-
 
 
           getFilters();
@@ -136,7 +129,7 @@ angular
           function currentSoftwareVersion(testVersion){ //used in filter
             return testVersion.id === $scope.cloud.softwareVersionId;
           }
-          $scope.defaultSoftwareVersion = $scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
+          $scope.defaultSoftwareVersion = null; //filtering versions for one that matches the cloud version for default
            
         })
     }

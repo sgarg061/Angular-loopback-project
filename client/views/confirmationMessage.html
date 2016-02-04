@@ -1,25 +1,30 @@
 <md-dialog aria-label="Confirmation Message" >
-  <md-toolbar>
-    <div class="md-toolbar-tools">
-      <h2>Confirmation Message</h2>
-      <span flex></span>
-      <md-button class="md-icon-button" ng-click="close()">
-        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+   
+   <md-toolbar>
+       <div class="md-toolbar-tools">
+       <h2>Confirmation Message</h2>
+       <span flex></span>
+       <md-button class="md-icon-button" ng-click="close()">
+         <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
        </md-button>
-    </div>
-  </md-toolbar>
-  <md-dialog-content >
-    <div layout="column" layout-margin layout-padding class="dialog">
-      <p><b>Updating version will affect all devices under the hierarchy. Are you sure you want to continue?</b></p>
-      <p>If so, please type <b>"{{softwareVersion}}"</b></p>
-      <md-input-container>
-        <label>Software Version</label>
-        <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="message">
-      </md-input-container>
-    </div>
-  </md-dialog-content>
-  <div class="md-actions">
-   <md-button ng-click="close()" class="md-primary">Cancel</md-button>
-   <md-button ng-disabled= "message != softwareVersion"  ng-click="updateVersion()" class="md-primary">update</md-button>
-  </div>
-</md-dialog>
+     </div>
+   </md-toolbar>
+ 
+   <md-dialog-content>
+     <p><b>Updating version will affect all devices under the hierarchy. Are you sure you want to continue?</b></p>
+     <p>If so, please type <b>"{{softwareVersion}}"</b></p>
+     
+     <var></var>
+     <md-input-container>
+         <label>Software Version</label>
+         <input type="text" class="form-control focus" name="name" autocomplete="off" required ng-model="message">
+       </md-input-container>
+   </md-dialog-content>
+   <div class="md-actions">
+     <md-button ng-click="close()" class="md-primary">Cancel</md-button>
+     <md-button ng-disabled= "message != softwareVersion"  ng-click="updateVersion()" class="md-primary">update
+   </md-input-container>
+   </md-button>
+ 
+   </div>
+ </md-dialog>

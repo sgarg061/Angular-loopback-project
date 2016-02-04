@@ -3,7 +3,7 @@
     .factory('softwareService', function ($mdDialog, toastr, SoftwareVersion, Cloud) {
         return {
 
-          dialog : function (id, newValueSoftwareVersionId, softwareVersionName){
+          dialog : function (id, newValueSoftwareVersionId){
             return ($mdDialog.show({
               controller: function (scope, $mdDialog){
                 scope.message = '';
@@ -12,14 +12,13 @@
                 .$promise
                 .then(function(softwareVersion) {
                   if(String(_.isEmpty(softwareVersion)) === 'true'){
-                    scope.softwareVersion = 'Default ' + softwareVersionName;
+                    scope.softwareVersion = 'Default software version';
                   } else if(String(_.isEmpty(softwareVersion)) === 'false'){
                     scope.softwareVersion = softwareVersion[0].name;
-                    softwareVersionName = softwareVersion[0].name;
-                  } else {toastr.error('invalid array');}
+                  } else {toastr.error('invalid arrayd');}
                 });
                 scope.updateVersion = function() {
-                  $mdDialog.hide(scope.softwareVersion); 
+                 $mdDialog.hide(); 
                 }; 
                 scope.close = function() {
                   toastr.info('Version not updated since you cancelled')
@@ -30,6 +29,7 @@
               templateUrl: 'views/confirmationMessage.html',
             }));
           },
+          
         };
     });
 })();
