@@ -65,7 +65,7 @@
               <td>
                <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.status=='green'"></md-icon>
                  <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.status=='red'"></md-icon>
-                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.status=='yellow'"></md-icon> 
+                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.status=='yellow'"></md-icon>
   <!--              <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.statusIconColor=='green'"></md-icon>
                 <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.statusIconColor=='red'"></md-icon>
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.statusIconColor=='yellow'"></md-icon> -->
@@ -76,20 +76,7 @@
         </md-tab>
 
         <md-tab label="MAP">
-          <md-content style="height:600px;">
-
-            <ui-gmap-google-map center='map.center' zoom='map.zoom'>
-              <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" click="onMarkerClicked" options="'options'" events="map.markers2Events" fit="true">
-                <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
-                  <div>
-                      <b ng-non-bindable >{{ customerName }}</b><br>
-                      <br>
-                      <a ng-click="model.selectDevice(model.deviceId)" style="text-decoration:underline;"><span ng-non-bindable>{{ deviceName }}</span></a>
-                  </div>
-                </ui-gmap-windows>
-              </ui-gmap-markers>
-            </ui-gmap-google-map>
-          </md-content>
+          <map devices="allDevices"></map>
         </md-tab>
       </md-tabs>
     </div>
