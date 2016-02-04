@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', '$localStorage',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, $localStorage) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', 'toastr', '$localStorage', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, toastr, $localStorage, softwareService) {
 
     $scope.customer = {};
 
@@ -53,9 +53,6 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateDevice(id, {checkinInterval: newValue.checkinInterval});
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateDevice(id, {softwareVersionId: newValue.softwareVersionId});
-          }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateDevice(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
@@ -81,10 +78,21 @@ angular
       }, true);
 
     }
+    $scope.updateVersion = function (softwareVersion) {
+      var id = $scope.device.id;
+      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
+        if (result === 'Default ' + $scope.defaultSoftwareVersion.name){
+          updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version'); 
+        } else {
+          updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
+        } 
+      }, function(result){$scope.device.softwareVersionId = $scope.currentSoftwareVersion;});
+    }
 
-    function updateDevice(id, changedDictionary) {
+    function updateDevice(id, changedDictionary, message) {
       Device.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(device) {}, function (res) {
+        .$promise.then(function(device) {toastr.info(' ' +  message);}, function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
     }
@@ -119,7 +127,7 @@ angular
         .$promise
         .then(function(devices) {
           $scope.device = devices[0];
-
+          $scope.currentSoftwareVersion = devices[0].softwareVersionId;
           $scope.device.loadingMore = false;
           $scope.device.logDataLimit = $scope.logDataLimit;
 

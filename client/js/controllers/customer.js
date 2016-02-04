@@ -3,7 +3,6 @@ angular
   .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
     function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
 
-
     $scope.clouds = [];
     $scope.resellers = [];
     $scope.customers = [];
@@ -39,17 +38,29 @@ angular
           var id = $scope.customer.id;
 
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateCustomer(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
+            updateCustomer(id, {checkinInterval: newValue.checkinInterval});
           }
           
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
+            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
           }
           if (newValue.customerName !== oldValue.customerName) {
-            updateCustomer(id, {customerName: newValue.customerName}, 'Customer name has been updated');
+            updateCustomer(id, {customerName: newValue.customerName});
           }
         }
       }, true);
+    }
+    $scope.updateVersion = function (softwareVersion) {
+      var id = $scope.customer.id;
+      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
+        if (result === 'Default ' + $scope.defaultSoftwareVersion.name){
+          updateCustomer(id, {softwareVersionId: null}, 'Software version has been updated to default version'); 
+          
+        } else {
+          updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
+        } 
+      }, function(result){$scope.customer.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
     function updateCustomer(id, changedDictionary, message) {
@@ -58,12 +69,6 @@ angular
           function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
-    }
-    $scope.updateVersion = function (softwareVersion, defaultSoftwareVersionId) {
-      var id = $scope.customer.id;
-      softwareService.dialog(id,softwareVersion).then(function(result) {
-        updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated'); 
-      }, function(result){getCustomer();});
     }
 
     function getCustomer(cb) {
@@ -199,7 +204,7 @@ angular
           }
         });
     }
-    
+
     function getFilters(){
       POSFilter
         .find({
@@ -548,7 +553,7 @@ angular
             return (testVersion.id===$scope.reseller.softwareVersionId || 
                     testVersion.id===$scope.cloud.softwareVersionId);
         }
-        $scope.defaultSoftwareVersion=null; //filtering versions for one that matches the most immediate parent version for default
+        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
       })
   }
 
