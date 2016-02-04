@@ -477,32 +477,25 @@ angular
                 })
                 .$promise
                 .then(function(customer){ //if the customer already exists
-                  if(customer && customer.length > 0)
-                    {
+                  if(customer && customer.length > 0) {
                       toastr.error("Customer already exists; please enter a unique name.");
-                    }
-                  else
-                    {
+                  } else {
                       Customer.prototype$updateAttributes({id: $scope.currentCustomer.id}, {
                         name: scope.customerRename
                       })
                       .$promise
                       .then
-                     (function(currentCustomer) 
-                      {
+                     (function(currentCustomer) {
                         $scope.currentCustomer.name = scope.customerRename
                         toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
                         $scope.selectCustomer()
                         $mdDialog.cancel();
-
-                      }, 
-                      function (res) 
-                      {
+                      }, function (res) {
                         toastr.error('Error');
                         console.log(res.data.error.message);
                       }
                      );
-                    }
+                  }
                 }
                 );
           };
