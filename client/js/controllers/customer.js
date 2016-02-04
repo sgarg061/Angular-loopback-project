@@ -468,7 +468,6 @@ angular
     $scope.currentCustomer = customer;
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
-<<<<<<< HEAD
           scope.renameCustomer = function() {
               Customer
                 .find({
