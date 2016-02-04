@@ -10,6 +10,7 @@ angular
       link: function (scope, element, attrs) {
         var smallMarkerRadius = 7.5;
         var bigMarkerRadius = 10;
+        var readyToRefit = true;
 
         scope.showGreenDevices = true;
         scope.showYellowDevices = true;
@@ -103,16 +104,14 @@ angular
             };
 
             scope.overlay.draw = function() {
-              console.log('drawing');
               var data = convertDevicesToMarkers(scope.filteredDevices);
-            var bounds = new google.maps.LatLngBounds();
+              var bounds = new google.maps.LatLngBounds();
 
-            console.log('hmm', Object.keys(data).length);
 
-            Object.keys(data).forEach(function(d) {
-              var datapoint = data[d];
-              bounds.extend(new google.maps.LatLng(datapoint[1], datapoint[0]));
-            });
+              Object.keys(data).forEach(function(d) {
+                var datapoint = data[d];
+                bounds.extend(new google.maps.LatLng(datapoint[1], datapoint[0]));
+              });
               var projection = this.getProjection(), padding = 15;
 
               var markers = scope.layer.selectAll("svg")
@@ -160,7 +159,10 @@ angular
                   .datum(device);
               }
 
-              scope.map.fitBounds(bounds);
+              if (readyToRefit) {
+                scope.map.fitBounds(bounds);
+                readyToRefit = false;
+              }
             };
 
             // Bind our overlay to the map…
@@ -193,7 +195,6 @@ angular
         function watchForChanges() {
           scope.$watch('searchQuery', function (newValue, oldValue) {
             filterDevices();
-            //loadMarkers();
           }, true);
         }
 
@@ -229,6 +230,7 @@ angular
 
           scope.filteredDevices = newFilteredDevices;
           scope.overlay.map_changed();
+          readyToRefit = true;
         }
 
         function preprocessDevices() {
