@@ -643,6 +643,27 @@ i{
   color: #E65100;
 };*/
 
+/* maps */
+
+.device-filter {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.device-filter:focus {
+  outline: none;
+}
+
+.device-count {
+  display: inline-block;
+}
+
+.map-search input {
+  display: inline-block;
+  width: 50%;
+  float: right;
+  background: none;
+}
 
 #map {
   width: 100%;
