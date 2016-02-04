@@ -11,13 +11,15 @@ angular
     $scope.cloudId = null;
     $scope.cloud = null;
 
+    $scope.allDevices = [];
+
     $scope.children = [];
     $scope.filters = [];
     $scope.reports = [];
 
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
-    
+
     $scope.cascadedReports = [];
     $scope.ownedReports = [];
     
@@ -26,7 +28,7 @@ angular
       $scope.$watch("cloud", function(newValue, oldValue) {
         if (newValue) {
           var id = $scope.cloud.id;
-          
+
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateCloud(id, {eventServerUrl: newValue.eventServerUrl});
           }
@@ -66,7 +68,23 @@ angular
               scope: {
                 order: 'name ASC',
                 limit: $scope.currentResellerPage,
-                skip: $scope.currentResellerPage * $scope.resellersPerPage
+                skip: $scope.currentResellerPage * $scope.resellersPerPage,
+                include: {
+                  relation: 'customers',
+                  scope: {
+                    include: {
+                      relation: 'devices',
+                      scope: {
+                        include: {
+                          relation: 'cameras',
+                          scope: {
+                            fields: ['id', 'name', 'status']
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }]
           }
@@ -77,6 +95,21 @@ angular
           $scope.cloudId = clouds[0].id;
 
           $scope.children = clouds[0].resellers;
+
+          // get all devices
+          $scope.cloud.resellers.forEach(function (reseller) {
+            reseller.customers.forEach(function (customer) {
+              customer.devices.forEach(function (device) {
+                device.customerName = customer.name;
+                device.checkinInterval = device.checkinInterval ||
+                   customer.checkinInterval ||
+                   reseller.checkinInterval ||
+                   $scope.cloud.checkinInterval;
+
+                $scope.allDevices.push(device);
+              });
+            });
+          });
 
           watchForChanges();
         });
@@ -92,8 +125,8 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          $scope.clouds    = [].concat(clouds);          
-          
+          $scope.clouds    = [].concat(clouds);
+
           // select the first by default
           if (!$stateParams.cloudId && clouds.length > 0) {
             $scope.selectCloud(clouds[0]);
@@ -101,7 +134,7 @@ angular
         });
     }
 
-    
+
     function getFilters(){
       POSFilter
         .find({

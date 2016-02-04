@@ -7,8 +7,6 @@ angular
 
     $scope.resellerId = null;
 
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
-    $scope.markers = [];
     $scope.filters = [];
     $scope.reports = [];
 
@@ -17,6 +15,7 @@ angular
     $scope.cascadedFilters = [];
     $scope.ownedFilters = [];
 
+    $scope.allDevices = [];
     $scope.cascadedReports = [];
     $scope.ownedReports = [];
     
@@ -78,8 +77,6 @@ angular
         })
         .$promise
         .then(function(resellers) {
-
-
           $scope.reseller = resellers[0];
 
           $scope.cloudId = resellers[0].cloud.id;
@@ -88,90 +85,23 @@ angular
 
           $scope.children = $scope.reseller.customers;
 
-
           getFilters();
           getReports();
 
           watchForChanges();
 
-          if ($scope.reseller.customers) {
-            for (var i=0; i<$scope.reseller.customers.length; i++) {
-              var customer = $scope.reseller.customers[i];
-              if (customer.devices) {
-                for (var j=0; j<customer.devices.length; j++) {
-                  var device = customer.devices[j];
-                  if (device.location) {
-                    // get device status
-                     /*
-                       Device status
- 
-                       green:
-                         - all cameras are green
-                         - device has checked in within expected interval
- 
-                       yellow:
-                         - one or more cameras are red
-                         - device has checked in within expected interval
-                       red:
-                         - device has not checked in within expected interval
-                     */
-                     var checkinIntervalInSeconds = device.checkinInterval ||
-                       customer.checkinInterval ||
-                       $scope.reseller.checkinInterval ||
-                       $scope.cloud.checkinInterval;
- 
-                     var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
-                     var nowInSeconds = new Date().getTime() / 1000;
- 
-                     var gracePeriodInSeconds = 30;
-                     var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
- 
-                     var allCamerasOnline = true;
-                     if (device.cameras) {
-                       for (var k = 0; k < device.cameras.length; k++) {
-                         var camera = device.cameras[k];
-                         if (camera.status != 'online') {
-                           allCamerasOnline = false;
-                           break;
-                         }
-                       }
-                     }
+          // get all devices
+          $scope.reseller.customers.forEach(function (customer) {
+            customer.devices.forEach(function (device) {
+              device.customerName = customer.name;
+              device.checkinInterval = device.checkinInterval ||
+                 customer.checkinInterval ||
+                 $scope.reseller.checkinInterval ||
+                 $scope.cloud.checkinInterval;
 
-                   // var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
-                   // device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
-
-                   if (hasCheckedInOnTime) {
-                       if (allCamerasOnline) {
-                         device.status = 'green';
-                       } else {
-                         device.status = 'yellow';
-                       }
-                     } else {
-                       device.status = 'red';
-                     }
-                     var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
-                    //var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';
-
-                    $scope.markers.push({
-                      id: device.id,
-                      icon: icon,
-                      latitude: device.location.lat,
-                      longitude: device.location.lng,
-                      showWindow: false,
-                      customerName: customer.name,
-                      deviceName: device.name,
-                      deviceId: device.id,
-                      options: {
-                        labelAnchor: "22 0",
-                        labelClass: "marker-labels"
-                      },
-                      selectDevice: $scope.selectDevice
-                    });
-                  }
-                }
-              }
-            }
-          }
+              $scope.allDevices.push(device);
+            });
+          });
           if (cb){
             cb();
           }
@@ -226,7 +156,7 @@ angular
               filter.selected = (filter.connectors.length > 0)
               filter.owner = (filter.creatorType == 'reseller');
               $scope.filters.push(filter);
-              
+
               filter.creatorType == 'reseller' ? $scope.ownedFilters.push(filter) :$scope.cascadedFilters.push(filter)
             };
 
@@ -293,10 +223,6 @@ angular
 
     $scope.selectCustomer = function(customer) {
       $state.go('customer', {customerId: (typeof customer === 'string') ? customer : customer.id}, {reload: true});
-    }
-
-    $scope.selectDevice = function(device) {
-      $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
     }
 
     $scope.openCustomerForm = function(event, reseller) {
@@ -403,11 +329,6 @@ angular
       });
     }
 
-    function onMarkerClicked(marker) {
-      marker.showWindow = true;
-      $scope.$apply();
-    }
-
     function goHome() {
       $state.go('home');
     }
@@ -438,7 +359,7 @@ angular
         parent: angular.element(document.body),
         targetEvent: event,
         clickOutsideToClose:true
-      });    
+      });
     }
 
     $scope.filterChanged = function (filter) {
@@ -507,7 +428,6 @@ angular
     }
 
 
-
     $scope.addFilter = function(connector) {
       filterService.addFilter('reseller', $stateParams.resellerId, function(){
         getFilters();
@@ -532,10 +452,7 @@ angular
         getReports();
       });
     }; 
-
-
     $scope.deleteReseller = deleteReseller;
-    $scope.onMarkerClicked = onMarkerClicked;
     $scope.goHome = goHome;
 
   }]);
