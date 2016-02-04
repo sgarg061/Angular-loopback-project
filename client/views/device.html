@@ -62,6 +62,7 @@
                     <md-button class="md-icon-button md-primary" aria-label="Timeline" ng-click="timelineView = true;" style="{{timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="timeline"></md-icon>
                     </md-button>
+                    <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
                   </div>
 
                 </div>
