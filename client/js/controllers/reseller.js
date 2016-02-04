@@ -84,11 +84,13 @@ angular
         .$promise
         .then(function(resellers) {
 
+          if(String(_.isEmpty(resellers)) === 'false'){
+            $scope.reseller = resellers[0];
+
             $scope.cloudId = resellers[0].cloud.id;
             $scope.cloud = resellers[0].cloud;
             $scope.resellerId = resellers[0].id;
             $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
-
 
           getFilters();
           getReports();
