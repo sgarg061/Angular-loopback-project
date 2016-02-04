@@ -5,8 +5,6 @@ var authService = require('../../server/services/authService');
 
 module.exports = function(Customer) {
 
-    Customer.validatesUniquenessOf('name');
-
     Customer.observe('before save', function addId(ctx, next) {
         customerAccessPermissions(ctx, function permissionsGranted(err) {
             if (err) {
