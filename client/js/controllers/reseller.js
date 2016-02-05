@@ -45,12 +45,14 @@ angular
       var id = $scope.reseller.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
         if (result === 'Default ' + $scope.defaultSoftwareVersion.name){
-          updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version'); 
+          updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+          $scope.currentSoftwareVersion = softwareVersion; 
           
         } else {
           updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
         } 
-        $scope.currentSoftwareVersion = softwareVersion;
+        
       }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
