@@ -85,8 +85,8 @@ angular
           updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version'); 
         } else {
           updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-          $scope.currentSoftwareVersion = softwareVersion;
         } 
+        $scope.currentSoftwareVersion = softwareVersion;
       }, function(result){$scope.device.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 

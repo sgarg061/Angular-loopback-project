@@ -49,8 +49,8 @@ angular
           
         } else {
           updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-          $scope.currentSoftwareVersion = softwareVersion;
         } 
+        $scope.currentSoftwareVersion = softwareVersion;
       }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
