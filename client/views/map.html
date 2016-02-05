@@ -1,27 +1,28 @@
 <div>
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+  <div class="map-search col-md-8">
+    <div class='device-filter' ng-class="{deselected: !showGreenDevices}" ng-click='toggle("green")'>
+      <md-icon ng-if="showGreenDevices" md-svg-icon='indicator_green' style="width:24px;margin:10px;"></md-icon>
+      <md-icon ng-if="!showGreenDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
+      <div class='device-count'>{{greenCount}}</div>
+    </div>
+
+    <div class='device-filter' ng-class="{deselected: !showYellowDevices}" ng-click='toggle("yellow")'>
+      <md-icon ng-if="showYellowDevices" md-svg-icon='indicator_yellow' style="width:24px;margin:10px;"></md-icon>
+      <md-icon ng-if="!showYellowDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
+      <div class='device-count'>{{yellowCount}}</div>
+    </div>
+
+    <div class='device-filter' ng-class="{deselected: !showRedDevices}" ng-click='toggle("red")'>
+      <md-icon ng-if="showRedDevices" md-svg-icon='indicator_red' style="width:24px;margin:10px;"></md-icon>
+      <md-icon ng-if="!showRedDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
+      <div class='device-count'>{{redCount}}</div>
+    </div>
+    <input type="text" placeholder="Search" ng-model="searchQuery" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
+  </div>
 
   <md-content style="height:600px;">
-    <div class="map-search col-md-8">
-      <div class='device-filter' ng-class="{deselected: !showGreenDevices}" ng-click='toggle("green")'>
-        <md-icon ng-if="showGreenDevices" md-svg-icon='indicator_green' style="width:24px;margin:10px;"></md-icon>
-        <md-icon ng-if="!showGreenDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
-        <div class='device-count'>{{greenCount}}</div>
-      </div>
-
-      <div class='device-filter' ng-class="{deselected: !showYellowDevices}" ng-click='toggle("yellow")'>
-        <md-icon ng-if="showYellowDevices" md-svg-icon='indicator_yellow' style="width:24px;margin:10px;"></md-icon>
-        <md-icon ng-if="!showYellowDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
-        <div class='device-count'>{{yellowCount}}</div>
-      </div>
-
-      <div class='device-filter' ng-class="{deselected: !showRedDevices}" ng-click='toggle("red")'>
-        <md-icon ng-if="showRedDevices" md-svg-icon='indicator_red' style="width:24px;margin:10px;"></md-icon>
-        <md-icon ng-if="!showRedDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
-        <div class='device-count'>{{redCount}}</div>
-      </div>
-      <input type="text" placeholder="Search" ng-model="searchQuery" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
-    </div>
     <div id="map"></div>
   </md-content>
+
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
 </div>
