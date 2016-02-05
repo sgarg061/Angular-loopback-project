@@ -10,14 +10,13 @@ angular
     'ui.bootstrap',
     'ngClipboard',
     'ngPrettyJson',
-    'uiGmapgoogle-maps',
     'customUserService',
     'angular-momentjs',
     'd3',
     'filterService'
   ])
-  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',
-    function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider, uiGmapGoogleMapApiProvider) {
+  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'blockUIConfig', 'ngClipProvider',
+    function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, blockUIConfig, toastr, ngClipProvider) {
       $momentProvider
         .asyncLoading(false)
         .scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
@@ -49,6 +48,13 @@ angular
 
 
       $locationProvider.html5Mode(true);
+
+      blockUIConfig.requestFilter = function(config) {
+        if(config.url.match(/^\/api\/DeviceLogEntries/)) {
+          return false; // don't block it checkin requests (used on map)
+        }
+        return true;
+      }
 
       $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function ($q, $location, $localStorage) {
         return {

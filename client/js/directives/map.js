@@ -82,7 +82,6 @@ angular
         }
 
         function loadMarkers() {
-          console.log('loading markers');
           if (scope.devices.length <= 0) {
             setTimeout(function() {
               loadMarkers();
@@ -93,7 +92,6 @@ angular
 
             // Add the container when the overlay is added to the map.
             scope.overlay.onRemove = function() {
-              console.log('huh!!');
               scope.layer.remove();
               console.log(scope.layer);
             };
