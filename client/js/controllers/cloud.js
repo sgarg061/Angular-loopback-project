@@ -49,12 +49,13 @@ angular
 
       }, true);
     }
-    $scope.updateVersion = function (newValueSoftwareVersionId) {
+    $scope.updateVersion = function (softwareVersion) {
       
       var id = $scope.cloud.id;
-      softwareService.dialog(id,newValueSoftwareVersionId).then(function(result) {
-       updateCloud(id, {softwareVersionId: newValueSoftwareVersionId}, 'Software version has been updated');
-      }, function(result){getCloud();});
+      softwareService.dialog(id,softwareVersion, '').then(function(result) {
+       updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+       $scope.currentSoftwareVersion = softwareVersion;
+      }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
 
