@@ -38,14 +38,14 @@ angular
           var id = $scope.customer.id;
 
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateCustomer(id, {checkinInterval: newValue.checkinInterval});
+            updateCustomer(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
           
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.customerName !== oldValue.customerName) {
-            updateCustomer(id, {customerName: newValue.customerName});
+            updateCustomer(id, {customerName: newValue.customerName}, 'Customer name has been updated');
           }
         }
       }, true);

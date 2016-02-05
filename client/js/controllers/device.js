@@ -51,16 +51,16 @@ angular
         if (newValue) {
           var id = $scope.device.id;
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateDevice(id, {checkinInterval: newValue.checkinInterval});
+            updateDevice(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateDevice(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateDevice(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
-            updateDevice(id, {imageServerUrl: newValue.imageServerUrl});
+            updateDevice(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateDevice(id, {eventServerUrl: newValue.eventServerUrl});
+            updateDevice(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.selectedCheckinReason !== oldValue.selectedCheckinReason) {
             console.log('checkin value selected', selectedCheckinReason);
