@@ -525,7 +525,7 @@ angular
       .find({
         filter: {
           fields: {id: true, name: true, url: true},
-          order: 'name ASC'
+          order: 'name DESC'
         }
       })
       .$promise
