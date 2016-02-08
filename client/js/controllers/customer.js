@@ -98,7 +98,7 @@ angular
         .$promise
         .then(function(customers) {
           $scope.customer = customers[0];
-          $scope.numberofAvailableLicenses = $scope.customer.licenses.filter(function(value,inded){return String(value.activated) === 'false';}).length;
+          $scope.numberofAvailableLicenses = $scope.customer.licenses.filter(function(value){return value.activated == false;}).length;
           $scope.reseller = customers[0].reseller;
           $scope.cloud = customers[0].reseller.cloud;
 
@@ -363,7 +363,7 @@ angular
     }
 
     function licensesAvailable(Licenses) {
-      $scope.licensesArray = Licenses.filter(function(value, index){return String(value.activated) === 'false';});
+      $scope.licensesArray = Licenses.filter(function(value, index){return value.activated == false;});
       toastr.info($scope.licensesArray.length + ' licenses copied');
       return $scope.licensesArray.map(function(elem) { return elem.key; }).join('\n');
     }
@@ -421,7 +421,7 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
-                  $scope.numberofAvailableLicenses += 1;
+                  $scope.numberofAvailableLicenses = $scope.customer.licenses.filter(function(value){return value.activated == false;}).length;
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
