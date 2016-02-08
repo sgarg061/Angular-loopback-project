@@ -12,6 +12,7 @@ var productionSettings = {
     auth0PrivateKey: fs.readFileSync('private/solink-test.priv', {encoding: 'utf8'}),
     createUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJoU0ZYZG9idUs0Z2lQSTZwR2pQeWVMQzVpVm5ldGdIQiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQ0NDkzMDUzOSwianRpIjoiYzEzZjQwZWRjYWNjODUyYzAxMDdkMDkzMDg4NzI5NjkifQ.W4xjNLtQhKeEHRogZ-F_5GvDgjETsdKAE7nGOYJ2uG8',
     updateUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJoU0ZYZG9idUs0Z2lQSTZwR2pQeWVMQzVpVm5ldGdIQiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSIsInVwZGF0ZSJdfX0sImlhdCI6MTQ0NDkzMDU3NSwianRpIjoiYjgxZGExMTJkNDgzZjNhMWJhZGI4MjBiNmQyMmMzYzkifQ.tg-lMy1slCEekgrRGJ1d1nrqDtTU4fjPRESNB8_S88w',
+    listUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJoU0ZYZG9idUs0Z2lQSTZwR2pQeWVMQzVpVm5ldGdIQiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NTQ5NTMzODgsImp0aSI6IjU5Y2MzZjdmMWEzZmVkNTJlY2MzYTAxMTQwYjhiM2I1In0.lynErlIqenjtQfiqSXLdItzWofEyNQMhtwRUraTi-JY',
 
     revokedTokensRedisLocation: 'redis-revoked.ppufgb.0001.usw2.cache.amazonaws.com',
     revokedTokensRedisPort: '6379',
@@ -40,6 +41,7 @@ var developmentSettings = {
     auth0PrivateKey: fs.readFileSync('private/solink-test.priv', {encoding: 'utf8'}),
     createUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJoU0ZYZG9idUs0Z2lQSTZwR2pQeWVMQzVpVm5ldGdIQiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSJdfX0sImlhdCI6MTQ0NDkzMDUzOSwianRpIjoiYzEzZjQwZWRjYWNjODUyYzAxMDdkMDkzMDg4NzI5NjkifQ.W4xjNLtQhKeEHRogZ-F_5GvDgjETsdKAE7nGOYJ2uG8',
     updateUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJoU0ZYZG9idUs0Z2lQSTZwR2pQeWVMQzVpVm5ldGdIQiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbImNyZWF0ZSIsInVwZGF0ZSJdfX0sImlhdCI6MTQ0NDkzMDU3NSwianRpIjoiYjgxZGExMTJkNDgzZjNhMWJhZGI4MjBiNmQyMmMzYzkifQ.tg-lMy1slCEekgrRGJ1d1nrqDtTU4fjPRESNB8_S88w',
+    listUserToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJoU0ZYZG9idUs0Z2lQSTZwR2pQeWVMQzVpVm5ldGdIQiIsInNjb3BlcyI6eyJ1c2VycyI6eyJhY3Rpb25zIjpbInJlYWQiXX19LCJpYXQiOjE0NTQ5NTMzODgsImp0aSI6IjU5Y2MzZjdmMWEzZmVkNTJlY2MzYTAxMTQwYjhiM2I1In0.lynErlIqenjtQfiqSXLdItzWofEyNQMhtwRUraTi-JY',
 
     privateKey: fs.readFileSync(path.join(__dirname, 'private/privatekey.pem')).toString(),
     certificate: fs.readFileSync(path.join(__dirname, 'private/certificate.pem')).toString(),

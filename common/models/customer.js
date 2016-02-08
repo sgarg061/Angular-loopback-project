@@ -44,6 +44,22 @@ module.exports = function(Customer) {
     returns: {arg: 'ownershipProperties', type: 'Object'}
   });
 
+  Customer.remoteMethod('listUsers', {
+    http: {verb: 'get', status: 200, errorStatus: 500},
+    accepts: {arg: 'id', type: 'string', required: true},
+    returns: {arg: 'users', type: 'Array'}
+  });
+
+  // this one should probably belong to a users model..
+  Customer.remoteMethod('updateUserMetadata', {
+    accepts: [
+      {arg: 'id', type: 'string'},
+      {arg: 'metadata', type: 'object'}
+    ],
+    http: {verb: 'put', status: 200, errorStatus: 500},
+    returns: {arg: 'response', type: 'object'}
+  });
+
   Customer.observe('access', function customerPermissions(ctx, next) {
     var context = loopback.getCurrentContext();
 
@@ -140,43 +156,43 @@ module.exports = function(Customer) {
     });
   };
 
-    Customer.getReseller = function(id, cb) {
-      var error;
-      var Reseller = Customer.app.models.Reseller;
+  Customer.getReseller = function(id, cb) {
+    var error;
+    var Reseller = Customer.app.models.Reseller;
 
-      Customer.find({where: {id: id}}, function (err, res) {
-        if (err) {
-          cb(new Error('Error while retrieving customer ownership'));
+    Customer.find({where: {id: id}}, function (err, res) {
+      if (err) {
+        cb(new Error('Error while retrieving customer ownership'));
+      } else {
+        if (res.length < 1) {
+          error = new Error('Unable to find customer ' + id);
+          error.statusCode = 404;
+          cb(error);
+        } else if (res.length > 1) {
+          error = new Error('Duplicate customers found with id ' + id);
+          error.statusCode = 422;
+          cb(error);
         } else {
-          if (res.length < 1) {
-            error = new Error('Unable to find customer ' + id);
-            error.statusCode = 404;
-            cb(error);
-          } else if (res.length > 1) {
-            error = new Error('Duplicate customers found with id ' + id);
-            error.statusCode = 422;
-            cb(error);
-          } else {
-            var resellerId = res[0].resellerId;
-            Reseller.find({where: {id: resellerId}}, function (err, res) {
-              if (err) {
-                logger.error(err);
-                cb(new Error('Error while retrieving reseller for customer ' + id));
-              } else if (res.length < 1) {
-                error = new Error('Unable to find reseller for customer ' + id);
-                error.statusCode = 404;
-                cb(error, -1);
-              } else if (res.length > 1) {
-                error = new Error('Duplicate resellers for customer ' + id);
-                error.statusCode = 422;
-                cb(error, -1);
-              } else {
-                cb(null, res);
-              }
-            });
-          }
+          var resellerId = res[0].resellerId;
+          Reseller.find({where: {id: resellerId}}, function (err, res) {
+            if (err) {
+              logger.error(err);
+              cb(new Error('Error while retrieving reseller for customer ' + id));
+            } else if (res.length < 1) {
+              error = new Error('Unable to find reseller for customer ' + id);
+              error.statusCode = 404;
+              cb(error, -1);
+            } else if (res.length > 1) {
+              error = new Error('Duplicate resellers for customer ' + id);
+              error.statusCode = 422;
+              cb(error, -1);
+            } else {
+              cb(null, res);
+            }
+          });
         }
-      });
+      }
+    });
   };
 
   Customer.getOwnership = function (id, cb) {
@@ -207,81 +223,118 @@ module.exports = function(Customer) {
       }
     });
   };
+
+  Customer.updateUserMetadata = function (id, metadata, cb) {
+    var error;
+
+    authService.updateMetadata(id, metadata, function (err, res) {
+      return cb(err, res);
+    });
+  };
+
+  Customer.listUsers = function (id, cb) {
+    var error;
+    Customer.find({where: {id: id}}, function (err, res) {
+      if (err) {
+        return cb(new Error('Error while retrieving users'));
+      }
+
+      if (res.length < 1) {
+        error = new Error('Unable to find customer ' + id);
+        error.statusCode = 404;
+        return cb(error);
+      }
+
+      if (res.length > 1) {
+        error = new Error('Duplicate customers found with id ' + id);
+        error.statusCode = 422;
+        return cb(error);
+      }
+
+      authService.listUsers('tenantId', id, function (err, res) {
+        if (err) {
+          logger.error(err);
+          cb(err, null);
+        }
+        cb(err, res);
+      });
+    });
+  };
 };
 
 function customerAccessPermissions(ctx, next) {
-    var error;
-    var context = loopback.getCurrentContext();
-    if (context && context.get('jwt')) {
-        var resellerId = context.get('jwt').resellerId;
-        var cloudId = context.get('jwt').cloudId;
-        var userType = context.get('jwt').userType;
+  var error;
+  var context = loopback.getCurrentContext();
+  if (context && context.get('jwt')) {
+    var resellerId = context.get('jwt').resellerId;
+    var cloudId = context.get('jwt').cloudId;
+    var userType = context.get('jwt').userType;
 
-        if (userType === 'solink') {
-            next();
-        } else if (resellerId) {
-            if (ctx.isNewInstance) {
-                ctx.instance.resellerId = resellerId;
+    if (userType === 'solink') {
+      next();
+    } else if (resellerId) {
+      if (ctx.isNewInstance) {
+        ctx.instance.resellerId = resellerId;
+        if (ctx.instance.id) {
+          ctx.instance.id = null;
+        }
+      } else {
+        // resellers cannot change reseller IDs
+        if (ctx.data.resellerId) {
+          delete ctx.data.resellerId;
+        }
+        if (ctx.data.id) {
+          delete ctx.data.id;
+        }
+      }
+      next();
+    } else if (cloudId) {
+      if (ctx.isNewInstance) {
+        // cloud users can only create customers for resellers under their own domain
+        var Reseller = ctx.Model.app.models.Reseller;
+        Reseller.find({where: {id: ctx.instance.resellerId}}, function (err, res) {
+          if (err) {
+            logger.error('Error validating that the cloud is customer is being attached to a valid reseller');
+            logger.error(err);
+            next(err);
+          } else {
+            if (res.length < 1) {
+              error = new Error('Reseller not found');
+              error.statusCode = 404;
+              next(error);
+            } else {
+              if (res[0].cloudId === cloudId) {
                 if (ctx.instance.id) {
-                    ctx.instance.id = null;
-                }
-            } else {
-                // resellers cannot change reseller IDs
-                if (ctx.data.resellerId) {
-                    delete ctx.data.resellerId;
-                }
-                if (ctx.data.id) {
-                    delete ctx.data.id;
-                }
-            }
-            next();
-        } else if (cloudId) {
-            if (ctx.isNewInstance) {
-                // cloud users can only create customers for resellers under their own domain
-                var Reseller = ctx.Model.app.models.Reseller;
-                Reseller.find({where: {id: ctx.instance.resellerId}}, function (err, res) {
-                    if (err) {
-                        logger.error('Error validating that the cloud is customer is being attached to a valid reseller');
-                        logger.error(err);
-                        next(err);
-                    } else {
-                        if (res.length < 1) {
-                            error = new Error('Reseller not found');
-                            error.statusCode = 404;
-                            next(error);
-                        } else {
-                            if (res[0].cloudId === cloudId) {
-                                if (ctx.instance.id) {
-                                    ctx.instance.id = null;
-                                }
-                                next();
-                            } else {
-                                error = new Error('Not authorized to attach this customer to this reseller');
-                                error.statusCode = 401;
-                                next(error);
-                            }
-                        }
-                    }
-                });
-            } else {
-                // cloud users cannot modify the reseller or customer id
-                if (ctx.data.resellerId) {
-                    delete ctx.data.resellerId;
-                }
-
-                if (ctx.data.id) {
-                    delete ctx.data.id;
+                  ctx.instance.id = null;
                 }
                 next();
+              } else {
+                error = new Error('Not authorized to attach this customer to this reseller');
+                error.statusCode = 401;
+                next(error);
+              }
             }
-        } else {
-            error = new Error('Unauthorized');
-            error.statusCode = 401;
-            next(error);
+          }
+        });
+      } else {
+        // cloud users cannot modify the reseller or customer id
+        if (ctx.data.resellerId) {
+          delete ctx.data.resellerId;
         }
-    } else {
+
+        if (ctx.data.id) {
+          delete ctx.data.id;
+        }
         next();
+      }
+    } else {
+      error = new Error('Unauthorized');
+      error.statusCode = 401;
+      next(error);
     }
+  } else {
+    next();
+  }
 }
 
 function createCustomerAdminUser(customer, next) {

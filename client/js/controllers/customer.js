@@ -16,7 +16,7 @@ angular
 
     $scope.cascadedReports = [];
     $scope.ownedReports = [];
-    
+
     $scope.cloud = null;
     $scope.reseller = null;
 
@@ -104,6 +104,10 @@ angular
 
           $scope.devices = customers[0].devices;
 
+          getUsers($scope.customer.id, function (users) {
+            $scope.users = users;
+            console.log('cool...', $scope.users);
+          });
           getFilters();
           getReports();
 
@@ -189,6 +193,21 @@ angular
         });
     }
 
+    function getUsers(id, cb) {
+      Customer.listUsers({
+        id: id
+      })
+        .$promise
+        .then(function(res) {
+          cb(res.users);
+        })
+        .catch(function (err) {
+          console.log('error listing users', err);
+          toastr.error('Unable to list users: ' + err.data.error.message);
+          cb([]);
+        });
+    }
+
     function getFilters(){
       POSFilter
         .find({
@@ -243,7 +262,7 @@ angular
           })
         })
     }
-    
+
     function getReports(){
       SearchFilter
         .find({
@@ -266,7 +285,7 @@ angular
           $scope.reports = [];
           $scope.ownedReports = [];
           $scope.cascadedReports = [];
-          
+
 
           connectors.forEach(function(filter, i){
             filter.filter = JSON.stringify(filter.filter);
@@ -280,21 +299,21 @@ angular
                 filter.selected = (filter.connectors.length >= 2);
 
                 if (filter.connectors[index].assigneeType == 'customer') {
-                  filter.selected = true;                  
+                  filter.selected = true;
                   $scope.reports.push(filter);
                   filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
                 }
                 else if (filter.connectors[index].assigneeType == 'reseller') {
-                  $scope.reports.push(filter);  
+                  $scope.reports.push(filter);
                   filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
                 }
               }
               else if(filter.creatorType == 'customer'){
-                $scope.reports.push(filter);      
-                  filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)          
+                $scope.reports.push(filter);
+                  filter.creatorType == 'customer' ? $scope.ownedReports.push(filter) : $scope.cascadedReports.push(filter)
               }
             };
-            
+
           })
         })
     }
@@ -534,7 +553,7 @@ angular
 
         //Getting the default software version name
         function currentSoftwareVersion(testVersion){ //used in filter
-            return (testVersion.id===$scope.reseller.softwareVersionId || 
+            return (testVersion.id===$scope.reseller.softwareVersionId ||
                     testVersion.id===$scope.cloud.softwareVersionId);
         }
         $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
@@ -713,7 +732,7 @@ angular
       getFilters();
     });
   };
-   
+
 
   $scope.addReport = function(connector) {
     filterService.addReport('customer', $stateParams.customerId, function(){
@@ -725,7 +744,7 @@ angular
     filterService.actionReport(filter, function(){
       getReports();
     });
-  }; 
+  };
 
   $scope.showLicense = showLicense;
   $scope.addLicense = addLicense;

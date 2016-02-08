@@ -23,7 +23,7 @@ html, body {
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
   -ms-flex-direction: column;
-  flex-direction: column;  
+  flex-direction: column;
   height: 100%;
 }
 
@@ -107,7 +107,7 @@ md-tab-item.md-tab.md-active{
 
 md-tabs,
 md-grid-list{
-  width: 100%;  
+  width: 100%;
 }
 
 /*md-tabs md-tabs-wrapper{
@@ -149,7 +149,7 @@ h2{
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
   -ms-flex-direction: column;
-  flex-direction: column;  
+  flex-direction: column;
   position: fixed;
   width: 305px;
   height: 100%;
@@ -209,8 +209,8 @@ h2{
 
 /* Breadcrumb */
 
-.breadcrumb { 
-  list-style: none; 
+.breadcrumb {
+  list-style: none;
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -224,18 +224,18 @@ h2{
   font-size: 1em;
 }
 
-.breadcrumb li { 
+.breadcrumb li {
   display: inline;
   list-style-type: none;
   padding-right: 10px;
 }
 .breadcrumb li a, .breadcrumb:visited li a, .breadcrumb:hover li a, .breadcrumb:active li a {
-  text-decoration: none; 
+  text-decoration: none;
   color: #ffffff;
 }
 
 .breadcrumb a, .breadcrumb:visited a, .breadcrumb:hover a, .breadcrumb:active a {
-  text-decoration: none; 
+  text-decoration: none;
   color: #ffffff;
 }
 
@@ -521,7 +521,7 @@ textarea { height:auto;}
   transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
 #timeline-detail.open{
-  opacity: 1;  
+  opacity: 1;
 }
 
 pre.pretty-json{
@@ -640,5 +640,61 @@ i{
   /*text-shadow: 2px 2px 2px #ccc;*/
 }
 /*.material-icons.add:hover{
-  color: #E65100; 
+  color: #E65100;
 };*/
+
+/* Assigning devices to users */
+md-content.autocomplete {
+  min-height: 250px;
+}
+
+md-content.autocomplete input {
+  min-width: 400px;
+}
+
+.md-item-text.compact {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.contact-item {
+  box-sizing: border-box;
+}
+
+.contact-item.selected {
+  opacity: 0.5;
+}
+
+.contact-item.selected h3 {
+  opacity: 0.5;
+}
+
+.contact-item .md-list-item-text h3 {
+  margin: 0 !important;
+  padding: 0;
+  line-height: 1.2em !important;
+}
+
+.contact-item .md-list-item-text h3, .chipsdemoContactChips .contact-item .md-list-item-text p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 960px) {
+  .contact-item {
+    float: left;
+    width: 25%;
+  }
+}
+
+md-contact-chips {
+  margin-bottom: 10px;
+}
+
+.chipsdemoContactChips .md-chips {
+  padding: 5px 0 8px; }
+
+.chipsdemoContactChips .fixedRows {
+  height: 250px;
+  overflow: hidden; }

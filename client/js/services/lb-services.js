@@ -4974,6 +4974,81 @@ module.factory(
           method: "POST"
         },
 
+        /**
+         * @ngdoc method
+         * @name lbServices.Customer#listUsers
+         * @methodOf lbServices.Customer
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `users` – `{Array=}` - 
+         */
+        "listUsers": {
+          url: urlBase + "/Customers/listUsers",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Customer#updateUserMetadata
+         * @methodOf lbServices.Customer
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `id` – `{string=}` - 
+         *
+         *  - `metadata` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `response` – `{object=}` - 
+         */
+        "updateUserMetadata": {
+          url: urlBase + "/Customers/updateUserMetadata",
+          method: "PUT"
+        },
+
         // INTERNAL. Use Reseller.customers.findById() instead.
         "::findById::Reseller::customers": {
           params: {
@@ -16872,18 +16947,6 @@ module
      */
     this.setUrlBase = function(url) {
       urlBase = url;
-    };
-
-    /**
-     * @ngdoc method
-     * @name lbServices.LoopBackResourceProvider#getUrlBase
-     * @methodOf lbServices.LoopBackResourceProvider
-     * @description
-     * Get the URL of the REST API server. The URL provided
-     * to the code generator (`lb-ng` or `grunt-loopback-sdk-angular`) is used.
-     */
-    this.getUrlBase = function() {
-      return urlBase;
     };
 
     this.$get = ['$resource', function($resource) {
