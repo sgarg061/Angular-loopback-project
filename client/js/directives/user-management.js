@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('userManagement', ['$state', 'Customer', function($state, Customer) {
+  .directive('userManagement', ['$state', 'Auth', function($state, Auth) {
     return {
       restrict: 'E',
       templateUrl: '/views/user-management.html',
@@ -63,7 +63,7 @@ angular
           console.log('updating', scope.selectedUser);
           console.log('with ', appMetadata);
           // update user metadata
-          Customer.updateUserMetadata({
+          Auth.updateUserMetadata({
             id: scope.selectedUser.user_id,
             metadata: appMetadata
           })

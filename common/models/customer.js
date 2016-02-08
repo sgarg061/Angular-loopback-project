@@ -50,16 +50,6 @@ module.exports = function(Customer) {
     returns: {arg: 'users', type: 'Array'}
   });
 
-  // this one should probably belong to a users model..
-  Customer.remoteMethod('updateUserMetadata', {
-    accepts: [
-      {arg: 'id', type: 'string'},
-      {arg: 'metadata', type: 'object'}
-    ],
-    http: {verb: 'put', status: 200, errorStatus: 500},
-    returns: {arg: 'response', type: 'object'}
-  });
-
   Customer.observe('access', function customerPermissions(ctx, next) {
     var context = loopback.getCurrentContext();
 
@@ -221,14 +211,6 @@ module.exports = function(Customer) {
           });
         }
       }
-    });
-  };
-
-  Customer.updateUserMetadata = function (id, metadata, cb) {
-    var error;
-
-    authService.updateMetadata(id, metadata, function (err, res) {
-      return cb(err, res);
     });
   };
 
