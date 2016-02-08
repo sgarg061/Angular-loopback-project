@@ -321,20 +321,14 @@ angular
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
-                      if(cloudServerUrl === null)
-                      { 
+                      if(cloudServerUrl === null) { 
                         cloudServerUrl = [$scope.model.tempServerUrl];
                         $mdDialog.cancel();
-                      }
-                      else
-                      {
-                        if(cloudServerUrl.indexOf($scope.model.tempServerUrl) === -1) //check for duplicate entry
-                        {
+                      } else {
+                        if(cloudServerUrl.indexOf($scope.model.tempServerUrl) === -1) { //check for duplicate entry
                           cloudServerUrl.push($scope.model.tempServerUrl);
                           $mdDialog.cancel();
-                        }
-                        else
-                        {
+                        } else {
                           toastr.error("Duplicate URL entry. Please enter a unique URL.");
                         }
                       }
@@ -355,10 +349,11 @@ angular
   };
 
   $scope.deleteServerUrl = function(cloud, serverUrl, deleteUrl) {
-      eval ('var deleteIndex = cloud.' + serverUrl + '.indexOf(deleteUrl)');
+      var cloudServerUrl = eval ('cloud.' + serverUrl)
+      var deleteIndex = cloudServerUrl.indexOf(deleteUrl);
 
       if(deleteIndex > -1){
-        eval('cloud.' + serverUrl + '.splice(deleteIndex, 1)');
+        cloudServerUrl.splice(deleteIndex, 1);
       }
   };
 
