@@ -484,8 +484,7 @@ angular
                         name: scope.customerRename
                       })
                       .$promise
-                      .then
-                     (function(currentCustomer) {
+                      .then(function(currentCustomer) {
                         $scope.currentCustomer.name = scope.customerRename
                         toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
                         $scope.selectCustomer()
