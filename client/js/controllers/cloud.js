@@ -317,27 +317,28 @@ angular
   };
 
   $scope.addServerUrl = function(cloud, serverUrl) {
+    var cloudServerUrl = eval('cloud.' + serverUrl);
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
-                      if(eval('cloud.' + serverUrl + '=== null'))
-                      {
-                        eval('cloud.' + serverUrl + '= new Array()'); 
-                        eval('cloud.' + serverUrl + '[0] = $scope.model.tempServerUrl');
+                      if(cloudServerUrl === null)
+                      { 
+                        cloudServerUrl = [$scope.model.tempServerUrl];
                         $mdDialog.cancel();
                       }
                       else
                       {
-                        if(eval('cloud.' + serverUrl + '.indexOf($scope.model.tempServerUrl) === -1')) //check for duplicate entry
+                        if(cloudServerUrl.indexOf($scope.model.tempServerUrl) === -1) //check for duplicate entry
                         {
-                           eval('cloud.' + serverUrl +' .push($scope.model.tempServerUrl)');
-                           $mdDialog.cancel();
+                          cloudServerUrl.push($scope.model.tempServerUrl);
+                          $mdDialog.cancel();
                         }
                         else
                         {
                           toastr.error("Duplicate URL entry. Please enter a unique URL.");
                         }
                       }
+                      eval('cloud.' + serverUrl + '= cloudServerUrl');
                   };
                   $scope.close = function() {
                       $mdDialog.cancel();
