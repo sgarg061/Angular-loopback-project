@@ -1,0 +1,25 @@
+<md-dialog aria-label="Add Server URL">
+  
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>Add Server URL</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+   <div layout="column" layout-margin layout-padding class="dialog">
+    <md-input-container class="form-group" name="input">
+        <label>New Server URL</label>
+        <input type="url" class="form-control focus" name="serverUrl" autocomplete="off" required ng-model="model.tempServerUrl" value="" >
+    </md-input-container>
+  </div>
+  </md-dialog-content>
+  <div class="md-actions">
+    <md-button ng-click="close()" class="md-primary">Cancel</md-button>
+    <md-button ng-click="create()" class="md-primary" ng-disabled="!model.tempServerUrl">Add</md-button>
+  </div>
+</md-dialog>
