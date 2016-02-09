@@ -67,7 +67,7 @@ angular
                 $location.path('/login');
                 break;
               case 500:
-              toastr.error(response.message, 'Error');
+                console.error(response);
                 break;
             }
             return $q.reject(response);

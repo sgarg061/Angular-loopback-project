@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('userManagement', ['$state', 'Auth', '$mdDialog', function($state, Auth, $mdDialog) {
+  .directive('userManagement', ['$state', 'Auth', '$mdDialog', 'toastr', function($state, Auth, $mdDialog, toastr) {
     return {
       restrict: 'E',
       templateUrl: '/views/user-management.html',
@@ -122,10 +122,19 @@ angular
             clickOutsideToClose: true,
             controller: function (scope, $mdDialog) {
               scope._setPassword = function () {
-                console.log('setting a password hurray', scope.userPassword);
-                console.log('hmm', user);
-                //console.log('bah?', selectedUser);
-                console.log('err', scope);
+                Auth.forceSetPassword({
+                  id: user.user_id,
+                  password: scope.userPassword
+                })
+                .$promise
+                .then(function (res) {
+                  toastr.success('Password successfully set');
+                  $mdDialog.cancel();
+                })
+                .catch(function (err) {
+                  console.log('error:', err);
+                  toastr.error('Could not set password');
+                });
               };
 
               scope.close = function () {
@@ -133,9 +142,8 @@ angular
               };
             }
           })
-            .then(function (result) {
-              console.log('done...', result);
-            });
+          .then(function (result) {
+          });
         };
       }
     }

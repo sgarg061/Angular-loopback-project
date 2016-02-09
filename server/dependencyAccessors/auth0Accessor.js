@@ -263,7 +263,7 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
 
     cb(null, JSON.parse(body));
   });
-}
+};
 
 Auth0Accessor.prototype.updateMetadata = function (id, metadata, cb) {
   'use strict';
@@ -291,6 +291,51 @@ Auth0Accessor.prototype.updateMetadata = function (id, metadata, cb) {
     }
 
     return cb(null, JSON.parse(body));
+  });
+};
+
+Auth0Accessor.prototype.getUser = function (id, cb) {
+  'use strict';
+  var config = new Config();
+
+  request({
+    url: config.auth0URL + '/api/v2/users/' + id,
+    method: 'GET',
+    auth: {
+      bearer: config.listUserToken
+    }
+  }, function (err, res, body) {
+    if (err) {
+      throw err;
+    }
+
+    cb(null, JSON.parse(body));
+  })
+};
+
+Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
+  'use strict';
+  var config = new Config();
+
+  request({
+    url: config.auth0URL + '/api/v2/users/' + id,
+    method: 'PATCH',
+    form: {
+      password: password
+    },
+    auth: {
+      bearer: config.updateUserToken
+    }
+  }, function (error, response, body) {
+    if (error) {
+      cb(error, '');
+    } else if (response.statusCode !== 200) {
+      var e = new Error('Unable to set password.');
+      e.statusCode = response.statusCode;
+      cb(e, '');
+    } else {
+      cb(null, 'Password successfully updated.');
+    }
   });
 }
 

@@ -25,5 +25,11 @@ module.exports = {
   },
   updateMetadata: function (id, metadata, cb) {
     authAccessor.updateMetadata(id, metadata, cb);
+  },
+  getUser: function (id, cb) {
+    authAccessor.getUser(id, cb);
+  },
+  forceSetPassword: function (id, password, cb) {
+    authAccessor.forceSetPassword(id, password, cb);
   }
 };

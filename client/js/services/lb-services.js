@@ -11480,6 +11480,42 @@ module.factory(
           url: urlBase + "/Auth/updateUserMetadata",
           method: "PUT"
         },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Auth#forceSetPassword
+         * @methodOf lbServices.Auth
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{string=}` - 
+         *
+         *  - `password` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `resposne` – `{object=}` - 
+         */
+        "forceSetPassword": {
+          url: urlBase + "/Auth/forceSetPassword",
+          method: "GET"
+        },
       }
     );
 
