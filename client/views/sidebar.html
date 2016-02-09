@@ -73,7 +73,7 @@
                     </md-option>
                 </md-select>
                 <div align="right">
-                    <button class="md-button md-primary md-hue" ng-hide="model.softwareVersionId===''|| type=='cloud'" data-ng-click="model.softwareVersionId=''">Reset to Default</button>
+                    <button class="md-button md-primary md-hue" ng-hide="model.softwareVersionId===''|| type=='cloud'" data-ng-click="model.softwareVersionId=updateVersion(null)">Reset to Default</button>
                 </div>
                 <md-button class="md-primary" ng-show="type=='cloud'" ng-click="openSoftwareVersionForm($event)">Add Version</md-button>
 

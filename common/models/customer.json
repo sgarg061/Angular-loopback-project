@@ -65,6 +65,17 @@
       "foreignKey": "assigneeId"
     }
   },
+  "indexes": {
+    "unique_customerName": {
+      "keys": {
+        "resellerId": 1,
+        "name": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
   "acls": [
     {
       "accessType": "*",

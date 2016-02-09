@@ -100,7 +100,7 @@ angular
         })
         .$promise
         .then(function(clouds) {
-          if(String(_.isEmpty(clouds)) === 'false'){
+          if(!_.isEmpty(clouds)){
             $scope.cloud = clouds[0];
             $scope.cloudId = clouds[0].id;
             $scope.currentSoftwareVersion = clouds[0].softwareVersionId;

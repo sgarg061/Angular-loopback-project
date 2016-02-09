@@ -11,9 +11,9 @@
                 SoftwareVersion.find({filter:{where: {id: newValueSoftwareVersionId}}})
                 .$promise
                 .then(function(softwareVersion) {
-                  if(String(_.isEmpty(softwareVersion)) === 'true'){
-                    scope.softwareVersion = 'Default ' + softwareVersionName;
-                  } else if(String(_.isEmpty(softwareVersion)) === 'false'){
+                  if(_.isEmpty(softwareVersion)){
+                    scope.softwareVersion = 'Default: ' + softwareVersionName;
+                  } else if(!_.isEmpty(softwareVersion)){
                     scope.softwareVersion = softwareVersion[0].name;
                     softwareVersionName = softwareVersion[0].name;
                   } else {toastr.error('invalid array');}

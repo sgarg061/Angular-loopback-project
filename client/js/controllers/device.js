@@ -81,7 +81,7 @@ angular
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.device.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
-        if (result === 'Default ' + $scope.defaultSoftwareVersion.name){
+        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
           updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version');
           $scope.currentSoftwareVersion = softwareVersion; 
         } else {
@@ -128,9 +128,12 @@ angular
         })
         .$promise
         .then(function(devices) {
-          $scope.device = devices[0];
-          $scope.currentSoftwareVersion = devices[0].softwareVersionId;
-          $scope.device.loadingMore = false;
+           if(!_.isEmpty(devices)) {
+
+            $scope.device = devices[0];
+            $scope.currentSoftwareVersion = devices[0].softwareVersionId;
+          }
+            $scope.device.loadingMore = false;
           $scope.device.logDataLimit = $scope.logDataLimit;
 
           if ($scope.device.logEntries.length) {
