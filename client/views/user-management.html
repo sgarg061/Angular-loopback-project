@@ -1,5 +1,5 @@
 <div>
-  <md-content style="height:600px;">
+  <md-content>
     <div ng-hide="selectedUser">
       <table class="user-table" width="100%" style="margin: 0px;">
         <tr>
@@ -16,19 +16,51 @@
     </div>
 
     <div ng-show="selectedUser">
-      <p>{{selectedUser.email}}</p>
+      <div class="userHeader">
+        <h3 style="display: inline-block; padding: 16px;">{{selectedUser.email}}</h3>
+        <md-menu>
+          <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+            <md-icon md-svg-icon="chevron_down"></md-icon>
+          </md-button>
+          <md-menu-content width="3">
+            <md-menu-item>
+              <md-button ng-click="setPassword(selectedUser)">
+                Set password
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="deleteUser()">
+                Delete user
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
 
       <div>
-        <md-switch class="md-primary" md-no-ink aria-label="Should Default to HD" ng-model="shouldDefaultToHD">
-          Should Default to HD Video
-        </md-switch>
+        <md-toolbar>
+          <h2 class="md-toolbar-tools">
+            <span>Settings</span>
+          </h2>
+        </md-toolbar>
+        <div style="padding: 16px;">
+          <md-switch class="md-primary" md-no-ink aria-label="Should Default to HD" ng-model="shouldDefaultToHD">
+            Should Default to HD Video
+          </md-switch>
 
-        <md-switch class="md-primary" md-no-ink aria-label="Should Play Video over WebRTC" ng-model="shouldPlayWebRTC">
-          Should Play Video Over WebRTC
-        </md-switch>
+          <md-switch class="md-primary" md-no-ink aria-label="Should Play Video over WebRTC" ng-model="shouldPlayWebRTC">
+            Should Play Video Over WebRTC
+          </md-switch>
+        </div>
       </div>
 
       <div layout="column" ng-cloak>
+        <md-toolbar>
+          <h2 class="md-toolbar-tools">
+            <span>Assign Devices</span>
+          </h2>
+        </md-toolbar>
         <md-content class="md-padding autocomplete" layout="column">
           <md-contact-chips
               ng-model="selectedDevices"

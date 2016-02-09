@@ -42,6 +42,7 @@ angular
                     .icon("show", "./assets/svg/ic_pageview_black_24px.svg", 24)
                     .icon("timeline", "./assets/svg/ic_timeline_black_24px.svg", 24)
                     .icon("cached", "./assets/svg/ic_cached_black_24px.svg", 24)
+                    .icon("chevron_down", "./assets/svg/chevron_down.svg", 24)
                     .icon("list", "./assets/svg/ic_view_list_black_24px.svg", 24);
 
 
@@ -61,7 +62,7 @@ angular
           'responseError': function (response) {
             switch (response.status) {
               case 401:
-              case 403: 
+              case 403:
                 delete $localStorage.token;
                 $location.path('/login');
                 break;
@@ -135,7 +136,7 @@ angular
           url: '/logout',
           templateUrl: 'views/logout.html',
           controller: 'LogoutController'
-        });    
+        });
 
       $urlRouterProvider.otherwise('home');
   }])
@@ -158,6 +159,6 @@ angular
         $location.path('/login');
       }
     });
-  
+
 
 });

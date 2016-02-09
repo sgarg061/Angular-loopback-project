@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('userManagement', ['$state', 'Auth', function($state, Auth) {
+  .directive('userManagement', ['$state', 'Auth', '$mdDialog', function($state, Auth, $mdDialog) {
     return {
       restrict: 'E',
       templateUrl: '/views/user-management.html',
@@ -31,7 +31,6 @@ angular
         };
 
         scope.selectUser = function (user) {
-          console.log('buh?');
           scope.selectedUser = user;
           console.log('selected User', user);
           // TODO set selected devices
@@ -57,7 +56,7 @@ angular
           });
 
           if (appMetadata.devices.length === 0) {
-            appMetadata.devices = [""]; // auth0 won't let us pass in an empty array.
+            appMetadata.devices =  null;// auth0 won't let us pass in an empty array.
           }
 
           console.log('updating', scope.selectedUser);
@@ -104,7 +103,40 @@ angular
 
         scope.selectDevice = function (device) {
           scope.selectedDevices.push(device);
-        }
+        };
+
+        scope.openMenu = function ($mdOpenMenu, ev) {
+          $mdOpenMenu(ev);
+        };
+
+        scope.deleteUser = function () {
+          // delete
+          scope.selectedUser = null;
+        };
+
+        scope.setPassword = function (user) {
+          $mdDialog.show({
+            templateUrl: 'views/setPassword.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: true,
+            controller: function (scope, $mdDialog) {
+              scope._setPassword = function () {
+                console.log('setting a password hurray', scope.userPassword);
+                console.log('hmm', user);
+                //console.log('bah?', selectedUser);
+                console.log('err', scope);
+              };
+
+              scope.close = function () {
+                $mdDialog.cancel();
+              };
+            }
+          })
+            .then(function (result) {
+              console.log('done...', result);
+            });
+        };
       }
     }
   }]);
