@@ -12,9 +12,38 @@ angular
 
     $scope.checkinHeight = 500;
 
-    $scope.logDataLimit = 100;
+    $scope.timelineView = false;
+
+    $scope.logCount = 0;
+    $scope.logDataLimit = 25;
     $scope.sendingCheckin = null;
     $scope.isSavingSettings = false;
+
+    $scope.currentDate = new Date();
+
+
+    $scope.checkinReasons = [
+      {name: 'all', count: 0},
+      {name: 'interval', count: 0},
+      {name: 'status', count: 0},
+      {name: 'forced', count: 0},
+      {name: 'service', count: 0},
+      {name: 'reboot', count: 0},
+      {name: 'other', count: 0}
+    ];
+
+    $scope.checkinTypes = ['show all', 'all down', 'some down', 'all online']
+
+    $scope.selectedCheckinType = 'show all'
+
+    $scope.checkinColors = {
+      interval: '#00bb00',
+      status: '#c400ff',
+      forced: '#ffa000',
+      service: '#ff8a80',
+      reboot: '#f54',
+      other: '#0088cc'
+    };
 
     function watchForChanges() {
       // watch device for updates and save them when they're found
@@ -36,8 +65,21 @@ angular
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateDevice(id, {eventServerUrl: newValue.eventServerUrl});
           }
+          if (newValue.selectedCheckinReason !== oldValue.selectedCheckinReason) {
+            console.log('checkin value selected', selectedCheckinReason);
+          }
         }
       }, true);
+
+      // watch device for updates and save them when they're found
+      $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
+        if (newValue) {
+          if (newValue !== oldValue) {
+            $scope.device.noMoreLogs = false;
+          }
+        }
+      }, true);
+
     }
 
     function updateDevice(id, changedDictionary) {
@@ -67,7 +109,7 @@ angular
             }, {
               relation: 'logEntries',
               scope: {
-                fields: ['id','timestamp'],
+                fields: ['id','timestamp', 'onlineCameras', 'totalCameras', 'reason'],
                 limit: $scope.logDataLimit,
                 order: 'timestamp DESC'
               }
@@ -84,15 +126,37 @@ angular
           if ($scope.device.logEntries.length) {
             $scope.showCheckin($scope.device.logEntries[0]);
 
+
             if ($scope.device.logEntries.length < $scope.logDataLimit) {
               $scope.device.noMoreLogs = true;
             }
             else{
               $scope.device.noMoreLogs = false;
             }
+            var height = document.body.clientHeight - 370;
 
-            $scope.checkinHeight = document.body.clientHeight - 450;
+            if (height < 650) {
+              height = 650;
+            };
+            $scope.checkinHeight = height
+            renderGraph();
           };
+
+          $scope.device.cameraStatus = function (log) {
+
+            if (log.onlineCameras === log.totalCameras){
+              return $scope.checkinTypes[3]
+            }
+            else if(log.onlineCameras === 0){
+              return $scope.checkinTypes[1]
+            }
+            else if(log.onlineCameras < log.totalCameras){
+              return $scope.checkinTypes[2]
+            }
+            else{
+              return $scope.checkinTypes[0]
+            }
+          }
 
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
@@ -139,19 +203,20 @@ angular
   //        var allCamerasOnline = !device.cameras || device.cameras.every(function(c) {return c.status == 'online';});
     //      device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
 
-          console.log('$scope.device: ' + JSON.stringify($scope.device));
+          // console.log('$scope.device: ' + JSON.stringify($scope.device));
           if(cb){
             cb();
           }
         });
     }
 
+
     function getSoftwareVersions() {
       SoftwareVersion
         .find({
           filter: {
             fields: {id: true, name: true, url: true},
-            order: 'name ASC'
+            order: 'name DESC'
           }
         })
         .$promise
@@ -164,6 +229,34 @@ angular
         })
     }
 
+    function getCountByReasons() {
+      var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
+
+      $scope.checkinReasons.forEach(function (reason, index){
+        
+        var reasonName = reason.name;
+        if (reason.name == 'all')
+          reasonName = {neq: null};
+        else if(reason.name == 'other')
+          reasonName = {neq: arrayReasons};
+
+
+
+        DeviceLogEntry
+          .count({
+              where: {deviceId: $stateParams.deviceId, reason: reasonName}
+          }, function(data) {
+            reason.count = data.count;
+            if (index == $scope.checkinReasons.length-1) {
+              $scope.selectedCheckinReason = 'all';
+            };
+          });
+
+      });
+
+    }
+
+    getCountByReasons();
     getDevice(function(){
       getSoftwareVersions();
     });
@@ -269,16 +362,28 @@ angular
       $scope.sendingCheckin = null;
       $scope.$digest();
     });
+
+
   }
 
   function loadMore(value) {
     $scope.device.loadingMore = true;
+    var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
+
+    var reasonName = $scope.selectedCheckinReason;
+
+    if (reasonName == 'all')
+      reasonName = {neq: null};
+    else if(reasonName == 'other')
+      reasonName = {neq: arrayReasons};
+
+
     var lastTimeStamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp
     DeviceLogEntry
       .find({
           filter: {
-            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}},
-            fields: ['id','timestamp', 'deviceId'],
+            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}, reason: reasonName},
+            fields: ['id','timestamp', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
             limit: value,
             order: 'timestamp DESC'
           }
@@ -336,9 +441,92 @@ angular
   };
 
   function goHome() {
-      $state.go('home');
+    $state.go('home');
   };
 
+  function renderGraph() {
+    var start = new Date($scope.currentDate.toLocaleDateString());
+    var end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {deviceId: $stateParams.deviceId, checkinTime: {gt: start, lt: end}},
+            fields: ['id','timestamp','reason'],
+            order: 'timestamp DESC'
+          }
+      })
+      .$promise
+      .then(function(logs) {
+        $scope.device.loadingMore = false;
+
+
+        var args = {
+          date: $scope.currentDate,
+          width: function() {
+            return window.innerWidth - 380;
+          },
+          height: function() {
+            return $scope.checkinHeight - 40;
+          },
+          margin: {
+            left: 10,
+            right: 10,
+            top: 0,
+            bottom: 0
+          },
+          data: logs,
+          reasonColorCode: $scope.checkinColors,
+          callback: function(data) {
+            /* insert the data into angular directive */
+            viewCheckin(data);
+            var angularDirectiveDOM = document.createElement('div');
+            return angularDirectiveDOM;
+
+          }
+        };
+
+        timeline(args);
+
+      })
+
+
+  }
+
+  function getTick(width) {
+    if (width >= 1000) {
+      return 1;
+    }
+
+    if (width >= 600) {
+      return 2;
+    }
+  }
+  function viewCheckin(checkin) {
+    $scope.device.loadingMore = true;
+    DeviceLogEntry
+      .find({
+          filter: {
+            where: {id: checkin.id}
+          }
+      })
+      .$promise
+      .then(function(log) {
+        $scope.device.loadingMore = false;
+        $scope.device.currentGraphEntry = log[0];
+      })
+  }
+
+  $scope.loadNextDay = function () {
+    document.getElementById('timeline-detail').classList.remove('open');
+    $scope.currentDate.setDate($scope.currentDate.getDate()+1);
+    renderGraph();
+  }
+
+  $scope.loadPrevDay = function () {
+    document.getElementById('timeline-detail').classList.remove('open');
+    $scope.currentDate.setDate($scope.currentDate.getDate()-1);
+    renderGraph();
+  }
 
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;

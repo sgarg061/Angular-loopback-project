@@ -21,8 +21,7 @@ angular
     $scope.cloud = null;
     $scope.reseller = null;
 
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 4 };
-    $scope.markers = [];
+    $scope.allDevices = [];
 
     $scope.deviceData = {};
 
@@ -99,9 +98,6 @@ angular
         .then(function(customers) {
           $scope.customer = customers[0];
           $scope.numberofAvailableLicenses = $scope.customer.licenses.filter(function(value){return value.activated == false;}).length;
-          $scope.reseller = customers[0].reseller;
-          $scope.cloud = customers[0].reseller.cloud;
-
           $scope.cloud = customers[0].reseller.cloud;
           $scope.reseller = customers[0].reseller;
 
@@ -112,33 +108,43 @@ angular
 
 
           watchForChanges();
-           /*   
- -            Device status   
- -    
- -            green:    
- -              - all cameras are green   
- -              - all pos devices are green   
- -              - device has checked in within expected interval    
- -    
- -            yellow:   
- -              - one or more cameras or pos devices are red    
- -              - device has checked in within expected interval    
- -            red:    
- -              - device has not checked in within expected interval    
+          // get all devices
+          $scope.customer.devices.forEach(function (device) {
+            device.customerName = $scope.customer.name;
+            device.checkinInterval = device.checkinInterval ||
+               $scope.customer.checkinInterval ||
+               $scope.reseller.checkinInterval ||
+               $scope.cloud.checkinInterval;
+
+            $scope.allDevices.push(device);
+          });
+           /*
+ -            Device status
+ -
+ -            green:
+ -              - all cameras are green
+ -              - all pos devices are green
+ -              - device has checked in within expected interval
+ -
+ -            yellow:
+ -              - one or more cameras or pos devices are red
+ -              - device has checked in within expected interval
+ -            red:
+ -              - device has not checked in within expected interval
  -          */
           for (var i=0; i<$scope.devices.length; i++) {
             var device = $scope.devices[i];
 
             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
              var nowInSeconds = new Date().getTime() / 1000;
- 
+
              var checkinIntervalInSeconds = device.checkinInterval ||
                                            $scope.customer.checkinInterval ||
                                            $scope.customer.reseller.checkinInterval ||
                                            $scope.customer.reseller.cloud.checkinInterval;
- 
+
              console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
- 
+
              var gracePeriodInSeconds = 30;
              var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
              if (hasCheckedInOnTime) {
@@ -147,7 +153,7 @@ angular
                device.onlineStatus = 'Offline';
              }
              console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
- 
+
              device.onlineCameraCount = 0;
              var allCamerasOnline = true;
              if (device.cameras) {
@@ -160,7 +166,7 @@ angular
                  }
                }
              }
- 
+
              if (hasCheckedInOnTime) {
                if (allCamerasOnline) {
                  device.status = 'green';
@@ -175,28 +181,6 @@ angular
             var allCamerasOnline = !device.cameras || device.onlineCameraCount == device.cameras.length;
             device.statusIconColor = device.status == 'online' ? (allCamerasOnline ? 'green' : 'yellow') : 'red';
             device.onlineStatus = device.status == 'online' ? 'Online' : 'Offline';*/
-
-            // TODO: add marker here
-            if (device.location) {
-           //   var icon = 'assets/images/gmaps_marker_' + device.statusIconColor + '.png';*/
-              var icon = 'assets/images/gmaps_marker_' + device.status + '.png';
-
-              $scope.markers.push({
-                id: device.id,
-                icon: icon,
-                latitude: device.location.lat,
-                longitude: device.location.lng,
-                showWindow: false,
-                customerName: $scope.customer.name,
-                deviceName: device.name,
-                deviceId: device.id,
-                options: {
-                  labelAnchor: "22 0",
-                  labelClass: "marker-labels"
-                },
-                selectDevice: $scope.selectDevice
-              });
-            }
           }
           if(cb){
             cb();
@@ -240,21 +224,21 @@ angular
                 filter.selected = (filter.connectors.length >= 2);
 
                 if (filter.connectors[index].assigneeType == 'customer') {
-                  filter.selected = true;                  
+                  filter.selected = true;
                   $scope.filters.push(filter);
                   filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
                 }
                 else if (filter.connectors[index].assigneeType == 'reseller') {
-                  $scope.filters.push(filter);  
+                  $scope.filters.push(filter);
                   filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
                 }
               }
               else if(filter.creatorType == 'customer'){
-                $scope.filters.push(filter);      
-                  filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)          
+                $scope.filters.push(filter);
+                  filter.creatorType == 'customer' ? $scope.ownedFilters.push(filter) : $scope.cascadedFilters.push(filter)
               }
             };
-            
+
           })
         })
     }
@@ -490,34 +474,43 @@ angular
   }
 
  function renameCustomer(customer) {
+    $scope.currentCustomer = customer;
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
-          
           scope.renameCustomer = function() {
-              Customer.prototype$updateAttributes({id: customer.id}, {
-                name: scope.customerRename
-              })
-              .$promise
-              .then
-              (function(customer) 
-                {
-                  $scope.customer.name = scope.customerRename
-                  toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
-                  $scope.selectCustomer()
-                }, 
-                function (res) 
-                {
-                  toastr.error('Error');
-                  console.log('FOO' + res.data.error.message);
+              Customer
+                .find({
+                  filter: {
+                    where: {and: [{'resellerId':$scope.reseller.id}, {'name':scope.customerRename}]}
+                  }
+                })
+                .$promise
+                .then(function(customer){ //if the customer already exists
+                  if(customer && customer.length > 0) {
+                      toastr.error("Customer already exists; please enter a unique name.");
+                  } else {
+                      Customer.prototype$updateAttributes({id: $scope.currentCustomer.id}, {
+                        name: scope.customerRename
+                      })
+                      .$promise
+                      .then(function(currentCustomer) {
+                        $scope.currentCustomer.name = scope.customerRename
+                        toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
+                        $scope.selectCustomer()
+                        $mdDialog.cancel();
+                      }, function (res) {
+                        toastr.error('Error');
+                        console.log(res.data.error.message);
+                      }
+                     );
+                  }
                 }
-              );
-            $mdDialog.cancel();
+                );
           };
-
           scope.close = function() {
             $mdDialog.cancel();
           };
-          
+
         },
         templateUrl: 'views/customerRename.html',
         parent: angular.element(document.body),
@@ -547,7 +540,7 @@ angular
       .find({
         filter: {
           fields: {id: true, name: true, url: true},
-          order: 'name ASC'
+          order: 'name DESC'
         }
       })
       .$promise
