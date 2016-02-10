@@ -116,7 +116,8 @@ angular
           } else {
             toastr.error('invalid arrray');
           }
-
+          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
+          $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
 
           watchForChanges();
         });
