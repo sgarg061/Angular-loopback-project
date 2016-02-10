@@ -630,6 +630,10 @@ md-input-container .md-input.scripted:disabled{
   outline: none;
 }
 
+label{
+  left: auto !important;
+}
+
 /* Icons */
 i{
   /*padding:10px 10px 10px 10px;*/

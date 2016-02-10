@@ -6,7 +6,7 @@
   "callHomeDb": {
     "name": "callHomeDb",
     "connector": "postgresql",
-    "url": "postgres://solink:ClhgCk22!!@callhome-test-db.crfyigzqcdko.us-west-2.rds.amazonaws.com:5432/callhome",
+    "url": "",
     "debug": false
   }
 }
