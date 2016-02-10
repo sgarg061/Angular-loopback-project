@@ -11516,6 +11516,85 @@ module.factory(
           url: urlBase + "/Auth/forceSetPassword",
           method: "GET"
         },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Auth#deleteUser
+         * @methodOf lbServices.Auth
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `response` – `{string=}` - 
+         */
+        "deleteUser": {
+          url: urlBase + "/Auth/deleteUser",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Auth#createUser
+         * @methodOf lbServices.Auth
+         *
+         * @description
+         *
+         * <em>
+         * (The remote method definition does not provide any description.)
+         * </em>
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `email` – `{string=}` - 
+         *
+         *  - `password` – `{string=}` - 
+         *
+         *  - `userType` – `{string=}` - 
+         *
+         *  - `orgId` – `{string=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `response` – `{object=}` - 
+         */
+        "createUser": {
+          url: urlBase + "/Auth/createUser",
+          method: "POST"
+        },
       }
     );
 

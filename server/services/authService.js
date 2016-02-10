@@ -31,5 +31,8 @@ module.exports = {
   },
   forceSetPassword: function (id, password, cb) {
     authAccessor.forceSetPassword(id, password, cb);
+  },
+  deleteUser: function (id, cb) {
+    authAccessor.deleteUser(id, cb);
   }
 };

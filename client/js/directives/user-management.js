@@ -6,10 +6,12 @@ angular
       templateUrl: '/views/user-management.html',
       scope: {
         users: '=users',
-        devices: '=devices'
+        devices: '=devices',
+        userTypes: '=userTypes',
+        userKey: '=userKey',
+        userValue: '=userValue'
       },
       link: function (scope, element, attrs) {
-        console.log('alright, ', scope.devices);
         scope.selectedUser = null;
         scope.selectedDevices = [];
         scope.shouldDefaultToHD = false;
@@ -32,8 +34,7 @@ angular
 
         scope.selectUser = function (user) {
           scope.selectedUser = user;
-          console.log('selected User', user);
-          // TODO set selected devices
+
           scope.selectedDevices = [];
           if (scope.selectedUser.app_metadata.devices) {
             scope.selectedUser.app_metadata.devices.forEach(function (id) {
@@ -42,6 +43,7 @@ angular
               }));
             });
           }
+
           scope.shouldPlayWebRTC = user.app_metadata.wrtc === 'true';
           scope.shouldDefaultToHD = user.app_metadata.defaultToHD === 'true';
         };
@@ -111,7 +113,24 @@ angular
 
         scope.deleteUser = function () {
           // delete
-          scope.selectedUser = null;
+          Auth.deleteUser({
+            id: scope.selectedUser.user_id
+          })
+          .$promise
+          .then(function (res) {
+            for (var i = 0; i < scope.users.length; i++) {
+              if (scope.users[i].user_id === scope.selectedUser.user_id) {
+                scope.users.splice(i, 1); // remove the element
+                break;
+              }
+            }
+            scope.selectedUser = null;
+          })
+          .catch(function (err) {
+            toastr.error('Error deleting user');
+            console.error(err);
+          });
+
         };
 
         scope.setPassword = function (user) {
@@ -143,6 +162,46 @@ angular
             }
           })
           .then(function (result) {
+          });
+        };
+
+        // TODO: inject user types into the directive and pass them through the template
+        scope.createUser = function (userTypes, userKey, userValue) {
+          $mdDialog.show({
+            templateUrl: 'views/createUser.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: true,
+            scope: scope.$new(),
+            controller: function (scope, $mdDialog) {
+              scope.userTypes = userTypes;
+              scope.newUser = {
+                userType: userTypes[0]
+              };
+
+              scope._createUser = function () {
+                Auth.createUser({
+                  email: scope.newUser.email,
+                  password: scope.newUser.password,
+                  userType: scope.newUser.userType,
+                  orgId: userValue
+                })
+                  .$promise
+                  .then(function (res) {
+                    var newUser = JSON.parse(res.response);
+                    toastr.success('User successfully created');
+                    scope.users.push(newUser);
+                    $mdDialog.cancel();
+                  })
+                  .catch(function (err) {
+                    toastr.error('Error creating user: ' + err.statusText);
+                  });
+              };
+
+              scope.closeCreateUser = function() {
+                $mdDialog.cancel();
+              };
+            }
           });
         };
       }

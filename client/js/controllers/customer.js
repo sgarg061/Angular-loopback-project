@@ -104,9 +104,9 @@ angular
 
           $scope.devices = customers[0].devices;
 
+          $scope.userTypes = ['admin', 'standard'];
           getUsers($scope.customer.id, function (users) {
             $scope.users = users;
-            console.log('cool...', $scope.users);
           });
           getFilters();
           getReports();

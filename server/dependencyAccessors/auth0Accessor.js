@@ -328,13 +328,36 @@ Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
     }
   }, function (error, response, body) {
     if (error) {
-      cb(error, '');
+      cb(error, null);
     } else if (response.statusCode !== 200) {
       var e = new Error('Unable to set password.');
       e.statusCode = response.statusCode;
-      cb(e, '');
+      cb(e, null);
     } else {
       cb(null, 'Password successfully updated.');
+    }
+  });
+}
+
+Auth0Accessor.prototype.deleteUser = function (id, cb) {
+  'use strict';
+  var config = new Config();
+
+  request({
+    url: config.auth0URL + '/api/v2/users/' + id,
+    method: 'DELETE',
+    auth: {
+      bearer: config.deleteUserToken
+    }
+  }, function (error, response, body) {
+    if (error){
+      cb(error, null);
+    } else if (response.statusCode !== 200) {
+      var e = new Error('Unable to delete user');
+      e.statusCode = response.statusCode;
+      cb(e, null);
+    } else {
+      cb(null, 'Deleted successfully');
     }
   });
 }

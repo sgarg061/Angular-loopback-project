@@ -1,4 +1,10 @@
 <div>
+  <div ng-hide="selectedUser" layout="row" layout-align="space-between center" class="title-row" style="padding-bottom:10px;">
+    <div class='create-button' ng-click="createUser(userTypes, userKey, userValue)" style="margin-left:auto;">
+      <i class="material-icons add">add</i>
+      <span>Create User</span>
+    </div>
+  </div>
   <md-content>
     <div ng-hide="selectedUser">
       <table class="user-table" width="100%" style="margin: 0px;">

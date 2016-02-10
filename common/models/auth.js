@@ -63,7 +63,42 @@ module.exports = function (Auth) {
     });
   };
 
-  Auth.forceSetPassword = function(id, newPassword, cb) {
+  Auth.deleteUser = function (id, cb) {
+    logger.debug('Deleting user ' + id);
+
+    var unauthorizedError = new Error('Unauthorized');
+    unauthorizedError.statusCode = 401;
+
+    var context = loopback.getCurrentContext();
+    if (context && context.get('jwt')) {
+      var jwt = context.get('jwt');
+      var userType = jwt.userType;
+      if (['solink', 'cloud', 'reseller'].indexOf(userType) < 0) {
+        return cb(unauthorizedError, null);
+      }
+
+      authService.getUser(id, function (err, user) {
+        if (err) {
+          return cb(err, null);
+        }
+
+        // lost the context... reset it.  TODO: investigate why this happens
+        context.set('jwt', jwt);
+
+        canModifyUser(user, function(canModify) {
+          if (canModify) {
+            return authService.deleteUser(id, cb);
+          } else {
+            return cb(unauthorizedError, null);
+          }
+        });
+      });
+    } else {
+      return cb(unauthorizedError, null);
+    }
+  };
+
+  Auth.forceSetPassword = function (id, newPassword, cb) {
     logger.debug('Forcing a set password of user ' + id);
 
     var unauthorizedError = new Error('Unauthorized');
@@ -85,87 +120,157 @@ module.exports = function (Auth) {
         // lost the context... reset it.  TODO: investigate why this happens
         context.set('jwt', jwt);
 
-        switch (user.app_metadata.userType) {
-          case 'admin':
-          case 'standard':
-            var tenantId = user.app_metadata.tenantId;
-            if (userType === 'solink') {
-              // just do it
-              changePassword(id, newPassword, cb);
-            } else if (userType === 'reseller') {
-              var resellerId = jwt.resellerId;
-              // query for customer, make sure customer.resellerId === resellerId
-              Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
-                if (err) {
-                  logger.error('Error retrieving customer for force password:', err);
-                  return cb(err, null);
-                }
-
-                if (!customer) {
-                  var error = new Error('Customer not found');
-                  error.statusCode = 404;
-                  return cb(error, null);
-                }
-
-                if (customer.resellerId !== resellerId) {
-                  return cb(unauthorizedError, null);
-                } else {
-                  changePassword(id, newPassword, cb);
-                }
-              });
-            } else if (userType === 'cloud') {
-              // check that customer matching tenantId's reseller matches this cloudid
-              var cloudId = jwt.cloudId;
-              Auth.app.models.Customer.findOne({
-                where: {id: tenantId},
-                include: {
-                  relation: 'reseller',
-                  scope: {
-                    fields: ['id', 'name', 'cloudId']
-                  }
-                }
-              }, function (err, customer) {
-                if (err) {
-                  logger.error('Error retrieving customer for force password:', err)
-                  return cb(err, null);
-                }
-
-                if (!customer) {
-                  var error = new Error('Customer not found');
-                  error.statusCode = 404;
-                  return cb(error, null);
-                }
-
-                if (customer.reseller().cloudId !== cloudId) {
-                  return cb(unauthorizedError, cb);
-                } else {
-                  changePassword(id, newPassword, cb);
-                }
-              });
-            } else {
-              // something terribly wrong
-              return cb(unauthorizedError, null);
-            }
-            break;
-
-          case 'reseller':
-            // TODO: check for ownership
-            // implement this at a later date
+        canModifyUser(user, function(canModify) {
+          if (canModify) {
+            changePassword(id, newPassword, cb);
+          } else {
             return cb(unauthorizedError, null);
-            break;
-
-          case 'cloud':
-            // TODO: check for ownership
-            // implement this at a later date
-            return cb(unauthorizedError, null);
-            break;
-
-          default:
-            return cb(unauthorizedError, null);
-        }
+          }
+        });
       });
     } else {
       return cb(unauthorizedError, null);
+    }
+  };
+
+  Auth.createUser = function(email, password, userType, orgId, cb) {
+    logger.info('Create user request for ' + email);
+
+    var unauthorizedError = new Error('Unauthorized');
+    unauthorizedError.statusCode = 401;
+
+    var fakeUser = {
+      app_metadata: {
+        userType: userType
+      }
+    };
+    var userData = {
+      userType: userType,
+      email_verified: true
+    };
+    var orgKey = '';
+    // map type -> orgid to get an object
+    switch (userType) {
+      case 'admin':
+      case 'standard':
+        orgKey = 'tenantId';
+        fakeUser.app_metadata['tenantId'] = orgId;
+        userData['customerId'] = orgId;
+        break;
+      case 'reseller':
+        orgKey = 'resellerId';
+        fakeUser.app_metadata['resellerId'] = orgId;
+        userData['resellerId'] = orgId;
+        break;
+      case 'cloud':
+        orgKey = 'cloudId';
+        fakeUser.app_metadata['cloudId'] = orgId;
+        userData['cloudId'] = orgId;
+        break;
+      default:
+        return cb(unauthorizedError, null);
+    }
+    // check if they have permissions to create on that object
+    // use a fake user and re-use our existing 'canModifyUser' function
+    canModifyUser(fakeUser, function(canModify) {
+      if (!canModify) {
+        return cb(unauthorizedError, null);
+      } else {
+        // then, create
+        authService.createUser(email, password, userData, function (err, res) {
+          if (err) {
+            logger.error('Could not create user' + err);
+            return cb(err, null);
+          } else {
+            logger.info('Successfully created new user ' + email);
+            return cb(null, res);
+          }
+        });
+      }
+    });
+  };
+
+  function canModifyUser(user, cb) {
+    var context = loopback.getCurrentContext();
+    var jwt = context.get('jwt');
+    var userType = jwt.userType;
+
+    switch (user.app_metadata.userType) {
+      case 'admin':
+      case 'standard':
+        var tenantId = user.app_metadata.tenantId;
+        if (userType === 'solink') {
+          return cb(true);
+        } else if (userType === 'reseller') {
+          var resellerId = jwt.resellerId;
+          // query for customer, make sure customer.resellerId === resellerId
+          Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
+            if (err) {
+              logger.error('Error retrieving customer for force password:', err);
+              return cb(err, null);
+            }
+
+            if (!customer) {
+              var error = new Error('Customer not found');
+              error.statusCode = 404;
+              return cb(error, null);
+            }
+
+            if (customer.resellerId !== resellerId) {
+              return cb(false);
+            } else {
+              return cb(true);
+            }
+          });
+        } else if (userType === 'cloud') {
+          // check that customer matching tenantId's reseller matches this cloudid
+          var cloudId = jwt.cloudId;
+          Auth.app.models.Customer.findOne({
+            where: {id: tenantId},
+            include: {
+              relation: 'reseller',
+              scope: {
+                fields: ['id', 'name', 'cloudId']
+              }
+            }
+          }, function (err, customer) {
+            if (err) {
+              logger.error('Error retrieving customer for force password:', err)
+              return cb(false);
+            }
+
+            if (!customer) {
+              var error = new Error('Customer not found');
+              error.statusCode = 404;
+              return cb(false);
+            }
+
+            if (customer.reseller().cloudId !== cloudId) {
+              return cb(false);
+            } else {
+              return cb(true);
+            }
+          });
+        } else {
+          // something terribly wrong
+          return cb(false);
+        }
+        break;
+
+      case 'reseller':
+        // TODO: check for ownership
+        // implement this at a later date
+        return cb(false);
+        break;
+
+      case 'cloud':
+        // TODO: check for ownership
+        // implement this at a later date
+        return cb(false);
+        break;
+
+      default:
+        return cb(false);
     }
   }
 
@@ -246,5 +351,24 @@ module.exports = function (Auth) {
     ],
     http: {verb: 'get', status: 200, errorStatus: 500},
     returns: {arg: 'resposne', type: 'object'}
+  });
+
+  Auth.remoteMethod('deleteUser', {
+    accepts: [
+      {arg: 'id', type: 'string'},
+    ],
+    http: {verb: 'delete', status: 204, errorStatus: 500},
+    returns: {arg: 'response', type: 'string'}
+  });
+
+  Auth.remoteMethod('createUser', {
+    accepts: [
+      {arg: 'email', type: 'string'},
+      {arg: 'password', type: 'string'},
+      {arg: 'userType', type: 'string'},
+      {arg: 'orgId', type: 'string'}
+    ],
+    http: {verb: 'post', status: 201, errorStatus: 500},
+    returns: {arg: 'response', type: 'object'}
   });
 };
