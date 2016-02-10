@@ -57,10 +57,44 @@ module.exports = function (Auth) {
   };
 
   Auth.updateUserMetadata = function (id, metadata, cb) {
-    // TODO: verify permissions!
-    authService.updateMetadata(id, metadata, function (err, res) {
-      return cb(err, res);
-    });
+    // there is a common pattern here across these Auth methods.
+    // Refactor whenever time
+    logger.debug('Updating user ' + id);
+
+    var unauthorizedError = new Error('Unauthorized');
+    unauthorizedError.statusCode = 401;
+
+    var context = loopback.getCurrentContext();
+    if (context && context.get('jwt')) {
+      var jwt = context.get('jwt');
+      var userType = jwt.userType;
+
+      // TODO: allow users to update themselves
+      if (['solink', 'cloud', 'reseller'].indexOf(userType) < 0) {
+        return cb(unauthorizedError, null);
+      }
+
+      authService.getUser(id, function (err, user) {
+        if (err) {
+          return cb(err, null);
+        }
+
+        // lost the context... reset it.  TODO: investigate why this happens
+        context.set('jwt', jwt);
+
+        canModifyUser(user, function(canModify) {
+          if (canModify) {
+            authService.updateMetadata(id, metadata, function (err, res) {
+              return cb(err, res);
+            });
+          } else {
+            return cb(unauthorizedError, null);
+          }
+        });
+      });
+    } else {
+      return cb(unauthorizedError, null);
+    }
   };
 
   Auth.deleteUser = function (id, cb) {

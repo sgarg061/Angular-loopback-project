@@ -49,7 +49,6 @@ angular
         };
 
         scope.saveUser = function () {
-          console.log('selected devices', scope.selectedDevices);
           var appMetadata = {};
           appMetadata.wrtc = scope.shouldPlayWebRTC;
           appMetadata.defaultToHD = scope.shouldDefaultToHD;
@@ -61,8 +60,6 @@ angular
             appMetadata.devices =  null;// auth0 won't let us pass in an empty array.
           }
 
-          console.log('updating', scope.selectedUser);
-          console.log('with ', appMetadata);
           // update user metadata
           Auth.updateUserMetadata({
             id: scope.selectedUser.user_id,
@@ -70,7 +67,6 @@ angular
           })
             .$promise
             .then(function (res) {
-              console.log('response:', res);
               for (var i = 0; i < scope.users.length; i++) {
                 if (scope.users[i].user_id === scope.selectedUser.user_id) {
                   scope.users[i] = res.response;
@@ -151,7 +147,7 @@ angular
                   $mdDialog.cancel();
                 })
                 .catch(function (err) {
-                  console.log('error:', err);
+                  console.error('error:', err);
                   toastr.error('Could not set password');
                 });
               };
