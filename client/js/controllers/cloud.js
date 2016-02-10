@@ -38,6 +38,12 @@ angular
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
+          if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
+             updateCloud(id, {turnServerUrl: newValue.turnServerUrl});
+          }
+          if (newValue.stunServerUrl !== oldValue.stunServerUrl) {
+             updateCloud(id, {stunServerUrl: newValue.stunServerUrl});
+          }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl}, 'URL has been updated');
           }
@@ -104,7 +110,8 @@ angular
             $scope.cloud = clouds[0];
             $scope.cloudId = clouds[0].id;
             $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
-
+          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
+          $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
             $scope.children = clouds[0].resellers;
           } else {
             toastr.error('invalid arrray');
@@ -339,6 +346,47 @@ angular
   $scope.canModifyImageServerUrl = function() {
     var userType = userService.getUserType();
     return ['solink'].indexOf(userType) > -1;
+  };
+
+  $scope.addServerUrl = function(cloud, serverUrl) {
+    var cloudServerUrl = eval('cloud.' + serverUrl);
+      $mdDialog.show({
+              controller: function DialogController ($scope, $mdDialog) {
+                  $scope.create = function() {
+                      if(cloudServerUrl === null) { 
+                        cloudServerUrl = [$scope.model.tempServerUrl];
+                        $mdDialog.cancel();
+                      } else {
+                        if(cloudServerUrl.indexOf($scope.model.tempServerUrl) === -1) { //check for duplicate entry
+                          cloudServerUrl.push($scope.model.tempServerUrl);
+                          $mdDialog.cancel();
+                        } else {
+                          toastr.error("Duplicate URL entry. Please enter a unique URL.");
+                        }
+                      }
+                      eval('cloud.' + serverUrl + '= cloudServerUrl');
+                  };
+                  $scope.close = function() {
+                      $mdDialog.cancel();
+                  };
+              },
+              templateUrl: 'views/newServerUrl.tmpl.html',
+              parent: angular.element(document.body),
+              targetEvent: event,
+              clickOutsideToClose: true
+          })
+          .then(function(result) {
+      }, function() {
+    });
+  };
+
+  $scope.deleteServerUrl = function(cloud, serverUrl, deleteUrl) {
+      var cloudServerUrl = eval ('cloud.' + serverUrl)
+      var deleteIndex = cloudServerUrl.indexOf(deleteUrl);
+
+      if(deleteIndex > -1){
+        cloudServerUrl.splice(deleteIndex, 1);
+      }
   };
 
   $scope.canModifyCheckinInterval = function() {
