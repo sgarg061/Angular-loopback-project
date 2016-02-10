@@ -1,6 +1,7 @@
 var request = require('request');
 var Config = require('../../config');
 var jwt = require('jsonwebtoken');
+var logger = require('../logger');
 
 var Auth0Accessor = function () {
 };
@@ -310,7 +311,7 @@ Auth0Accessor.prototype.getUser = function (id, cb) {
     }
 
     cb(null, JSON.parse(body));
-  })
+  });
 };
 
 Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
@@ -337,7 +338,7 @@ Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
       cb(null, 'Password successfully updated.');
     }
   });
-}
+};
 
 Auth0Accessor.prototype.deleteUser = function (id, cb) {
   'use strict';
@@ -360,6 +361,6 @@ Auth0Accessor.prototype.deleteUser = function (id, cb) {
       cb(null, 'Deleted successfully');
     }
   });
-}
+};
 
 module.exports = Auth0Accessor;

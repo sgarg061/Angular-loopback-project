@@ -235,7 +235,7 @@ module.exports = function (Auth) {
             }
           }, function (err, customer) {
             if (err) {
-              logger.error('Error retrieving customer for force password:', err)
+              logger.error('Error retrieving customer for force password:', err);
               return cb(false);
             }
 
@@ -261,13 +261,11 @@ module.exports = function (Auth) {
         // TODO: check for ownership
         // implement this at a later date
         return cb(false);
-        break;
 
       case 'cloud':
         // TODO: check for ownership
         // implement this at a later date
         return cb(false);
-        break;
 
       default:
         return cb(false);
