@@ -626,6 +626,10 @@ md-input-container .md-input.scripted:disabled{
   background:#BBDEFB;
 }
 
+label{
+  left: auto !important;
+}
+
 /* Icons */
 i{
   /*padding:10px 10px 10px 10px;*/
