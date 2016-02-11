@@ -4,7 +4,7 @@
 			<h2 class="md-title">Cameras</h2>
 			<div layout="row" layout-align="space-between center" ng-repeat="camera in device.currentEntry.cameraInformation">
 
-				<div>{{ camera.name }}</div>
+				<div class="device-name" style="width: 120px;">{{ camera.name }}</div>
 				<md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>
 			</div>
 		</div>
@@ -12,7 +12,7 @@
 		<div class="pos-info" flex="50">
 			<h2 class="md-title">POS Devices</h2>
 			<div layout="row" layout-align="space-between center" ng-repeat="posDevice in device.currentEntry.posInformation">
-				<div>{{ posDevice.name }}</div>
+				<div class="device-name" style="width: 120px;">{{ posDevice.name }}</div>
 				<md-icon md-svg-icon='indicator_{{posDevice.status === "online" ? "green" : posDevice.status === "offline" ? "red" : "yellow"}}'></md-icon>
 			</div>
 		</div>
