@@ -648,3 +648,11 @@ i{
 /*.material-icons.add:hover{
   color: #E65100; 
 };*/
+
+
+.md-datepicker-triangle-button.md-button.md-icon-button{
+  top: 10px;
+}
+.md-datepicker-input-container {
+  padding-bottom: 0px;
+}

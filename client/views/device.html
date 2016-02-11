@@ -59,7 +59,7 @@
 
 
                     <md-button flex="15" class="md-primary" ng-click="loadPrevDay()" ng-disabled="device.loadingMore" ng-show="timelineView">Prev Day</md-button>
-                    <h3 style="text-align: center; " ng-show="timelineView" flex="30" ng-click="">{{currentDate | date: 'mediumDate' }}</h3>
+                    <md-datepicker ng-model="currentDate"  ng-show="timelineView" flex="30" md-placeholder="Enter date"></md-datepicker>
                     <md-button flex="15" class="md-primary" ng-click="loadNextDay()" ng-disabled="device.loadingMore" ng-show="timelineView">Next Day</md-button>
 
                   <div style="margin-right: 10px; text-align:right;" flex>

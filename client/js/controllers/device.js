@@ -75,7 +75,17 @@ angular
       $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
         if (newValue) {
           if (newValue !== oldValue) {
+            document.getElementById('timeline-detail').classList.remove('open');
             $scope.device.noMoreLogs = false;
+          }
+        }
+      }, true);
+
+      // watch device for updates and save them when they're found
+      $scope.$watch("currentDate", function(newValue, oldValue) {
+        if (newValue) {
+          if (newValue !== oldValue) {
+            renderGraph();
           }
         }
       }, true);
@@ -519,13 +529,11 @@ angular
   $scope.loadNextDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()+1);
-    renderGraph();
   }
 
   $scope.loadPrevDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
-    renderGraph();
   }
 
   $scope.checkin = checkin;
