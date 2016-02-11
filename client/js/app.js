@@ -60,9 +60,10 @@ angular
           },
           'responseError': function (response) {
             switch (response.status) {
-              case 401:
-              case 403: 
+              case 401: 
+              case 403:
                 delete $localStorage.token;
+                $localStorage.redirect = $location.$$path;
                 $location.path('/login');
                 break;
               case 500:
@@ -78,7 +79,7 @@ angular
         // .state('root', {
         //   url: '/',
         //   templateUrl: 'views/root.html',
-        //   controller: 'RootController',
+        //   configtroller: 'RootController',
         //   data: {
         //     requiresLogin: true
         //   }

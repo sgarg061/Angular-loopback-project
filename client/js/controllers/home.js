@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('HomeController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'SoftwareVersion', 'userService',
-    function($scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, SoftwareVersion, userService) {
+  .controller('HomeController', ['$localStorage', '$location', '$scope', '$state', '$stateParams', 'Cloud', 'Reseller', '$mdDialog', 'toastr', 'SoftwareVersion', 'userService',
+    function($localStorage, $location, $scope, $state, $stateParams, Cloud, Reseller, $mdDialog, toastr, SoftwareVersion, userService) {
 
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
@@ -11,6 +11,8 @@ angular
     $scope.cloudId = null;
 
     $scope.softwareVersions = [];
+    $localStorage.defaultPath = $location.$$path;
+
 
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
