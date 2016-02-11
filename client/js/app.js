@@ -79,7 +79,7 @@ angular
         // .state('root', {
         //   url: '/',
         //   templateUrl: 'views/root.html',
-        //   configtroller: 'RootController',
+        //   controller: 'RootController',
         //   data: {
         //     requiresLogin: true
         //   }
