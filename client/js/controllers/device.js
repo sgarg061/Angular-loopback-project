@@ -238,7 +238,7 @@ angular
         if (reason.name == 'all')
           reasonName = {neq: null};
         else if(reason.name == 'other')
-          reasonName = {neq: arrayReasons};
+          reasonName = {nin: arrayReasons};
 
 
 
