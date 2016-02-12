@@ -50,10 +50,15 @@
       <div>
         <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
           <label>Software Version</label>
-          <md-select ng-model="model.softwareVersionId" ng-disabled="!canModifySoftwareVersion(model)">
-            <md-option ng-repeat="softwareVersion in softwareVersions" value="{{softwareVersion.id}}" ng-selected="softwareVersion.id === model.softwareVersionId">  
-              <span ng-show="defaultSoftwareVersion.name===softwareVersion.name">Default: </span> {{softwareVersion.name}}
-            </md-option>
+          <md-select ng-change = "updateVersion(model.softwareVersionId)" ng-model="model.softwareVersionId" 
+            ng-disabled="!canModifySoftwareVersion(model)">
+              <md-option value='' ng-show="type=='reseller' || type=='customer' || type=='device'|| type=='cloud'" ng-disabled = "  
+                type == 'cloud'">
+                Default: {{defaultSoftwareVersion.name}} 
+              </md-option>
+              <md-option ng-repeat="softwareVersion in softwareVersions" value="{{softwareVersion.id}}" ng-selected="softwareVersion
+                .id === model.softwareVersionId">{{softwareVersion.name}}
+              </md-option>
           </md-select>
           <md-button class="md-primary" ng-show="type=='cloud'" ng-click="openSoftwareVersionForm($event)">Add Version</md-button>
         </md-input-container>
@@ -156,7 +161,7 @@
         <label>Event Server URL</label>
         <input name="eventServerUrl" type="url" class="form-control focus" autocomplete="off" ng-model="model.eventServerUrl" placeholder="{{model.cloud.eventServerUrl}}" ng-disabled="!canModifyEventUrl(model)" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
         <div align="right">
-          <button class="md-button md-primary md-hue" ng-hide="model.eventServerUrl===''||type=='cloud'" data-ng-click="model.eventServerUrl=''">Reset to Default</button>
+          <button class="md-button md-primary md-hue" ng-hide="model.eventServerUrl===''||type=='cloud'" data-ng-click="model.eventServerUrl=null">Reset to Default</button>
         </div>
       </md-input-container>
                   
