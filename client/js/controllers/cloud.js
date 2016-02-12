@@ -38,11 +38,11 @@ angular
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateCloud(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
-          if (newValue.turnServerUrl !== oldValue.turnServerUrl) {
-             updateCloud(id, {turnServerUrl: newValue.turnServerUrl});
+          if (!(_.isEqual(newValue.turnServerUrl, oldValue.turnServerUrl))) {
+             updateCloud(id, {turnServerUrl: newValue.turnServerUrl}, 'Turn server URL has been updated');
           }
-          if (newValue.stunServerUrl !== oldValue.stunServerUrl) {
-             updateCloud(id, {stunServerUrl: newValue.stunServerUrl});
+          if (!(_.isEqual(newValue.stunServerUrl, oldValue.stunServerUrl))) {
+             updateCloud(id, {stunServerUrl: newValue.stunServerUrl}, 'Turn server URL has been updated');
           }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl}, 'URL has been updated');
@@ -110,15 +110,12 @@ angular
             $scope.cloud = clouds[0];
             $scope.cloudId = clouds[0].id;
             $scope.currentSoftwareVersion = clouds[0].softwareVersionId;
-          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
-          $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
+            $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
+            $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
             $scope.children = clouds[0].resellers;
           } else {
             toastr.error('invalid arrray');
           }
-          $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
-          $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
-
           watchForChanges();
         });
     }
