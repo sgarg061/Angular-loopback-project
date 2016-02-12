@@ -63,6 +63,7 @@
                       <md-icon md-svg-icon="timeline"></md-icon>
                     </md-button>
                     <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
+                    <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin || device.loadingMore" md-diameter="30"></md-progress-circular>
                   </div>
 
                 </div>
