@@ -102,7 +102,7 @@ angular
           }
         })
         .state('cloud', {
-          url: '/cloud/:cloudId',
+          url: '/cloud/:cloudId/:tabIndex',
           templateUrl: 'views/cloud.html',
           controller: 'CloudController',
           data: {

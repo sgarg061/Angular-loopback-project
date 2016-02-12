@@ -648,6 +648,12 @@ i{
 .device-filter {
   cursor: pointer;
   display: inline-block;
+  margin-right: 20px;
+}
+
+.map-filter {
+  align-self: flex-start;
+  margin-right: auto;
 }
 
 .device-filter:focus {
@@ -658,11 +664,20 @@ i{
   display: inline-block;
 }
 
+.map-search {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .map-search input {
+  align-self: flex-end;
   display: inline-block;
   width: 50%;
   float: right;
   background: none;
+  margin-left: auto;
 }
 
 #map {
@@ -700,4 +715,19 @@ i{
 
 .marker-yellow {
   fill: #F7CC05;
+}
+
+.map-indicator {
+  width: 24px;
+  margin: 10px 0px 10px 0px;
+}
+
+.map-indicator:first-child {
+  margin: 10px 0px 10px 0px;
+}
+
+.hovered-location {
+  display: inline-block;
+  opacity: 0.7;
+  text-overflow: ellipsis;
 }

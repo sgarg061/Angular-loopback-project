@@ -1,21 +1,27 @@
 <div>
   <div class="map-search col-md-8">
-    <div class='device-filter' ng-class="{deselected: !showGreenDevices}" ng-click='toggle("green")'>
-      <md-icon ng-if="showGreenDevices" md-svg-icon='indicator_green' style="width:24px;margin:10px;"></md-icon>
-      <md-icon ng-if="!showGreenDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
-      <div class='device-count'>{{greenCount}}</div>
-    </div>
+    <span class="map-filter">
+      <div class='device-filter' ng-class="{deselected: !showGreenDevices}" ng-click='toggle("green")'>
+        <md-icon class="map-indicator" ng-if="showGreenDevices" md-svg-icon='indicator_green'></md-icon>
+        <md-icon class="map-indicator" ng-if="!showGreenDevices" md-svg-icon='indicator_gray'></md-icon>
+        <div class='device-count'>{{greenCount}}</div>
+      </div>
 
-    <div class='device-filter' ng-class="{deselected: !showYellowDevices}" ng-click='toggle("yellow")'>
-      <md-icon ng-if="showYellowDevices" md-svg-icon='indicator_yellow' style="width:24px;margin:10px;"></md-icon>
-      <md-icon ng-if="!showYellowDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
-      <div class='device-count'>{{yellowCount}}</div>
-    </div>
+      <div class='device-filter' ng-class="{deselected: !showYellowDevices}" ng-click='toggle("yellow")'>
+        <md-icon class="map-indicator" ng-if="showYellowDevices" md-svg-icon='indicator_yellow'></md-icon>
+        <md-icon class="map-indicator" ng-if="!showYellowDevices" md-svg-icon='indicator_gray'></md-icon>
+        <div class='device-count'>{{yellowCount}}</div>
+      </div>
 
-    <div class='device-filter' ng-class="{deselected: !showRedDevices}" ng-click='toggle("red")'>
-      <md-icon ng-if="showRedDevices" md-svg-icon='indicator_red' style="width:24px;margin:10px;"></md-icon>
-      <md-icon ng-if="!showRedDevices" md-svg-icon='indicator_gray' style="width:24px;margin:10px;"></md-icon>
-      <div class='device-count'>{{redCount}}</div>
+      <div class='device-filter' ng-class="{deselected: !showRedDevices}" ng-click='toggle("red")'>
+        <md-icon class="map-indicator" ng-if="showRedDevices" md-svg-icon='indicator_red'></md-icon>
+        <md-icon class="map-indicator" ng-if="!showRedDevices" md-svg-icon='indicator_gray'></md-icon>
+        <div class='device-count'>{{redCount}}</div>
+      </div>
+    </span>
+
+    <div class='hovered-location'>
+      {{hoveredLocationText}}
     </div>
     <input type="text" placeholder="Search" ng-model="searchQuery" ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }">
   </div>

@@ -22,6 +22,7 @@ angular
 
         scope.devices = [];
         scope.filteredDevices = [];
+        scope.hoveredLocationText = '';
 
         scope.overlay = new google.maps.OverlayView();
         scope.layer = null;
@@ -43,19 +44,17 @@ angular
 
         var attempts = 0;
         function getUpdates(lastDate) {
-          console.log('querying...', lastDate);
           var newLastDate = new Date();
           DeviceLogEntry.find({
             filter: {
               where: {checkinTime: {gt: lastDate}},
-              fields: ['id', 'deviceId', 'onlineCameras', 'totalCameras']
+              fields: ['id', 'deviceId', 'onlineCameras', 'totalCameras', 'checkinTime']
             }
           })
           .$promise
           .then(function(checkins) {
               if  (checkins.length > 0) {
                 checkins.forEach(function(c) {
-                  console.log('new checkin from ', c);
                   pulse(c.deviceId);
                 });
               }
@@ -68,14 +67,12 @@ angular
 
         function pulse(id) {
           try {
-            var elem = d3.select('#marker-' + id);
+            var elem = d3.select('#marker-inner-' + id);
             var originalColour = colourTransitionMapping[elem.data()[0].status];
-            elem.transition().duration(500).style('fill', 'blue');
-            elem.selectAll('circle').transition().duration(500).attr('r', bigMarkerRadius);
+            elem.transition().duration(500).style('fill', 'blue').attr('r', bigMarkerRadius);
 
             setTimeout(function() {
-              elem.transition().duration(500).style('fill', originalColour);
-              elem.selectAll('circle').transition().duration(500).attr('r', smallMarkerRadius);
+              elem.transition().duration(500).style('fill', originalColour).attr('r', smallMarkerRadius);
             }, 1000);
           } catch (err) {
           }
@@ -116,30 +113,50 @@ angular
                 .data(d3.entries(data))
                 .each(transform) // update existing markers
                 .enter().append('svg:svg')
-                .each(transform)
+                .each(transform);
 
               // Add a circle.
               markers.append('svg:circle')
                 .attr('r', 7.5)
                 .attr('cx', padding)
                 .attr('cy', padding)
-                .style('cursor', 'pointer')
-                .on('mouseover', function(d) {
-                  d3.select(this).transition().duration(500).attr('r', bigMarkerRadius);
-                })
-                .on('mouseout', function (d) {
-                  d3.select(this).transition().duration(500).attr('r', smallMarkerRadius);
-                })
-                .on('click', function(d) {
-                  scope.selectDevice(d);
-                });
+                .each(transformInner);
 
-              // Add a label.
-              /*markers.append("svg:text")
-                .attr("x", padding + 7)
-                .attr("y", padding + 10)
-                .attr("dy", ".31em")
-                .text(function(d) { return d.key; });*/
+              markers.append('svg:circle')
+                .attr('r', 15)
+                .attr('cx', padding)
+                .attr('cy', padding)
+                .style('opacity', 0.2)
+                .style('cursor', 'pointer')
+                .each(transformOuter);
+
+              function transformInner(d) {
+                return d3.select(this).attr('id', 'marker-inner-' + d.id);
+              };
+
+              function transformOuter(d) {
+                var id = d.id;
+
+                return d3.select(this)
+                  .attr('id', 'marker-outer-' + id)
+                  .on('mouseover', function(d) {
+                    scope.$applyAsync(function () {
+                      scope.hoveredLocationText = d.name;
+                    });
+
+                    d3.select('#marker-inner-' + id).transition().duration(500).attr('r', bigMarkerRadius);
+                  })
+                  .on('mouseout', function (d) {
+                    scope.$applyAsync(function () {
+                      scope.hoveredLocationText = '';
+                    });
+
+                    d3.select('#marker-inner-' + id).transition().duration(500).attr('r', smallMarkerRadius);
+                  })
+                  .on('click', function(d) {
+                    scope.selectDevice(d);
+                  });
+              }
 
               function transform(d) {
                 var device = d.value[2];
