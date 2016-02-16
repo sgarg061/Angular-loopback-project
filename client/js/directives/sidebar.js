@@ -10,6 +10,7 @@ angular
         filterChangedFunction: "=filterChangedFunction",
         reportChangedFunction: "=reportChangedFunction",
         numberofAvailableLicenses: "=numberofAvailableLicenses",
+        numberofLicenses: "=numberofLicenses",
         assignFiltersFunction: "=assignFiltersFunction",
         reports: "=reports",
         licensesAvailable: "=licensesAvailableFunction",

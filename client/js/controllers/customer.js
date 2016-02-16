@@ -110,8 +110,7 @@ angular
         .then(function(customers) {
           if(!_.isEmpty(customers)){
             $scope.customer = customers[0];
-          $scope.numberofAvailableLicenses = $scope.customer.licenses.filter(function(value){return value.activated == false;}).length;
-            
+            $scope.numberofAvailableLicenses = numberofLicenses($scope.customer.licenses).length;
             $scope.cloud = customers[0].reseller.cloud;
             $scope.reseller = customers[0].reseller;
             
@@ -366,9 +365,12 @@ angular
     }
 
     function licensesAvailable(Licenses) {
-      $scope.licensesArray = Licenses.filter(function(value, index){return value.activated == false;});
+      $scope.licensesArray = numberofLicenses(Licenses);
       toastr.info($scope.licensesArray.length + ' licenses copied');
       return $scope.licensesArray.map(function(elem) { return elem.key; }).join('\n');
+    }
+    function numberofLicenses(licenses) {
+      return licenses.filter(function(license){return !license.activated});
     }
     function showLicense(aLicense) {
       $mdDialog.show({
@@ -424,7 +426,7 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
-                  $scope.numberofAvailableLicenses = $scope.customer.licenses.filter(function(value){return value.activated == false;}).length;
+                  $scope.numberofAvailableLicenses = numberofLicenses($scope.customer.licenses).length;
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
@@ -763,6 +765,7 @@ angular
   }; 
 
   $scope.showLicense = showLicense;
+  $scope.numberofLicenses = numberofLicenses;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.renameCustomer = renameCustomer;
