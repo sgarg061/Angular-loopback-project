@@ -269,14 +269,24 @@ angular
                       };
                       $scope.create = function() {
                         $scope.newReseller['cloudId'] = cloud.id;
-                        Reseller.create($scope.newReseller)
-                        .$promise
-                        .then(function(reseller) {
-                          getCloud();
-                        }, function (res) {
-                          toastr.error(res.data.error.message, 'Error');
-                        });
-                        $mdDialog.cancel();
+                         var iRecur = 0;
+                        for(var i = 0; i < cloud.resellers.length; i++){ //check for duplicate name
+                          if(cloud.resellers[i].name === $scope.newReseller.name){
+                            iRecur++;
+                          }
+                        }
+                        if(iRecur > 0){
+                          toastr.error("Reseller already exists (counts:" + iRecur + "); please enter a unique name.");}
+                        else{
+                          Reseller.create($scope.newReseller)
+                          .$promise
+                          .then(function(reseller) {
+                            getCloud();
+                          }, function (res) {
+                            toastr.error(res.data.error.message, 'Error');
+                          });
+                          $mdDialog.cancel();
+                        }
                       };
                       $scope.cancel = function() {
                         $mdDialog.cancel();
