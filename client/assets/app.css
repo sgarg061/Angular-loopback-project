@@ -491,15 +491,18 @@ textarea { height:auto;}
   border: 1px solid #8A8A8A;
   border-radius: 15px;
   transition: background-color 0.15s ease;
+  width: 20px !important;
+  height: 20px !important;
 }
 
 .logEntries {
-  height: 70px !important;
+  height: 50px !important;
   min-height: 10px !important;
+  padding: 0px !important;
 }
 
 .logEntries button, .load-more-logs button{
-  height: 70px !important;
+  /*height: 70px !important;*/
   min-height: 10px !important;
 }
 
@@ -565,13 +568,16 @@ pre.pretty-json{
   text-transform: uppercase;
   font-size: 12px !important;
   background-color: white;
+  padding: 0px;
+  line-height: 21px;
+  height: 22px;
 }
 
 .checkin-camera-numbers{
   margin-right: 8px;
   background-color: gray;
   color: white;
-  padding: 2px 7px;
+  padding: 1px 6px;
   border-radius: 3px;
   font-size: 12px !important;
 }
@@ -651,12 +657,22 @@ i{
   color: #E65100;
 };*/
 
+
+.md-datepicker-triangle-button.md-button.md-icon-button {
+  top: 10px;
+}
+
+.md-datepicker-input-container {
+  padding-bottom: 0px;
+}
+
+
 /* Assigning devices to users */
 md-content.autocomplete {
   min-height: 250px;
 }
 
-md-content.autocomplete input {
+md-content.autocomplete.input {
   min-width: 400px;
 }
 
