@@ -42,7 +42,7 @@ angular
              updateCloud(id, {turnServerUrl: newValue.turnServerUrl}, 'Turn server URL has been updated');
           }
           if (!(_.isEqual(newValue.stunServerUrl, oldValue.stunServerUrl))) {
-             updateCloud(id, {stunServerUrl: newValue.stunServerUrl}, 'Turn server URL has been updated');
+             updateCloud(id, {stunServerUrl: newValue.stunServerUrl}, 'Stun server URL has been updated');
           }
           if (newValue.updateUrl !== oldValue.updateUrl) {
             updateCloud(id, {updateUrl: newValue.updateUrl}, 'URL has been updated');
