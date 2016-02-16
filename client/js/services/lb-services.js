@@ -4976,7 +4976,7 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.Customer#listUsers
+         * @name lbServices.Customer#prototype$listUsers
          * @methodOf lbServices.Customer
          *
          * @description
@@ -4987,7 +4987,8 @@ module.factory(
          *
          * @param {Object=} parameters Request parameters.
          *
-         *  - `id` – `{string}` - 
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -4999,12 +5000,10 @@ module.factory(
          *   populated with the actual data once the response is returned
          *   from the server.
          *
-         * Data properties:
-         *
-         *  - `users` – `{Array=}` - 
+         * This method returns no data.
          */
-        "listUsers": {
-          url: urlBase + "/Customers/listUsers",
+        "prototype$listUsers": {
+          url: urlBase + "/Customers/:id/listUsers",
           method: "GET"
         },
 
@@ -11515,7 +11514,7 @@ module.factory(
          *
          * Data properties:
          *
-         *  - `resposne` – `{object=}` - 
+         *  - `response` – `{object=}` - 
          */
         "forceSetPassword": {
           url: urlBase + "/Auth/forceSetPassword",

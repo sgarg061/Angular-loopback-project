@@ -45,8 +45,14 @@ module.exports = function(Customer) {
   });
 
   Customer.remoteMethod('listUsers', {
-    http: {verb: 'get', status: 200, errorStatus: 500},
-    accepts: {arg: 'id', type: 'string', required: true},
+    isStatic: false,
+    http: {
+      verb: 'get',
+      path: '/listUsers',
+      status: 200,
+      errorStatus: 500
+    },
+    accepts: [],
     returns: {arg: 'users', type: 'Array'}
   });
 
@@ -214,32 +220,14 @@ module.exports = function(Customer) {
     });
   };
 
-  Customer.listUsers = function (id, cb) {
-    var error;
-    Customer.find({where: {id: id}}, function (err, res) {
+  Customer.prototype.listUsers = function (cb) {
+    authService.listUsers('tenantId', this.id, function (err, res) {
       if (err) {
-        return cb(new Error('Error while retrieving users'));
+        logger.error(err);
+        return cb(err, null);
       }
 
-      if (res.length < 1) {
-        error = new Error('Unable to find customer ' + id);
-        error.statusCode = 404;
-        return cb(error);
-      }
-
-      if (res.length > 1) {
-        error = new Error('Duplicate customers found with id ' + id);
-        error.statusCode = 422;
-        return cb(error);
-      }
-
-      authService.listUsers('tenantId', id, function (err, res) {
-        if (err) {
-          logger.error(err);
-          cb(err, null);
-        }
-        cb(err, res);
-      });
+      cb(null, res);
     });
   };
 };
