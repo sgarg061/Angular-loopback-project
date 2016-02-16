@@ -12,6 +12,10 @@
             <p style="margin:2px 2px">{{model.email}}</p>
         </div>
 
+        <div ng-show="type=='device'">
+            <md-icon md-svg-icon='indicator_{{model.status}}' style="width:24px;margin-top:15px;"></md-icon>
+        </div>
+
         <div>
             <md-menu ng-show="type=='reseller'||type=='customer'">
                 <i aria-label="interactions menu" ng-click="openMenu($mdOpenMenu, $event)" class="material-icons">arrow_drop_down_circle</i>
@@ -41,7 +45,12 @@
 
             </md-menu>
         </div>
+
     </div>
+
+        
+
+
 
     <md-divider style="margin-bottom:10px"></md-divider>
     <div layout-padding>

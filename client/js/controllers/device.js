@@ -297,7 +297,7 @@ angular
     }
 
     $scope.selectDevice = function(device) {
-      $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
+      $state.go('device', {deviceId: (typeof device === 'string') ? device : $scope.device.id}, {reload: true});
     }
 
    $scope.showCheckin = function(anEntry) {
