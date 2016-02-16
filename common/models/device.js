@@ -364,10 +364,7 @@ module.exports = function(Device) {
         }
 
         //add reason field
-        var reasonArray = ['interval', 'status', 'forced', 'service', 'reboot'];
         deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
-        if (reasonArray.indexOf(deviceLogEntry.checkinData.reason) < 0)
-            deviceLogEntry.reason = 'other';
         delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
         var cameras = deviceLogEntry.checkinData.cameraInformation;

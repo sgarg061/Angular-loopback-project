@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
 
     $scope.reseller = {};
 
@@ -26,27 +26,40 @@ angular
         if (newValue) {
           var id = $scope.reseller.id;
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateReseller(id, {eventServerUrl: newValue.eventServerUrl});
+            updateReseller(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
-            updateReseller(id, {imageServerUrl: newValue.imageServerUrl});
+            updateReseller(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateReseller(id, {checkinInterval: newValue.checkinInterval});
+            updateReseller(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateReseller(id, {softwareVersionId: newValue.softwareVersionId});
-          }
+          
         }
       }, true);
     }
+    $scope.updateVersion = function (softwareVersion) {
+      var id = $scope.reseller.id;
+      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
+        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name) {
+          updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+          $scope.currentSoftwareVersion = softwareVersion; 
+          
+        } else {
+          updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
+        } 
+        
+      }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
+    }
 
-    function updateReseller(id, changedDictionary) {
+    function updateReseller(id, changedDictionary, message) {
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(reseller) {}, function (res) {
+        .$promise.then(function(reseller) {toastr.info(' ' + message);}, 
+          function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
     }
@@ -77,13 +90,21 @@ angular
         })
         .$promise
         .then(function(resellers) {
-          $scope.reseller = resellers[0];
+          if(!_.isEmpty(resellers)){
+            $scope.reseller = resellers[0];
 
-          $scope.cloudId = resellers[0].cloud.id;
-          $scope.cloud = resellers[0].cloud;
-          $scope.resellerId = resellers[0].id;
 
-          $scope.children = $scope.reseller.customers;
+            $scope.cloudId = resellers[0].cloud.id;
+            $scope.cloud = resellers[0].cloud;
+            $scope.resellerId = resellers[0].id;
+            $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
+
+
+            $scope.children = $scope.reseller.customers;
+          } else {
+            toastr.error('invalid array');
+          }
+
 
           getFilters();
           getReports();
@@ -113,7 +134,7 @@ angular
         .find({
           filter: {
             fields: {id: true, name: true, url: true},
-            order: 'name ASC'
+            order: 'name DESC'
           }
         })
         .$promise
@@ -234,14 +255,25 @@ angular
                       };
                       $scope.create = function() {
                         $scope.newCustomer['resellerId'] = reseller.id;
-                        Customer.create($scope.newCustomer)
-                        .$promise
-                        .then(function(customer) {
-                          getReseller();
-                        }, function (res) {
-                          toastr.error(res.data.error.message, 'Error');
-                        });
-                        $mdDialog.cancel();
+
+                        var iRecur = 0;
+                        for(var i = 0; i < reseller.customers.length; i++){ //check for duplicate name
+                          if(reseller.customers[i].name === $scope.newCustomer.name){
+                            iRecur++;
+                          }
+                        }
+                        if(iRecur > 0){
+                          toastr.error("Customer already exists (counts:" + iRecur + "); please enter a unique name.");}
+                        else{
+                          Customer.create($scope.newCustomer)
+                          .$promise
+                          .then(function(customer) {
+                            getReseller();
+                          }, function (res) {
+                            toastr.error(res.data.error.message, 'Error');
+                          });
+                          $mdDialog.cancel();
+                        }
                       };
                       $scope.cancel = function() {
                         $mdDialog.cancel();

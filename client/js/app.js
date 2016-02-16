@@ -12,8 +12,10 @@ angular
     'ngPrettyJson',
     'customUserService',
     'angular-momentjs',
+    'dialogBox',
     'd3',
     'filterService'
+
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'blockUIConfig', 'ngClipProvider',
     function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, blockUIConfig, toastr, ngClipProvider) {

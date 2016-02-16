@@ -51,6 +51,17 @@
       "foreignKey": "cameraId"
     }
   },
+  "indexes": {
+    "unique_cameras": {
+      "keys": {
+        "deviceId": 1,
+        "cameraId": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

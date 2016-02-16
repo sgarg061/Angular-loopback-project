@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
 
     $scope.clouds = [];
     $scope.resellers = [];
@@ -38,24 +38,36 @@ angular
           var id = $scope.customer.id;
 
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateCustomer(id, {checkinInterval: newValue.checkinInterval});
+            updateCustomer(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateCustomer(id, {softwareVersionId: newValue.softwareVersionId});
-          }
+          
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.customerName !== oldValue.customerName) {
-            updateCustomer(id, {customerName: newValue.customerName});
+            updateCustomer(id, {customerName: newValue.customerName}, 'Customer name has been updated');
           }
         }
       }, true);
     }
+    $scope.updateVersion = function (softwareVersion) {
+      var id = $scope.customer.id;
+      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
+        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
+          updateCustomer(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+          $scope.currentSoftwareVersion = softwareVersion; 
+        } else {
+          updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
+        } 
+        
+      }, function(result){$scope.customer.softwareVersionId = $scope.currentSoftwareVersion;});
+    }
 
-    function updateCustomer(id, changedDictionary) {
+    function updateCustomer(id, changedDictionary, message) {
       Customer.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(customer) {}, function (res) {
+        .$promise.then(function(customer) {toastr.info(' ', message);}, 
+          function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
     }
@@ -94,15 +106,19 @@ angular
         })
         .$promise
         .then(function(customers) {
-          $scope.customer = customers[0];
+          if(!_.isEmpty(customers)){
+            $scope.customer = customers[0];
 
-          $scope.reseller = customers[0].reseller;
-          $scope.cloud = customers[0].reseller.cloud;
-
-          $scope.cloud = customers[0].reseller.cloud;
-          $scope.reseller = customers[0].reseller;
-
-          $scope.devices = customers[0].devices;
+            
+            $scope.cloud = customers[0].reseller.cloud;
+            $scope.reseller = customers[0].reseller;
+            
+            $scope.devices = customers[0].devices;
+            $scope.currentSoftwareVersion = customers[0].softwareVersionId;
+            
+          } else {
+            toastr.error('invalid array');
+          }
 
           getFilters();
           getReports();
@@ -468,30 +484,39 @@ angular
   }
 
  function renameCustomer(customer) {
+    $scope.currentCustomer = customer;
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
-
           scope.renameCustomer = function() {
-              Customer.prototype$updateAttributes({id: customer.id}, {
-                name: scope.customerRename
-              })
-              .$promise
-              .then
-              (function(customer)
-                {
-                  $scope.customer.name = scope.customerRename
-                  toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
-                  $scope.selectCustomer()
-                },
-                function (res)
-                {
-                  toastr.error('Error');
-                  console.log('FOO' + res.data.error.message);
+              Customer
+                .find({
+                  filter: {
+                    where: {and: [{'resellerId':$scope.reseller.id}, {'name':scope.customerRename}]}
+                  }
+                })
+                .$promise
+                .then(function(customer){ //if the customer already exists
+                  if(customer && customer.length > 0) {
+                      toastr.error("Customer already exists; please enter a unique name.");
+                  } else {
+                      Customer.prototype$updateAttributes({id: $scope.currentCustomer.id}, {
+                        name: scope.customerRename
+                      })
+                      .$promise
+                      .then(function(currentCustomer) {
+                        $scope.currentCustomer.name = scope.customerRename
+                        toastr.success('Successful customer renaming to ' + scope.customerRename + ".");
+                        $scope.selectCustomer()
+                        $mdDialog.cancel();
+                      }, function (res) {
+                        toastr.error('Error');
+                        console.log(res.data.error.message);
+                      }
+                     );
+                  }
                 }
-              );
-            $mdDialog.cancel();
+                );
           };
-
           scope.close = function() {
             $mdDialog.cancel();
           };
@@ -525,7 +550,7 @@ angular
       .find({
         filter: {
           fields: {id: true, name: true, url: true},
-          order: 'name ASC'
+          order: 'name DESC'
         }
       })
       .$promise

@@ -11,6 +11,7 @@ angular
         reportChangedFunction: "=reportChangedFunction",
         assignFiltersFunction: "=assignFiltersFunction",
         reports: "=reports",
+        updateVersionFunction: "=updateVersionFunction",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
@@ -23,6 +24,8 @@ angular
         renameFunction: "=renameFunction",
         canModifyEventUrlFunction: "=canModifyEventUrlFunction",
         canModifyImageServerUrlFunction: "=canModifyImageServerUrlFunction",
+        addServerUrlFunction: "=addServerUrlFunction",
+        deleteServerUrlFunction: "=deleteServerUrlFunction",
         canModifyCheckinIntervalFunction: "=canModifyCheckinIntervalFunction",
         canModifySignallingServerFunction: "=canModifySignallingServerFunction",
         canModifySoftwareVersionFunction: "=canModifySoftwareVersionFunction",
@@ -50,6 +53,9 @@ angular
         }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
+        }
+        scope.updateVersion = function(model) {
+          scope.updateVersionFunction(model);
         }
         scope.reportChanged = function(filter) {
           scope.reportChangedFunction(filter);
@@ -86,6 +92,12 @@ angular
         }
         scope.canModifyImageServerUrl = function(model) {
           return scope.canModifyImageServerUrlFunction(model);
+        }
+        scope.addServerUrl = function(model, url) {
+          scope.addServerUrlFunction(model, url);
+        }
+        scope.deleteServerUrl = function(model, url, deleteUrl) {
+          scope.deleteServerUrlFunction (model, url, deleteUrl);
         }
         scope.canModifyCheckinInterval = function(model) {
           return scope.canModifyCheckinIntervalFunction(model);

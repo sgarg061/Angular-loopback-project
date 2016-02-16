@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', '$localStorage',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, $localStorage) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', 'toastr', '$localStorage', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, toastr, $localStorage, softwareService) {
 
     $scope.customer = {};
 
@@ -51,19 +51,16 @@ angular
         if (newValue) {
           var id = $scope.device.id;
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateDevice(id, {checkinInterval: newValue.checkinInterval});
-          }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateDevice(id, {softwareVersionId: newValue.softwareVersionId});
+            updateDevice(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateDevice(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateDevice(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
-            updateDevice(id, {imageServerUrl: newValue.imageServerUrl});
+            updateDevice(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateDevice(id, {eventServerUrl: newValue.eventServerUrl});
+            updateDevice(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.selectedCheckinReason !== oldValue.selectedCheckinReason) {
             console.log('checkin value selected', selectedCheckinReason);
@@ -75,16 +72,39 @@ angular
       $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
         if (newValue) {
           if (newValue !== oldValue) {
+            document.getElementById('timeline-detail').classList.remove('open');
             $scope.device.noMoreLogs = false;
           }
         }
       }, true);
 
+      // watch device for updates and save them when they're found
+      $scope.$watch("currentDate", function(newValue, oldValue) {
+        if (newValue) {
+          if (newValue !== oldValue) {
+            renderGraph();
+          }
+        }
+      }, true);
+
+    }
+    $scope.updateVersion = function (softwareVersion) {
+      var id = $scope.device.id;
+      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
+        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
+          updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+          $scope.currentSoftwareVersion = softwareVersion; 
+        } else {
+          updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
+        } 
+        
+      }, function(result){$scope.device.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
-    function updateDevice(id, changedDictionary) {
+    function updateDevice(id, changedDictionary, message) {
       Device.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(device) {}, function (res) {
+        .$promise.then(function(device) {toastr.info(' ' +  message);}, function (res) {
           toastr.error(res.data.error.message, 'Error');
         });
     }
@@ -118,9 +138,12 @@ angular
         })
         .$promise
         .then(function(devices) {
-          $scope.device = devices[0];
+           if(!_.isEmpty(devices)) {
 
-          $scope.device.loadingMore = false;
+            $scope.device = devices[0];
+            $scope.currentSoftwareVersion = devices[0].softwareVersionId;
+          }
+            $scope.device.loadingMore = false;
           $scope.device.logDataLimit = $scope.logDataLimit;
 
           if ($scope.device.logEntries.length) {
@@ -216,7 +239,7 @@ angular
         .find({
           filter: {
             fields: {id: true, name: true, url: true},
-            order: 'name ASC'
+            order: 'name DESC'
           }
         })
         .$promise
@@ -238,7 +261,7 @@ angular
         if (reason.name == 'all')
           reasonName = {neq: null};
         else if(reason.name == 'other')
-          reasonName = {neq: arrayReasons};
+          reasonName = {nin: arrayReasons};
 
 
 
@@ -274,7 +297,7 @@ angular
     }
 
     $scope.selectDevice = function(device) {
-      $state.go('device', {deviceId: (typeof device === 'string') ? device : device.id}, {reload: true});
+      $state.go('device', {deviceId: (typeof device === 'string') ? device : $scope.device.id}, {reload: true});
     }
 
    $scope.showCheckin = function(anEntry) {
@@ -519,13 +542,11 @@ angular
   $scope.loadNextDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()+1);
-    renderGraph();
   }
 
   $scope.loadPrevDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
-    renderGraph();
   }
 
   $scope.checkin = checkin;
