@@ -55,17 +55,18 @@
                     <h3 style="text-align: center; " ng-show="timelineView" flex="30">{{currentDate | date: 'mediumDate' }}</h3>
                     <md-button flex="15" class="md-primary" ng-click="loadNextDay()" ng-if="device.id != sendingCheckin" ng-disabled="device.loadingMore" ng-show="timelineView">Next Day</md-button>
 
-                  <div style="margin-right: 10px; text-align:right;" flex>
+
+                  <div style="margin-right: 10px; text-align:right; position:relative;" flex layout="row" layout-align="end-center">
+                    <div><md-progress-circular md-mode="indeterminate" md-diameter="30" ng-if="device.id == sendingCheckin || device.loadingMore"></md-progress-circular></div>
+                    <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
                     <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false" style="{{!timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="list"></md-icon>
                     </md-button>
                     <md-button class="md-icon-button md-primary" aria-label="Timeline" ng-click="timelineView = true;" style="{{timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="timeline"></md-icon>
                     </md-button>
-                    <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
-                    
                   </div>
-                  <md-progress-circular md-mode="indeterminate" ng-if="device.id == sendingCheckin || device.loadingMore" md-diameter="30"></md-progress-circular>
+
                 </div>
 
                 <div layout="column" ng-show="timelineView" id="checkin-list">
