@@ -137,16 +137,6 @@ h2{
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
   margin: -10px 0px 0px -10px !important;
   background-color: #ffffff;
-/*  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;  */
-  /*position: fixed;*/
   width: 305px;
   height: 100%;
   -webkit-flex: 0 0 300px;
