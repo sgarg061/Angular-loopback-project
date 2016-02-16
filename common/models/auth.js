@@ -70,7 +70,7 @@ module.exports = function (Auth) {
       var userType = jwt.userType;
 
       // TODO: allow users to update themselves
-      if (['solink', 'cloud', 'reseller'].indexOf(userType) < 0) {
+      if (!isCallHomeLevelUserType(userType)) {
         return cb(unauthorizedError, null);
       }
 
@@ -107,7 +107,7 @@ module.exports = function (Auth) {
     if (context && context.get('jwt')) {
       var jwt = context.get('jwt');
       var userType = jwt.userType;
-      if (['solink', 'cloud', 'reseller'].indexOf(userType) < 0) {
+      if (!isCallHomeLevelUserType(userType)) {
         return cb(unauthorizedError, null);
       }
 
@@ -142,7 +142,7 @@ module.exports = function (Auth) {
     if (context && context.get('jwt')) {
       var jwt = context.get('jwt');
       var userType = jwt.userType;
-      if (['solink', 'cloud', 'reseller'].indexOf(userType) < 0) {
+      if (!isCallHomeLevelUserType(userType)) {
         return cb(unauthorizedError, null);
       }
 
@@ -223,6 +223,10 @@ module.exports = function (Auth) {
       }
     });
   };
+
+  function isCallHomeLevelUserType(userType) {
+    return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
+  }
 
   function canModifyUser(user, cb) {
     var context = loopback.getCurrentContext();
