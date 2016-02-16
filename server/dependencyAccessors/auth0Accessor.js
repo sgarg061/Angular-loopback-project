@@ -9,8 +9,7 @@ var Auth0Accessor = function () {
 Auth0Accessor.prototype.login = function (username, password, cb) {
   'use strict';
   var config = new Config();
-  console.log(username);
-  console.log(password);
+
   request({
     url: config.auth0URL + '/oauth/ro',
     method: 'POST',

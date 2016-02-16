@@ -69,29 +69,50 @@ module.exports = function (Auth) {
       var jwt = context.get('jwt');
       var userType = jwt.userType;
 
-      // TODO: allow users to update themselves
-      if (!isCallHomeLevelUserType(userType)) {
-        return cb(unauthorizedError, null);
-      }
+      if (userType === 'standard' || userType === 'admin') {
+        // users can only modify themselves, and only a small portion of themselves.
+        authService.getUser(id, function (err, user) {
+          if (err) {
+            return cb(err, null);
+          }
 
-      authService.getUser(id, function (err, user) {
-        if (err) {
-          return cb(err, null);
-        }
-
-        // lost the context... reset it.  TODO: investigate why this happens
-        context.set('jwt', jwt);
-
-        canModifyUser(user, function(canModify) {
-          if (canModify) {
-            authService.updateMetadata(id, metadata, function (err, res) {
-              return cb(err, res);
-            });
-          } else {
+          context.set('jwt', jwt);
+          if (user.app_metadata.tenantId !== jwt.tenantId) {
             return cb(unauthorizedError, null);
           }
+
+          // delete properties that they are not allowed to modify.
+          delete metadata.tenantId;
+          delete metadata.userType;
+          delete metadata.devices;
+
+          authService.updateMetadata(id, metadata, function (err, res) {
+            return cb(err, res);
+          });
         });
-      });
+      }
+      else if (!isCallHomeLevelUserType(userType)) {
+        return cb(unauthorizedError, null);
+      } else {
+        authService.getUser(id, function (err, user) {
+          if (err) {
+            return cb(err, null);
+          }
+
+          // lost the context... reset it.  TODO: investigate why this happens
+          context.set('jwt', jwt);
+
+          canModifyUser(user, function(canModify) {
+            if (canModify) {
+              authService.updateMetadata(id, metadata, function (err, res) {
+                return cb(err, res);
+              });
+            } else {
+              return cb(unauthorizedError, null);
+            }
+          });
+        });
+      }
     } else {
       return cb(unauthorizedError, null);
     }

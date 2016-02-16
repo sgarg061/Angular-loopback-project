@@ -161,7 +161,6 @@ angular
           });
         };
 
-        // TODO: inject user types into the directive and pass them through the template
         scope.createUser = function (userTypes, userKey, userValue) {
           $mdDialog.show({
             templateUrl: 'views/createUser.tmpl.html',
