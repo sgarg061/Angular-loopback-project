@@ -5,7 +5,7 @@ angular
     
     $scope.clouds = [];
     $scope.resellers = [];
-    $scope.numberofAvailableLicenses = 0;
+    $scope.numberOfAvailableLicenses = 0;
     $scope.customers = [];
     $scope.customer = {};
     $scope.devices = [];
@@ -110,7 +110,7 @@ angular
         .then(function(customers) {
           if(!_.isEmpty(customers)){
             $scope.customer = customers[0];
-            $scope.numberofAvailableLicenses = numberofLicenses($scope.customer.licenses).length;
+            $scope.numberOfAvailableLicenses = availableLicenses($scope.customer.licenses).length;
             $scope.cloud = customers[0].reseller.cloud;
             $scope.reseller = customers[0].reseller;
             
@@ -365,11 +365,11 @@ angular
     }
 
     function licensesAvailable(Licenses) {
-      $scope.licensesArray = numberofLicenses(Licenses);
+      $scope.licensesArray = availableLicenses(Licenses);
       toastr.info($scope.licensesArray.length + ' licenses copied');
       return $scope.licensesArray.map(function(elem) { return elem.key; }).join('\n');
     }
-    function numberofLicenses(licenses) {
+    function availableLicenses(licenses) {
       return licenses.filter(function(license){return !license.activated});
     }
     function showLicense(aLicense) {
@@ -426,7 +426,7 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
-                  $scope.numberofAvailableLicenses = numberofLicenses($scope.customer.licenses).length;
+                  $scope.numberOfAvailableLicenses = availableLicenses($scope.customer.licenses).length;
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
@@ -765,7 +765,7 @@ angular
   }; 
 
   $scope.showLicense = showLicense;
-  $scope.numberofLicenses = numberofLicenses;
+  $scope.availableLicenses = availableLicenses;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.renameCustomer = renameCustomer;
