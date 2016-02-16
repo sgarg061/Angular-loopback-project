@@ -131,17 +131,13 @@ h2{
 /* Sidebar */
 
 .sidebar-container{
-  -webkit-flex: 0 0 300px;
-  -ms-flex: 0 0 300px;
-  flex: 0 0 300px;
-  position: relative;
 }
 
 .sidebar {
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
   margin: -10px 0px 0px -10px !important;
   background-color: #ffffff;
-  display: -webkit-box;
+/*  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: ms-flexbox;
@@ -149,16 +145,38 @@ h2{
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
   -ms-flex-direction: column;
-  flex-direction: column;  
-  position: fixed;
+  flex-direction: column;  */
+  /*position: fixed;*/
   width: 305px;
   height: 100%;
+  -webkit-flex: 0 0 300px;
+  -ms-flex: 0 0 300px;
+  flex: 0 0 300px;
+  position: relative;
 }
 
 .sidebar md-content{
+  position: fixed;
+  width: 305px;
+  height: 100%;
   padding-bottom: 60px;
 }
 
+
+.sidebar.close{
+  width: 0px;
+  -webkit-flex: 0;
+  -ms-flex: 0;
+  flex: 0;
+}
+.sidebar.close .side-bar-toggle{
+  transform: rotate(0deg);
+  margin-left: -300px;
+}
+
+.sidebar.close md-content{
+  width: 0px;
+}
 @media only screen and (max-width: 640px) {
   .sidebar-container{
     -webkit-flex: 0;
@@ -659,4 +677,13 @@ i{
 }
 .md-datepicker-input-container {
   padding-bottom: 0px;
+}
+
+
+.side-bar-toggle{
+  position: fixed;
+  left: 310px;
+  bottom: 5px;
+  transform: rotate(180deg);
+  transition: margin-left 0.15s ease-in;
 }

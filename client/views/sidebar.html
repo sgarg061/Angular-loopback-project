@@ -1,4 +1,10 @@
-<div class="sidebar">
+  <div class="sidebar" ng-init="open = true" ng-class="{'close':!open}">
+  <md-button class="md-fab side-bar-toggle" aria-label="Toggle Sidebar" ng-click="open = !open">
+      <md-icon md-svg-icon="right_arrow"></md-icon>
+    <md-tooltip md-direction="top">
+      {{open ? 'Hide' : 'Show'}} Sidebar
+    </md-tooltip>
+  </md-button>
   <md-content>
     <div layout="row" layout-padding layout-align="space-between center" style="padding-left:24px">
         <div layout="column" layout-align="start start">
@@ -199,3 +205,5 @@
   </div>
   </md-content>
 </div>
+
+
