@@ -21,7 +21,9 @@ angular
 
     $scope.cascadedReports = [];
     $scope.ownedReports = [];
-    
+
+    $scope.selectedTab = $stateParams.tabIndex;
+
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
       
@@ -169,7 +171,7 @@ angular
         })
     }
 
-    
+
     function getReports(){
       SearchFilter
         .find({
@@ -417,7 +419,7 @@ angular
       getFilters();
     });
   };
-   
+
 
   $scope.addReport = function(connector) {
     filterService.addReport('cloud', $stateParams.cloudId, function(){
@@ -429,7 +431,7 @@ angular
     filterService.actionReport(filter, function(){
       getReports();
     });
-  }; 
+  };
 
 }]);
 
