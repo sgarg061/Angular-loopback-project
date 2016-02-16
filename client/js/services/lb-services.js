@@ -11494,6 +11494,11 @@ module.factory(
          *
          * @param {Object=} parameters Request parameters.
          *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
          *  - `id` – `{string=}` - 
          *
          *  - `password` – `{string=}` - 
@@ -11514,7 +11519,7 @@ module.factory(
          */
         "forceSetPassword": {
           url: urlBase + "/Auth/forceSetPassword",
-          method: "GET"
+          method: "PUT"
         },
 
         /**

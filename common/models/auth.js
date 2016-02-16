@@ -406,8 +406,8 @@ module.exports = function (Auth) {
       {arg: 'id', type: 'string'},
       {arg: 'password', type: 'string'}
     ],
-    http: {verb: 'get', status: 200, errorStatus: 500},
-    returns: {arg: 'resposne', type: 'object'}
+    http: {verb: 'put', status: 200, errorStatus: 500},
+    returns: {arg: 'response', type: 'object'}
   });
 
   Auth.remoteMethod('deleteUser', {
