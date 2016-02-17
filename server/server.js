@@ -5,6 +5,7 @@ var Auth0Accessor = require('./dependencyAccessors/auth0Accessor');
 var RedisAccessor = require('./dependencyAccessors/redisAccessor');
 var authService = require('./services/authService');
 var cacheService = require('./services/cacheService');
+var liveDataService = require('./services/liveDataService');
 var Config = require('../config');
 var loopbackConsole = require('loopback-console');
 var models = require('./model-config.json');
@@ -81,6 +82,8 @@ app.start = function() {
     };
 
     var server = https.createServer(options, app);
+    liveDataService.initialize(server);
+
     return server.listen(app.get('port'), function () {
         app.emit('started');
         console.log('Web server listening at %s', app.get('url'));
