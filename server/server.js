@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 var boot = require('loopback-boot');
 var Auth0Accessor = require('./dependencyAccessors/auth0Accessor');
 var RedisAccessor = require('./dependencyAccessors/redisAccessor');
+var SocketAccessor = require('./dependencyAccessors/socketAccessor');
 var authService = require('./services/authService');
 var cacheService = require('./services/cacheService');
 var liveDataService = require('./services/liveDataService');
@@ -82,7 +83,7 @@ app.start = function() {
     };
 
     var server = https.createServer(options, app);
-    liveDataService.initialize(server);
+    liveDataService.initialize(server, SocketAccessor);
 
     return server.listen(app.get('port'), function () {
         app.emit('started');
