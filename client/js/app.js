@@ -44,6 +44,7 @@ angular
                     .icon("show", "./assets/svg/ic_pageview_black_24px.svg", 24)
                     .icon("timeline", "./assets/svg/ic_timeline_black_24px.svg", 24)
                     .icon("cached", "./assets/svg/ic_cached_black_24px.svg", 24)
+                    .icon("chevron_down", "./assets/svg/chevron_down.svg", 24)
                     .icon("list", "./assets/svg/ic_view_list_black_24px.svg", 24);
 
 
@@ -75,7 +76,7 @@ angular
                 $location.path('/login');
                 break;
               case 500:
-              toastr.error(response.message, 'Error');
+                console.error(response);
                 break;
             }
             return $q.reject(response);

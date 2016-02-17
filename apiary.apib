@@ -5,6 +5,166 @@ HOST: http://polls.apiblueprint.org/
 
 This is a mock API for the Call Home server so we can work as if it is already built
 
+## Group Customers
+
+## List Users [/api/customers/{id}/listUsers]
+
+List all of the users under a given tenant.
+
+### List Users [GET]
+
++ Response 200 (application/json)
+
+        {
+            "users":[
+                {
+                    "email":"cwhiten+jumanji@solinkcorp.com",
+                    "email_verified":true,
+                    "user_id":"auth0|56bb758503dd760e71a57c96",
+                    "picture":"https://s.gravatar.com/avatar/908b60832e2bd6efc712b3bfa7fcd7bd?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fcw.png",
+                    "nickname":"cwhiten+jumanji",
+                    "identities":[
+                        {
+                            "user_id":"56bb758503dd760e71a57c96",
+                            "provider":"auth0",
+                            "connection":"Username-Password-Authentication",
+                            "isSocial":false
+                        }
+                    ],
+                    "updated_at":"2016-02-16T16:24:21.198Z",
+                    "created_at":"2016-02-10T17:38:13.358Z",
+                    "last_password_reset":"2016-02-12T16:33:55.688Z",
+                    "name":"cwhiten+jumanji@solinkcorp.com",
+                    "last_login":"2016-02-12T16:35:14.883Z",
+                    "logins_count":1,
+                    "app_metadata":{
+                        "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
+                        "userType":"admin",
+                        "wrtc":"false",
+                        "defaultToHD":"false",
+                        "devices":[
+                            "7b43b990-c536-11e5-8f73-4bebc88006af",
+                            "8edc0d40-c536-11e5-8f73-4bebc88006af"
+                        ]
+                    }
+                },
+                {
+                    "email":"cwhiten+stripedemo@solinkcorp.com",
+                    "email_verified":true,
+                    "user_id":"auth0|56a924c536e4c4fb3922c641",
+                    "picture":"https://s.gravatar.com/avatar/245652a80c146e2ad3c2f62aa51f14e0?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fcw.png",
+                    "nickname":"cwhiten+stripedemo",
+                    "identities":[
+                        {
+                            "user_id":"56a924c536e4c4fb3922c641",
+                            "provider":"auth0",
+                            "connection":"Username-Password-Authentication",
+                            "isSocial":false
+                        }
+                    ],
+                    "updated_at":"2016-02-16T15:35:35.269Z",
+                    "created_at":"2016-01-27T20:12:53.965Z",
+                    "last_password_reset":"2016-02-10T15:37:14.502Z",
+                    "name":"cwhiten+stripedemo@solinkcorp.com",
+                    "last_ip":"52.35.201.87",
+                    "last_login":"2016-02-10T15:37:35.209Z",
+                    "logins_count":4,
+                    "app_metadata":{
+                        "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
+                        "userType":"admin",
+                        "shouldPlayWebRTC":"false",
+                        "shouldDefaultToHD":"true",
+                        "devices":[
+                            "f8ee3f10-c535-11e5-8f73-4bebc88006af"
+                        ],
+                        "wrtc":"true",
+                        "defaultToHD":"true"
+                    }
+                },
+                {
+                    "email":"cwhiten+test981@solinkcorp.com",
+                    "email_verified":true,
+                    "user_id":"auth0|56bb760e1f3084f139ffee35",
+                    "picture":"https://s.gravatar.com/avatar/3618381e3889e1267616f4c76ce0eb6b?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fcw.png",
+                    "identities":[
+                        {
+                            "user_id":"56bb760e1f3084f139ffee35",
+                            "provider":"auth0",
+                            "connection":"Username-Password-Authentication",
+                            "isSocial":false
+                        }
+                    ],
+                    "updated_at":"2016-02-10T17:40:30.533Z",
+                    "created_at":"2016-02-10T17:40:30.533Z",
+                    "app_metadata":{
+                        "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
+                        "userType":"admin"
+                    }
+                },
+                {
+                    "email":"cwhiten+anothertest@solinkcorp.com",
+                    "email_verified":true,
+                    "user_id":"auth0|56bb763603dd760e71a57d30",
+                    "picture":"https://s.gravatar.com/avatar/1a719b8ac72d98d2a6ce82d3f6b7bb2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fcw.png",
+                    "identities":[
+                        {
+                            "user_id":"56bb763603dd760e71a57d30",
+                            "provider":"auth0",
+                            "connection":"Username-Password-Authentication",
+                            "isSocial":false
+                        }
+                    ],
+                    "updated_at":"2016-02-10T17:41:10.068Z",
+                    "created_at":"2016-02-10T17:41:10.068Z",
+                    "app_metadata":{
+                        "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
+                        "userType":"standard"
+                    }
+                },
+                {
+                    "email":"hello@world.com",
+                    "email_verified":true,
+                    "user_id":"auth0|56bb7b68ea988c1753045ee5",
+                    "picture":"https://s.gravatar.com/avatar/4b3cdf9adfc6258a102ab90eb64565ea?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fhe.png",
+                    "identities":[
+                        {
+                            "user_id":"56bb7b68ea988c1753045ee5",
+                            "provider":"auth0",
+                            "connection":"Username-Password-Authentication",
+                            "isSocial":false
+                        }
+                    ],
+                    "updated_at":"2016-02-10T18:03:20.254Z",
+                    "created_at":"2016-02-10T18:03:20.254Z",
+                    "app_metadata":{
+                        "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
+                        "userType":"admin"
+                    }
+                },
+                {
+                    "email":"test12@solinkcorp.com",
+                    "email_verified":true,
+                    "user_id":"auth0|56bb7c3bea988c1753045f92",
+                    "picture":"https://s.gravatar.com/avatar/decd95c7e9cb13e41cfc49b5912c1b45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png",
+                    "identities":[
+                        {
+                            "user_id":"56bb7c3bea988c1753045f92",
+                            "provider":"auth0",
+                            "connection":"Username-Password-Authentication",
+                            "isSocial":false
+                        }
+                    ],
+                    "updated_at":"2016-02-10T18:06:51.342Z",
+                    "created_at":"2016-02-10T18:06:51.342Z",
+                    "app_metadata":{
+                        "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
+                        "userType":"admin"
+                    }
+                }
+            ]
+        }
+
+
 ## Group Devices
 
 ## Get Devices [/api/devices/{id}]
@@ -70,62 +230,62 @@ A device object has the following attributes:
                 "localIP": "10.1.1.2",
                 "cameras": [
                      {
-                         "id":"c5084250-4b37-11e5-8184-752d1c0476b3",    
-                         "name":"axis camera",    
-                         "thumbnail": "12/thumbnails/hello.jpg",    
-                         "streams": [     
-                             {   
-                                 "id": "streamabc",    
-                                 "name": "HD",   
-                                 "earliestSegmentDate": 1450211609000,   
+                         "id":"c5084250-4b37-11e5-8184-752d1c0476b3",
+                         "name":"axis camera",
+                         "thumbnail": "12/thumbnails/hello.jpg",
+                         "streams": [
+                             {
+                                 "id": "streamabc",
+                                 "name": "HD",
+                                 "earliestSegmentDate": 1450211609000,
                                  "latestSegmentDate": 1550211609000
-                             },     
-                             {    
+                             },
+                             {
                                  "id": "streamdef",
-                                 "name": "SD",    
-                                 "earliestSegmentDate": 1450211609000,   
-                                 "latestSegmentDate": 1550211609000     
-                             }   
-                         ]   
-                     },    
-                     {   
-                         "id":"d5084250-4b37-11e5-8184-752d1c0476b3",    
-                         "name":" POS camera",   
-                         "thumbnail": "12/thumbnails/hello.jpg",   
-                         "streams": [    
-                             {   
-                                 "id": "streamabc",    
-                                 "name": "HD",   
-                                 "earliestSegmentDate": 1450211609000,   
-                                 "latestSegmentDate": 1550211609000    
-                             },    
-                             {   
-                                 "id": "streamdef",    
-                                 "name": "SD",   
-                                 "earliestSegmentDate": 1450211609000,   
-                                 "latestSegmentDate": 1550211609000    
-                             }   
-                         ]   
-                     },    
-                     {   
-                         "id":"e5084250-4b37-11e5-8184-752d1c0476b3",    
-                         "name":"Door camera",   
-                         "thumbnail": "12/thumbnails/hello.jpg",   
-                         "streams": [    
-                            {   
-                                 "id": "streamabc",    
-                                 "name": "HD",   
-                                 "earliestSegmentDate": 1450211609000,   
-                                 "latestSegmentDate": 1550211609000    
-                             },    
-                             {   
-                                 "id": "streamdef",    
-                                 "name": "SD",   
-                                 "earliestSegmentDate": 1450211609000,   
-                                 "latestSegmentDate": 1550211609000    
-                             }   
-                         ]   
-                     }   
+                                 "name": "SD",
+                                 "earliestSegmentDate": 1450211609000,
+                                 "latestSegmentDate": 1550211609000
+                             }
+                         ]
+                     },
+                     {
+                         "id":"d5084250-4b37-11e5-8184-752d1c0476b3",
+                         "name":" POS camera",
+                         "thumbnail": "12/thumbnails/hello.jpg",
+                         "streams": [
+                             {
+                                 "id": "streamabc",
+                                 "name": "HD",
+                                 "earliestSegmentDate": 1450211609000,
+                                 "latestSegmentDate": 1550211609000
+                             },
+                             {
+                                 "id": "streamdef",
+                                 "name": "SD",
+                                 "earliestSegmentDate": 1450211609000,
+                                 "latestSegmentDate": 1550211609000
+                             }
+                         ]
+                     },
+                     {
+                         "id":"e5084250-4b37-11e5-8184-752d1c0476b3",
+                         "name":"Door camera",
+                         "thumbnail": "12/thumbnails/hello.jpg",
+                         "streams": [
+                            {
+                                 "id": "streamabc",
+                                 "name": "HD",
+                                 "earliestSegmentDate": 1450211609000,
+                                 "latestSegmentDate": 1550211609000
+                             },
+                             {
+                                 "id": "streamdef",
+                                 "name": "SD",
+                                 "earliestSegmentDate": 1450211609000,
+                                 "latestSegmentDate": 1550211609000
+                             }
+                         ]
+                     }
                  ]
             }
 
@@ -616,7 +776,7 @@ A device object has the following attributes:
                     "vms": 8080,
                     "uploader": 3000,
                     "checkin": 1234
-                }    
+                }
             }
 
 ## Group Licenses
@@ -788,6 +948,135 @@ An email is sent to the user's current email to confirm changing the password
             "response": "Forgot password email successfully sent."
         }
 
+## Force set password [/api/auth/forceSetPassword]
+
+Force set a user's password to a specific value
+
+### Force Set Password [PUT]
++ Request (application/json)
+
+        {
+            "id": "auth0|5633b2d0794d1c5a0b72a79d",
+            "password": "chrisrules"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "response": "Password successfully updated."
+        }
+
+## Create user [/api/auth/createUser]
+
+Create a new user within our authentication service.
+This API endpoint should be moved to a `/users` endpoint in a later migration.
+
+### Create User [POST]
++ Request (application/json)
+
+        {
+            "email": "test@customer.com",
+            "password": "solink",
+            "userType": "admin",
+            "orgId": "a3953d60-7f31-11e5-92b7-c9701c189e5f"
+        }
++ Response 201 (application/json)
+
+        {
+            "response":{
+                "email":"test@customer.com",
+                "email_verified":true,
+                "user_id":"auth0|5633b2d0794d1c5a0b72a79d",
+                "picture":"https://s.gravatar.com/avatar/771aa3cf167856f1f2f0270bbf3c878f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png",
+                "nickname":"test",
+                "identities":[
+                    {
+                        "user_id":"5633b2d0794d1c5a0b72a79d",
+                        "provider":"auth0",
+                        "connection":"Username-Password-Authentication",
+                        "isSocial":false
+                    }
+                ],
+                "updated_at":"2016-02-16T15:53:35.971Z",
+                "created_at":"2015-10-30T18:11:28.091Z",
+                "name":"test@customer.com",
+                "last_password_reset":"2015-11-12T22:42:03.443Z",
+                "app_metadata":{
+                    "tenantId":"a3953d60-7f31-11e5-92b7-c9701c189e5f",
+                    "userType":"admin"
+                },
+                "last_ip":"52.35.201.87",
+                "last_login":"2016-02-16T15:42:12.897Z",
+                "logins_count":814
+            }
+        }
+
+## Delete user [/api/auth/deleteUser]
+
+Delete a user from our authentication service.
+This API endpoint should be moved to a `/users` endpoint in a later migration.
+
+### Delete User [DELETE]
++ Request (application/json)
+
+        {
+            "id": "auth0|5633b2d0794d1c5a0b72a79d"
+        }
+
++ Response 204 (application/json)
+
+## Update user metadata [/api/auth/updateUserMetadata]
+
+A user's internal app_metadata is modified to reflect the property changes requested.  This is useful for changing a user's user type, assigning them to a subset of devices, or enabling and disabling certain functionality encoded in that user's JWT.
+This API endpoint should be moved to a `/users` endpoint in a later migration.
+
+### Update user metadata [PUT]
++ Request (application/json)
+
+        {
+            "id": "auth0|5633b2d0794d1c5a0b72a79d",
+            "metadata": {
+                "devices": ["abcdefg", "12345"],
+                "wrtc": "true"
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "response":{
+                "email":"test@customer.com",
+                "email_verified":true,
+                "user_id":"auth0|5633b2d0794d1c5a0b72a79d",
+                "picture":"https://s.gravatar.com/avatar/771aa3cf167856f1f2f0270bbf3c878f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png",
+                "nickname":"test",
+                "identities":[
+                    {
+                        "user_id":"5633b2d0794d1c5a0b72a79d",
+                        "provider":"auth0",
+                        "connection":"Username-Password-Authentication",
+                        "isSocial":false
+                    }
+                ],
+                "updated_at":"2016-02-16T15:53:35.971Z",
+                "created_at":"2015-10-30T18:11:28.091Z",
+                "name":"test@customer.com",
+                "last_password_reset":"2015-11-12T22:42:03.443Z",
+                "app_metadata":{
+                    "tenantId":"a3953d60-7f31-11e5-92b7-c9701c189e5f",
+                    "userType":"admin",
+                    "wrtc": "true",
+                    "devices": [
+                        "abcdefg",
+                        "12345"
+                    ]
+                },
+                "last_ip":"52.35.201.87",
+                "last_login":"2016-02-16T15:42:12.897Z",
+                "logins_count":814
+            }
+        }
+
 ## Group Connectors
 
 ## Connectors [/api/connectors/{connectorId}/filter]
@@ -956,10 +1245,10 @@ Remove, edit, or get specific software versions.
 Get or add available software version numbers.
 
 ### Get all software versions [GET]
-+ Response 200 (application/json) 
++ Response 200 (application/json)
 
     + Body
-    
+
             [
                 {
                     "id": "33721400-b491-11e5-ae4d-2db205d4c135",
@@ -1061,7 +1350,7 @@ It has the following attributes:
 ### Get IP Address [GET]
 
  + Response 200 (application/json)
- 
+
      + Body
- 
+
              "207.35.173.122"

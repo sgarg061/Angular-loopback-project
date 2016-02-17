@@ -640,6 +640,10 @@ md-input-container .md-input.scripted:disabled{
   background:#BBDEFB;
 }
 
+.create-button:focus {
+  outline: none;
+}
+
 label{
   left: auto !important;
 }
@@ -662,9 +666,10 @@ i{
 };*/
 
 
-.md-datepicker-triangle-button.md-button.md-icon-button{
+.md-datepicker-triangle-button.md-button.md-icon-button {
   top: 10px;
 }
+
 .md-datepicker-input-container {
   padding-bottom: 0px;
 }
@@ -763,3 +768,60 @@ i{
   opacity: 0.7;
   text-overflow: ellipsis;
 }
+
+
+/* Assigning devices to users */
+md-content.autocomplete {
+  min-height: 250px;
+}
+
+md-content.autocomplete.input {
+  min-width: 400px;
+}
+
+.md-item-text.compact {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.contact-item {
+  box-sizing: border-box;
+}
+
+.contact-item.selected {
+  opacity: 0.5;
+}
+
+.contact-item.selected h3 {
+  opacity: 0.5;
+}
+
+.contact-item .md-list-item-text h3 {
+  margin: 0 !important;
+  padding: 0;
+  line-height: 1.2em !important;
+}
+
+.contact-item .md-list-item-text h3, .chipsdemoContactChips .contact-item .md-list-item-text p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 960px) {
+  .contact-item {
+    float: left;
+    width: 25%;
+  }
+}
+
+md-contact-chips {
+  margin-bottom: 10px;
+}
+
+.chipsdemoContactChips .md-chips {
+  padding: 5px 0 8px; }
+
+.chipsdemoContactChips .fixedRows {
+  height: 250px;
+  overflow: hidden; }
