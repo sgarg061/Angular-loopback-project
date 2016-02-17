@@ -23,8 +23,8 @@ module.exports = {
   listUsers: function (type, id, cb) {
     authAccessor.listUsers(type, id, cb);
   },
-  updateMetadata: function (id, metadata, cb) {
-    authAccessor.updateMetadata(id, metadata, cb);
+  updateMetadata: function (id, appMetadata, userMetadata, cb) {
+    authAccessor.updateMetadata(id, appMetadata, userMetadata, cb);
   },
   getUser: function (id, cb) {
     authAccessor.getUser(id, cb);

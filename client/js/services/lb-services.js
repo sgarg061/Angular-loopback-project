@@ -5000,7 +5000,9 @@ module.factory(
          *   populated with the actual data once the response is returned
          *   from the server.
          *
-         * This method returns no data.
+         * Data properties:
+         *
+         *  - `users` – `{Array=}` - 
          */
         "prototype$listUsers": {
           url: urlBase + "/Customers/:id/listUsers",
@@ -11459,7 +11461,9 @@ module.factory(
          *
          *  - `id` – `{string=}` - 
          *
-         *  - `metadata` – `{object=}` - 
+         *  - `appMetadata` – `{object=}` - 
+         *
+         *  - `userMetadata` – `{object=}` - 
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.

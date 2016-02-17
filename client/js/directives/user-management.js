@@ -44,14 +44,17 @@ angular
             });
           }
 
-          scope.shouldPlayWebRTC = user.app_metadata.wrtc === 'true';
-          scope.shouldDefaultToHD = user.app_metadata.defaultToHD === 'true';
+          if (user.user_metadata) {
+            scope.shouldPlayWebRTC = user.user_metadata.wrtc === 'true';
+            scope.shouldDefaultToHD = user.user_metadata.defaultToHD === 'true';
+          }
         };
 
         scope.saveUser = function () {
           var appMetadata = {};
-          appMetadata.wrtc = scope.shouldPlayWebRTC;
-          appMetadata.defaultToHD = scope.shouldDefaultToHD;
+          var userMetadata = {};
+          userMetadata.wrtc = scope.shouldPlayWebRTC;
+          userMetadata.defaultToHD = scope.shouldDefaultToHD;
           appMetadata.devices = scope.selectedDevices.map(function (device) {
             return device.id;
           });
@@ -63,7 +66,8 @@ angular
           // update user metadata
           Auth.updateUserMetadata({
             id: scope.selectedUser.user_id,
-            metadata: appMetadata
+            appMetadata: appMetadata,
+            updateUserMetadata: userMetadata
           })
             .$promise
             .then(function (res) {

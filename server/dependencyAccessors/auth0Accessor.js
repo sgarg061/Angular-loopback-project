@@ -265,16 +265,23 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
   });
 };
 
-Auth0Accessor.prototype.updateMetadata = function (id, metadata, cb) {
+Auth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata, cb) {
   'use strict';
   var config = new Config();
+
+  var updateForm = {};
+  if (appMetadata) {
+    updateForm.app_metadata = appMetadata;
+  }
+
+  if (userMetadata) {
+    updateForm.user_metadata = userMetadata;
+  }
 
   request({
     url: config.auth0URL + '/api/v2/users/' + id,
     method: 'PATCH',
-    form: {
-      app_metadata: metadata
-    },
+    form: updateForm,
     auth: {
       bearer: config.updateUserToken
     }

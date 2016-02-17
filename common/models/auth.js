@@ -56,7 +56,7 @@ module.exports = function (Auth) {
     authService.forgotPassword(email, newPassword, cb);
   };
 
-  Auth.updateUserMetadata = function (id, metadata, cb) {
+  Auth.updateUserMetadata = function (id, appMetadata, userMetadata, cb) {
     // there is a common pattern here across these Auth methods.
     // Refactor whenever time
     logger.debug('Updating user ' + id);
@@ -81,12 +81,8 @@ module.exports = function (Auth) {
             return cb(unauthorizedError, null);
           }
 
-          // delete properties that they are not allowed to modify.
-          delete metadata.tenantId;
-          delete metadata.userType;
-          delete metadata.devices;
-
-          authService.updateMetadata(id, metadata, function (err, res) {
+          // users can't update their own app metadata. pass through null
+          authService.updateMetadata(id, null, userMetadata, function (err, res) {
             return cb(err, res);
           });
         });
@@ -104,7 +100,13 @@ module.exports = function (Auth) {
 
           canModifyUser(user, function(canModify) {
             if (canModify) {
-              authService.updateMetadata(id, metadata, function (err, res) {
+              // don't allow for modifying userType or tenantId/resellerId/cloudId right now.
+              delete appMetadata.userType;
+              delete appMetadata.tenantId;
+              delete appMetadata.resellerId;
+              delete appMetadata.cloudId;
+
+              authService.updateMetadata(id, appMetadata, userMetadata, function (err, res) {
                 return cb(err, res);
               });
             } else {
@@ -395,7 +397,8 @@ module.exports = function (Auth) {
   Auth.remoteMethod('updateUserMetadata', {
     accepts: [
       {arg: 'id', type: 'string'},
-      {arg: 'metadata', type: 'object'}
+      {arg: 'appMetadata', type: 'object'},
+      {arg: 'userMetadata', type: 'object'}
     ],
     http: {verb: 'put', status: 200, errorStatus: 500},
     returns: {arg: 'response', type: 'object'}
