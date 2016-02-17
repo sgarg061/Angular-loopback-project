@@ -5,7 +5,7 @@ var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
-var authService = require('../../server/services/liveDataService');
+var liveDataService = require('../../server/services/liveDataService');
 
 
 module.exports = function(Device) {
@@ -269,6 +269,7 @@ module.exports = function(Device) {
         liveDataService.publish('checkin', {
             deviceId: id
         });
+
         // parse checkin data
         data = deviceDataParser.parseDeviceData(data);
         // log the checkin data

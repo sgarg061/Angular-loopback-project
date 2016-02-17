@@ -27,7 +27,7 @@ module.exports = {
 
       socket.on('error', function (err) {
         console.log('error:', err);
-      })
+      });
     });
   },
 

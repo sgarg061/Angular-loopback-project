@@ -29,7 +29,7 @@ module.exports = function(SearchFilterConnector) {
                 next();
             }
             else if (cloudId){
-                cloudPermissions(SearchFilterConnector, ctx, cloudId, next);        	
+                cloudPermissions(SearchFilterConnector, ctx, cloudId, next);
             }
 
             else if (resellerId){
@@ -64,7 +64,7 @@ module.exports = function(SearchFilterConnector) {
 			                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
 		            	}
 
-						next();  
+						next();
 		            }
 		        });
             }
@@ -144,7 +144,7 @@ module.exports = function(SearchFilterConnector) {
                 scope: {
                     fields: ['id', 'filter', 'name', 'description', 'lastUpdated']
                 }
-            }
+            };
         }
         else
         {
