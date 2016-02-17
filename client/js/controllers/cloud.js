@@ -21,14 +21,16 @@ angular
 
     $scope.cascadedReports = [];
     $scope.ownedReports = [];
-    
+
+    $scope.selectedTab = $stateParams.tabIndex;
+
     function watchForChanges() {
       // watch cloud for updates and save them when they're found
-      
+
       $scope.$watch("cloud", function(newValue, oldValue) {
         if (newValue) {
           var id = $scope.cloud.id;
-        
+
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
             updateCloud(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
           }
@@ -56,7 +58,7 @@ angular
       }, true);
     }
     $scope.updateVersion = function (softwareVersion) {
-      
+
       var id = $scope.cloud.id;
       softwareService.dialog(id,softwareVersion, '').then(function(result) {
        updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
@@ -67,7 +69,7 @@ angular
 
     function updateCloud(id, changedDictionary, message) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(cloud) {toastr.info(' ' + message);}, 
+        .$promise.then(function(cloud) {toastr.info(' ' + message);},
           function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
@@ -113,6 +115,20 @@ angular
             $scope.cloud.turnServerUrls = clouds[0].turnServerUrl;
             $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
             $scope.children = clouds[0].resellers;
+
+            $scope.cloud.resellers.forEach(function (reseller) {
+              reseller.customers.forEach(function (customer) {
+                customer.devices.forEach(function (device) {
+                  device.customerName = customer.name;
+                  device.checkinInterval = device.checkinInterval ||
+                    customer.checkinInterval ||
+                    reseller.checkinInterval ||
+                    $scope.cloud.checkinInterval;
+
+                  $scope.allDevices.push(device);
+                })
+              })
+            })
           } else {
             toastr.error('invalid arrray');
           }
@@ -137,10 +153,10 @@ angular
           }
         });
     }
-    
 
 
-    
+
+
     function getFilters(){
       POSFilter
         .find({
@@ -169,7 +185,7 @@ angular
         })
     }
 
-    
+
     function getReports(){
       SearchFilter
         .find({
@@ -351,7 +367,7 @@ angular
       $mdDialog.show({
               controller: function DialogController ($scope, $mdDialog) {
                   $scope.create = function() {
-                      if(cloudServerUrl === null) { 
+                      if(cloudServerUrl === null) {
                         cloudServerUrl = [$scope.model.tempServerUrl];
                         $mdDialog.cancel();
                       } else {
@@ -417,7 +433,7 @@ angular
       getFilters();
     });
   };
-   
+
 
   $scope.addReport = function(connector) {
     filterService.addReport('cloud', $stateParams.cloudId, function(){
@@ -429,7 +445,7 @@ angular
     filterService.actionReport(filter, function(){
       getReports();
     });
-  }; 
+  };
 
 }]);
 

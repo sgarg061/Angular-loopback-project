@@ -131,34 +131,42 @@ h2{
 /* Sidebar */
 
 .sidebar-container{
-  -webkit-flex: 0 0 300px;
-  -ms-flex: 0 0 300px;
-  flex: 0 0 300px;
-  position: relative;
 }
 
 .sidebar {
   box-shadow: 2px 2px 7px 1px rgba(199,199,199,1);
   margin: -10px 0px 0px -10px !important;
   background-color: #ffffff;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  position: fixed;
   width: 305px;
   height: 100%;
+  -webkit-flex: 0 0 300px;
+  -ms-flex: 0 0 300px;
+  flex: 0 0 300px;
+  position: relative;
 }
 
 .sidebar md-content{
+  position: fixed;
+  width: 305px;
+  height: 100%;
   padding-bottom: 60px;
 }
 
+
+.sidebar.close{
+  width: 0px;
+  -webkit-flex: 0;
+  -ms-flex: 0;
+  flex: 0;
+}
+.sidebar.close .side-bar-toggle{
+  transform: rotate(0deg);
+  margin-left: -300px;
+}
+
+.sidebar.close md-content{
+  width: 0px;
+}
 @media only screen and (max-width: 640px) {
   .sidebar-container{
     -webkit-flex: 0;
@@ -664,6 +672,101 @@ i{
 
 .md-datepicker-input-container {
   padding-bottom: 0px;
+}
+.side-bar-toggle{
+  position: fixed;
+  left: 310px;
+  bottom: 5px;
+  transform: rotate(180deg);
+  transition: margin-left 0.15s ease-in;
+}
+/* maps */
+
+.device-filter {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.map-filter {
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.device-filter:focus {
+  outline: none;
+}
+
+.device-count {
+  display: inline-block;
+}
+
+.map-search {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-search input {
+  align-self: flex-end;
+  display: inline-block;
+  width: 50%;
+  float: right;
+  background: none;
+  margin-left: auto;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing:content-box;
+}
+
+#map * {
+  box-sizing: content-box;
+}
+
+.locations, .locations svg {
+  position: absolute;
+}
+
+.locations svg {
+  width: 30px;
+  height: 30px;
+}
+
+.active {
+  fill: blue;
+}
+
+.marker-red {
+  fill: #DE0808;
+}
+
+.marker-green {
+  fill: green;
+}
+
+.marker-yellow {
+  fill: #F7CC05;
+}
+
+.map-indicator {
+  width: 24px;
+  margin: 10px 0px 10px 0px;
+}
+
+.map-indicator:first-child {
+  margin: 10px 0px 10px 0px;
+}
+
+.hovered-location {
+  display: inline-block;
+  opacity: 0.7;
+  text-overflow: ellipsis;
 }
 
 
