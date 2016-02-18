@@ -268,13 +268,13 @@ module.exports = function (Auth) {
           Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
             if (err) {
               logger.error('Error retrieving customer for force password:', err);
-              return cb(err, null);
+              return cb(false);
             }
 
             if (!customer) {
               var error = new Error('Customer not found');
               error.statusCode = 404;
-              return cb(error, null);
+              return cb(false);
             }
 
             if (customer.resellerId !== resellerId) {
