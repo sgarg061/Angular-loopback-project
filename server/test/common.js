@@ -1,10 +1,12 @@
 var request = require('supertest');
 var app = require('../server');
 var assert = require('assert');
-var authService = require('../services/authService');
 var AuthAccessor = require('../dependencyAccessors/fakeAuth0Accessor');
 var RedisAccessor = require('../dependencyAccessors/fakeRedisAccessor');
+var SocketAccessor = require('../dependencyAccessors/fakeSocketAccessor');
 var cacheService = require('../services/cacheService');
+var authService = require('../services/authService');
+var liveDataService = require('../services/liveDataService');
 var Config = require('../../config');
 var sampleData = require('../create-sample-data');
 
@@ -90,6 +92,8 @@ before(function(done) {
     }]);
 
     cacheService.initialize(RedisAccessor);
+
+    liveDataService.initialize(app, SocketAccessor);
 
     sampleData(app, function() {
       done();

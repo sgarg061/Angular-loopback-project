@@ -17,6 +17,8 @@ var productionSettings = {
 
     revokedTokensRedisLocation: 'redis-revoked.ppufgb.0001.usw2.cache.amazonaws.com',
     revokedTokensRedisPort: '6379',
+    socketRedisLocation: 'redis-revoked.ppufgb.0001.usw2.cache.amazonaws.com', // TODO: switch to its own redis instance.
+    socketRedisPort: '6379',
     log: {
         console: {
             colorize: true,
@@ -50,6 +52,8 @@ var developmentSettings = {
 
     revokedTokensRedisLocation: '127.0.0.1',
     revokedTokensRedisPort: '6380',
+    socketRedisLocation: '127.0.0.1',
+    socketRedisPort: '6379',
     log: {
         console: {
             colorize: true,

@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('map', ['$state', 'DeviceLogEntry', function($state, DeviceLogEntry) {
+  .directive('map', ['$state', 'socket', function($state, socket) {
     return {
       restrict: 'E',
       templateUrl: '/views/map.html',
@@ -33,7 +33,6 @@ angular
         });
 
         loadMarkers();
-        getUpdates(new Date());
         watchForChanges();
 
         var colourTransitionMapping = {
@@ -42,28 +41,10 @@ angular
           yellow: '#F7CC05'
         }; // yeah, this sucks.  not sure how to do this yet...
 
-        var attempts = 0;
-        function getUpdates(lastDate) {
-          var newLastDate = new Date();
-          DeviceLogEntry.find({
-            filter: {
-              where: {checkinTime: {gt: lastDate}},
-              fields: ['id', 'deviceId', 'onlineCameras', 'totalCameras', 'checkinTime']
-            }
-          })
-          .$promise
-          .then(function(checkins) {
-              if  (checkins.length > 0) {
-                checkins.forEach(function(c) {
-                  pulse(c.deviceId);
-                });
-              }
-
-              setTimeout(function() {
-                getUpdates(newLastDate);
-              }, 5000);
-          });
-        }
+        socket.on('checkin', function (data) {
+          console.log('checkin:', data);
+          pulse(data.deviceId)
+        });
 
         function pulse(id) {
           try {

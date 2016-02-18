@@ -11,6 +11,7 @@ angular
     'ngClipboard',
     'ngPrettyJson',
     'customUserService',
+    'socket',
     'angular-momentjs',
     'dialogBox',
     'd3',
