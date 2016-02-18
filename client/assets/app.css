@@ -53,6 +53,9 @@ html, body {
   -moz-align-content: flex-start;
   -ms-flex-line-pack: start;
   align-content: flex-start;
+  -webkit-flex: 1 0 50%;
+  -ms-flex: 1 0 50%;
+  flex: 1 0 50%;
 }
 
 .child-list h2{
