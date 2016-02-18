@@ -2,6 +2,9 @@
   angular.module('socket', [])
   .factory('socket', function ($rootScope, $window, $localStorage) {
     var socketOptions = {
+      transports: ['websocket'],
+      'forceNew': true,
+      'secure': false,
       query: 'token=' + $localStorage.token
     };
 
