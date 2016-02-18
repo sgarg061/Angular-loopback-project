@@ -10,14 +10,15 @@ angular
     'ui.bootstrap',
     'ngClipboard',
     'ngPrettyJson',
-    'uiGmapgoogle-maps',
     'customUserService',
     'angular-momentjs',
+    'dialogBox',
     'd3',
     'filterService'
+
   ])
-  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'ngClipProvider', 'uiGmapGoogleMapApiProvider',
-    function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, toastr, ngClipProvider, uiGmapGoogleMapApiProvider) {
+  .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'blockUIConfig', 'ngClipProvider',
+    function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, blockUIConfig, toastr, ngClipProvider) {
       $momentProvider
         .asyncLoading(false)
         .scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
@@ -33,6 +34,7 @@ angular
                     .icon("indicator_red", "./assets/svg/indicator_red.svg", 24)
                     .icon("indicator_yellow", "./assets/svg/indicator_yellow.svg", 24)
                     .icon("indicator_green", "./assets/svg/indicator_green.svg", 24)
+                    .icon("indicator_gray", "./assets/svg/indicator_gray.svg", 24)
                     .icon('checkmark', './assets/svg/ic_check_circle_green_24px.svg', 24)
                     .icon('error', './assets/svg/ic_error_red_24px.svg', 24)
                     .icon('warning', './assets/svg/ic_warning_yellow_24px.svg', 24)
@@ -48,6 +50,13 @@ angular
 
 
       $locationProvider.html5Mode(true);
+
+      blockUIConfig.requestFilter = function(config) {
+        if(config.url.match(/^\/api\/DeviceLogEntries/)) {
+          return false; // don't block it checkin requests (used on map)
+        }
+        return true;
+      }
 
       $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function ($q, $location, $localStorage) {
         return {
@@ -96,7 +105,7 @@ angular
           }
         })
         .state('cloud', {
-          url: '/cloud/:cloudId',
+          url: '/cloud/:cloudId/:tabIndex',
           templateUrl: 'views/cloud.html',
           controller: 'CloudController',
           data: {
@@ -136,7 +145,7 @@ angular
           url: '/logout',
           templateUrl: 'views/logout.html',
           controller: 'LogoutController'
-        });    
+        });
 
       $urlRouterProvider.otherwise('home');
   }])
@@ -159,6 +168,6 @@ angular
         $location.path('/login');
       }
     });
-  
+
 
 });

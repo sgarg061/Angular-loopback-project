@@ -29,6 +29,7 @@
         owned-reports="ownedReports"
         cascaded-reports="cascadedReports"
         filter-changed-function="filterChanged"
+        update-version-function = "updateVersion"
         assign-filters-function="assignFilters"
         select-connector-function="selectConnector"/>
     </div>
@@ -41,7 +42,7 @@
           <span>Create new Reseller</span>
         </div>
       </div>
-      <md-tabs md-dynamic-height>
+      <md-tabs md-dynamic-height md-selected="selectedTab">
         <md-tab label="LIST">
           <md-grid-list md-cols="1" md-row-height="50px" md-gutter="10px">
             <md-grid-tile ng-repeat="reseller in cloud.resellers" class="card"

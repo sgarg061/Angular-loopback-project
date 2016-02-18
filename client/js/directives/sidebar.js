@@ -9,8 +9,11 @@ angular
         type: "=type",
         filterChangedFunction: "=filterChangedFunction",
         reportChangedFunction: "=reportChangedFunction",
+        numberOfAvailableLicenses: "=numberOfAvailableLicenses",
         assignFiltersFunction: "=assignFiltersFunction",
         reports: "=reports",
+        licensesAvailable: "=licensesAvailableFunction",
+        updateVersionFunction: "=updateVersionFunction",
         addLicenseFunction: "=addLicenseFunction",
         showLicenseFunction: "=showLicenseFunction",
         addFilterFunction: "=addFilterFunction",
@@ -52,6 +55,9 @@ angular
         }
         scope.filterChanged = function(filter) {
           scope.filterChangedFunction(filter);
+        }
+        scope.updateVersion = function(model) {
+          scope.updateVersionFunction(model);
         }
         scope.reportChanged = function(filter) {
           scope.reportChangedFunction(filter);

@@ -1,10 +1,11 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService) {
-
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+    
     $scope.clouds = [];
     $scope.resellers = [];
+    $scope.numberOfAvailableLicenses = 0;
     $scope.customers = [];
     $scope.customer = {};
     $scope.devices = [];
@@ -38,28 +39,41 @@ angular
           var id = $scope.customer.id;
 
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
-            updateCustomer(id, {checkinInterval: newValue.checkinInterval});
+            updateCustomer(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
-          if (newValue.softwareVersionId !== oldValue.softwareVersionId) {
-            updateCustomer(id, {softwareVersionId: newValue.softwareVersionId});
-          }
+          
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
-            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl});
+            updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
           if (newValue.customerName !== oldValue.customerName) {
-            updateCustomer(id, {customerName: newValue.customerName});
+            updateCustomer(id, {customerName: newValue.customerName}, 'Customer name has been updated');
           }
         }
       }, true);
     }
-
-    function updateCustomer(id, changedDictionary) {
-      Customer.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(customer) {}, function (res) {
-          toastr.error(res.data.error.message, 'Error');
-        });
+    $scope.updateVersion = function (softwareVersion) {
+      var id = $scope.customer.id;
+      softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
+        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
+          updateCustomer(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+          $scope.currentSoftwareVersion = softwareVersion; 
+        } else {
+          updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+          $scope.currentSoftwareVersion = softwareVersion;
+        } 
+        
+      }, function(result){$scope.customer.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
+    function updateCustomer(id, changedDictionary, message) {
+      Customer.prototype$updateAttributes({id: id}, changedDictionary)
+        .$promise.then(function(customer) {toastr.info(' ', message);}, 
+          function (res) {
+          toastr.error(res.data.error.message, 'Error');
+        });
+
+    }
+    
     function getCustomer(cb) {
       Customer
         .find({
@@ -94,12 +108,18 @@ angular
         })
         .$promise
         .then(function(customers) {
-          $scope.customer = customers[0];
-
-          $scope.cloud = customers[0].reseller.cloud;
-          $scope.reseller = customers[0].reseller;
-
-          $scope.devices = customers[0].devices;
+          if(!_.isEmpty(customers)){
+            $scope.customer = customers[0];
+            $scope.numberOfAvailableLicenses = availableLicenses($scope.customer.licenses).length;
+            $scope.cloud = customers[0].reseller.cloud;
+            $scope.reseller = customers[0].reseller;
+            
+            $scope.devices = customers[0].devices;
+            $scope.currentSoftwareVersion = customers[0].softwareVersionId;
+            
+          } else {
+            toastr.error('invalid array');
+          }
 
           getFilters();
           getReports();
@@ -344,6 +364,14 @@ angular
       return thisEleObj;
     }
 
+    function licensesAvailable(Licenses) {
+      $scope.licensesArray = availableLicenses(Licenses);
+      toastr.info($scope.licensesArray.length + ' licenses copied');
+      return $scope.licensesArray.map(function(elem) { return elem.key; }).join('\n');
+    }
+    function availableLicenses(licenses) {
+      return licenses.filter(function(license){return !license.activated});
+    }
     function showLicense(aLicense) {
       $mdDialog.show({
         parent: angular.element(document.body),
@@ -398,9 +426,11 @@ angular
                 .$promise
                 .then(function(license) {
                   $scope.customer.licenses.push(license);
+                  $scope.numberOfAvailableLicenses = availableLicenses($scope.customer.licenses).length;
                   // add to the list on screen and to the string that might be copied to the clipboard
                   scope.licenseKeys.push(license.key);
                   scope.licenseKeyList += license.key + "\n";
+                   
 
                   next(undefined, license)
                 }, function(err) {
@@ -549,6 +579,7 @@ angular
 
   // TODO: refactor these permissions
   // so much code replication :/
+  
   $scope.canModifyEventUrl = function() {
     var userType = userService.getUserType();
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
@@ -734,10 +765,12 @@ angular
   }; 
 
   $scope.showLicense = showLicense;
+  $scope.availableLicenses = availableLicenses;
   $scope.addLicense = addLicense;
   $scope.deleteCustomer = deleteCustomer;
   $scope.renameCustomer = renameCustomer;
   $scope.showCheckin = showCheckin;
   $scope.goHome = goHome;
+  $scope.licensesAvailable = licensesAvailable;
 
 }]);

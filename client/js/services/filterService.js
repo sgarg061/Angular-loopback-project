@@ -197,7 +197,7 @@
 								SearchFilter.deleteById($scope.newFilter)
 								.$promise
 								.then(function(customer) {
-									getReports();
+									callback();
 								}, function (res) {
 									toastr.error(res.data.error.message, 'Error');
 								});
