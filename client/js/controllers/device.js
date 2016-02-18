@@ -12,6 +12,8 @@ angular
 
     $scope.checkinHeight = 500;
 
+    $scope.checkinWidth = 620;
+
     $scope.timelineView = false;
 
     $scope.logCount = 0;
@@ -157,11 +159,14 @@ angular
               $scope.device.noMoreLogs = false;
             }
             var height = document.body.clientHeight - 370;
-
+            var width = document.body.clientWidth - 725;
             if (height < 650) {
               height = 650;
             };
-            $scope.checkinHeight = height
+
+            $scope.checkinHeight = height;
+            $scope.checkinWidth = width;
+
             renderGraph();
           };
 

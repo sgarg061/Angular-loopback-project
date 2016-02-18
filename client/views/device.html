@@ -84,7 +84,7 @@
                     </md-tab>
 
                     <md-tab label="raw data">
-                      <md-content style="height:{{checkinHeight-250}}px;">
+                      <md-content style="height:{{checkinHeight-250}}px;overflow-x:hidden;">
                         <pre pretty-json="device.currentGraphEntry"></pre>
                       </md-content>
                     </md-tab>
@@ -144,13 +144,13 @@
                   <md-content>
                     <md-tabs md-dynamic-height md-border-bottom>
                       <md-tab label="devices status">
-                        <md-content style="height:{{checkinHeight-51}}px;max-width:620px;">
+                        <md-content style="height:{{checkinHeight-51}}px;">
                           <devices-status device="device" />
                         </md-content>
                       </md-tab>
 
                       <md-tab label="raw data">
-                        <md-content style="height:{{checkinHeight-51}}px;max-width:620px;">
+                        <md-content style="height:{{checkinHeight-51}}px;max-width:{{checkinWidth}}px;overflow-x:hidden;">
                           <pre pretty-json="device.currentEntry"></pre>
                         </md-content>
                       </md-tab>
