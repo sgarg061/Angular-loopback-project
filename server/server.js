@@ -59,9 +59,8 @@ app.use(function jwtMiddleware (req, res, next) {
     }
 });
 
-function initializeRedis() {
+function initializeRedis(config) {
     'use strict';
-    var config = new Config();
     RedisAccessor.initialize([
     {
         name: 'revoked',
@@ -72,8 +71,9 @@ function initializeRedis() {
 
 app.start = function() {
     'use strict';
+    var config = new Config();
     authService.initialize(new Auth0Accessor());
-    initializeRedis();
+    initializeRedis(config);
     cacheService.initialize(RedisAccessor);
 
     // start the web server
@@ -83,11 +83,17 @@ app.start = function() {
     };
 
     var server = https.createServer(options, app);
-    liveDataService.initialize(server, SocketAccessor);
+
+    var socketServer = https.createServer(options, function (req, res) {});
+    var socketPort = config.socketPort ? config.socketPort : 8547;
+    socketServer.listen(socketPort);
+
+    liveDataService.initialize(socketServer, SocketAccessor);
 
     return server.listen(app.get('port'), function () {
         app.emit('started');
         console.log('Web server listening at %s', app.get('url'));
+        console.log('Socket server listening at %s', socketPort);
     });
 };
 

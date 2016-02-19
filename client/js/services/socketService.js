@@ -8,7 +8,8 @@
       query: 'token=' + $localStorage.token
     };
 
-    var socket = io.connect($window.location.origin, socketOptions);
+    var socketLocation = $window.location.protocol + '//' + $window.location.hostname + ':8547';
+    var socket = io.connect(socketLocation, socketOptions);
 
     return {
       on: function (channel, cb) {
