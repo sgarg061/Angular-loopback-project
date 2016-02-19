@@ -321,19 +321,14 @@ module.exports = function(Device) {
     };
 
     function logCheckin(id, data) {
-        if (id) {
-            var deviceLogEntry = createDeviceLogEntry(id, data);
-            Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
-                if (err) {
-                    logger.error('Failed to insert logEntry for device checkin: %s', err);
-                } else {
-                    logger.debug('logEntry for device stored successfully');
-                }
-            });
-        } else {
-            logger.error('Unable to checkin: data does not include device id: %s', data);
-        }
-
+        var deviceLogEntry = createDeviceLogEntry(id, data);
+        Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
+            if (err) {
+                logger.error('Failed to insert logEntry for device checkin: %s', err);
+            } else {
+                logger.debug('logEntry for device stored successfully');
+            }
+        });
     }
 
     function createDeviceLogEntry(id, data) {
@@ -374,7 +369,7 @@ module.exports = function(Device) {
         } else {
             logger.error('invalid cameras array');
         }
-        //getting the id from url rather than data from checkins 
+        //getting the id from url rather than checkin data
         deviceLogEntry.deviceId = id;
         delete deviceLogEntry.checkinData.id;
 
