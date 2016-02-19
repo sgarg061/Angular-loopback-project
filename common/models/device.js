@@ -269,7 +269,7 @@ module.exports = function(Device) {
         // parse checkin data
         data = deviceDataParser.parseDeviceData(data);
         // log the checkin data
-        logCheckin(data);
+        logCheckin(id, data);
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
         // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
@@ -320,9 +320,9 @@ module.exports = function(Device) {
         return device;
     };
 
-    function logCheckin(data) {
-        if (data.id) {
-            var deviceLogEntry = createDeviceLogEntry(data);
+    function logCheckin(id, data) {
+        if (id) {
+            var deviceLogEntry = createDeviceLogEntry(id, data);
             Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
                 if (err) {
                     logger.error('Failed to insert logEntry for device checkin: %s', err);
@@ -336,7 +336,7 @@ module.exports = function(Device) {
 
     }
 
-    function createDeviceLogEntry(data) {
+    function createDeviceLogEntry(id, data) {
         var deviceLogEntry = {checkinData: _.clone(data)};
 
         if (deviceLogEntry.checkinData.appVersion) {
@@ -374,8 +374,8 @@ module.exports = function(Device) {
         } else {
             logger.error('invalid cameras array');
         }
-
-        deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
+        //getting the id from url rather than data from checkins 
+        deviceLogEntry.deviceId = id;
         delete deviceLogEntry.checkinData.id;
 
         // add a timestamp field
