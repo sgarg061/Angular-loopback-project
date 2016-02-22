@@ -60,11 +60,11 @@ module.exports = function(Customer) {
     var context = loopback.getCurrentContext();
 
     if (!context) {
-      next(); // test
-    } else if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+      return next(); // test access
+    } else if (!context.get('jwt') || context.get('jwt').userType === 'solink') {
       // querying as a test or as solink
       next();
-    } else if (context && context.get('jwt') && context.get('jwt').tenantId) {
+    } else if (context.get('jwt') && context.get('jwt').tenantId) {
       // querying with a customer's credentials
       var tenantId = context.get('jwt').tenantId;
       if (ctx.query.where) {
@@ -75,7 +75,7 @@ module.exports = function(Customer) {
         };
       }
       next();
-    } else if (context && context.get('jwt') && context.get('jwt').resellerId) {
+    } else if (context.get('jwt') && context.get('jwt').resellerId) {
       var resellerId = context.get('jwt').resellerId;
       if (ctx.query.where) {
         ctx.query.where.resellerId = resellerId;
@@ -85,7 +85,7 @@ module.exports = function(Customer) {
         };
       }
       next();
-    } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
+    } else if (context.get('jwt') && context.get('jwt').cloudId) {
       var cloudId = context.get('jwt').cloudId;
       var Reseller = Customer.app.models.Reseller;
 
