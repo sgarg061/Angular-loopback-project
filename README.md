@@ -19,6 +19,7 @@
 -   You could get some error where you have downloaded bower but the computer cannot detect it.
  	In this case, go add a path called: C:\Users\yourusername\AppData\Roaming\npm
  	and then try again.
+- Redis process (port: 6379) (required for socket clustering for updating the UI dynamically)
 - Redis processes (port: 6380) (able to run without this, but will keep logging error message:
  `WARNING: Unable to create redis connection`)
 - Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
