@@ -20,7 +20,6 @@ angular
         scope.yellowCount = 0;
         scope.searchQuery = '';
 
-        scope.devices = [];
         scope.filteredDevices = [];
         scope.hoveredLocationText = '';
 
@@ -71,7 +70,6 @@ angular
             // Add the container when the overlay is added to the map.
             scope.overlay.onRemove = function() {
               scope.layer.remove();
-              console.log(scope.layer);
             };
 
             scope.overlay.onAdd = function() {
@@ -190,6 +188,10 @@ angular
 
         function watchForChanges() {
           scope.$watch('searchQuery', function (newValue, oldValue) {
+            filterDevices();
+          }, true);
+
+          scope.$watch('devices', function (newValue, oldValue) {
             filterDevices();
           }, true);
         }
