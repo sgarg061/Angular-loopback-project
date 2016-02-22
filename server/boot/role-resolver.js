@@ -78,9 +78,8 @@ function isOwnerOfFilter(context, token, cb) {
                         logger.error(err);
                         cb(err, false);
                     }
-                    var mutable = (filter.creatorId === userId && filter.creatorType === token.userType);
-                    if (mutable) {
-                        cb(null, mutable); // true = is a team member
+                    if(token.userType === 'reseller' || token.userType === 'cloud'){
+                        cb(); //only solink users, cloud users, and resellers will be able to modify reports and connectors
                     }
                     else{
                         unauthorized(cb);
