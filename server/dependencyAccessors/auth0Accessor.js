@@ -251,7 +251,6 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
   }
 
   query += '&search_engine=v2';
-  console.log('making query ', query);
   request({
     url: config.auth0URL + '/api/v2/users?q=' + query,
     method: 'GET',
