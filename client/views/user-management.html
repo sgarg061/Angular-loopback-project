@@ -44,7 +44,7 @@
         </md-menu>
       </div>
 
-      <div>
+      <div ng-show="userKey === 'tenantId'" ng-cloak>
         <md-toolbar>
           <h2 class="md-toolbar-tools">
             <span>Settings</span>
@@ -61,7 +61,7 @@
         </div>
       </div>
 
-      <div layout="column" ng-cloak>
+      <div layout="column" ng-show="userKey === 'tenantId'" ng-cloak>
         <md-toolbar>
           <h2 class="md-toolbar-tools">
             <span>Assign Devices</span>

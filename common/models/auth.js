@@ -252,84 +252,115 @@ module.exports = function (Auth) {
   }
 
   function canModifyUser(user, cb) {
-    var context = loopback.getCurrentContext();
-    var jwt = context.get('jwt');
-    var userType = jwt.userType;
+    try {
+      var context = loopback.getCurrentContext();
+      var jwt = context.get('jwt');
+      var userType = jwt.userType;
 
-    switch (user.app_metadata.userType) {
-      case 'admin':
-      case 'standard':
-        var tenantId = user.app_metadata.tenantId;
-        if (userType === 'solink') {
-          return cb(true);
-        } else if (userType === 'reseller') {
-          var resellerId = jwt.resellerId;
-          // query for customer, make sure customer.resellerId === resellerId
-          Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
-            if (err) {
-              logger.error('Error retrieving customer for force password:', err);
-              return cb(false);
-            }
-
-            if (!customer) {
-              var error = new Error('Customer not found');
-              error.statusCode = 404;
-              return cb(false);
-            }
-
-            if (customer.resellerId !== resellerId) {
-              return cb(false);
-            } else {
-              return cb(true);
-            }
-          });
-        } else if (userType === 'cloud') {
-          // check that customer matching tenantId's reseller matches this cloudid
-          var cloudId = jwt.cloudId;
-          Auth.app.models.Customer.findOne({
-            where: {id: tenantId},
-            include: {
-              relation: 'reseller',
-              scope: {
-                fields: ['id', 'name', 'cloudId']
+      switch (user.app_metadata.userType) {
+        case 'admin':
+        case 'standard':
+          var tenantId = user.app_metadata.tenantId;
+          if (userType === 'solink') {
+            return cb(true);
+          } else if (userType === 'reseller') {
+            var resellerId = jwt.resellerId;
+            // query for customer, make sure customer.resellerId === resellerId
+            Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
+              if (err) {
+                logger.error('Error retrieving customer for force password:', err);
+                return cb(false);
               }
-            }
-          }, function (err, customer) {
-            if (err) {
-              logger.error('Error retrieving customer for force password:', err);
-              return cb(false);
-            }
 
-            if (!customer) {
-              var error = new Error('Customer not found');
-              error.statusCode = 404;
-              return cb(false);
-            }
+              if (!customer) {
+                var error = new Error('Customer not found');
+                error.statusCode = 404;
+                return cb(false);
+              }
 
-            if (customer.reseller().cloudId !== cloudId) {
-              return cb(false);
-            } else {
-              return cb(true);
-            }
-          });
-        } else {
-          // something terribly wrong
+              if (customer.resellerId !== resellerId) {
+                return cb(false);
+              } else {
+                return cb(true);
+              }
+            });
+          } else if (userType === 'cloud') {
+            // check that customer matching tenantId's reseller matches this cloudid
+            var cloudId = jwt.cloudId;
+            Auth.app.models.Customer.findOne({
+              where: {id: tenantId},
+              include: {
+                relation: 'reseller',
+                scope: {
+                  fields: ['id', 'name', 'cloudId']
+                }
+              }
+            }, function (err, customer) {
+              if (err) {
+                logger.error('Error retrieving customer for force password:', err);
+                return cb(false);
+              }
+
+              if (!customer) {
+                var error = new Error('Customer not found');
+                error.statusCode = 404;
+                return cb(false);
+              }
+
+              if (customer.reseller().cloudId !== cloudId) {
+                return cb(false);
+              } else {
+                return cb(true);
+              }
+            });
+          } else {
+            // something terribly wrong
+            return cb(false);
+          }
+          break;
+
+        case 'reseller':
+          if (userType === 'solink') {
+            return cb(true);
+          } else if (userType === 'reseller') {
+            // must have matching id
+            var resellerId = user.app_metadata.resellerId;
+            var myResellerId = jwt.app_metadata.resellerId;
+            return cb(resellerId === myResellerId);
+          } else if (userType === 'cloud') {
+            // reseller must have cloudid that matches me
+            var cloudId = jwt.cloudId;
+            Auth.app.models.Reseller.findOne({
+              where: {id: user.app_metadata.resellerId}
+            }, function (err, reseller) {
+              if (err) {
+                logger.error('Error retrieving reseller to create user:', err);
+                return cb(false);
+              }
+
+              if (!reseller) {
+                var error = new Error('Reseller not found');
+                error.statusCode = 404;
+                return cb(false);
+              }
+
+              return cb(reseller.cloudId === cloudId);
+            });
+          } else {
+            return cb(false);
+          }
+
+        case 'cloud':
+          // TODO: check for ownership
+          // implement this at a later date
           return cb(false);
-        }
-        break;
 
-      case 'reseller':
-        // TODO: check for ownership
-        // implement this at a later date
-        return cb(false);
-
-      case 'cloud':
-        // TODO: check for ownership
-        // implement this at a later date
-        return cb(false);
-
-      default:
-        return cb(false);
+        default:
+          return cb(false);
+      }
+    } catch (err) {
+      console.log(err);
+      return cb(false);
     }
   }
 

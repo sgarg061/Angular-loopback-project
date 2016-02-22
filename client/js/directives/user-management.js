@@ -36,6 +36,10 @@ angular
           scope.selectedUser = user;
 
           scope.selectedDevices = [];
+          if (!scope.selectedUser) {
+            return;
+          }
+
           if (scope.selectedUser.app_metadata.devices) {
             scope.selectedUser.app_metadata.devices.forEach(function (id) {
               scope.selectedDevices.push.apply(scope.selectedDevices, scope.devices.filter(function (d) {
