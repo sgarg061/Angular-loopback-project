@@ -59,7 +59,9 @@ module.exports = function(Customer) {
   Customer.observe('access', function customerPermissions(ctx, next) {
     var context = loopback.getCurrentContext();
 
-    if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+    if (!context) {
+      next(); // test
+    } else if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
       // querying as a test or as solink
       next();
     } else if (context && context.get('jwt') && context.get('jwt').tenantId) {

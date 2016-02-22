@@ -49,6 +49,10 @@ app.use(function jwtMiddleware (req, res, next) {
             jwtToken.cloudId = unpackedToken.app_metadata.cloudId;
         }
 
+        if (unpackedToken.app_metadata.devices) {
+            jwtToken.devices = unpackedToken.app_metadata.devices;
+        }
+
         var ctx = loopback.getCurrentContext();
         ctx.set('jwt', jwtToken);
 

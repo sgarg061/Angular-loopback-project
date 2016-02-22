@@ -89,6 +89,10 @@ function createValidToken (user) {
         appMetadata.tenantId = user.tenantId;
     }
 
+    if (user.devices) {
+        appMetadata.devices = user.devices;
+    }
+
     var payload = {
         email: user.username,
         email_verified: true,
@@ -142,6 +146,10 @@ FakeAuth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
         response: 'Forgot password email successfully sent.'
     };
     cb(null, response);
+};
+
+FakeAuth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata, cb) {
+    'use strict';
 };
 
 module.exports = FakeAuth0Accessor;
