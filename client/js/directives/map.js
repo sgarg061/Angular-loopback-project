@@ -70,7 +70,6 @@ angular
             // Add the container when the overlay is added to the map.
             scope.overlay.onRemove = function() {
               scope.layer.remove();
-              console.log(scope.layer);
             };
 
             scope.overlay.onAdd = function() {
