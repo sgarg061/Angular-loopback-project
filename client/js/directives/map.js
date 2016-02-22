@@ -20,7 +20,6 @@ angular
         scope.yellowCount = 0;
         scope.searchQuery = '';
 
-        scope.devices = [];
         scope.filteredDevices = [];
         scope.hoveredLocationText = '';
 
@@ -190,6 +189,10 @@ angular
 
         function watchForChanges() {
           scope.$watch('searchQuery', function (newValue, oldValue) {
+            filterDevices();
+          }, true);
+
+          scope.$watch('devices', function (newValue, oldValue) {
             filterDevices();
           }, true);
         }
