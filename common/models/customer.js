@@ -2,6 +2,7 @@ var uuid = require('node-uuid');
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var authService = require('../../server/services/authService');
+var _ = require('lodash');
 
 module.exports = function(Customer) {
 
@@ -59,57 +60,47 @@ module.exports = function(Customer) {
   Customer.observe('access', function customerPermissions(ctx, next) {
     var context = loopback.getCurrentContext();
 
-    if (context && (!context.get('jwt') || context.get('jwt').userType === 'solink')) {
+    if (!context) {
+      return next(); // test access
+    } else if (!context.get('jwt') || context.get('jwt').userType === 'solink') {
       // querying as a test or as solink
-      next();
-    } else if (context && context.get('jwt') && context.get('jwt').tenantId) {
-      // querying with a customer's credentials
-      var tenantId = context.get('jwt').tenantId;
-      if (ctx.query.where) {
-        ctx.query.where.id = tenantId;
-      } else {
-        ctx.query.where = {
-          id: tenantId
-        };
-      }
-      next();
-    } else if (context && context.get('jwt') && context.get('jwt').resellerId) {
-      var resellerId = context.get('jwt').resellerId;
-      if (ctx.query.where) {
-        ctx.query.where.resellerId = resellerId;
-      } else {
-        ctx.query.where = {
-          resellerId: resellerId
-        };
-      }
-      next();
-    } else if (context && context.get('jwt') && context.get('jwt').cloudId) {
-      var cloudId = context.get('jwt').cloudId;
-      var Reseller = Customer.app.models.Reseller;
+      return next();
+    }
 
-      Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
-        if (err) {
-          logger.error('Error querying resellers with cloud id ' + cloudId);
-          logger.error(err);
-          next(err);
-        } else {
-          var ids = [];
-          for (var i = 0; i < res.length; i++) {
-            ids.push(res[i].id);
-          }
+    switch (context.get('jwt').userType) {
+      case 'admin':
+      case 'standard':
+      case 'connect':
+        // querying with a customer's credentials
+        var tenantId = context.get('jwt').tenantId;
+        ctx.query.where = _.merge(ctx.query.where, {id: tenantId});
+        next();
+        break;
+      case 'reseller':
+        var resellerId = context.get('jwt').resellerId;
+        ctx.query.where = _.merge(ctx.query.where, {resellerId: resellerId});
+        next();
+        break;
+      case 'cloud':
+        var cloudId = context.get('jwt').cloudId;
+        var Reseller = Customer.app.models.Reseller;
 
-          if (ctx.query.where) {
-            ctx.query.where.resellerId = {inq: ids};
+        Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
+          if (err) {
+            logger.error('Error querying resellers with cloud id ' + cloudId);
+            logger.error(err);
+            next(err);
           } else {
-            ctx.query.where = {
-              resellerId: {
-                inq: ids
-              }
-            };
+            var ids = [];
+            for (var i = 0; i < res.length; i++) {
+              ids.push(res[i].id);
+            }
+
+            ctx.query.where = _.merge(ctx.query.where, {resellerId: {inq: ids}});
+            next();
           }
-          next();
-        }
-      });
+        });
+        break;
     }
   });
 
