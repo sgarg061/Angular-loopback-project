@@ -69,6 +69,7 @@ module.exports = function(Customer) {
     switch (context.get('jwt').userType) {
       case 'admin':
       case 'standard':
+      case 'connect':
         // querying with a customer's credentials
         var tenantId = context.get('jwt').tenantId;
         if (ctx.query.where) {
