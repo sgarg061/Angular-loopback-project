@@ -34,9 +34,9 @@ angular
       {name: 'other', count: 0}
     ];
 
-    $scope.checkinTypes = ['show all', 'all down', 'some down', 'all online']
+    $scope.checkinTypes = ['show all', 'all down', /*'some down', 'all online', these 2 aren't supported by loopback*/  'some up'];
 
-    $scope.selectedCheckinType = 'show all'
+    $scope.selectedCheckinType = 'show all';
 
     $scope.checkinColors = {
       interval: '#00bb00',
@@ -70,13 +70,21 @@ angular
         }
       }, true);
 
-      // watch device for updates and save them when they're found
-      $scope.$watch("selectedCheckinReason", function(newValue, oldValue) {
-        if (newValue) {
-          if (newValue !== oldValue) {
-            document.getElementById('timeline-detail').classList.remove('open');
-            $scope.device.noMoreLogs = false;
-          }
+      $scope.$watch('selectedCheckinReason', function (newValue, oldValue) {
+        if (newValue && newValue !== oldValue) {
+          document.getElementById('timeline-detail').classList.remove('open');
+          $scope.device.noMoreLogs = false;
+
+          // reset log entries
+          $scope.device.logEntries = [];
+          loadMore(100);
+        }
+      }, true);
+
+      $scope.$watch('selectedCheckinType', function (newValue, oldValue) {
+        if (newValue && newValue !== oldValue) {
+          $scope.device.logEntries = [];
+          loadMore(100);
         }
       }, true);
 
@@ -95,12 +103,12 @@ angular
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
         if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
           updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version');
-          $scope.currentSoftwareVersion = softwareVersion; 
+          $scope.currentSoftwareVersion = softwareVersion;
         } else {
           updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
           $scope.currentSoftwareVersion = softwareVersion;
-        } 
-        
+        }
+
       }, function(result){$scope.device.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
@@ -171,7 +179,6 @@ angular
           };
 
           $scope.device.cameraStatus = function (log) {
-
             if (log.onlineCameras === log.totalCameras){
               return $scope.checkinTypes[3]
             }
@@ -196,18 +203,18 @@ angular
 
             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
            var nowInSeconds = new Date().getTime() / 1000;
- 
+
            var checkinIntervalInSeconds = device.checkinInterval ||
                                          $scope.customer.checkinInterval ||
                                          $scope.customer.reseller.checkinInterval ||
                                          $scope.customer.reseller.cloud.checkinInterval;
- 
+
            console.log('lastCheckin: ' + lastCheckinTimeInSeconds + ' now: ' + nowInSeconds + ' checkin interval: ' + checkinIntervalInSeconds);
- 
+
            var gracePeriodInSeconds = 30;
            var hasCheckedInOnTime = (lastCheckinTimeInSeconds + checkinIntervalInSeconds + gracePeriodInSeconds) > nowInSeconds;
            console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
- 
+
            var allCamerasOnline = true;
            if (device.cameras) {
              for (var j=0; j<device.cameras.length; j++) {
@@ -218,7 +225,7 @@ angular
                }
              }
            }
- 
+
            if (hasCheckedInOnTime) {
              if (allCamerasOnline) {
                device.status = 'green';
@@ -261,7 +268,7 @@ angular
       var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
 
       $scope.checkinReasons.forEach(function (reason, index){
-        
+
         var reasonName = reason.name;
         if (reason.name == 'all')
           reasonName = {neq: null};
@@ -390,27 +397,74 @@ angular
       $scope.sendingCheckin = null;
       $scope.$digest();
     });
+  }
 
+  function checkinFilter() {
+    var filter = {};
 
+    // set timestamp filter
+    if ($scope.device.logEntries && $scope.device.logEntries.length > 0) {
+      var lastTimestamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp;
+      filter.timestamp = {lt: lastTimestamp};
+    }
+
+    // reason filter
+    var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
+
+    var reasonName = $scope.selectedCheckinReason;
+    if (reasonName === 'all'){
+      reasonName = {neq: null};
+    } else if (reasonName === 'other'){
+      reasonName = {nin: arrayReasons};
+    }
+
+    filter.reason = reasonName;
+
+    switch ($scope.selectedCheckinType) {
+      case 'all down':
+        filter.and = [{
+          totalCameras: {gt: 0}
+        }, {
+          onlineCameras: 0
+        }];
+        break;
+      // the below 2 cases aren't supported by the loopback api.
+      // TODO: implement this directly against the database at a later date
+      /*case 'some down':
+        filter.and = [{
+          totalCameras: {gt: 'onlineCameras'}
+        }, {
+          onlineCameras: {
+            onlineCameras: {gt: 0}
+          }
+        }];
+        break;
+      case 'all online':
+        filter.onlineCameras = 'totalCameras';
+        break;*/
+      case 'some up':
+        filter.onlineCameras = {gt: 0};
+        break;
+      case 'show all':
+      default:
+        // no filter to apply
+    }
+
+    return filter
   }
 
   function loadMore(value) {
     $scope.device.loadingMore = true;
-    var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
 
-    var reasonName = $scope.selectedCheckinReason;
+    var whereClause = {
+      deviceId: $stateParams.deviceId
+    };
 
-    if (reasonName == 'all')
-      reasonName = {neq: null};
-    else if(reasonName == 'other')
-      reasonName = {neq: arrayReasons};
-
-
-    var lastTimeStamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp
+    whereClause = _.merge(whereClause, checkinFilter());
     DeviceLogEntry
       .find({
           filter: {
-            where: {deviceId: $stateParams.deviceId, timestamp: {lt: lastTimeStamp}, reason: reasonName},
+            where: whereClause,
             fields: ['id','timestamp', 'deviceId', 'onlineCameras', 'totalCameras', 'reason'],
             limit: value,
             order: 'timestamp DESC'

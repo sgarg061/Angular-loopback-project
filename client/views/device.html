@@ -95,8 +95,8 @@
 
                   <md-content style="width:330px;border-left: 1px solid rgba(0, 0, 0, 0.117647);border-top: 1px solid rgba(0, 0, 0, 0.117647);border-bottom: 1px solid rgba(0, 0, 0, 0.117647);">
                     <md-list layout-padding>
-                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}" ng-show="(selectedCheckinReason == 'all' || selectedCheckinReason == entry.reason) && (selectedCheckinType == 'show all' || selectedCheckinType == device.cameraStatus(entry))">
-                        
+                      <md-list-item class="md-3-line logEntries {{device.currentEntry.id === entry.id? ' active': ''}}" ng-repeat="entry in device.logEntries" ng-click="showCheckin(entry, $index)" id="logEntry-{{$index}}">
+
                         <md-icon md-svg-icon='indicator_green' ng-if='entry.totalCameras && entry.onlineCameras == entry.totalCameras' style="margin-right: 15px;">
                           <md-tooltip md-direction="top">
                             All cameras are online
@@ -278,8 +278,8 @@
                     <label>Camera Config Forward Port</label>
                     <input type="text" id="overrideConfigForwardPort" ng-model="device.overrideConfigForwardPort" />
                   </md-input-container>
-                  
-                </div> 
+
+                </div>
                 <md-button class="md-raised" ng-click="modifySettings()" ng-disabled="isSavingSettings">OK</md-button>
               </div>
             </md-tab>
