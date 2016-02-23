@@ -2,6 +2,7 @@ var uuid = require('node-uuid');
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var authService = require('../../server/services/authService');
+var _ = require('lodash');
 
 module.exports = function(Customer) {
 
@@ -72,25 +73,12 @@ module.exports = function(Customer) {
       case 'connect':
         // querying with a customer's credentials
         var tenantId = context.get('jwt').tenantId;
-        if (ctx.query.where) {
-          ctx.query.where.id = tenantId;
-        } else {
-          ctx.query.where = {
-            id: tenantId
-          };
-        }
+        ctx.query.where = _.merge(ctx.query.where, {id: tenantId});
         next();
         break;
       case 'reseller':
-        console.log('reseller!', context.get('jwt').resellerId);
         var resellerId = context.get('jwt').resellerId;
-        if (ctx.query.where) {
-          ctx.query.where.resellerId = resellerId;
-        } else {
-          ctx.query.where = {
-            resellerId: resellerId
-          };
-        }
+        ctx.query.where = _.merge(ctx.query.where, {resellerId: resellerId});
         next();
         break;
       case 'cloud':
@@ -108,15 +96,7 @@ module.exports = function(Customer) {
               ids.push(res[i].id);
             }
 
-            if (ctx.query.where) {
-              ctx.query.where.resellerId = {inq: ids};
-            } else {
-              ctx.query.where = {
-                resellerId: {
-                  inq: ids
-                }
-              };
-            }
+            ctx.query.where = _.merge(ctx.query.where, {resellerId: {inq: ids}});
             next();
           }
         });
