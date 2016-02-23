@@ -261,95 +261,98 @@ module.exports = function (Auth) {
         case 'admin':
         case 'standard':
           var tenantId = user.app_metadata.tenantId;
-          if (userType === 'solink') {
-            return cb(true);
-          } else if (userType === 'reseller') {
-            var resellerId = jwt.resellerId;
-            // query for customer, make sure customer.resellerId === resellerId
-            Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
-              if (err) {
-                logger.error('Error retrieving customer for force password:', err);
-                return cb(false);
-              }
-
-              if (!customer) {
-                var error = new Error('Customer not found');
-                error.statusCode = 404;
-                return cb(false);
-              }
-
-              if (customer.resellerId !== resellerId) {
-                return cb(false);
-              } else {
-                return cb(true);
-              }
-            });
-          } else if (userType === 'cloud') {
-            // check that customer matching tenantId's reseller matches this cloudid
-            var cloudId = jwt.cloudId;
-            Auth.app.models.Customer.findOne({
-              where: {id: tenantId},
-              include: {
-                relation: 'reseller',
-                scope: {
-                  fields: ['id', 'name', 'cloudId']
+          switch (userType) {
+            case 'solink':
+              return cb(true);
+            case 'reseller':
+              var resellerId = jwt.resellerId;
+              // query for customer, make sure customer.resellerId === resellerId
+              Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
+                if (err) {
+                  logger.error('Error retrieving customer for force password:', err);
+                  return cb(false);
                 }
-              }
-            }, function (err, customer) {
-              if (err) {
-                logger.error('Error retrieving customer for force password:', err);
-                return cb(false);
-              }
 
-              if (!customer) {
-                var error = new Error('Customer not found');
-                error.statusCode = 404;
-                return cb(false);
-              }
+                if (!customer) {
+                  var error = new Error('Customer not found');
+                  error.statusCode = 404;
+                  return cb(false);
+                }
 
-              if (customer.reseller().cloudId !== cloudId) {
-                return cb(false);
-              } else {
-                return cb(true);
-              }
-            });
-          } else {
-            // something terribly wrong
-            return cb(false);
+                if (customer.resellerId !== resellerId) {
+                  return cb(false);
+                } else {
+                  return cb(true);
+                }
+              });
+              break;
+            case 'cloud':
+              // check that customer matching tenantId's reseller matches this cloudid
+              var cloudId = jwt.cloudId;
+              Auth.app.models.Customer.findOne({
+                where: {id: tenantId},
+                include: {
+                  relation: 'reseller',
+                  scope: {
+                    fields: ['id', 'name', 'cloudId']
+                  }
+                }
+              }, function (err, customer) {
+                if (err) {
+                  logger.error('Error retrieving customer for force password:', err);
+                  return cb(false);
+                }
+
+                if (!customer) {
+                  var error = new Error('Customer not found');
+                  error.statusCode = 404;
+                  return cb(false);
+                }
+
+                if (customer.reseller().cloudId !== cloudId) {
+                  return cb(false);
+                } else {
+                  return cb(true);
+                }
+              });
+              break;
+            default:
+              return cb(false);
           }
           break;
-
         case 'reseller':
-          if (userType === 'solink') {
-            return cb(true);
-          } else if (userType === 'reseller') {
-            // must have matching id
-            var resellerId = user.app_metadata.resellerId;
-            var myResellerId = jwt.app_metadata.resellerId;
-            return cb(resellerId === myResellerId);
-          } else if (userType === 'cloud') {
-            // reseller must have cloudid that matches me
-            var cloudId = jwt.cloudId;
-            Auth.app.models.Reseller.findOne({
-              where: {id: user.app_metadata.resellerId}
-            }, function (err, reseller) {
-              if (err) {
-                logger.error('Error retrieving reseller to create user:', err);
-                return cb(false);
-              }
+          switch (userType) {
+            case 'solink':
+              return cb(true);
+            case 'reseller':
+              // must have matching id
+              resellerId = user.app_metadata.resellerId;
+              var myResellerId = jwt.app_metadata.resellerId;
+              return cb(resellerId === myResellerId);
+            case 'cloud':
+              // reseller must have cloudid that matches me
+              cloudId = jwt.cloudId;
+              Auth.app.models.Reseller.findOne({
+                where: {id: user.app_metadata.resellerId}
+              }, function (err, reseller) {
+                if (err) {
+                  logger.error('Error retrieving reseller to create user:', err);
+                  return cb(false);
+                }
 
-              if (!reseller) {
-                var error = new Error('Reseller not found');
-                error.statusCode = 404;
-                return cb(false);
-              }
+                if (!reseller) {
+                  var error = new Error('Reseller not found');
+                  error.statusCode = 404;
+                  return cb(false);
+                }
 
-              return cb(reseller.cloudId === cloudId);
-            });
-          } else {
-            return cb(false);
+                return cb(reseller.cloudId === cloudId);
+              });
+              break;
+            default:
+              return cb(false);
           }
-
+          break;
         case 'cloud':
           // TODO: check for ownership
           // implement this at a later date
