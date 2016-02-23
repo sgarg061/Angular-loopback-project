@@ -40,6 +40,7 @@ module.exports = function(Device) {
             var tenantId = context.get('jwt').tenantId;
             var cloudId = context.get('jwt').cloudId;
             var userType = context.get('jwt').userType;
+            var jwtDevices = context.get('jwt').devices;
 
             if (userType === 'solink') {
                 next();
@@ -50,6 +51,10 @@ module.exports = function(Device) {
                     ctx.query.where = {
                         customerId: tenantId
                     };
+                }
+
+                if (jwtDevices && jwtDevices.length > 0) {
+                    ctx.query.where.id = {inq: jwtDevices};
                 }
                 next();
             } else if (resellerId) {
