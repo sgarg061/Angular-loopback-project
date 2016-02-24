@@ -71,9 +71,12 @@ angular
           },
           'responseError': function (response) {
             switch (response.status) {
-              case 401:
+              case 401: 
               case 403:
                 delete $localStorage.token;
+                if ($location.$$path !== '/login'){ //no need to include login path
+                  $localStorage.redirect = $location.$$path;
+                }
                 $location.path('/login');
                 break;
               case 500:
