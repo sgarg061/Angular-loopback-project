@@ -137,10 +137,8 @@ function resellerAccessPermissions(ctx, next) {
       case 'admin':
       case 'connect':
       case 'standard':
-        console.log('i am a connect...');
         // only allow read for reseller
         loopback.getModel('Customer').findById(customerId, function (err, customer) {
-          console.log('here is my customer...', customer);
           if (err) {
             return next(err);
           } else {
