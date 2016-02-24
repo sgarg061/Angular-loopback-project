@@ -242,6 +242,7 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
       query += ' AND (app_metadata.userType:admin OR app_metadata.userType:standard)';
       break;
     case 'resellerId':
+      query += ' AND app_metadata.userType:reseller';
       break;
     case 'cloudId':
       break;
