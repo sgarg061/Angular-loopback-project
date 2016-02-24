@@ -327,7 +327,7 @@ module.exports = function (Auth) {
             case 'reseller':
               // must have matching id
               resellerId = user.app_metadata.resellerId;
-              var myResellerId = jwt.app_metadata.resellerId;
+              var myResellerId = jwt.resellerId;
               return cb(resellerId === myResellerId);
             case 'cloud':
               // reseller must have cloudid that matches me
