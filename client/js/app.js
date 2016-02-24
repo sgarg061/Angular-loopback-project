@@ -72,7 +72,9 @@ angular
               case 401: 
               case 403:
                 delete $localStorage.token;
-                $localStorage.redirect = $location.$$path;
+                if ($location.$$path !== '/login'){ //no need to include login path
+                  $localStorage.redirect = $location.$$path;
+                }
                 $location.path('/login');
                 break;
               case 500:

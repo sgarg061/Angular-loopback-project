@@ -7,7 +7,7 @@ angular.module('app').controller('LoginController', function($scope, $state, Aut
     userService.loadUser(result.response.authToken);
     if ($localStorage.redirect != $localStorage.defaultPath){
       $location.path($localStorage.redirect);
-      $localStorage.redirect = $localStorage.defaultPath;
+      $localStorage.redirect = null;
     } else {
       $state.go('home');
     }
