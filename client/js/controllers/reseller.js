@@ -255,25 +255,27 @@ angular
                       };
                       $scope.create = function() {
                         $scope.newCustomer['resellerId'] = reseller.id;
-
-                        var iRecur = 0;
-                        for(var i = 0; i < reseller.customers.length; i++){ //check for duplicate name
-                          if(reseller.customers[i].name === $scope.newCustomer.name){
-                            iRecur++;
+                      Customer
+                        .find({
+                          filter: {
+                            where: {and: [{'resellerId':reseller.id}, {'name':$scope.newCustomer.name}]}
                           }
-                        }
-                        if(iRecur > 0){
-                          toastr.error("Customer already exists (counts:" + iRecur + "); please enter a unique name.");}
-                        else{
-                          Customer.create($scope.newCustomer)
-                          .$promise
-                          .then(function(customer) {
-                            getReseller();
-                          }, function (res) {
-                            toastr.error(res.data.error.message, 'Error');
-                          });
-                          $mdDialog.cancel();
-                        }
+                        })
+                        .$promise
+                        .then(function(customer){ //if the customer already exists
+                          if(customer && customer.length > 0) {
+                              toastr.error("Customer already exists; please enter a unique name.");
+                          } else {
+                            Customer.create($scope.newCustomer)
+                            .$promise
+                            .then(function(customer) {
+                              getReseller();
+                            }, function (res) {
+                              toastr.error(res.data.error.message, 'Error');
+                            });
+                            $mdDialog.cancel();
+                          }
+                        });
                       };
                       $scope.cancel = function() {
                         $mdDialog.cancel();
