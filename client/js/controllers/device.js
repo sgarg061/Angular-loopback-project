@@ -275,11 +275,16 @@ angular
         else if(reason.name == 'other')
           reasonName = {nin: arrayReasons};
 
+        var whereClause = {
+          deviceId: $stateParams.deviceId,
+          reason: reasonName
+        };
 
+        whereClause = _.merge(whereClause, checkinFilter(false));
 
         DeviceLogEntry
           .count({
-              where: {deviceId: $stateParams.deviceId, reason: reasonName}
+              where: whereClause
           }, function(data) {
             reason.count = data.count;
             if (index == $scope.checkinReasons.length-1) {
@@ -399,26 +404,28 @@ angular
     });
   }
 
-  function checkinFilter() {
+  function checkinFilter(applyReasonFilter) {
     var filter = {};
 
     // set timestamp filter
-    if ($scope.device.logEntries && $scope.device.logEntries.length > 0) {
+    if ($scope.device && $scope.device.logEntries && $scope.device.logEntries.length > 0) {
       var lastTimestamp = $scope.device.logEntries[$scope.device.logEntries.length-1].timestamp;
       filter.timestamp = {lt: lastTimestamp};
     }
 
     // reason filter
-    var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
+    if (applyReasonFilter) {
+      var arrayReasons = Object.keys($scope.checkinColors).slice(0, $scope.checkinReasons.length-2);
 
-    var reasonName = $scope.selectedCheckinReason;
-    if (reasonName === 'all'){
-      reasonName = {neq: null};
-    } else if (reasonName === 'other'){
-      reasonName = {nin: arrayReasons};
+      var reasonName = $scope.selectedCheckinReason;
+      if (reasonName === 'all'){
+        reasonName = {neq: null};
+      } else if (reasonName === 'other'){
+        reasonName = {nin: arrayReasons};
+      }
+
+      filter.reason = reasonName;
     }
-
-    filter.reason = reasonName;
 
     switch ($scope.selectedCheckinType) {
       case 'all down':
@@ -460,7 +467,7 @@ angular
       deviceId: $stateParams.deviceId
     };
 
-    whereClause = _.merge(whereClause, checkinFilter());
+    whereClause = _.merge(whereClause, checkinFilter(true));
     DeviceLogEntry
       .find({
           filter: {
@@ -486,8 +493,9 @@ angular
         else{
           $scope.device.noMoreLogs = false;
         }
-      })
+      });
 
+      getCountByReasons();
   }
 
   // TODO: refactor these permissions
