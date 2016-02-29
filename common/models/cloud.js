@@ -91,8 +91,6 @@ module.exports = function(Cloud) {
         };
 
         authService.createUser(cloud.email, cloud.password, userData, function (err, res) {
-            console.log('err:');
-            console.log(err);
             if (err) {
                 logger.error('Could not create cloud user');
                 logger.error(err);

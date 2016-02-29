@@ -1,11 +1,16 @@
-angular.module('app').controller('LoginController', function($scope, $state, Auth, $localStorage, toastr, blockUI, userService) {
+angular.module('app').controller('LoginController', function($scope, $state, Auth, $localStorage, $location, toastr, blockUI, userService) {
 
   function successAuth(res, headers) {
     blockUI.stop();
     var result = JSON.parse(JSON.stringify(res));
     $localStorage.token = result.response.authToken;
     userService.loadUser(result.response.authToken);
-    $state.go('home');
+    if ($localStorage.redirect != $localStorage.defaultPath){
+      $location.path($localStorage.redirect);
+      $localStorage.redirect = null;
+    } else {
+      $state.go('home');
+    }
   }
 
   function errorAuth(res) {
@@ -19,7 +24,7 @@ angular.module('app').controller('LoginController', function($scope, $state, Aut
       username: $scope.username,
       password: $scope.password
     };
-
+    
     // Block the user interface until the login succeeds or fails
     blockUI.start('Logging in...');
 

@@ -18,7 +18,7 @@ angular
     $scope.allDevices = [];
     $scope.cascadedReports = [];
     $scope.ownedReports = [];
-    
+
 
     function watchForChanges() {
       // watch reseller for updates and save them when they're found
@@ -37,7 +37,7 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateReseller(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
-          
+
         }
       }, true);
     }
@@ -46,19 +46,19 @@ angular
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
         if (result === 'Default: ' + $scope.defaultSoftwareVersion.name) {
           updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
-          $scope.currentSoftwareVersion = softwareVersion; 
-          
+          $scope.currentSoftwareVersion = softwareVersion;
+
         } else {
           updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
           $scope.currentSoftwareVersion = softwareVersion;
-        } 
-        
+        }
+
       }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
     function updateReseller(id, changedDictionary, message) {
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(reseller) {toastr.info(' ' + message);}, 
+        .$promise.then(function(reseller) {toastr.info(' ' + message);},
           function (res) {
         toastr.error(res.data.error.message, 'Error');
       });
@@ -106,6 +106,11 @@ angular
           }
 
 
+          $scope.userTypes = ['reseller'];
+          getUsers($scope.reseller.id, function (users) {
+            $scope.users = users;
+          });
+
           getFilters();
           getReports();
 
@@ -149,6 +154,21 @@ angular
         })
     }
 
+    function getUsers(id, cb) {
+      Reseller.prototype$listUsers({
+        id: id
+      })
+        .$promise
+        .then(function(res) {
+          cb(res.users);
+        })
+        .catch(function (err) {
+          console.log('error listing users', err);
+          toastr.error('Unable to list users: ' + err.data.error.message);
+          cb([]);
+        });
+    }
+
     function getFilters(){
       POSFilter
         .find({
@@ -185,7 +205,7 @@ angular
         })
     }
 
-    
+
     function getReports(){
       SearchFilter
         .find({
@@ -460,7 +480,7 @@ angular
         getFilters();
       });
     };
-     
+
 
     $scope.addReport = function(connector) {
       filterService.addReport('reseller', $stateParams.resellerId, function(){
@@ -472,7 +492,7 @@ angular
       filterService.actionReport(filter, function(){
         getReports();
       });
-    }; 
+    };
     $scope.deleteReseller = deleteReseller;
     $scope.goHome = goHome;
 

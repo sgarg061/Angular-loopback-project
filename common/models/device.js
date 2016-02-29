@@ -5,7 +5,7 @@ var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
-
+var liveDataService = require('../../server/services/liveDataService');
 
 
 module.exports = function(Device) {
@@ -40,6 +40,7 @@ module.exports = function(Device) {
             var tenantId = context.get('jwt').tenantId;
             var cloudId = context.get('jwt').cloudId;
             var userType = context.get('jwt').userType;
+            var jwtDevices = context.get('jwt').devices;
 
             if (userType === 'solink') {
                 next();
@@ -50,6 +51,10 @@ module.exports = function(Device) {
                     ctx.query.where = {
                         customerId: tenantId
                     };
+                }
+
+                if (jwtDevices && jwtDevices.length > 0) {
+                    ctx.query.where.id = {inq: jwtDevices};
                 }
                 next();
             } else if (resellerId) {
@@ -266,10 +271,14 @@ module.exports = function(Device) {
     };
 
     Device.checkin = function (id, data, cb) {
+        liveDataService.publish('checkin', {
+            deviceId: id
+        });
+
         // parse checkin data
         data = deviceDataParser.parseDeviceData(data);
         // log the checkin data
-        logCheckin(data);
+        logCheckin(id, data);
         // TODO: get the customerId from the current jwt token and use it in the device query
         // tod ensure that you can only update a device that belongs to you.
         // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
@@ -320,23 +329,18 @@ module.exports = function(Device) {
         return device;
     };
 
-    function logCheckin(data) {
-        if (data.id) {
-            var deviceLogEntry = createDeviceLogEntry(data);
-            Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
-                if (err) {
-                    logger.error('Failed to insert logEntry for device checkin: %s', err);
-                } else {
-                    logger.debug('logEntry for device stored successfully');
-                }
-            });
-        } else {
-            logger.error('Unable to checkin: data does not include device id: %s', data);
-        }
-
+    function logCheckin(id, data) {
+        var deviceLogEntry = createDeviceLogEntry(id, data);
+        Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
+            if (err) {
+                logger.error('Failed to insert logEntry for device checkin: %s', err);
+            } else {
+                logger.debug('logEntry for device stored successfully');
+            }
+        });
     }
 
-    function createDeviceLogEntry(data) {
+    function createDeviceLogEntry(id, data) {
         var deviceLogEntry = {checkinData: _.clone(data)};
 
         if (deviceLogEntry.checkinData.appVersion) {
@@ -374,8 +378,8 @@ module.exports = function(Device) {
         } else {
             logger.error('invalid cameras array');
         }
-
-        deviceLogEntry.deviceId = deviceLogEntry.checkinData.id;
+        //getting the id from url rather than checkin data
+        deviceLogEntry.deviceId = id;
         delete deviceLogEntry.checkinData.id;
 
         // add a timestamp field

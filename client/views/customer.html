@@ -41,9 +41,9 @@
 
     <div class="child-list col-md-8" layout-margin layout-fill layout-padding>
       <h2>Devices</h2>
-      <input type="text" placeholder="Search" ng-model="searchFilter" class="device-search form-control">
       <md-tabs md-dynamic-height>
         <md-tab label="LIST">
+          <input type="text" placeholder="Search" ng-model="searchFilter" class="device-search form-control">
           <md-content class="card">
             <table class="device-table" width="100%" style="margin: 0px;">
             <tr>
@@ -79,6 +79,10 @@
 
         <md-tab label="MAP">
           <map devices="allDevices"></map>
+        </md-tab>
+
+        <md-tab label="USERS">
+          <user-management users="users" user-types="userTypes" user-key="'tenantId'" user-value="customer.id" devices="devices"></user-management>
         </md-tab>
       </md-tabs>
     </div>

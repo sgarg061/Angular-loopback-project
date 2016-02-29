@@ -9,7 +9,7 @@
         delete-function="deleteReseller"
         software-versions="softwareVersions"
         default-software-version="defaultSoftwareVersion"
-        update-version-function = "updateVersion"        
+        update-version-function = "updateVersion"
         add-filter-function="addFilter"
         add-report-function="addReport"
         action-filter-function="actionFilter"
@@ -54,8 +54,13 @@
             </md-grid-tile>
           </md-grid-list>
         </md-tab>
+
         <md-tab label="MAP">
           <map devices="allDevices"></map>
+        </md-tab>
+
+        <md-tab label="USERS">
+          <user-management users="users" user-types="userTypes" user-key="'resellerId'" user-value="reseller.id" devices="devices"></user-management>
         </md-tab>
       </md-tabs>
 

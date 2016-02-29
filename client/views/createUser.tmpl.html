@@ -1,0 +1,36 @@
+<md-dialog aria-label="Set Password">
+
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+      <h2>Create User</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="closeCreateUser()">
+        <md-icon md-svg-icon='close' aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <div layout-padding layout-margin>
+    <md-dialog-content>
+      <p>Create a new user for this customer</p>
+      <md-input-container style="width: 100%;">
+          <label>Email</label>
+          <input required type="text" class="form-control focus" name="email" autocomplete="off" required ng-model="newUser.email">
+        </md-input-container>
+        <md-input-container style="width: 100%;">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newUser.password">
+        </md-input-container>
+        <md-input-container style="width: 100%;">
+          <label>User Type</label>
+          <md-select ng-model="newUser.userType" class="form-control">
+            <md-option ng-repeat="userType in userTypes" value="{{userType}}">{{userType}}</md-option>
+          </md-select>
+        </md-input-container>
+    </md-dialog-content>
+  </div>
+  <div class="md-actions">
+    <md-button ng-click="closeCreateUser()" class="md-primary">Cancel</md-button>
+    <md-button ng-click="_createUser()" class="md-primary">Create user</md-button>
+  </div>
+</md-dialog>

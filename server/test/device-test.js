@@ -3,16 +3,109 @@ var common = require('./common');
 var async = require('async');
 var app = require('../server');
 var authService = require('../services/authService');
+var uuid = require('node-uuid');
 
 describe('Device tests', function() {
   'use strict';
   this.timeout(5000);
 
+  describe('Location filtering', function () {
+    var device1Id = uuid.v1();
+    var device2Id = uuid.v1();
+    var device3Id = uuid.v1();
+
+    var noDeviceMetadataUser;
+    var noDeviceMetadataUserUsername = 'nodevicemetadatauser';
+    var emptyDeviceMetadataUser;
+    var emptyDeviceMetadataUserUsername = 'emptydevicemetadatauser';
+    var twoDevicesMetadataUser;
+    var twoDevicesMetadataUserUsername = 'twodevicesmetadatauser';
+
+    before(function (done) {
+      // create 3 devices
+      app.models.Customer.find({}, function (err, res) {
+        var cust = res[0];
+        app.models.Device.create([
+          {id: device1Id, name: 'Device 1', customerId: cust.id},
+          {id: device2Id, name: 'Device 2', customerId: cust.id},
+          {id: device3Id, name: 'Device 3', customerId: cust.id},
+        ], function devicesCreated(err, res) {
+          // now create the requisite users...
+          authService.createUser(noDeviceMetadataUserUsername, 'test', {
+            userType: 'admin',
+            tenantId: cust.id
+          }, function firstUserCreated (err, res) {
+            noDeviceMetadataUser = res;
+            authService.createUser(emptyDeviceMetadataUserUsername, 'test', {
+              userType: 'admin',
+              tenantId: cust.id,
+              devices: []
+            }, function secondUserCreated (err, res) {
+              emptyDeviceMetadataUser = res;
+              authService.createUser(twoDevicesMetadataUserUsername, 'test', {
+                userType: 'admin',
+                tenantId: cust.id,
+                devices: [device1Id, device2Id]
+              }, function thirdUserCreated (err, res) {
+                twoDevicesMetadataUser = res;
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it('should only return devices defined in a a user\'s token', function (done) {
+      common.login({username: twoDevicesMetadataUserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/devices', token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          var devices = res.body;
+          assert(devices.length === 2);
+          assert(devices.filter(function (d) {
+            return d.id === device1Id || d.id === device2Id;
+          }).length === 2);
+          done();
+        });
+      });
+    });
+
+    it('should return all devices if the devices section of a user\'s token is empty', function (done) {
+      common.login({username: emptyDeviceMetadataUserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/devices', token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          var devices = res.body;
+          assert(devices.length >= 3); // at least 3 devices have been created for this user.
+          // since this user is reused in other tests, can't assert for sure, but this is good enough.
+          done();
+        });
+      });
+    });
+
+    it('should return all devices if the devices section of a user\'s token does not exist', function (done) {
+      common.login({username: noDeviceMetadataUserUsername, password: 'test'}, function (token) {
+        common.json('get', '/api/devices', token)
+        .send({})
+        .expect(200)
+        .end(function (err, res) {
+          var devices = res.body;
+          assert(devices.length >= 3); // at least 3 devices have been created for this user.
+          // since this user is reused in other tests, can't assert for sure, but this is good enough.
+          done();
+        });
+      });
+    });
+  });
+
   describe('POST permissions', function() {
-    it('should always be successful for solink users', function(done) {
+    it('should always be successful for solink users', function (done) {
       var deviceName = 'test device';
 
-      common.login('solink', function(token) {
+      common.login('solink', function (token) {
         common.json('post', '/api/devices', token)
           .send({
             id: 'yoohoo',

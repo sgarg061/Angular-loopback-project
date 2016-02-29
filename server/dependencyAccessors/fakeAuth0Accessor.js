@@ -1,3 +1,4 @@
+'use strict';
 var Config = require('../../config');
 var jwt = require('jsonwebtoken');
 
@@ -36,8 +37,6 @@ var FakeAuth0Accessor = function () {
 };
 
 FakeAuth0Accessor.prototype.login = function (username, password, cb) {
-    'use strict';
-
     var matchingUser = users.filter(function (user) {
         return user.username === username && user.password === password;
     });
@@ -65,8 +64,6 @@ FakeAuth0Accessor.prototype.login = function (username, password, cb) {
 
 
 FakeAuth0Accessor.prototype.createUser = function (email, password, userData, cb) {
-    'use strict';
-
     var newUser = userData;
     newUser.username = email;
     newUser.password = password;
@@ -76,7 +73,6 @@ FakeAuth0Accessor.prototype.createUser = function (email, password, userData, cb
 };
 
 function createValidToken (user) {
-    'use strict';
     var appMetadata = {
         userType: user.userType
     };
@@ -87,6 +83,10 @@ function createValidToken (user) {
         appMetadata.resellerId = user.resellerId;
     } else if (user.tenantId) {
         appMetadata.tenantId = user.tenantId;
+    }
+
+    if (user.devices) {
+        appMetadata.devices = user.devices;
     }
 
     var payload = {
@@ -106,8 +106,6 @@ function createValidToken (user) {
 }
 
 FakeAuth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword, cb) {
-    'use strict';
-
     var matchingUser = users.filter(function (user) {
         return user.username === email;
     });
@@ -126,8 +124,6 @@ FakeAuth0Accessor.prototype.setPassword = function (email, oldPassword, newPassw
 };
 
 FakeAuth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
-    'use strict';
-
     var matchingUser = users.filter(function (user) {
         return user.username === email;
     });
@@ -142,6 +138,9 @@ FakeAuth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
         response: 'Forgot password email successfully sent.'
     };
     cb(null, response);
+};
+
+FakeAuth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata, cb) {
 };
 
 module.exports = FakeAuth0Accessor;

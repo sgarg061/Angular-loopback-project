@@ -1,0 +1,105 @@
+<div>
+  <div ng-hide="selectedUser" layout="row" layout-align="space-between center" class="title-row" style="padding-bottom:10px;">
+    <div class='create-button' ng-click="createUser(userTypes, userKey, userValue)" style="margin-left:auto;">
+      <i class="material-icons add">add</i>
+      <span>Create User</span>
+    </div>
+  </div>
+  <md-content>
+    <div ng-hide="selectedUser">
+      <table class="user-table" width="100%" style="margin: 0px;">
+        <tr>
+          <th align="left" ng-click="changeUserSorting('email')">Email</th>
+          <th align="left" ng-click="changeUserSorting('type')">User Type</th>
+          <th align="left" ng-click="changeUserSorting('lastlogin')">Last login</th>
+        </tr>
+        <tr class="user-table-row" ng-repeat="user in users | orderBy: userSort.column:userSort.descending | filter: searchFilter" ng-click="selectUser(user)">
+          <td>{{user.email}}</td>
+          <td>{{user.app_metadata.userType}}</td>
+          <td>{{user.last_login}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div ng-show="selectedUser">
+      <div class="userHeader">
+        <h3 style="display: inline-block; padding: 16px;">{{selectedUser.email}}</h3>
+        <md-menu>
+          <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+            <md-icon md-svg-icon="chevron_down"></md-icon>
+          </md-button>
+          <md-menu-content width="3">
+            <md-menu-item>
+              <md-button ng-click="setPassword(selectedUser)">
+                Set password
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="deleteUser()">
+                Delete user
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+
+      <div ng-show="userKey === 'tenantId'" ng-cloak>
+        <md-toolbar>
+          <h2 class="md-toolbar-tools">
+            <span>Settings</span>
+          </h2>
+        </md-toolbar>
+        <div style="padding: 16px;">
+          <md-switch class="md-primary" md-no-ink aria-label="Should Default to HD" ng-model="shouldDefaultToHD">
+            Should Default to HD Video
+          </md-switch>
+
+          <md-switch class="md-primary" md-no-ink aria-label="Should Play Video over WebRTC" ng-model="shouldPlayWebRTC">
+            Should Play Video Over WebRTC
+          </md-switch>
+        </div>
+      </div>
+
+      <div layout="column" ng-show="userKey === 'tenantId'" ng-cloak>
+        <md-toolbar>
+          <h2 class="md-toolbar-tools">
+            <span>Assign Devices</span>
+          </h2>
+        </md-toolbar>
+        <md-content class="md-padding autocomplete" layout="column">
+          <md-contact-chips
+              ng-model="selectedDevices"
+              md-contacts="devicesSearch($query)"
+              md-contact-name="name"
+              md-require-match="true"
+              md-highlight-flags="i"
+              filter-selected="true"
+              placeholder="Assigned Devices">
+          </md-contact-chips>
+          <md-list class="fixedRows">
+            <md-subheader class="md-no-sticky">Assigned Devices</md-subheader>
+            <md-list-item class="md-2-line contact-item" ng-repeat="device in devices"
+                ng-if="selectedDevices.indexOf(device) < 0"  ng-click="selectDevice(device)">
+              <div class="md-list-item-text compact">
+                <h3>{{device.name}}</h3>
+                <p>{{device.address}}</p>
+              </div>
+            </md-list-item>
+            <md-list-item class="md-2-line contact-item selected" ng-repeat="device in selectedDevices" ng-if="!isSelected(device)">
+              <div class="md-list-item-text compact">
+                <h3>{{device.name}}</h3>
+                <p>{{device.address}}</p>
+              </div>
+            </md-list-item>
+          </md-list>
+        </md-content>
+      </div>
+
+      <span style="float: right;">
+        <md-button class="md-raised md-primary" ng-click="saveUser()">Save</md-button>
+        <md-button class="md-raised md-warn" ng-click="selectUser(null)">Cancel</md-button>
+      </span>
+    </div>
+  </md-content>
+</div>
