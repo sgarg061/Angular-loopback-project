@@ -66,9 +66,9 @@ module.exports = function (app) {
 };
 
 function isOwnerOfFilter(context, token, cb) {
-
+    var Customer = loopback.getModel('Customer');
+    var Reseller = loopback.getModel('Reseller');
     var userId = getUserId(token);
-
     switch (context.remotingContext.req.method) {
         case 'PUT':
         case 'DELETE':
@@ -78,14 +78,53 @@ function isOwnerOfFilter(context, token, cb) {
                         logger.error(err);
                         cb(err, false);
                     }
-                    var mutable = (filter.creatorId === userId && filter.creatorType === token.userType);
-                    if (mutable) {
-                        cb(null, mutable); // true = is a team member
-                    }
-                    else{
-                        unauthorized(cb);
-                    }
-                });
+                        if (token.userType === 'reseller'){ //if reseller on reseller page
+                            if (filter.creatorId === token.resellerId && filter.creatorType === 'reseller'){
+                                cb(); 
+                            } else if(filter.creatorType === 'customer'){ //if reseller on customer page
+                                Customer.find({where: {id: filter.creatorId}}, function (err, res) {
+                                    var onCustomerPage = (filter.creatorId === res[0].id && filter.creatorType === 'customer');
+                                    if (onCustomerPage){
+                                        cb(null, onCustomerPage); 
+                                    } else {
+                                        unauthorized(cb);
+                                    }
+                                });
+                            } else {
+                                unauthorized(cb);
+                            }
+                        }
+                        else if (token.userType === 'cloud'){ //cloud user logs in
+                            if (filter.creatorId === token.cloudId && filter.creatorType === 'cloud'){
+                                cb();
+                            }
+                            else if(filter.creatorType === 'reseller'){ //cloud user is on reseller page
+                                Reseller.find({where: {id: filter.creatorId}}, function (err, res) {
+                                    var onResellerPage = (filter.creatorId === res[0].id && filter.creatorType === 'reseller');
+                                    if (onResellerPage){
+                                        cb(null, onResellerPage); 
+                                    } else {
+                                        unauthorized(cb);
+                                    }
+                                });
+                            }
+                            else if(filter.creatorType === 'customer'){//cloud user is on customer page
+                                Customer.find({where: {id: filter.creatorId}}, function (err, res) {
+                                    var onCustomerPage = (filter.creatorId === res[0].id && filter.creatorType === 'customer');
+                                    if (onCustomerPage){
+                                        cb(null, onCustomerPage); 
+                                    } else {
+                                        unauthorized(cb);
+                                    }
+                                });
+                            }
+                            else{
+                                unauthorized(cb);
+                            }
+                        }
+
+                
+                });
             }
             else{
                 invalidMethod(cb);
