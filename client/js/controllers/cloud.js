@@ -285,14 +285,28 @@ angular
                       };
                       $scope.create = function() {
                         $scope.newReseller['cloudId'] = cloud.id;
-                        Reseller.create($scope.newReseller)
+
+                        Reseller
+                        .find({
+                          filter: {
+                            where: {and: [{'cloudId':cloud.id}, {'name':$scope.newReseller.name}]}
+                          }
+                        })
                         .$promise
-                        .then(function(reseller) {
-                          getCloud();
-                        }, function (res) {
-                          toastr.error(res.data.error.message, 'Error');
+                        .then(function(reseller){ //if the reseller already exists
+                          if(reseller && reseller.length > 0) {
+                              toastr.error("Reseller already exists; please enter a unique name.");
+                          } else {
+                            Reseller.create($scope.newReseller)
+                            .$promise
+                            .then(function(reseller) {
+                              getCloud();
+                            }, function (res) {
+                              toastr.error(res.data.error.message, 'Error');
+                            });
+                            $mdDialog.cancel();
+                          }
                         });
-                        $mdDialog.cancel();
                       };
                       $scope.cancel = function() {
                         $mdDialog.cancel();

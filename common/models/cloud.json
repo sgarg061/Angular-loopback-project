@@ -73,6 +73,16 @@
       "foreignKey": "id"
     }
   },
+"indexes": {
+    "unique_cloudName": {
+      "keys": {
+        "name": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
   "acls": [
     {
       "principalType": "ROLE",
