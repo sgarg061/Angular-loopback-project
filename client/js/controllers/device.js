@@ -345,6 +345,11 @@ angular
       updatedConfigObject.ipAddress = $scope.device.overrideIpAddress;
     }
 
+    if ($scope.device.overrideLocalIP) {
+      updatedConfigObject.overrideLocalIP = $scope.device.overrideLocalIP;
+      updatedConfigObject.localIP = $scope.device.overrideLocalIP;
+    }
+
     if ($scope.device.overrideVmsPort) {
       updatedConfigObject.overrideVmsPort = $scope.device.overrideVmsPort;
     }
