@@ -102,6 +102,18 @@
       "type": "string",
       "required": false
     },
+    "overrideLocation": {
+      "type": "geopoint",
+      "required": false
+    },
+    "overrideAddress": {
+      "type": "string",
+      "required": false
+    },
+    "overrideName": {
+      "type": "string",
+      "required": false
+    },
     "overrideConnectPort": {
       "type": "number",
       "required": false

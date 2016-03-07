@@ -369,6 +369,27 @@ angular
       updatedConfigObject.overrideConfigForwardPort = $scope.device.overrideConfigForwardPort;
     }
 
+    if ($scope.device.overrideAddress && $scope.device.overrideAddress.geometry) {
+      var newLocation = {
+        lat: $scope.device.overrideAddress.geometry.location.lat(),
+        lng: $scope.device.overrideAddress.geometry.location.lng()
+      };
+
+      updatedConfigObject.overrideLocation = newLocation;
+      updatedConfigObject.location = newLocation;
+
+      updatedConfigObject.address = $scope.device.overrideAddress.formatted_address;
+      updatedConfigObject.overrideAddress = $scope.device.overrideAddress.formatted_address;
+    }
+
+    if ($scope.device.overrideName) {
+      updatedConfigObject.name = $scope.device.overrideName;
+      updatedConfigObject.overrideName = $scope.device.overrideName;
+
+      // make this change visible on the UI
+      $scope.device.name = $scope.device.overrideName;
+    }
+
     Device
       .prototype$updateAttributes({id: $scope.device.id}, updatedConfigObject)
       .$promise
