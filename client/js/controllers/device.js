@@ -402,8 +402,12 @@ angular
         setTimeout(function () {
           $scope.$apply(function() {
             $scope.isSavingSettings = false;
+            toastr.info('Settings updated');
           });
         }, 300); // wrapped in a setTimeout just so people know this is doing something :)
+      })
+      .catch(function (err) {
+        toastr.error('Error updating settings');
       });
   }
 
