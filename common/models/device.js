@@ -427,6 +427,10 @@ module.exports = function(Device) {
             props.address = device.overrideAddress;
         }
 
+        if (device.overrideLocalIP && device.overrideLocalIP.length > 0) {
+            props.localIP = device.overrideLocalIP;
+        }
+
         return props;
     }
 

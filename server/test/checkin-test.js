@@ -392,6 +392,49 @@ describe('Override settings', function() {
     });
   });
 
+  it('should ignore the local IP if an override local IP is set', function (done) {
+    var overrideLocalIP = '1.2.3.4';
+
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send({
+          localIP: overrideLocalIP,
+          overrideLocalIP: overrideLocalIP
+        })
+        .expect(200)
+        .end(function (err, res) {
+          if (err) throw err;
+
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+            .send({data: deviceCheckinData})
+            .expect(200)
+            .end(function (err, res) {
+              if (err) throw err;
+
+              common.json('get', '/api/devices/' + deviceId, token)
+                .expect(200)
+                .end(function (err, res) {
+                  if (err) throw err;
+
+                  assert.equal(res.body.localIP, overrideLocalIP);
+
+                  // undo
+                  common.json('put', '/api/devices/' + deviceId, token)
+                    .send({
+                      overrideLocalIP: null
+                    })
+                    .expect(200)
+                    .end(function (err, res) {
+                      if (err) throw err;
+
+                      done();
+                    });
+               });
+            });
+        });
+    });
+  });
+
   it('should ignore the address and lat/lng if an override location is set', function (done) {
     var overrideAddress = '123 Whopper Street';
     var overrideLocation = {

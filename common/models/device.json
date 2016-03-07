@@ -141,6 +141,10 @@
     "localIP": {
       "type": "string",
       "required": false
+    },
+    "overrideLocalIP": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
