@@ -86,7 +86,7 @@ module.exports = {
         if (customerId) {
             deviceData.customerId = customerId;
         }
-        if (location) {
+        if (_.has(location, 'lat') && _.has(location, 'lng')) {
             deviceData.location = location;
         } else {
             delete deviceData.location;
