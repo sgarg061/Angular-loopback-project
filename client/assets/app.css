@@ -826,3 +826,7 @@ md-contact-chips {
 .chipsdemoContactChips .fixedRows {
   height: 250px;
   overflow: hidden; }
+
+.button-on-the-right {
+  float: right;
+}
