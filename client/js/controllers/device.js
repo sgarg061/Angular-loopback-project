@@ -342,6 +342,11 @@ angular
       updatedConfigObject.ipAddress = $scope.device.overrideIpAddress;
     }
 
+    if ($scope.device.overrideLocalIP) {
+      updatedConfigObject.overrideLocalIP = $scope.device.overrideLocalIP;
+      updatedConfigObject.localIP = $scope.device.overrideLocalIP;
+    }
+
     if ($scope.device.overrideVmsPort) {
       updatedConfigObject.overrideVmsPort = $scope.device.overrideVmsPort;
     }
@@ -366,6 +371,27 @@ angular
       updatedConfigObject.overrideConfigForwardPort = $scope.device.overrideConfigForwardPort;
     }
 
+    if ($scope.device.overrideAddress && $scope.device.overrideAddress.geometry) {
+      var newLocation = {
+        lat: $scope.device.overrideAddress.geometry.location.lat(),
+        lng: $scope.device.overrideAddress.geometry.location.lng()
+      };
+
+      updatedConfigObject.overrideLocation = newLocation;
+      updatedConfigObject.location = newLocation;
+
+      updatedConfigObject.address = $scope.device.overrideAddress.formatted_address;
+      updatedConfigObject.overrideAddress = $scope.device.overrideAddress.formatted_address;
+    }
+
+    if ($scope.device.overrideName) {
+      updatedConfigObject.name = $scope.device.overrideName;
+      updatedConfigObject.overrideName = $scope.device.overrideName;
+
+      // make this change visible on the UI
+      $scope.device.name = $scope.device.overrideName;
+    }
+
     Device
       .prototype$updateAttributes({id: $scope.device.id}, updatedConfigObject)
       .$promise
@@ -373,8 +399,12 @@ angular
         setTimeout(function () {
           $scope.$apply(function() {
             $scope.isSavingSettings = false;
+            toastr.info('Settings updated');
           });
         }, 300); // wrapped in a setTimeout just so people know this is doing something :)
+      })
+      .catch(function (err) {
+        toastr.error('Error updating settings');
       });
   }
 
