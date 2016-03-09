@@ -1,7 +1,11 @@
-<md-toolbar layout="row" layout-padding class="breadcrumb">
+<md-toolbar layout="row" layout-padding class="breadcrumb fix-height">
   
   <div layout="row" layout-align="start center">
-    <span class="md-title" style="margin-left:10px;"ng-click="goHome()">Call Home</span>
+
+    <div>
+      <span class="md-title" style="margin-left:10px;"ng-click="goHome()">Call Home</span>
+    </div>
+
     <div ng-if="cloud">
       <span class="md-title" ng-click="selectCloud(cloud)" aria-label="Cloud">
         <md-icon md-svg-icon="right_arrow" md-menu-align-target ></md-icon>

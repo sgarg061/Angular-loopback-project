@@ -248,7 +248,9 @@ h2{
 
 
 /* Toolbar area */
-
+.fix-height{
+  min-height: 50px;
+}
 .menu {
   background-color: transparent;
   border: none;
