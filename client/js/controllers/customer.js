@@ -141,6 +141,7 @@ angular
 
             $scope.allDevices.push(device);
           });
+
            /*
  -            Device status
  -
@@ -155,10 +156,21 @@ angular
  -            red:
  -              - device has not checked in within expected interval
  -          */
+          var array= [];
           for (var i=0; i<$scope.devices.length; i++) {
             var device = $scope.devices[i];
-
-            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+            for (var j=0; j<device.cameras.length; j++) {
+              for (var k=0; k<device.cameras[j].streams.length; ++k){
+                array.push(device.cameras[j].streams[k].earliestSegmentDate);
+              }
+             }
+             var oldestDate = array.sort(function(greatest, smallest){return greatest-smallest})[0];
+             var todayDate = new Date().valueOf();
+             var calculation = ((todayDate - oldestDate)/1000);
+             //converting to days
+             device.RetentionDays = Math.floor(((calculation/3600)/24))
+             
+             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
              var nowInSeconds = new Date().getTime() / 1000;
 
              var checkinIntervalInSeconds = device.checkinInterval ||
@@ -189,7 +201,7 @@ angular
                  }
                }
              }
-
+             
              if (hasCheckedInOnTime) {
                if (allCamerasOnline) {
                  device.status = 'green';

@@ -53,6 +53,9 @@
               <th align="left"></th>
               <th align="left" ng-click="changeSorting('status')">Camera Status</th>
               <th align="left"></th>
+              <th></th>
+              <th align="left">Retention</th>
+              <th align="left"></th>
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
               <td>{{device.name}}</td>
@@ -63,7 +66,7 @@
                 <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.onlineStatus=='Offline'"></md-icon>
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.onlineStatus=='Unknown'"></md-icon>
               </td>
-              <td ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online</td>
+              <td ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online
               <td>
                <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.status=='green'"></md-icon>
                  <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.status=='red'"></md-icon>
@@ -72,6 +75,8 @@
                 <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.statusIconColor=='red'"></md-icon>
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.statusIconColor=='yellow'"></md-icon> -->
               </td>
+              <td></td>
+              <td> {{device.RetentionDays}} days</td>
             </tr>
             </table>
           </md-content>
