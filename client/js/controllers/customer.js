@@ -182,7 +182,7 @@ angular
              var allCamerasOnline = true;
              if (device.cameras) {
                for (var j=0; j<device.cameras.length; j++) {
-                 for (var k=0; k<device.cameras[j].streams.length; ++k){
+                 for (var k=0; k<device.cameras[j].streams.length; k++){
                   array.push(device.cameras[j].streams[k].earliestSegmentDate);
                  }
                  var camera = device.cameras[j];
@@ -196,7 +196,7 @@ angular
                var todayDate = new Date().valueOf();
                var calculation = ((todayDate - oldestDate)/1000);
                //converting to days
-               device.RetentionDays = Math.floor(((calculation/3600)/24))
+               device.retentionDays = Math.floor(((calculation/3600)/24))
              }
 
              
