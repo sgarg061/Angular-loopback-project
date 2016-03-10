@@ -15,8 +15,8 @@ angular
     'angular-momentjs',
     'dialogBox',
     'd3',
-    'filterService'
-
+    'filterService',
+    'google.places'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'blockUIConfig', 'ngClipProvider',
     function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, blockUIConfig, toastr, ngClipProvider) {
@@ -71,7 +71,7 @@ angular
           },
           'responseError': function (response) {
             switch (response.status) {
-              case 401: 
+              case 401:
               case 403:
                 delete $localStorage.token;
                 if ($location.$$path !== '/login'){ //no need to include login path

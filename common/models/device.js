@@ -396,12 +396,8 @@ module.exports = function(Device) {
     function checkinDevice (device, deviceData, cb) {
         // update general metadata about the device
         var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
+        checkedInProperties = replacePropertiesWithOverride(checkedInProperties, device);
 
-        // this code overrides the IP address (only in callhome) so that consumers of the callhome api know which port to use to access the device
-        // useful in the case of tim hortons where the outbound ip is different than the inbound ip
-        if (device.overrideIpAddress && device.overrideIpAddress.length > 0) {
-            checkedInProperties.ipAddress = device.overrideIpAddress;
-        }
 
         device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
             if (err) {
@@ -410,6 +406,32 @@ module.exports = function(Device) {
                 updateCameras(updatedDevice, deviceData, cb);
             }
         });
+    }
+
+    function replacePropertiesWithOverride(props, device) {
+        // this code overrides the IP address (only in callhome) so that consumers of the callhome api know which port to use to access the device
+        // useful in the case of tim hortons where the outbound ip is different than the inbound ip
+        if (device.overrideIpAddress && device.overrideIpAddress.length > 0) {
+            props.ipAddress = device.overrideIpAddress;
+        }
+
+        if (device.overrideName && device.overrideName.length > 0) {
+            props.name = device.overrideName;
+        }
+
+        if (device.overrideLocation) {
+            props.location = device.overrideLocation;
+        }
+
+        if (device.overrideAddress) {
+            props.address = device.overrideAddress;
+        }
+
+        if (device.overrideLocalIP && device.overrideLocalIP.length > 0) {
+            props.localIP = device.overrideLocalIP;
+        }
+
+        return props;
     }
 
     function generateCheckedInPropertiesObject(deviceData) {
