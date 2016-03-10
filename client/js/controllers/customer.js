@@ -156,8 +156,9 @@ angular
  -            red:
  -              - device has not checked in within expected interval
  -          */
-          var array= [];
+          
           for (var i=0; i<$scope.devices.length; i++) {
+            var array= [];
             var device = $scope.devices[i];
             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
              var nowInSeconds = new Date().getTime() / 1000;
