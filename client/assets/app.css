@@ -162,10 +162,6 @@ h2{
   -ms-flex: 0;
   flex: 0;
 }
-.sidebar.close .side-bar-toggle{
-  transform: rotate(0deg);
-  margin-left: -300px;
-}
 
 .sidebar.close md-content{
   width: 0px;
@@ -252,7 +248,9 @@ h2{
 
 
 /* Toolbar area */
-
+.fix-height{
+  min-height: 50px;
+}
 .menu {
   background-color: transparent;
   border: none;
@@ -676,12 +674,14 @@ i{
 .md-datepicker-input-container {
   padding-bottom: 0px;
 }
+
 .side-bar-toggle{
   position: fixed;
-  left: 310px;
-  bottom: 5px;
-  transform: rotate(180deg);
-  transition: margin-left 0.15s ease-in;
+  left: 5px;
+  top: 5px;
+  z-index:2;
+  min-width:24px;
+  padding:0px;
 }
 /* maps */
 
