@@ -439,6 +439,10 @@ module.exports = function(Device) {
             checkedInProperties.name = deviceData.locationName;
         }
 
+        if (deviceData.externalId) {
+            checkedInProperties.externalId = deviceData.externalId;
+        }
+
         if (deviceData.deviceInformation) {
             if (deviceData.deviceInformation.ip) {
                 checkedInProperties.ipAddress = deviceData.deviceInformation.ip;
