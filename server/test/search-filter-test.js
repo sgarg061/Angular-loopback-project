@@ -1,6 +1,5 @@
 var assert = require('assert');
 var common = require('./common');
-var async = require('async');
 var app = require('../server');
 var authService = require('../services/authService');
 
@@ -22,12 +21,6 @@ describe('Reports tests', function() {
     var customer1;
     var customer2;
     var customer3;
-
-    var camera1;
-    var camera2;
-    var camera3;
-    var camera4;
-    var camera5;
 
     var filter1;
     var filter2;
@@ -166,7 +159,7 @@ describe('Reports tests', function() {
                               if (err) throw err;
                               filter3 = res;
 
-                        
+
 			                        app.models.SearchFilterConnector.create({
 																id: connector1Id,
 																filterId: filter1.id,
@@ -193,7 +186,7 @@ describe('Reports tests', function() {
 			                            }, function (err, res) {
 			                              if (err) throw err;
 			                              connector3 = res;
-                        
+
 
                             // create users (add third reseller!)
                             authService.createUser(cloud1UserUsername, 'test', {
@@ -250,7 +243,7 @@ describe('Reports tests', function() {
         common.json('get', '/api/reports/' + connector3Id , token)
         .send({})
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -264,7 +257,7 @@ describe('Reports tests', function() {
         common.json('get', '/api/reports/' + connector1Id , token)
         .send({})
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -278,7 +271,7 @@ describe('Reports tests', function() {
         common.json('get', '/api/searchfilters/' + filter1.id , token)
         .send({})
         .expect(404)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -294,7 +287,7 @@ describe('Reports tests', function() {
           description: 'my new description'
         })
         .expect(404)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -330,28 +323,28 @@ describe('Reports tests', function() {
           description: 'my new description'
         })
         .expect(401)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
         });
       });
     });
-    
+
 
     it('it shouldnt let random cloud user delete the filter', function (done) {
       common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
         common.json('delete', '/api/searchfilters/' + filter1.id , token)
         .send({})
         .expect(401)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
         });
       });
     });
-    
+
 
     it('it should allow the owner to delete the filter', function (done) {
       common.login({username: cloud2UserUsername, password: 'test'}, function (token) {

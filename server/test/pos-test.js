@@ -1,11 +1,11 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
-var async = require('async');
 var app = require('../server');
 var authService = require('../services/authService');
 
 describe('POS tests', function() {
-  'use strict';
   this.timeout(5000);
 
 
@@ -166,7 +166,7 @@ describe('POS tests', function() {
                               if (err) throw err;
                               filter3 = res;
 
-                        
+
 			                        app.models.POSConnector.create({
 																id: connector1Id,
 																filterId: filter1.id,
@@ -193,7 +193,7 @@ describe('POS tests', function() {
 			                            }, function (err, res) {
 			                              if (err) throw err;
 			                              connector3 = res;
-                        
+
 
                             // create users (add third reseller!)
                             authService.createUser(cloud1UserUsername, 'test', {
@@ -325,7 +325,7 @@ describe('POS tests', function() {
                                                   {
                                                     cameraId: 'my-camera-1',
                                                     connectorId: connector3Id
-                                                  }], function (err, res) {
+                                                  }], function (err) {
                                                     if (err) throw err;
 
                                                     done(); // DONE!
@@ -430,7 +430,7 @@ describe('POS tests', function() {
         common.json('get', '/api/connectors/' + connector3Id + '/cameraConnectors' , token)
         .send({})
         .expect(404)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -443,7 +443,7 @@ describe('POS tests', function() {
         common.json('get', '/api/connectors/' + connector3Id , token)
         .send({})
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -457,7 +457,7 @@ describe('POS tests', function() {
         common.json('get', '/api/connectors/' + connector1Id , token)
         .send({})
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -471,7 +471,7 @@ describe('POS tests', function() {
         common.json('get', '/api/posfilters/' + filter1.id , token)
         .send({})
         .expect(404)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -487,7 +487,7 @@ describe('POS tests', function() {
           description: 'my new description'
         })
         .expect(404)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -523,28 +523,28 @@ describe('POS tests', function() {
           description: 'my new description'
         })
         .expect(401)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
         });
       });
     });
-    
+
 
     it('it shouldnt let random cloud user delete the filter', function (done) {
       common.login({username: reseller2Cloud1UserUsername, password: 'test'}, function (token) {
         common.json('delete', '/api/posfilters/' + filter1.id , token)
         .send({})
         .expect(401)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
         });
       });
     });
-    
+
 
     it('it should allow the owner to delete the filter', function (done) {
       common.login({username: cloud2UserUsername, password: 'test'}, function (token) {
@@ -575,7 +575,7 @@ describe('POS tests', function() {
 	      common.json('post', '/api/poscameraconnectors')
 	        .send({id: asscoation1Id, connectorId: connector2.id, cameraId: camera1.id})
 	        .expect(200)
-	        .end(function (err, res) {
+	        .end(function (err) {
 	          if (err) throw err;
 
             common.login({username: cloud1UserUsername, password: 'test'}, function (token) {

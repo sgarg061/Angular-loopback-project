@@ -1,8 +1,9 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
 
 describe('License tests', function() {
-  'use strict';
   this.timeout(5000);
 
   describe('Device activation fails with invalid license', function() {
@@ -10,11 +11,11 @@ describe('License tests', function() {
       common.json('post', '/api/licenses/activate')
         .send({key: 'ABCDABCDABC'})
         .expect(400)
-        .end(function(err, res) {
+        .end(function(err) {
           if (err) {
-            console.log('error! ' + err);
             throw err;
           }
+
           done();
         });
     });
@@ -425,7 +426,7 @@ describe('License tests', function() {
         common.json('post', '/api/licenses', token)
           .send({customerId: 1})
           .expect(401)
-          .end(function (err, res) {
+          .end(function (err) {
             if (err) throw err;
             done();
           });
@@ -439,7 +440,7 @@ describe('License tests', function() {
         common.json('post', '/api/licenses', token)
           .send({customerId: 1})
           .expect(401)
-          .end(function (err, res) {
+          .end(function (err) {
             if (err) throw err;
             done();
           });
@@ -452,7 +453,7 @@ describe('License tests', function() {
       common.json('post', '/api/licenses')
         .send({customerId: 1})
         .expect(401)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
           done();
         });

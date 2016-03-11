@@ -140,7 +140,6 @@ FakeAuth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
     cb(null, response);
 };
 
-FakeAuth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata, cb) {
-};
+FakeAuth0Accessor.prototype.updateMetadata = function () {};
 
 module.exports = FakeAuth0Accessor;

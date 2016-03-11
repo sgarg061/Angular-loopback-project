@@ -1,10 +1,7 @@
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
-var _ = require('underscore');
 var async = require('async');
-var _ = require('lodash');
-var deviceDataParser = require('../utils/deviceDataParser');
 
 
 module.exports = function(SearchFilter) {
@@ -36,7 +33,7 @@ module.exports = function(SearchFilter) {
                 next();
             }
             else if (cloudId){
-                cloudPermissions(SearchFilter, ctx, cloudId, next);        	
+                cloudPermissions(SearchFilter, ctx, cloudId, next);
             }
 
             else if (resellerId){
@@ -73,7 +70,7 @@ module.exports = function(SearchFilter) {
 			                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
 		            	}
 
-						next();  
+						next();
 		            }
 		        });
             }

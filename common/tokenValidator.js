@@ -1,4 +1,5 @@
-var logger = require('../server/logger');
+'use strict';
+
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var Config = require('../config');
@@ -6,7 +7,6 @@ var cacheService = require('../server/services/cacheService');
 
 module.exports = {
     validateToken: function (token, cb) {
-        'use strict';
         var config = new Config();
         jwt.verify(token, config.auth0PublicKey, function (err, decoded) {
             if (!err) {

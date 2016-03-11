@@ -1,10 +1,9 @@
+'use strict';
+
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
-var _ = require('underscore');
 var async = require('async');
-var _ = require('lodash');
-var deviceDataParser = require('../utils/deviceDataParser');
 
 module.exports = function(POSConnector) {
 	POSConnector.observe('before save', function addId(ctx, next) {
@@ -29,7 +28,7 @@ module.exports = function(POSConnector) {
                 next();
             }
             else if (cloudId){
-                cloudPermissions(POSConnector, ctx, cloudId, next);        	
+                cloudPermissions(POSConnector, ctx, cloudId, next);
             }
 
             else if (resellerId){
@@ -66,7 +65,7 @@ module.exports = function(POSConnector) {
 			                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
 		            	}
 
-						next();  
+						next();
 		            }
 		        });
             }

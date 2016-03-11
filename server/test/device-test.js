@@ -1,12 +1,12 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
-var async = require('async');
 var app = require('../server');
 var authService = require('../services/authService');
 var uuid = require('node-uuid');
 
 describe('Device tests', function() {
-  'use strict';
   this.timeout(5000);
 
   describe('Location filtering', function () {
@@ -29,7 +29,7 @@ describe('Device tests', function() {
           {id: device1Id, name: 'Device 1', customerId: cust.id},
           {id: device2Id, name: 'Device 2', customerId: cust.id},
           {id: device3Id, name: 'Device 3', customerId: cust.id},
-        ], function devicesCreated(err, res) {
+        ], () => {
           // now create the requisite users...
           authService.createUser(noDeviceMetadataUserUsername, 'test', {
             userType: 'admin',
