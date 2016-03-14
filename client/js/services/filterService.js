@@ -1,6 +1,6 @@
 (function() {
     angular.module('filterService', ['angular-jwt'])
-    .factory('filterService', function (jwtHelper, $localStorage, $moment, $mdDialog, POSFilter, SearchFilter) {
+    .factory('filterService', function (jwtHelper, $localStorage, $moment, $mdDialog, POSFilter, SearchFilter, toastr) {
         var user = {};
 
         return {
