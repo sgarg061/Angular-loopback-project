@@ -52,7 +52,7 @@ var developmentSettings = {
     certificate: fs.readFileSync(path.join(__dirname, 'private/certificate.pem')).toString(),
 
     revokedTokensRedisLocation: '127.0.0.1',
-    revokedTokensRedisPort: '6379',
+    revokedTokensRedisPort: '6380',
     socketRedisLocation: '127.0.0.1',
     socketRedisPort: '6379',
     socketPort: 8547,
