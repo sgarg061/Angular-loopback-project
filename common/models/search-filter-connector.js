@@ -136,12 +136,12 @@ module.exports = function(SearchFilterConnector) {
   }
 
   SearchFilterConnector.observe('access', function(ctx, next) {
-    ctx.query.include = _.merge(ctx.query.include, {
+    ctx.query.include = {
       relation: 'query',
       scope: {
         fields: ['id', 'filter', 'name', 'description', 'lastUpdated']
       }
-    });
+    };
     next();
   });
 
