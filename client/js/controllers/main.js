@@ -1,17 +1,24 @@
 angular.module('app')
-    .controller('MainController', ['$scope', '$rootScope', '$window', 'userService',
-    function($scope, $rootScope, $window, userService) {
+.controller('MainController', ['$scope', '$rootScope', '$window', '$http', 'userService',
+  function($scope, $rootScope, $window, $http, userService) {
 
-        $rootScope.$on("$stateChangeStart", function(event, curr, prev){
-            var user = userService.getUser();
-            if (user && user.userType) {
-                $window.Intercom('boot', {
-                    app_id: 'p9rbi4pn',
-                    email: user.email,
-                    created_at: user.createdAt,
-                    user_id: user.id
-                });
-            }
+    $rootScope.$on("$stateChangeStart", function(event, curr, prev){
+      var user = userService.getUser();
+      if (user && user.userType) {
+        $http.get('/assets/config.json')
+        .then(function (res) {
+          var config = res.data;
+          $window.Intercom('boot', {
+            app_id: config.intercomId,
+            email: user.email,
+            created_at: user.createdAt,
+            user_id: user.id
+          });
+        })
+        .catch(function (err) {
+          console.error('no config found', err);
         });
-        
-}]);
+      }
+    });
+
+  }]);
