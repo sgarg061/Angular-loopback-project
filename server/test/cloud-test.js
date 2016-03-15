@@ -1,22 +1,23 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
 var async = require('async');
 var app = require('../server');
 
 describe('Cloud tests', function() {
-  'use strict';
   this.timeout(5000);
 
   describe('Only solink can query clouds', function() {
     it('should return an error for each other type of user', function(done) {
-      
+
       var invalidLoginTypes = ['reseller', 'user', 'admin'];
       async.each(invalidLoginTypes, function loginWithInvalidType(loginType, cb) {
         common.login(loginType, function (token) {
           common.json('get', '/api/clouds', token)
             .send({})
             .expect(401)
-            .end(function (err, res) {
+            .end(function (err) {
               if (err) {
                 cb(err);
               } else {
@@ -37,10 +38,10 @@ describe('Cloud tests', function() {
         common.json('get', '/api/clouds', token)
         .send({})
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) {
             throw err;
-          } 
+          }
 
           done();
         });
@@ -64,7 +65,7 @@ describe('Cloud tests', function() {
 
   describe('Only Solink can create new clouds', function() {
     it('should return an error for each other type of user', function(done) {
-      
+
       var invalidLoginTypes = ['cloud', 'reseller', 'user', 'admin'];
       async.each(invalidLoginTypes, function loginWithInvalidType(loginType, cb) {
         common.login(loginType, function (token) {
@@ -80,7 +81,7 @@ describe('Cloud tests', function() {
               password: 'test'
             })
             .expect(401)
-            .end(function (err, res) {
+            .end(function (err) {
               if (err) {
                 cb(err);
               } else {
@@ -115,10 +116,10 @@ describe('Cloud tests', function() {
             password: 'test'
           })
           .expect(200) // should be 201.
-          .end(function (err, res) {
+          .end(function (err) {
             if (err) {
               throw err;
-            } 
+            }
 
             done();
           });

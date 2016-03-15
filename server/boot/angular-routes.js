@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path');
 
 var routes = ['/', '/cloud*', '/reseller*', '/customer*', '/device*', '/login', '/logout'];

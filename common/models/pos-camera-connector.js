@@ -1,10 +1,6 @@
-var logger = require('../../server/logger');
-var loopback = require('loopback');
+'use strict';
+
 var uuid = require('node-uuid');
-var _ = require('underscore');
-var async = require('async');
-var _ = require('lodash');
-var deviceDataParser = require('../utils/deviceDataParser');
 
 module.exports = function(PosCameraConnector) {
 	PosCameraConnector.observe('before save', function addId(ctx, next) {

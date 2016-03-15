@@ -1,19 +1,16 @@
 'use strict';
 const assert = require('assert');
 const common = require('./common');
-const async = require('async');
 const app = require('../server');
 const authService = require('../services/authService');
 
 describe('Reports tests', () => {
 
   describe('GET permissions', () => {
-
     let softwareVersionId;
     let cloud1, cloud2;
     let reseller1Cloud1, reseller2Cloud1, reseller1Cloud2;
     let customer1, customer2, customer3;
-    let camera1, camera2, camera3, camera4, camera5;
     let filter1, filter2, filter3;
     let connector1, connector2, connector3;
     let cloud1User, cloud2User;
@@ -227,7 +224,7 @@ describe('Reports tests', () => {
         common.json('get', '/api/reports/' + connector3Id , token)
         .send({})
         .expect(200)
-        .end((err, res) => {
+        .end((err) => {
           if (err) throw err;
 
           done();
@@ -241,7 +238,7 @@ describe('Reports tests', () => {
         common.json('get', '/api/reports/' + connector1Id , token)
         .send({})
         .expect(200)
-        .end((err, res) => {
+        .end((err) => {
           if (err) throw err;
 
           done();
@@ -255,7 +252,7 @@ describe('Reports tests', () => {
         common.json('get', '/api/searchfilters/' + filter1.id , token)
         .send({})
         .expect(404)
-        .end((err, res) => {
+        .end((err) => {
           if (err) throw err;
 
           done();
@@ -271,7 +268,7 @@ describe('Reports tests', () => {
           description: 'my new description'
         })
         .expect(404)
-        .end((err, res) => {
+        .end((err) => {
           if (err) throw err;
 
           done();
@@ -307,7 +304,7 @@ describe('Reports tests', () => {
           description: 'my new description'
         })
         .expect(401)
-        .end((err, res) => {
+        .end((err) => {
           if (err) throw err;
 
           done();
@@ -321,7 +318,7 @@ describe('Reports tests', () => {
         common.json('delete', '/api/searchfilters/' + filter1.id , token)
         .send({})
         .expect(401)
-        .end((err, res) => {
+        .end((err) => {
           if (err) throw err;
 
           done();
@@ -348,7 +345,7 @@ describe('Reports tests', () => {
     });
 
     it('should delete connector associations when a report is deleted', (done) => {
-      common.login('solink', (token) => {
+      common.login('solink', () => {
         // create the report and connector
         app.models.SearchFilter.create({ name: 'mynewreport', creatorId: cloud1.id, creatorType: 'cloud' })
         .then((newReport) => {

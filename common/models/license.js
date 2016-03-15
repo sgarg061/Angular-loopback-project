@@ -1,14 +1,14 @@
+'use strict';
+
 var crypto = require('crypto');
 var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');
-var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
 
 var loopback = require('loopback');
 
 module.exports = function (License) {
-    'use strict';
     License.activate = function (key, address, name, username, password, location, req, cb) {
         logger.info('Activating license key ' + key);
 
@@ -74,7 +74,6 @@ module.exports = function (License) {
 };
 
 function setUniqueLicenseKey(License, license, next) {
-    'use strict';
     var randToken = require('rand-token').generator({
         source: crypto.randomBytes
     });
@@ -104,7 +103,6 @@ function setUniqueLicenseKey(License, license, next) {
 }
 
 function activateLicense(License, key, deviceInfo, cb) {
-    'use strict';
     License.find({where: {key: key}}, function activateLicense(err, res) {
         if (err) {
             cb(new Error('Error while retrieving license for activation'), 'Error while retrieving license for activation');
@@ -129,7 +127,6 @@ function activateLicense(License, key, deviceInfo, cb) {
 }
 
 function performActivationTasks(License, license, deviceInfo, cb) {
-    'use strict';
     var Device = License.app.models.Device;
 
     var deviceData = deviceDataParser.parseDeviceData(deviceInfo, license.customerId);
@@ -152,7 +149,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                 customerId: license.customerId,
                 email_verified: true
             };
-            authService.createUser(username, password, userData, function (err, res) {
+            authService.createUser(username, password, userData, function (err) {
                 if (err) {
                     logger.error('Error while creating user for new device');
                     logger.error(err);
@@ -164,7 +161,7 @@ function performActivationTasks(License, license, deviceInfo, cb) {
                         username: username,
                         password: password,
                         deviceId: deviceId
-                    }, function sendActivationResponse(err, res) {
+                    }, function sendActivationResponse(err) {
                         if (err) {
                             logger.error('Error while setting activated flag on new device');
                             logger.error(err);

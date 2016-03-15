@@ -3,10 +3,7 @@
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
-var _ = require('underscore');
 var async = require('async');
-var _ = require('lodash');
-var deviceDataParser = require('../utils/deviceDataParser');
 
 module.exports = function(SearchFilter) {
 	SearchFilter.observe('before save', function addId(ctx, next) {
@@ -27,7 +24,7 @@ module.exports = function(SearchFilter) {
       filterId: ctx.where.id
     };
     Connector.destroyAll(whereClause)
-    .then((res) => {
+    .then(() => {
       next();
     })
     .catch((err) => {
