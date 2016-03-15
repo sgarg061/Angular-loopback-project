@@ -22,7 +22,7 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
       scope: config.auth0Scope,
       device: 'call-home'
     }
-  }, function (err, res, body) {
+  }, (err, res, body) => {
     if (!err && res.statusCode === 200) {
       var tokenInfo = JSON.parse(body);
       var token = tokenInfo.id_token;
@@ -68,7 +68,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
           api_type: 'app',
           scope: config.auth0Scope
         }
-      }, function (err, res, body) {
+      }, (err, res, body) => {
         if (!err && res.statusCode === 200) {
           var tokenInfo = JSON.parse(body);
           var token = tokenInfo.id_token;
@@ -113,7 +113,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
       auth: {
         bearer: config.createUserToken
       }
-    }, function (error, response, body) {
+    }, (error, response, body) => {
       if (error) {
         cb(error, '');
       } else if (response.statusCode !== 201) {
@@ -143,7 +143,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
         principal: config.auth0AWSPrincipal,
         api_type: 'aws'
       }
-    }, function (err, res, body) {
+    }, (err, res, body) => {
       if (!err && res.statusCode === 200) {
         var tokenInfo = JSON.parse(body);
         var creds = tokenInfo.Credentials;
@@ -171,7 +171,7 @@ Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword,
   'use strict';
   var config = new Config();
 
-  Auth0Accessor.prototype.login(email, oldPassword, function (error, response, body) {
+  Auth0Accessor.prototype.login(email, oldPassword, (error, response, body) => {
     if (error || response && !response.authToken) {
       var e = new Error('Unable to set password.');
       if(response) {
@@ -189,7 +189,7 @@ Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword,
         auth: {
           bearer: config.updateUserToken
         }
-      }, function (error, response, body) {
+      }, (error, response, body) => {
         if (error) {
           cb(error, '');
         } else if (response.statusCode !== 200) {
@@ -218,7 +218,7 @@ Auth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
     url: config.auth0URL + '/dbconnections/change_password',
     method: 'POST',
     form: forgotPasswordForm,
-  }, function (error, response, body) {
+  }, (error, response, body) => {
     if (error) {
       cb(error, '');
     } else if (response.statusCode !== 200) {
@@ -257,7 +257,7 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
     auth: {
       bearer: config.listUserToken
     }
-  }, function (err, res, body) {
+  }, (err, res, body) => {
     if (err) {
       throw err;
     }
@@ -286,7 +286,7 @@ Auth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata
     auth: {
       bearer: config.updateUserToken
     }
-  }, function (err, res, body) {
+  }, (err, res, body) => {
     if (err) {
       logger.error(err);
       return cb(err, null);
@@ -312,7 +312,7 @@ Auth0Accessor.prototype.getUser = function (id, cb) {
     auth: {
       bearer: config.listUserToken
     }
-  }, function (err, res, body) {
+  }, (err, res, body) => {
     if (err) {
       throw err;
     }
@@ -334,7 +334,7 @@ Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
     auth: {
       bearer: config.updateUserToken
     }
-  }, function (error, response, body) {
+  }, (error, response, body) => {
     if (error) {
       cb(error, null);
     } else if (response.statusCode !== 200) {
@@ -357,7 +357,7 @@ Auth0Accessor.prototype.deleteUser = function (id, cb) {
     auth: {
       bearer: config.deleteUserToken
     }
-  }, function (error, response, body) {
+  }, (error, response, body) => {
     if (error){
       cb(error, null);
     } else if (response.statusCode !== 200) {
