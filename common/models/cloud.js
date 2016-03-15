@@ -1,3 +1,5 @@
+'use strict';
+
 var uuid = require('node-uuid');
 var authService = require('../../server/services/authService');
 var logger = require('../../server/logger');

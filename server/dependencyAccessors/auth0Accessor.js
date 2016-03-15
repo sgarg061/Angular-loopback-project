@@ -1,3 +1,4 @@
+'use strict';
 var request = require('request');
 var Config = require('../../config');
 var jwt = require('jsonwebtoken');
@@ -7,7 +8,6 @@ var Auth0Accessor = function () {
 };
 
 Auth0Accessor.prototype.login = function (username, password, cb) {
-  'use strict';
   var config = new Config();
 
   request({
@@ -40,7 +40,6 @@ Auth0Accessor.prototype.login = function (username, password, cb) {
 };
 
 Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
-  'use strict';
   var config = new Config();
 
     // if jwt expires within an hour, refresh the whole thing
@@ -85,7 +84,6 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
   };
 
   Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
-    'use strict';
     var config = new Config();
 
     var userCreationForm = {
@@ -129,7 +127,6 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
   };
 
   function authenticateWithAWS(jwtToken, refreshToken, cb) {
-    'use strict';
     var config = new Config();
     console.log(jwtToken);
     request({
@@ -168,10 +165,9 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
 }
 
 Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword, cb) {
-  'use strict';
   var config = new Config();
 
-  Auth0Accessor.prototype.login(email, oldPassword, function (error, response, body) {
+  Auth0Accessor.prototype.login(email, oldPassword, function (error, response) {
     if (error || response && !response.authToken) {
       var e = new Error('Unable to set password.');
       if(response) {
@@ -189,7 +185,7 @@ Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword,
         auth: {
           bearer: config.updateUserToken
         }
-      }, function (error, response, body) {
+      }, function (error, response) {
         if (error) {
           cb(error, '');
         } else if (response.statusCode !== 200) {
@@ -205,7 +201,6 @@ Auth0Accessor.prototype.setPassword = function (email, oldPassword, newPassword,
 };
 
 Auth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
-  'use strict';
   var config = new Config();
 
   var forgotPasswordForm = {
@@ -218,7 +213,7 @@ Auth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
     url: config.auth0URL + '/dbconnections/change_password',
     method: 'POST',
     form: forgotPasswordForm,
-  }, function (error, response, body) {
+  }, function (error, response) {
     if (error) {
       cb(error, '');
     } else if (response.statusCode !== 200) {
@@ -232,7 +227,6 @@ Auth0Accessor.prototype.forgotPassword = function (email, newPassword, cb) {
 };
 
 Auth0Accessor.prototype.listUsers = function (type, id, cb) {
-  'use strict';
   var config = new Config();
 
   var query = 'app_metadata.' + type + ':\"' + id + '\"';
@@ -267,7 +261,6 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
 };
 
 Auth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata, cb) {
-  'use strict';
   var config = new Config();
 
   var updateForm = {};
@@ -303,7 +296,6 @@ Auth0Accessor.prototype.updateMetadata = function (id, appMetadata, userMetadata
 };
 
 Auth0Accessor.prototype.getUser = function (id, cb) {
-  'use strict';
   var config = new Config();
 
   request({
@@ -322,7 +314,6 @@ Auth0Accessor.prototype.getUser = function (id, cb) {
 };
 
 Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
-  'use strict';
   var config = new Config();
 
   request({
@@ -334,7 +325,7 @@ Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
     auth: {
       bearer: config.updateUserToken
     }
-  }, function (error, response, body) {
+  }, function (error, response) {
     if (error) {
       cb(error, null);
     } else if (response.statusCode !== 200) {
@@ -348,7 +339,6 @@ Auth0Accessor.prototype.forceSetPassword = function (id, password, cb) {
 };
 
 Auth0Accessor.prototype.deleteUser = function (id, cb) {
-  'use strict';
   var config = new Config();
 
   request({
@@ -357,7 +347,7 @@ Auth0Accessor.prototype.deleteUser = function (id, cb) {
     auth: {
       bearer: config.deleteUserToken
     }
-  }, function (error, response, body) {
+  }, function (error, response) {
     if (error){
       cb(error, null);
     } else if (response.statusCode !== 200) {

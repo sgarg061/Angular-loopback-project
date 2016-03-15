@@ -94,7 +94,6 @@ module.exports = function(Device) {
     function cloudPermissions(Device, ctx, cloudId, next) {
         var Reseller = Device.app.models.Reseller;
         var Customer = Device.app.models.Customer;
-        var ids = [];
 
         Reseller.find({where: {cloudId: cloudId}}, function (err, res) {
             if (err) {
@@ -331,7 +330,7 @@ module.exports = function(Device) {
 
     function logCheckin(id, data) {
         var deviceLogEntry = createDeviceLogEntry(id, data);
-        Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err, res) {
+        Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err) {
             if (err) {
                 logger.error('Failed to insert logEntry for device checkin: %s', err);
             } else {
@@ -537,7 +536,7 @@ module.exports = function(Device) {
                 // handle inherited attributes
                 var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
                 var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
-                var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
+                //var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
                 var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
                 var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
 
@@ -622,7 +621,7 @@ module.exports = function(Device) {
                     logger.error('Cannot register %s - Found more than one matching %s with %s: %s deviceId: %s', componentType, componentType, componentIdName, componentId, deviceId);
                 } else if (res.length < 1) {
                     logger.debug('%s not found - registering %s: %s', componentType, componentType, componentId);
-                    Device.app.models[componentType].create(component, function(err, res) {
+                    Device.app.models[componentType].create(component, function(err) {
                         if (err) {
                             logger.error('Cannot register %s - Failed while trying to create %s record: %s', componentType, componentType, err);
                         } else {
@@ -631,7 +630,7 @@ module.exports = function(Device) {
                     });
                 } else {
                     logger.debug('%s was found. updating attributes: %s', componentType, componentId);
-                    res[0].updateAttributes(component, function(err, res) {
+                    res[0].updateAttributes(component, function(err) {
                         if (err) {
                             logger.error('Cannot register %s - Failed while trying to update %s record: %s', componentType, componentType, err);
                         } else {

@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
 
@@ -46,7 +48,7 @@ describe('REST', function() {
             password: 'wrong password'
           })
           .expect(401)
-          .end(function(err, res) {
+          .end(function(err) {
             if (err) throw err;
             done();
           });
@@ -76,7 +78,7 @@ describe('REST', function() {
             token: 'notavalidjwt'
           })
           .expect(401)
-          .end(function(err, res) {
+          .end(function(err) {
             if (err) throw err;
             done();
           });
@@ -92,7 +94,7 @@ describe('REST', function() {
             newPassword: 'newpassword'
           })
           .expect(202)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -105,7 +107,7 @@ describe('REST', function() {
             newPassword: 'newpassword'
           })
           .expect(400)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -119,7 +121,7 @@ describe('REST', function() {
             newPassword: 'newpassword'
           })
           .expect(401)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -133,7 +135,7 @@ describe('REST', function() {
             newPassword: 'newpassword'
           })
           .expect(401)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -148,7 +150,7 @@ describe('REST', function() {
             newPassword: SOLINK_ADMIN_PASSWORD
           })
           .expect(202)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -163,7 +165,7 @@ describe('REST', function() {
             newPassword: 'newpassword'
           })
           .expect(200)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -176,7 +178,7 @@ describe('REST', function() {
             newPassword: 'newpassword'
           })
           .expect(400)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -188,7 +190,7 @@ describe('REST', function() {
             email: SOLINK_ADMIN_USERNAME,
           })
           .expect(400)
-          .end(function(err, res) {
+          .end(function(err) {
             if(err) throw err;
             done();
           });
@@ -225,7 +227,7 @@ describe('REST', function() {
           .end(function(err, res) {
             if (err) throw err;
             assert(res.body.length > 0, 'must have returned at least one device');
-            assert(typeof res.body[0] === 'object'); 
+            assert(typeof res.body[0] === 'object');
             done();
           });
       });
@@ -234,12 +236,12 @@ describe('REST', function() {
         common.json('get', '/api/devices')
           .send({})
           .expect(401)
-          .end(function(err, res) {
+          .end(function(err) {
             if (err) throw err;
             done();
           });
       });
-   
+
     });
 
   });

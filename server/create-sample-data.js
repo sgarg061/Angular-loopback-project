@@ -1,3 +1,5 @@
+'use strict';
+
 var logger = require('./logger');
 var async = require('async');
 var uuid = require('node-uuid');
@@ -37,7 +39,7 @@ module.exports = function(app, doneCallback) {
         app.models.License.destroyAll();
         cb(null);
       },
-      softwareVersions: ['destroyAll', function(cb, results) {
+      softwareVersions: ['destroyAll', function(cb) {
         createSoftwareVersions(cb);
       }],
       clouds: ['softwareVersions', function(cb, results) {
@@ -64,7 +66,7 @@ module.exports = function(app, doneCallback) {
       posDevices: ['devices', function (cb, results) {
         createPOSDevices(cb, results);
       }],
-      result: ['posDevices', function (cb, results) {
+      result: ['posDevices', () => {
         doneCallback();
       }]
     });
@@ -161,21 +163,21 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.POSFilter.create([
-        { 
+        {
           id: '',
           name: 'HDX',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7A));',
           creatorId: results.clouds[0].id,
           creatorType: 'cloud'
         },
-        { 
+        {
           id: '',
           name: 'QSR',
           script: 'console.log(String.fromCharCode(0xD83C, 0xDF7B));',
           creatorId: results.clouds[0].id,
           creatorType: 'cloud'
         },
-        { 
+        {
           id: '',
           name: 'Motion Parser',
           script: 'console.log(String.fromCharCode(0xD83D, 0xDE32));',

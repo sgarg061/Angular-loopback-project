@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
 var async = require('async');
@@ -5,7 +7,6 @@ var app = require('../server');
 var authService = require('../services/authService');
 
 describe('Reseller tests', function() {
-  'use strict';
   this.timeout(5000);
 
   describe('Solink, cloud owners, and the reseller in question can query resellers', function() {
@@ -21,7 +22,6 @@ describe('Reseller tests', function() {
         var Cloud = app.models.Cloud;
         var Reseller = app.models.Reseller;
         var Customer = app.models.Customer;
-        var Device = app.models.Device;
 
         Cloud.find({}, function (err, res) {
           var cloud = res[0];
@@ -65,11 +65,11 @@ describe('Reseller tests', function() {
                     authService.createUser('c1-connect', 'test', {
                       userType: 'connect',
                       tenantId: cust1reseller1.id
-                    }, function c1connectCreated (err, res) {
+                    }, function c1connectCreated () {
                       authService.createUser('c3-connect', 'test', {
                         userType: 'connect',
                         tenantId: cust1reseller2.id
-                      }, function c3connectCreated(err, res) {
+                      }, function c3connectCreated() {
                         done();
                       });
                     });
@@ -119,7 +119,7 @@ describe('Reseller tests', function() {
         common.json('get', '/api/resellers', token)
         .send({})
         .expect(200) // should be 201.
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) {
             throw err;
           }
@@ -148,7 +148,7 @@ describe('Solink and cloud users can create new resellers', function() {
               password: 'test'
             })
             .expect(401)
-            .end(function (err, res) {
+            .end(function (err) {
               if (err) {
                 cb(err);
               } else {
@@ -181,7 +181,7 @@ describe('Solink and cloud users can create new resellers', function() {
           password: 'test'
         })
         .expect(200) // should be 201.
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) {
             throw err;
           }
@@ -261,7 +261,7 @@ describe('To create or modify a reseller, you must be along its ownership chain'
     authService.createUser(cloudUsername, cloudPassword, {
       userType: 'cloud',
       cloudId: validCloud.id
-    }, function userCreated (err, res) {
+    }, () => {
       common.login({username: cloudUsername, password: cloudPassword}, function (token) {
 
         common.json('post', '/api/resellers', token)
@@ -292,7 +292,7 @@ describe('To create or modify a reseller, you must be along its ownership chain'
     authService.createUser(cloudUsername, cloudPassword, {
       userType: 'cloud',
       cloudId: validCloud.id
-    }, function userCreated (err, res) {
+    }, () => {
       common.login({username: cloudUsername, password: cloudPassword}, function (token) {
         // first, create the reseller to move
         common.json('post', '/api/resellers', token)
@@ -316,7 +316,7 @@ describe('To create or modify a reseller, you must be along its ownership chain'
             cloudId: '1'
           })
           .expect(404)
-          .end(function (err, res) {
+          .end(function (err) {
             if (err) throw err;
 
             done();

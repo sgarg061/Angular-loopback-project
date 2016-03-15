@@ -1,12 +1,11 @@
+'use strict';
+
 var logger = require('../../server/logger');
-var jwt = require('jsonwebtoken');
 var loopback = require('loopback');
 var tokenValidator = require('../tokenValidator');
 var authService = require('../../server/services/authService');
 
 module.exports = function (Auth) {
-  'use strict';
-
   Auth.disableRemoteMethod('create', true);
   Auth.disableRemoteMethod('upsert', true);
   Auth.disableRemoteMethod('updateAll', true);
