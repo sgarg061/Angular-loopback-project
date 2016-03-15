@@ -39,7 +39,6 @@ angular
           if (user !== null && user.app_metadata.hd !== undefined) {
             scope.hdAccess = user.app_metadata.hd === 'true';
           }
-          console.log(user)
           scope.selectedDevices = [];
           if (!scope.selectedUser) {
             return;
