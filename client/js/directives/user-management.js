@@ -16,7 +16,7 @@ angular
         scope.selectedDevices = [];
         scope.shouldDefaultToHD = false;
         scope.shouldPlayWebRTC = false;
-        scope.hdAccess = false;
+        scope.hdAccess = true;
         scope.userSort = {
           column: '',
           descending: false
@@ -36,10 +36,10 @@ angular
         scope.selectUser = function (user) {
           scope.selectedUser = user;
           //pressing cancel passes in null user
-          if (user !== null) {
-            scope.hdAccess = user.app_metadata.hd;
+          if (user !== null && user.app_metadata.hd !== undefined) {
+            scope.hdAccess = user.app_metadata.hd === 'true';
           }
-
+          console.log(user)
           scope.selectedDevices = [];
           if (!scope.selectedUser) {
             return;
