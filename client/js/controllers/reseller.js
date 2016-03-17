@@ -26,18 +26,18 @@ angular
         if (newValue) {
           var id = $scope.reseller.id;
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
+            var newValueEventServerUrl = newValue.eventServerUrl;
             if (newValue.eventServerUrl === ''){
-              updateReseller(id, {eventServerUrl: null}, 'Event server URL has been updated'); 
-            } else {
-              updateReseller(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
-            }
+              newValueEventServerUrl = null; 
+            } 
+            updateReseller(id, {eventServerUrl: newValueEventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
+            var newValueImageServerUrl = newValue.imageServerUrl;
             if (newValue.imageServerUrl === ''){
-              updateReseller(id, {imageServerUrl: null}, 'Image server URL has been updated');
-            } else { 
-              updateReseller(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
-            }
+              newValueImageServerUrl = null;
+            } 
+            updateReseller(id, {imageServerUrl: newValueImageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
