@@ -68,8 +68,7 @@ angular
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(reseller) {toastr.info(' ' + message);},
           function (res) {
-            console.log(res)
-        toastr.error(res.statusText, 'Error Invalid Value');
+          toastr.error(res.statusText, 'Error Invalid Value');
       });
     }
 
@@ -102,7 +101,6 @@ angular
           if(!_.isEmpty(resellers)){
             $scope.reseller = resellers[0];
 
-            $scope.imageServerUrl = resellers[0].imageServerUrl;
             $scope.cloudId = resellers[0].cloud.id;
             $scope.cloud = resellers[0].cloud;
             $scope.resellerId = resellers[0].id;
