@@ -197,7 +197,10 @@ angular
                var todayDate = new Date().valueOf();
                var calculation = ((todayDate - oldestDate)/1000);
                //converting to days
-               device.retentionDays = Math.floor(((calculation/3600)/24))
+               device.retentionDays = Math.floor(((calculation/3600)/24));
+               if (lastCheckinTimeInSeconds === 0 && !hasCheckedInOnTime){
+                device.retentionDays = 'Unknown';
+              }
              }
 
              
