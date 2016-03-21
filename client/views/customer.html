@@ -76,7 +76,7 @@
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.statusIconColor=='yellow'"></md-icon> -->
               </td>
               <td></td>
-              <td> {{device.retentionDays}} {{device.retentionDays > 1 || device.retentionDays === 'Unknown'?  'Days':  'Day'}}</td>
+              <td> {{device.retentionDays}} {{device.retentionDays > 1?'Days':device.retentionDays === 'Unknown'? '':'Day'}}</td>
             </tr>
             </table>
           </md-content>
