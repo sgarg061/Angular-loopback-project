@@ -16,6 +16,7 @@ angular
         scope.selectedDevices = [];
         scope.shouldDefaultToHD = false;
         scope.shouldPlayWebRTC = false;
+        scope.hdAccess = true;
         scope.userSort = {
           column: '',
           descending: false
@@ -34,7 +35,10 @@ angular
 
         scope.selectUser = function (user) {
           scope.selectedUser = user;
-
+          //pressing cancel passes in null user
+          if (user !== null && user.app_metadata.hd !== undefined) {
+            scope.hdAccess = user.app_metadata.hd === 'true';
+          }
           scope.selectedDevices = [];
           if (!scope.selectedUser) {
             return;
@@ -47,7 +51,6 @@ angular
               }));
             });
           }
-
           if (user.user_metadata) {
             scope.shouldPlayWebRTC = user.user_metadata.wrtc === 'true';
             scope.shouldDefaultToHD = user.user_metadata.defaultToHD === 'true';
@@ -62,7 +65,7 @@ angular
           appMetadata.devices = scope.selectedDevices.map(function (device) {
             return device.id;
           });
-
+          appMetadata.hd = scope.hdAccess;
           if (appMetadata.devices.length === 0) {
             appMetadata.devices =  null;// auth0 won't let us pass in an empty array.
           }
