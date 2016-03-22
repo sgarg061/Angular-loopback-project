@@ -64,7 +64,6 @@ module.exports = function(Reseller) {
   });
 
   Reseller.prototype.listUsers = function (cb) {
-    console.log('test')
     authService.listUsers('resellerId', this.id, function (err, res) {
       if (err) {
         logger.error(err);
