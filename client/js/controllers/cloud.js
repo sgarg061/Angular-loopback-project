@@ -132,6 +132,11 @@ angular
           } else {
             toastr.error('invalid arrray');
           }
+          $scope.userTypes = ['cloud'];
+          getUsers($scope.cloudId, function (users) {
+            $scope.users = users;
+          });
+
           watchForChanges();
         });
     }
@@ -154,6 +159,20 @@ angular
         });
     }
 
+    function getUsers(id, cb) {
+      Cloud.prototype$listUsers({
+        id: id
+      })
+        .$promise
+        .then(function(res) {
+          cb(res.users);
+        })
+        .catch(function (err) {
+          console.log('error listing users', err);
+          toastr.error('Unable to list users: ' + err.data.error.message);
+          cb([]);
+        });
+    }
 
 
 

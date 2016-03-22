@@ -343,10 +343,15 @@ module.exports = function (Auth) {
           }
           break;
         case 'cloud':
-          // TODO: check for ownership
-          // implement this at a later date
-          return cb(false);
-
+          switch (userType) {
+            case 'solink':
+              return cb(true);
+            case 'cloud':
+            // must have matching id
+              cloudId = user.app_metadata.cloudId;
+              var myCloudId = jwt.cloudId;
+              return cb(cloudId === myCloudId);
+          }
         default:
           return cb(false);
       }
