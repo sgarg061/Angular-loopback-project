@@ -65,39 +65,34 @@ module.exports = function (Auth) {
 
     var context = loopback.getCurrentContext();
     if (context && context.get('jwt')) {
-      var jwt = context.get('jwt');
-      var userType = jwt.userType;
+      const jwt = context.get('jwt');
+      const userType = jwt.userType;
 
       if (userType === 'standard' || userType === 'admin') {
         // users can only modify themselves, and only a small portion of themselves.
-        authService.getUser(id, function (err, user) {
+        authService.getUser(id, (err, user) => {
           if (err) {
             return cb(err, null);
           }
 
-          context.set('jwt', jwt);
           if (user.app_metadata.tenantId !== jwt.tenantId) {
             return cb(unauthorizedError, null);
           }
 
           // users can't update their own app metadata. pass through null
-          authService.updateMetadata(id, null, userMetadata, function (err, res) {
+          authService.updateMetadata(id, null, userMetadata, (err, res) => {
             return cb(err, res);
           });
         });
-      }
-      else if (!isCallHomeLevelUserType(userType)) {
+      } else if (!isCallHomeLevelUserType(userType)) {
         return cb(unauthorizedError, null);
       } else {
-        authService.getUser(id, function (err, user) {
+        authService.getUser(id, (err, user) => {
           if (err) {
             return cb(err, null);
           }
 
-          // lost the context... reset it.  TODO: investigate why this happens
-          context.set('jwt', jwt);
-
-          canModifyUser(user, function(canModify) {
+          canModifyUser(user, jwt, (canModify) => {
             if (canModify) {
               // don't allow for modifying userType or tenantId/resellerId/cloudId right now.
               delete appMetadata.userType;
@@ -105,7 +100,7 @@ module.exports = function (Auth) {
               delete appMetadata.resellerId;
               delete appMetadata.cloudId;
 
-              authService.updateMetadata(id, appMetadata, userMetadata, function (err, res) {
+              authService.updateMetadata(id, appMetadata, userMetadata, (err, res) => {
                 return cb(err, res);
               });
             } else {
@@ -133,15 +128,12 @@ module.exports = function (Auth) {
         return cb(unauthorizedError, null);
       }
 
-      authService.getUser(id, function (err, user) {
+      authService.getUser(id, (err, user) => {
         if (err) {
           return cb(err, null);
         }
 
-        // lost the context... reset it.  TODO: investigate why this happens
-        context.set('jwt', jwt);
-
-        canModifyUser(user, function(canModify) {
+        canModifyUser(user, jwt, (canModify) => {
           if (canModify) {
             return authService.deleteUser(id, cb);
           } else {
@@ -168,15 +160,12 @@ module.exports = function (Auth) {
         return cb(unauthorizedError, null);
       }
 
-      authService.getUser(id, function (err, user) {
+      authService.getUser(id, (err, user) => {
         if (err) {
           return cb(err, null);
         }
 
-        // lost the context... reset it.  TODO: investigate why this happens
-        context.set('jwt', jwt);
-
-        canModifyUser(user, function(canModify) {
+        canModifyUser(user, jwt, (canModify) => {
           if (canModify) {
             changePassword(id, newPassword, cb);
           } else {
@@ -194,6 +183,9 @@ module.exports = function (Auth) {
 
     var unauthorizedError = new Error('Unauthorized');
     unauthorizedError.statusCode = 401;
+
+    const context = loopback.getCurrentContext();
+    const jwt = context.get('jwt');
 
     var fakeUser = {
       app_metadata: {
@@ -228,12 +220,12 @@ module.exports = function (Auth) {
     }
     // check if they have permissions to create on that object
     // use a fake user and re-use our existing 'canModifyUser' function
-    canModifyUser(fakeUser, function(canModify) {
+    canModifyUser(fakeUser, jwt, (canModify) => {
       if (!canModify) {
         return cb(unauthorizedError, null);
       } else {
         // then, create
-        authService.createUser(email, password, userData, function (err, res) {
+        authService.createUser(email, password, userData, (err, res) => {
           if (err) {
             logger.error('Could not create user' + err);
             return cb(err, null);
@@ -250,10 +242,8 @@ module.exports = function (Auth) {
     return ['solink', 'cloud', 'reseller'].indexOf(userType) > -1;
   }
 
-  function canModifyUser(user, cb) {
+  function canModifyUser(user, jwt, cb) {
     try {
-      var context = loopback.getCurrentContext();
-      var jwt = context.get('jwt');
       var userType = jwt.userType;
 
       switch (user.app_metadata.userType) {
@@ -266,7 +256,7 @@ module.exports = function (Auth) {
             case 'reseller':
               var resellerId = jwt.resellerId;
               // query for customer, make sure customer.resellerId === resellerId
-              Auth.app.models.Customer.findOne({where: {id: tenantId}}, function (err, customer) {
+              Auth.app.models.Customer.findOne({where: {id: tenantId}}, (err, customer) => {
                 if (err) {
                   logger.error('Error retrieving customer for force password:', err);
                   return cb(false);
@@ -296,7 +286,7 @@ module.exports = function (Auth) {
                     fields: ['id', 'name', 'cloudId']
                   }
                 }
-              }, function (err, customer) {
+              }, (err, customer) => {
                 if (err) {
                   logger.error('Error retrieving customer for force password:', err);
                   return cb(false);
@@ -333,7 +323,7 @@ module.exports = function (Auth) {
               cloudId = jwt.cloudId;
               Auth.app.models.Reseller.findOne({
                 where: {id: user.app_metadata.resellerId}
-              }, function (err, reseller) {
+              }, (err, reseller) => {
                 if (err) {
                   logger.error('Error retrieving reseller to create user:', err);
                   return cb(false);
