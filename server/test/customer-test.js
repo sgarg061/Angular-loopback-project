@@ -1,11 +1,11 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
-var async = require('async');
 var app = require('../server');
 var authService = require('../services/authService');
 
 describe('Customer tests', function() {
-  'use strict';
   this.timeout(5000);
 
   var validCloud;
@@ -192,7 +192,7 @@ describe('Customer tests', function() {
           resellerId: resellerCloud1.id
         })
         .expect(401)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();
@@ -238,7 +238,7 @@ describe('Customer tests', function() {
         })
         .expect(200)
         .end(function (err, res) {
-          if (err) 
+          if (err)
           {
             throw err;
           }
@@ -322,7 +322,7 @@ describe('Customer tests', function() {
           name: testName
         })
         .expect(404)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           done();

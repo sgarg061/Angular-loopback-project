@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function mountLoopBackExplorer(server) {
   var explorer;
   try {
@@ -5,7 +7,7 @@ module.exports = function mountLoopBackExplorer(server) {
   } catch(err) {
     // Print the message only when the app was started via `server.listen()`.
     // Do not print any message when the project is used as a component.
-    server.once('started', function(baseUrl) {
+    server.once('started', function() {
       console.log(
         'Run `npm install loopback-explorer` to enable the LoopBack explorer'
       );

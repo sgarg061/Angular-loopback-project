@@ -1,5 +1,4 @@
-var logger = require('../logger');
-var redis = require('redis');
+'use strict';
 
 var redisConnections = {};
 
@@ -11,16 +10,15 @@ FakeRedisClient.prototype.exists = function(val, cb) {
     cb(null, 0);
 };
 
-FakeRedisClient.prototype.set = function(val, exp) {
+FakeRedisClient.prototype.set = function() {
     return;
 };
 
-FakeRedisClient.prototype.expire = function(val, time) {
+FakeRedisClient.prototype.expire = function() {
     return;
 };
 
 var FakeRedisConnection = function (name, port, address) {
-    'use strict';
     this.name = name;
     this.port = port;
     this.address = address;
@@ -29,7 +27,6 @@ var FakeRedisConnection = function (name, port, address) {
 
 module.exports = {
     initialize: function (connections) {
-        'use strict';
         connections.forEach(function (connection) {
             var newConnection = new FakeRedisConnection(connection.name, connection.port, connection.address);
             redisConnections[connection.name] = newConnection;
@@ -37,7 +34,6 @@ module.exports = {
     },
 
     getConnection: function (name) {
-        'use strict';
         return redisConnections[name];
     }
 };
