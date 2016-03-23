@@ -193,16 +193,18 @@ angular
                    device.onlineCameraCount++;
                  }
                }
-               var sortedArray = array.sort(function(greatest, smallest){return greatest-smallest});
-               var oldestDate = sortedArray[0];
-               if (oldestDate === null){
-                oldestDate = sortedArray.filter(function(index){return index !== null})[0];
+               if (!_.isEmpty(array)) {
+                 var sortedArray = array.sort(function(greatest, smallest){return greatest-smallest});
+                 var oldestDate = sortedArray[0];
+                 if (oldestDate === null){
+                  oldestDate = sortedArray.filter(function(index){return index !== null})[0];
+                 }
+                 var todayDate = new Date().valueOf();
+                 var calculation = ((todayDate - oldestDate)/1000);
+                 //converting to days
+                 device.retentionDays = Math.floor(((calculation/3600)/24));
                }
-               var todayDate = new Date().valueOf();
-               var calculation = ((todayDate - oldestDate)/1000);
-               //converting to days
-               device.retentionDays = Math.floor(((calculation/3600)/24));
-               if (lastCheckinTimeInSeconds === 0 && !hasCheckedInOnTime || oldestDate === undefined){
+               if (lastCheckinTimeInSeconds === 0 && !hasCheckedInOnTime || oldestDate === undefined || _.isEmpty(array)){
                 device.retentionDays = 'Unknown';
               }
              }
