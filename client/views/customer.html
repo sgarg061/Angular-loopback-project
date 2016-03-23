@@ -54,7 +54,7 @@
               <th align="left" ng-click="changeSorting('status')">Camera Status</th>
               <th align="left"></th>
               <th></th>
-              <th align="left" ng-click="changeSorting('retentionDays')">Retention</th>
+              <th align="left" ng-click="changeSorting('retentionDays')">Days Recorded</th>
               <th align="left"></th>
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
