@@ -10,6 +10,7 @@ angular
         filterChangedFunction: "=filterChangedFunction",
         reportChangedFunction: "=reportChangedFunction",
         numberOfAvailableLicenses: "=numberOfAvailableLicenses",
+        defaultCheckinInterval:"=defaultCheckinInterval",
         assignFiltersFunction: "=assignFiltersFunction",
         reports: "=reports",
         licensesAvailable: "=licensesAvailableFunction",

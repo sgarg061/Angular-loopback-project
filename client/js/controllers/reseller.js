@@ -96,6 +96,7 @@ angular
 
             $scope.cloudId = resellers[0].cloud.id;
             $scope.cloud = resellers[0].cloud;
+            $scope.defaultCheckinInterval=$scope.cloud.checkinInterval;
             $scope.resellerId = resellers[0].id;
             $scope.currentSoftwareVersion = resellers[0].softwareVersionId;
 
