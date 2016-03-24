@@ -168,6 +168,7 @@ angular
         cb(res.users);
       })
       .catch(function (err) {
+        console.error('error listing users', err);
         toastr.error('Unable to list users: ' + err.data.error.message);
         cb([]);
       });

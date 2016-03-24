@@ -121,11 +121,11 @@ module.exports = function(Cloud) {
         returns: {arg: 'users', type: 'Array'}
     });
     Cloud.prototype.listUsers = function (cb) {
-    authService.listUsers('cloudId', this.id, function (err, res) {
-      if (err) {
-        logger.error(err);
-      }
-    cb(err, res);
-    });
-  };
+        authService.listUsers('cloudId', this.id, function (err, res) {
+            if (err) {
+                logger.error(err);
+            }
+            cb(err, res);
+        });
+    };
 };
