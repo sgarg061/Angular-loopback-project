@@ -1,3 +1,5 @@
+'use strict';
+
 var winston = require('winston');
 var Config = require('../config');
 var fs = require('fs');
@@ -52,5 +54,4 @@ module.exports = (function() {
 
 
 
-    
-    
+

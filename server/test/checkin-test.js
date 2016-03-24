@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var common = require('./common');
 var app    = require('../server');
@@ -12,6 +14,7 @@ var deviceCheckinData = {
         lng: -75.9087814,
         lat: 45.3376177
     },
+    locationName: 'Device name',
     deviceInformation: {
         name: 'NAS #1',
         osVersion: '4.1',
@@ -158,7 +161,7 @@ describe('Checkin after initial device activation', function() {
             if (deviceCheckinData.cameraInformation[i].status === 'online')
               count_OnlineCameras = count_OnlineCameras + 1;
           }
-          
+
           //ensure the cameras are counted correctly
           assert.deepEqual(count_Cameras, 3);
           assert.deepEqual(count_OnlineCameras , 2);
@@ -236,7 +239,7 @@ describe('Checkin after initial device activation', function() {
         common.json('post', '/api/devices/' + deviceId + '/checkin', token)
           .send({data: deviceCheckinData})
           .expect(200)
-          .end(function(err, res) {
+          .end(function(err) {
              if (err) throw err;
              app.models.DeviceLogEntry.find({}, function (err, res) {
               var logEntry = res[0];
@@ -279,7 +282,7 @@ describe('Checkin after initial device activation', function() {
         common.json('post', '/api/devices/' + deviceId + '/checkin', token)
           .send({data: deviceCheckinData})
           .expect(200)
-          .end(function(err, res) {
+          .end(function(err) {
             if (err) throw err;
             common.json('get', '/api/devices/' + deviceId, token)
               .send({})
@@ -305,7 +308,7 @@ describe('Check-in of existing device with missing component', function() {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
@@ -330,7 +333,7 @@ describe('Check-in of existing device with missing component', function() {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
@@ -350,19 +353,155 @@ describe('Check-in of existing device with missing component', function() {
 });
 
 describe('Override settings', function() {
-  it('should set the IP address to the override IP address', function(done) {
+  it('should ignore the name if an override name is set', function (done) {
+    var overrideName = 'this is an overriden name';
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send({
+          name: overrideName,
+          overrideName: overrideName
+        })
+        .expect(200)
+        .end(function (err) {
+          if (err) throw err;
+
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+            .send({data: deviceCheckinData})
+            .expect(200)
+            .end(function(err) {
+              if (err) throw err;
+
+              common.json('get', '/api/devices/' + deviceId, token)
+                .expect(200)
+                .end(function (err, res) {
+                  if (err) throw err;
+                  assert.equal(res.body.name, overrideName);
+
+                  // undo
+                  common.json('put', '/api/devices/' + deviceId, token)
+                    .send({
+                      overrideName: null
+                    })
+                    .expect(200)
+                    .end(function (err) {
+                      if (err) throw err;
+
+                      done();
+                    });
+                });
+            });
+        });
+    });
+  });
+
+  it('should ignore the local IP if an override local IP is set', function (done) {
+    var overrideLocalIP = '1.2.3.4';
+
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send({
+          localIP: overrideLocalIP,
+          overrideLocalIP: overrideLocalIP
+        })
+        .expect(200)
+        .end(function (err) {
+          if (err) throw err;
+
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+            .send({data: deviceCheckinData})
+            .expect(200)
+            .end(function (err) {
+              if (err) throw err;
+
+              common.json('get', '/api/devices/' + deviceId, token)
+                .expect(200)
+                .end(function (err, res) {
+                  if (err) throw err;
+
+                  assert.equal(res.body.localIP, overrideLocalIP);
+
+                  // undo
+                  common.json('put', '/api/devices/' + deviceId, token)
+                    .send({
+                      overrideLocalIP: null
+                    })
+                    .expect(200)
+                    .end(function (err) {
+                      if (err) throw err;
+
+                      done();
+                    });
+               });
+            });
+        });
+    });
+  });
+
+  it('should ignore the address and lat/lng if an override location is set', function (done) {
+    var overrideAddress = '123 Whopper Street';
+    var overrideLocation = {
+      lat: 1,
+      lng: -1
+    };
+
+    common.login('solink', function (token) {
+      common.json('put', '/api/devices/' + deviceId, token)
+        .send({
+          location: overrideLocation,
+          overrideLocation: overrideLocation,
+          address: overrideAddress,
+          overrideAddress: overrideAddress
+        })
+        .expect(200)
+        .end(function (err) {
+          if (err) throw err;
+
+          common.json('post', '/api/devices/' + deviceId + '/checkin', token)
+            .send({data: deviceCheckinData})
+            .expect(200)
+            .end(function (err) {
+              if (err) throw err;
+
+              common.json('get', '/api/devices/' + deviceId, token)
+                .expect(200)
+                .end(function (err, res) {
+                  if (err) throw err;
+
+                  assert.equal(res.body.address, overrideAddress);
+                  assert.equal(res.body.location.lat, overrideLocation.lat);
+                  assert.equal(res.body.location.lng, overrideLocation.lng);
+
+                  // undo.
+                  common.json('put', '/api/devices/' + deviceId, token)
+                  .send({
+                    overrideLocation: null,
+                    overrideAddress: null
+                  })
+                  .expect(200)
+                  .end(function (err) {
+                    if (err) throw err;
+
+                    done();
+                  });
+                });
+            });
+        });
+    });
+  });
+
+  it('should set the IP address to the override IP address', function (done) {
     common.login('solink', function (token) {
       common.json('put', '/api/devices/' + deviceId, token)
         .send({overrideIpAddress: 'overriden'})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
           if (err) throw err;
 
           // now, check in...
           common.json('post', '/api/devices/' + deviceId + '/checkin', token)
             .send({data: deviceCheckinData})
             .expect(200)
-            .end(function (err, res) {
+            .end(function (err) {
               if (err) throw err;
 
               // now query for the device, and see the ip address is 'overriden'
@@ -386,7 +525,7 @@ describe('Override settings', function() {
       common.json('put', '/api/devices/' + deviceId, token)
         .send({overrideVmsPort: 1234})
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           // now check in
@@ -421,7 +560,7 @@ describe('Override settings', function() {
       common.json('put', '/api/devices/' + deviceId, token)
         .send(newPorts)
         .expect(200)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) throw err;
 
           common.json('post', '/api/devices/' + deviceId + '/checkin', token)
@@ -452,7 +591,7 @@ describe('Checkin address format', function () {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId, token)
@@ -474,7 +613,7 @@ describe('Checkin address format', function () {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId, token)
@@ -496,7 +635,7 @@ describe('Checkin address format', function () {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId, token)
@@ -518,7 +657,7 @@ describe('Checkin address format', function () {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId, token)
@@ -541,7 +680,7 @@ describe('Stream date range format', function () {
       common.json('post', '/api/devices/' + deviceId + '/checkin', token)
         .send({data: deviceCheckinData})
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
            if (err) throw err;
 
            common.json('get', '/api/devices/' + deviceId + '?filter[include]=cameras&filter[include]=posDevices&filter[include]=logEntries', token)
@@ -566,7 +705,6 @@ describe('Modification of inherited values at various locations in the object tr
     common.login('solink', function (token) {
       common.json('get', '/api/SoftwareVersions/', token).send().end(function (err, res) {
         var versions = res.body;
-        console.log('software versions: ' + JSON.stringify(versions));
 
         common.json('get', '/api/devices?filter[where][guid]='+deviceGuid, token).send().end(function (err, res) {
           var device = res.body[0];
@@ -582,7 +720,7 @@ describe('Modification of inherited values at various locations in the object tr
               /*****************/
 
               common.json('put', '/api/clouds/' + cloud.id, token).send(
-                {softwareVersionId: versions[7].id, checkinInterval:7000, eventServerUrl:'7000', imageServerUrl:'7000'}).end(function (err, res) {
+                {softwareVersionId: versions[7].id, checkinInterval:7000, eventServerUrl:'7000', imageServerUrl:'7000'}).end(function () {
                 common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
 
                   assert.equal(res.body.eventServerUrl, '7000', 'eventServerUrl must be inherited from cloud');
@@ -592,7 +730,7 @@ describe('Modification of inherited values at various locations in the object tr
                   assert.equal(res.body.checkinInterval, 7000, 'checkinInterval must be inherited from cloud');
 
                   common.json('put', '/api/resellers/' + reseller.id, token).send(
-                    {softwareVersionId: versions[6].id, checkinInterval:6000, eventServerUrl:'6000', imageServerUrl:'6000'}).end(function (err, res) {
+                    {softwareVersionId: versions[6].id, checkinInterval:6000, eventServerUrl:'6000', imageServerUrl:'6000'}).end(function () {
                     common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
 
                       assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
@@ -602,7 +740,7 @@ describe('Modification of inherited values at various locations in the object tr
                       assert.equal(res.body.checkinInterval, 6000, 'checkinInterval must be inherited from reseller');
 
                       common.json('put', '/api/customers/' + customer.id, token).send(
-                        {softwareVersionId: versions[5].id, checkinInterval:5000, eventServerUrl:'5000', imageServerUrl:'5000'}).end(function (err, res) {
+                        {softwareVersionId: versions[5].id, checkinInterval:5000, eventServerUrl:'5000', imageServerUrl:'5000'}).end(function () {
                         common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
 
                           assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');
@@ -612,7 +750,7 @@ describe('Modification of inherited values at various locations in the object tr
                           assert.equal(res.body.checkinInterval, 5000, 'checkinInterval must be inherited from customer');
 
                           common.json('put', '/api/devices/' + device.id, token).send(
-                            {softwareVersionId: versions[4].id, checkinInterval:4000, eventServerUrl:'4000', imageServerUrl:'4000'}).end(function (err, res) {
+                            {softwareVersionId: versions[4].id, checkinInterval:4000, eventServerUrl:'4000', imageServerUrl:'4000'}).end(function () {
                             common.json('post', '/api/devices/' + device.id + '/checkin', token).send({data: deviceCheckinData}).end(function (err, res) {
 
                               assert.equal(res.body.eventServerUrl, '6000', 'eventServerUrl must be inherited from reseller');

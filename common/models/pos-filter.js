@@ -1,24 +1,21 @@
+'use strict';
+
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
-var _ = require('underscore');
 var async = require('async');
-var _ = require('lodash');
-var deviceDataParser = require('../utils/deviceDataParser');
-
 
 module.exports = function(POSFilter) {
-    'use strict';
-	POSFilter.observe('before save', function addId(ctx, next) {
-		if (ctx.instance && !ctx.instance.id) {
-			ctx.instance.id = uuid.v1();
-		}
+  POSFilter.observe('before save', function addId(ctx, next) {
+    if (ctx.instance && !ctx.instance.id) {
+      ctx.instance.id = uuid.v1();
+    }
         if (ctx.instance) {
             ctx.instance.lastUpdated = Date();
         }
 
-		next();
-	});
+    next();
+  });
 
 
     POSFilter.observe('access', function limitToTenant(ctx, next) {
@@ -36,7 +33,7 @@ module.exports = function(POSFilter) {
                 next();
             }
             else if (cloudId){
-                cloudPermissions(POSFilter, ctx, cloudId, next);        	
+                cloudPermissions(POSFilter, ctx, cloudId, next);
             }
 
             else if (resellerId){
@@ -73,7 +70,7 @@ module.exports = function(POSFilter) {
 			                logger.error('Reseller or cloud was not fetched with resellerId ' + resellerId);
 		            	}
 
-						next();  
+						next();
 		            }
 		        });
             }

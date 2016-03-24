@@ -1,9 +1,10 @@
+'use strict';
+
 var tokenValidator = require('../../common/tokenValidator');
 var loopback = require('loopback');
 var logger = require('../logger');
 
 module.exports = function (app) {
-    'use strict';
     var Role = app.models.Role;
 
     Role.registerResolver('isValidated', function (role, context, cb) {
@@ -12,7 +13,7 @@ module.exports = function (app) {
         if (!jwt) {
             return unauthorized(cb);
         }
-        tokenValidator.validateToken(jwt.token, function (err, msg) {
+        tokenValidator.validateToken(jwt.token, function (err) {
             return cb(null, !err); // if no err, we are happy.
         });
     });
@@ -23,7 +24,7 @@ module.exports = function (app) {
         if (!jwt) {
             return unauthorized(cb);
         }
-        tokenValidator.validateToken(jwt.token, function (err, msg) {
+        tokenValidator.validateToken(jwt.token, function (err) {
             return cb(null, (!err && jwt.userType === 'solink'));
         });
     });
@@ -35,7 +36,7 @@ module.exports = function (app) {
             return unauthorized(cb);
         }
 
-        tokenValidator.validateToken(jwt.token, function (err, msg) {
+        tokenValidator.validateToken(jwt.token, function (err) {
             if (err) {
                 cb(err, false);
             } else {
@@ -80,12 +81,12 @@ function isOwnerOfFilter(context, token, cb) {
                     }
                         if (token.userType === 'reseller'){ //if reseller on reseller page
                             if (filter.creatorId === token.resellerId && filter.creatorType === 'reseller'){
-                                cb(); 
+                                cb();
                             } else if(filter.creatorType === 'customer'){ //if reseller on customer page
                                 Customer.find({where: {id: filter.creatorId}}, function (err, res) {
                                     var onCustomerPage = (filter.creatorId === res[0].id && filter.creatorType === 'customer');
                                     if (onCustomerPage){
-                                        cb(null, onCustomerPage); 
+                                        cb(null, onCustomerPage);
                                     } else {
                                         unauthorized(cb);
                                     }
@@ -102,7 +103,7 @@ function isOwnerOfFilter(context, token, cb) {
                                 Reseller.find({where: {id: filter.creatorId}}, function (err, res) {
                                     var onResellerPage = (filter.creatorId === res[0].id && filter.creatorType === 'reseller');
                                     if (onResellerPage){
-                                        cb(null, onResellerPage); 
+                                        cb(null, onResellerPage);
                                     } else {
                                         unauthorized(cb);
                                     }
@@ -112,7 +113,7 @@ function isOwnerOfFilter(context, token, cb) {
                                 Customer.find({where: {id: filter.creatorId}}, function (err, res) {
                                     var onCustomerPage = (filter.creatorId === res[0].id && filter.creatorType === 'customer');
                                     if (onCustomerPage){
-                                        cb(null, onCustomerPage); 
+                                        cb(null, onCustomerPage);
                                     } else {
                                         unauthorized(cb);
                                     }
@@ -123,7 +124,7 @@ function isOwnerOfFilter(context, token, cb) {
                             }
                         }
 
-                
+
                 });
             }
             else{

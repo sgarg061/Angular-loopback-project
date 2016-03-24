@@ -63,6 +63,17 @@
       "foreignKey": "id"
     }
   },
+  "indexes": {
+    "unique_resellerName": {
+      "keys": {
+        "cloudId": 1,
+        "name": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
   "acls": [
     {
       "principalType": "ROLE",

@@ -1,3 +1,5 @@
+'use strict';
+
 var uuid = require('node-uuid');
 var logger = require('../../server/logger');
 var loopback = require('loopback');

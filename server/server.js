@@ -1,3 +1,5 @@
+'use strict';
+
 var loopback = require('loopback');
 var jwt = require('jsonwebtoken');
 var boot = require('loopback-boot');
@@ -18,7 +20,6 @@ var app = module.exports = loopback();
 
 app.use(loopback.context());
 app.use(function jwtMiddleware (req, res, next) {
-    'use strict';
     try {
         var authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
@@ -64,7 +65,6 @@ app.use(function jwtMiddleware (req, res, next) {
 });
 
 function initializeRedis(config) {
-    'use strict';
     RedisAccessor.initialize([
     {
         name: 'revoked',
@@ -74,7 +74,6 @@ function initializeRedis(config) {
 }
 
 app.start = function() {
-    'use strict';
     var config = new Config();
     authService.initialize(new Auth0Accessor());
     initializeRedis(config);
@@ -88,7 +87,7 @@ app.start = function() {
 
     var server = https.createServer(options, app);
 
-    var socketServer = https.createServer(options, function (req, res) {});
+    var socketServer = https.createServer(options, () => {});
     var socketPort = config.socketPort ? config.socketPort : 8547;
     socketServer.listen(socketPort);
 

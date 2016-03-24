@@ -106,6 +106,18 @@
       "type": "string",
       "required": false
     },
+    "overrideLocation": {
+      "type": "geopoint",
+      "required": false
+    },
+    "overrideAddress": {
+      "type": "string",
+      "required": false
+    },
+    "overrideName": {
+      "type": "string",
+      "required": false
+    },
     "overrideConnectPort": {
       "type": "number",
       "required": false
@@ -135,6 +147,10 @@
       "required": false
     },
     "localIP": {
+      "type": "string",
+      "required": false
+    },
+    "overrideLocalIP": {
       "type": "string",
       "required": false
     }

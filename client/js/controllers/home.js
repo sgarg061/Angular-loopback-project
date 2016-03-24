@@ -161,24 +161,39 @@ angular
                       $scope.softwareVersions = softwareVersions; // transfer to new scope
                       $scope.Cloud = {};
 
-
                       $scope.create = function() {
-                        if($scope.newCloud.turnServerUrl){
-                          $scope.newCloud.turnServerUrl = $scope.newCloud.turnServerUrl.split(',');
-                        }
-                        if($scope.newCloud.stunServerUrl){
-                          $scope.newCloud.stunServerUrl = $scope.newCloud.stunServerUrl.split(',');
-                        }
-                       Cloud.create($scope.newCloud)
-                        .$promise
-                        .then(function(cloud) {
-                          $state.go('cloud', {cloudId: cloud.id}, {reload: true});  
+                        Cloud
+                          .find({
+                            filter: {
+                              where: {'name':$scope.newCloud.name}
+                            }
+                          })
+                          .$promise
+                          .then(function(cloud){
+                            if (cloud && cloud.length > 0){
+                              toastr.error("Cloud already exists; please enter a unique name.");
+                            } else {
+                            if($scope.newCloud.turnServerUrl){
+                              $scope.newCloud.turnServerUrl = $scope.newCloud.turnServerUrl.split(',');
+                            }
+                            if($scope.newCloud.stunServerUrl){
+                              $scope.newCloud.stunServerUrl = $scope.newCloud.stunServerUrl.split(',');
+                            }
 
-                        }, function (res) {
-                          toastr.error(res.data.error.message, 'Error');
-                        });
-                        $mdDialog.cancel();
+                            Cloud.create($scope.newCloud)
+                              .$promise
+                              .then(function(cloud) {
+                                $state.go('cloud', {cloudId: cloud.id}, {reload: true});  
+
+                              }, function (res) {
+                                toastr.error(res.data.error.message, 'Error');
+                              });
+                              $mdDialog.cancel();                          
+                            }
+                          })
+                        
                       };
+
                       $scope.cancel = function() {
                         $mdDialog.cancel();
                       };
