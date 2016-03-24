@@ -112,11 +112,7 @@ angular
             $scope.numberOfAvailableLicenses = availableLicenses($scope.customer.licenses).length;
             $scope.cloud = customers[0].reseller.cloud;
             $scope.reseller = customers[0].reseller;
-            $scope.defaultCheckinInterval = $scope.reseller.checkinInterval;
-            if($scope.defaultCheckinInterval === null){
-              $scope.defaultCheckinInterval = $scope.cloud.checkinInterval;
-            }
-
+            $scope.defaultCheckinInterval = $scope.reseller.checkinInterval || $scope.cloud.checkinInterval;
             $scope.devices = customers[0].devices;
             $scope.currentSoftwareVersion = customers[0].softwareVersionId;
 

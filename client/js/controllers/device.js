@@ -193,13 +193,8 @@ angular
           $scope.customer = devices[0].customer;
           $scope.reseller = devices[0].customer.reseller;
           $scope.cloud = devices[0].customer.reseller.cloud;
-          $scope.defaultCheckinInterval = $scope.customer.checkinInterval;
-          if ($scope.defaultCheckinInterval === null){
-            $scope.defaultCheckinInterval = $scope.reseller.checkinInterval;
-            if ($scope.defaultCheckinInterval === null) {
-              $scope.defaultCheckinInterval = $scope.cloud.checkinInterval;
-            }
-          }
+          $scope.defaultCheckinInterval = $scope.customer.checkinInterval || $scope.reseller.checkinInterval || $scope.cloud.checkinInterval;
+          
 
           watchForChanges();
 
