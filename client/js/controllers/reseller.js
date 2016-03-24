@@ -473,7 +473,7 @@ angular
       .then(function(data) {
         toastr.success('Unassigned filter successfully!', 'Filter Unassigned')
       }, function (res) {
-        toastr.error(res.data.error.message, 'Errors');
+        toastr.error(res.data.error.message, 'Error');
       });
     }
 
