@@ -194,11 +194,8 @@ angular
                  }
                }
                if (!_.isEmpty(array)) {
-                 var sortedArray = array.sort(function(greatest, smallest){return greatest-smallest});
-                 var oldestDate = sortedArray[0];
-                 if (oldestDate === null){
-                  oldestDate = sortedArray.filter(function(index){return index !== null})[0];
-                 }
+                 var oldestDate = array.sort(function(greatest, smallest){return greatest-smallest})
+                 .filter(function(index){return index !== null})[0];
                  var todayDate = new Date().valueOf();
                  var calculation = ((todayDate - oldestDate)/1000);
                  //converting to days
