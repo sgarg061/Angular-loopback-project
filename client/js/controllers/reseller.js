@@ -26,10 +26,18 @@ angular
         if (newValue) {
           var id = $scope.reseller.id;
           if (newValue.eventServerUrl !== oldValue.eventServerUrl) {
-            updateReseller(id, {eventServerUrl: newValue.eventServerUrl}, 'Event server URL has been updated');
+            var newValueEventServerUrl = newValue.eventServerUrl;
+            if (newValue.eventServerUrl === ''){
+              newValueEventServerUrl = null; 
+            } 
+            updateReseller(id, {eventServerUrl: newValueEventServerUrl}, 'Event server URL has been updated');
           }
           if (newValue.imageServerUrl !== oldValue.imageServerUrl) {
-            updateReseller(id, {imageServerUrl: newValue.imageServerUrl}, 'Image server URL has been updated');
+            var newValueImageServerUrl = newValue.imageServerUrl;
+            if (newValue.imageServerUrl === ''){
+              newValueImageServerUrl = null;
+            } 
+            updateReseller(id, {imageServerUrl: newValueImageServerUrl}, 'Image server URL has been updated');
           }
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateReseller(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
@@ -60,7 +68,7 @@ angular
       Reseller.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(reseller) {toastr.info(' ' + message);},
           function (res) {
-        toastr.error(res.data.error.message, 'Error');
+          toastr.error(res.statusText, 'Error Invalid Value');
       });
     }
 
@@ -92,7 +100,6 @@ angular
         .then(function(resellers) {
           if(!_.isEmpty(resellers)){
             $scope.reseller = resellers[0];
-
 
             $scope.cloudId = resellers[0].cloud.id;
             $scope.cloud = resellers[0].cloud;
