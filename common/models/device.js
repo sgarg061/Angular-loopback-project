@@ -397,10 +397,6 @@ module.exports = function(Device) {
         var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
         checkedInProperties = replacePropertiesWithOverride(checkedInProperties, device);
 
-
-        if (device.overrideExternalId){
-            checkedInProperties.externalId = device.overrideExternalId;
-        }
         device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
             if (err) {
                 cb(new Error('Error checking in device: %s', err));
@@ -431,6 +427,10 @@ module.exports = function(Device) {
 
         if (device.overrideLocalIP && device.overrideLocalIP.length > 0) {
             props.localIP = device.overrideLocalIP;
+        }
+
+        if (device.overrideExternalId) {
+            props.externalId = device.overrideExternalId;
         }
 
         return props;
