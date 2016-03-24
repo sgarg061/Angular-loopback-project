@@ -254,16 +254,9 @@ angular
         .$promise
         .then(function(versions) {
           $scope.softwareVersions = [].concat(versions);
-          function currentSoftwareVersion(testVersion) { //used in filter
-            return (testVersion.id===$scope.customer.softwareVersionId || testVersion.id===$scope.reseller.softwareVersionId || testVersion.id===$scope.cloud.softwareVersionId);
-          }
-        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.customer.softwareVersionId })[0];
-        if ($scope.defaultSoftwareVersion === undefined){
-          $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.reseller.softwareVersionId })[0];
-          if ($scope.defaultSoftwareVersion === undefined) {
-            $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0];
-          }
-        }
+          $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.customer.softwareVersionId })[0] ||
+          $scope.softwareVersions.filter(function(index){return index.id === $scope.reseller.softwareVersionId })[0] ||
+          $scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0];
         })
     }
 

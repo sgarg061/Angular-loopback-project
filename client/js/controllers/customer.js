@@ -588,13 +588,8 @@ angular
       .$promise
       .then(function(versions) {
         $scope.softwareVersions = [].concat(versions);
-
-        //Getting the default software version name
-        function currentSoftwareVersion(testVersion){ //used in filter
-            return (testVersion.id===$scope.reseller.softwareVersionId ||
-                    testVersion.id===$scope.cloud.softwareVersionId);
-        }
-        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
+        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.reseller.softwareVersionId })[0] ||
+        $scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0];
       })
   }
 
