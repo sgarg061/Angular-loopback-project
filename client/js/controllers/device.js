@@ -253,10 +253,14 @@ angular
         })
         .$promise
         .then(function(versions) {
-          $scope.softwareVersions = [].concat(versions);
-          $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.customer.softwareVersionId })[0] ||
-          $scope.softwareVersions.filter(function(index){return index.id === $scope.reseller.softwareVersionId })[0] ||
-          $scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0];
+          if (!_.isEmpty(versions)){
+            $scope.softwareVersions = [].concat(versions);
+            $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(function(index){return index.id === $scope.customer.softwareVersionId })[0] ||
+            $scope.softwareVersions.filter(function(index){return index.id === $scope.reseller.softwareVersionId })[0] ||
+            $scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0];
+          } else {
+            toastr.error('Software versions not available');
+          }
         })
     }
 

@@ -144,13 +144,12 @@ angular
         })
         .$promise
         .then(function(versions) {
-          $scope.softwareVersions = [].concat(versions);
-
-          //Getting the default software version name
-          function currentSoftwareVersion(testVersion){ //used in filter
-            return testVersion.id === $scope.cloud.softwareVersionId;
+          if (!_.isEmpty(versions)) {
+            $scope.softwareVersions = [].concat(versions);
+            $scope.defaultSoftwareVersion = $scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0]; 
+          } else {
+            toastr.error('Software versions not available')
           }
-          $scope.defaultSoftwareVersion = $scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the cloud version for default
         })
     }
 
