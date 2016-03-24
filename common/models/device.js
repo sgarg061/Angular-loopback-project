@@ -403,6 +403,9 @@ module.exports = function(Device) {
             checkedInProperties.ipAddress = device.overrideIpAddress;
         }
 
+        if (device.overrideExternalId){
+            checkedInProperties.externalId = device.overrideExternalId;
+        }
         device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
             if (err) {
                 cb(new Error('Error checking in device: %s', err));

@@ -369,6 +369,9 @@ angular
       updatedConfigObject.overrideConfigForwardPort = $scope.device.overrideConfigForwardPort;
     }
 
+    if ($scope.device.overrideExternalId) {
+      updatedConfigObject.overrideExternalId = $scope.device.overrideExternalId;
+    }
     Device
       .prototype$updateAttributes({id: $scope.device.id}, updatedConfigObject)
       .$promise

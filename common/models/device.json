@@ -130,6 +130,10 @@
       "type": "number",
       "required": false
     },
+    "overrideExternalId": {
+      "type": "string",
+      "required": false
+    },
     "localIP": {
       "type": "string",
       "required": false
