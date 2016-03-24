@@ -124,10 +124,8 @@ module.exports = function(Cloud) {
     authService.listUsers('cloudId', this.id, function (err, res) {
       if (err) {
         logger.error(err);
-        return cb(err, null);
       }
-
-      cb(null, res);
+    cb(err, res);
     });
   };
 };

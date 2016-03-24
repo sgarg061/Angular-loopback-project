@@ -347,7 +347,7 @@ module.exports = function (Auth) {
             case 'solink':
               return cb(true);
             case 'cloud':
-            // must have matching id
+              // must have matching id
               cloudId = user.app_metadata.cloudId;
               var myCloudId = jwt.cloudId;
               return cb(cloudId === myCloudId);

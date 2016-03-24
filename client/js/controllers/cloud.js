@@ -163,15 +163,14 @@ angular
       Cloud.prototype$listUsers({
         id: id
       })
-        .$promise
-        .then(function(res) {
-          cb(res.users);
-        })
-        .catch(function (err) {
-          console.log('error listing users', err);
-          toastr.error('Unable to list users: ' + err.data.error.message);
-          cb([]);
-        });
+      .$promise
+      .then(function(res) {
+        cb(res.users);
+      })
+      .catch(function (err) {
+        toastr.error('Unable to list users: ' + err.data.error.message);
+        cb([]);
+      });
     }
 
 
