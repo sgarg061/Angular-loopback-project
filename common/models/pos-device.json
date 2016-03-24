@@ -24,6 +24,10 @@
       "type": "string",
       "required": true
     },
+    "externalId": {
+      "type": "string",
+      "required": false 
+    },
     "deviceId": {
       "type": "string",
       "required": true

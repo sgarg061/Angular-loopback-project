@@ -392,6 +392,9 @@ angular
       $scope.device.name = $scope.device.overrideName;
     }
 
+    if ($scope.device.overrideExternalId){
+      updatedConfigObject.overrideExternalId = $scope.device.overrideExternalId;
+    }
     Device
       .prototype$updateAttributes({id: $scope.device.id}, updatedConfigObject)
       .$promise
