@@ -133,6 +133,15 @@ angular
           }
         });
     }
+    function getdefaultSoftwareVersion(version, cb) {
+      var defaultSoftwareversion = version.filter(function(index){return index.id === $scope.cloud.softwareVersionId });
+      if (!_.isEmpty(defaultSoftwareversion)){
+        cb(null, defaultSoftwareversion[0]);
+      } else {
+        var error = 'Unknown Parent Software Version';
+        cb(error, null);
+      }
+    }
 
     function getSoftwareVersions() {
       SoftwareVersion
@@ -146,7 +155,14 @@ angular
         .then(function(versions) {
           if (!_.isEmpty(versions)) {
             $scope.softwareVersions = [].concat(versions);
-            $scope.defaultSoftwareVersion = $scope.softwareVersions.filter(function(index){return index.id === $scope.cloud.softwareVersionId })[0]; 
+            getdefaultSoftwareVersion($scope.softwareVersions, function(err, defaultSoftwareVersion){
+              if (err) {
+                toastr.error(err);
+                return;
+              }
+              $scope.defaultSoftwareVersion = defaultSoftwareVersion;
+            });
+
           } else {
             toastr.error('Software versions not available')
           }

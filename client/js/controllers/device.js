@@ -242,17 +242,20 @@ angular
         });
     }
     function getdefaultSoftwareVersion(version, cb) {
-      var DefaultSoftwareversion = version.filter(function(index){return index.id === $scope.customer.softwareVersionId });
-      if (!_.isEmpty(DefaultSoftwareversion)) {
-        cb(DefaultSoftwareversion[0]);
+      var defaultSoftwareversion = version.filter(function(index){return index.id === $scope.customer.softwareVersionId });
+      if (!_.isEmpty(defaultSoftwareversion)) {
+        cb(null, defaultSoftwareversion[0]);
       } else {
-        DefaultSoftwareversion = version.filter(function(index){return index.id === $scope.reseller.softwareVersionId });
-        if (!_.isEmpty(DefaultSoftwareversion)){
-          cb(DefaultSoftwareversion[0]);
+        defaultSoftwareversion = version.filter(function(index){return index.id === $scope.reseller.softwareVersionId });
+        if (!_.isEmpty(defaultSoftwareversion)){
+          cb(null, defaultSoftwareversion[0]);
         } else {
-          DefaultSoftwareversion = version.filter(function(index){return index.id === $scope.cloud.softwareVersionId });
-          if (!_.isEmpty(DefaultSoftwareversion)){
-             cb(DefaultSoftwareversion[0]);
+          defaultSoftwareversion = version.filter(function(index){return index.id === $scope.cloud.softwareVersionId });
+          if (!_.isEmpty(defaultSoftwareversion)){
+             cb(null, defaultSoftwareversion[0]);
+          } else {
+            var error = 'Unknown Software Version';
+            cb(error, null);
           }
         }
       }
@@ -271,7 +274,11 @@ angular
         .then(function(versions) {
           if (!_.isEmpty(versions)){
             $scope.softwareVersions = [].concat(versions);
-            getdefaultSoftwareVersion($scope.softwareVersions, function(defaultSoftwareVersion){
+            getdefaultSoftwareVersion($scope.softwareVersions, function(err, defaultSoftwareVersion){
+              if (err){
+                toastr.error (err);
+                return;
+              }
               $scope.defaultSoftwareVersion = defaultSoftwareVersion;
             });
           } else {
