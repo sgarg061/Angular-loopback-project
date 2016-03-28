@@ -38,6 +38,10 @@
       "type": "geopoint",
       "required": false
     },
+    "externalId":{
+      "type": "string",
+      "required": false
+    },
     "osVersion": {
       "type": "string",
       "required": false
@@ -136,6 +140,10 @@
     },
     "overrideConfigForwardPort": {
       "type": "number",
+      "required": false
+    },
+    "overrideExternalId": {
+      "type": "string",
       "required": false
     },
     "localIP": {

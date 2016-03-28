@@ -74,7 +74,7 @@ angular
           Auth.updateUserMetadata({
             id: scope.selectedUser.user_id,
             appMetadata: appMetadata,
-            updateUserMetadata: userMetadata
+            userMetadata: userMetadata
           })
             .$promise
             .then(function (res) {

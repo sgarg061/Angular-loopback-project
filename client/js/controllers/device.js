@@ -112,7 +112,7 @@ angular
     function updateDevice(id, changedDictionary, message) {
       Device.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(device) {toastr.info(' ' +  message);}, function (res) {
-          toastr.error(res.data.error.message, 'Error');
+          toastr.error(res.statusText, 'Error Invalid Value');
         });
     }
 
@@ -394,6 +394,9 @@ angular
       $scope.device.name = $scope.device.overrideName;
     }
 
+    if ($scope.device.overrideExternalId){
+      updatedConfigObject.overrideExternalId = $scope.device.overrideExternalId;
+    }
     Device
       .prototype$updateAttributes({id: $scope.device.id}, updatedConfigObject)
       .$promise

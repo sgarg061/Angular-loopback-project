@@ -68,7 +68,7 @@ angular
       Customer.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(customer) {toastr.info(' ', message);},
           function (res) {
-          toastr.error(res.data.error.message, 'Error');
+          toastr.error(res.statusText, 'Error Invalid Value');
         });
 
     }
