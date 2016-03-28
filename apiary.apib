@@ -40,12 +40,14 @@ List all of the users under a given tenant.
                     "app_metadata":{
                         "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
                         "userType":"admin",
-                        "wrtc":"false",
-                        "defaultToHD":"false",
                         "devices":[
                             "7b43b990-c536-11e5-8f73-4bebc88006af",
                             "8edc0d40-c536-11e5-8f73-4bebc88006af"
                         ]
+                    },
+                    "user_metadata":{
+                        "wrtc": "false",
+                        "defaultToHD":"false"
                     }
                 },
                 {
@@ -72,11 +74,11 @@ List all of the users under a given tenant.
                     "app_metadata":{
                         "tenantId":"58e1ae10-c532-11e5-b7f4-19f29daa641d",
                         "userType":"admin",
-                        "shouldPlayWebRTC":"false",
-                        "shouldDefaultToHD":"true",
                         "devices":[
                             "f8ee3f10-c535-11e5-8f73-4bebc88006af"
-                        ],
+                        ]
+                    },
+                    "user_metadata":{
                         "wrtc":"true",
                         "defaultToHD":"true"
                     }
@@ -1063,11 +1065,13 @@ This API endpoint should be moved to a `/users` endpoint in a later migration.
                 "app_metadata":{
                     "tenantId":"a3953d60-7f31-11e5-92b7-c9701c189e5f",
                     "userType":"admin",
-                    "wrtc": "true",
                     "devices": [
                         "abcdefg",
                         "12345"
                     ]
+                },
+                "user_metadata":{
+                    "wrtc": "true",
                 },
                 "last_ip":"52.35.201.87",
                 "last_login":"2016-02-16T15:42:12.897Z",
