@@ -243,7 +243,26 @@ angular
           }
         });
     }
-
+    function getdefaultSoftwareVersion(version, cb) {
+      var defaultSoftwareversion = version.filter(function(index){return index.id === $scope.customer.softwareVersionId });
+      if (!_.isEmpty(defaultSoftwareversion)) {
+        cb(null, defaultSoftwareversion[0]);
+      } else {
+        defaultSoftwareversion = version.filter(function(index){return index.id === $scope.reseller.softwareVersionId });
+        if (!_.isEmpty(defaultSoftwareversion)){
+          cb(null, defaultSoftwareversion[0]);
+        } else {
+          defaultSoftwareversion = version.filter(function(index){return index.id === $scope.cloud.softwareVersionId });
+          if (!_.isEmpty(defaultSoftwareversion)){
+             cb(null, defaultSoftwareversion[0]);
+          } else {
+            var error = 'Unknown Software Version';
+            cb(error, null);
+          }
+        }
+      }
+    }
+    
 
     function getSoftwareVersions() {
       SoftwareVersion
@@ -255,11 +274,18 @@ angular
         })
         .$promise
         .then(function(versions) {
-          $scope.softwareVersions = [].concat(versions);
-          function currentSoftwareVersion(testVersion) { //used in filter
-            return (testVersion.id===$scope.customer.softwareVersionId || testVersion.id===$scope.reseller.softwareVersionId || testVersion.id===$scope.cloud.softwareVersionId);
-        }
-        $scope.defaultSoftwareVersion=$scope.softwareVersions.filter(currentSoftwareVersion)[0]; //filtering versions for one that matches the most immediate parent version for default
+          if (!_.isEmpty(versions)){
+            $scope.softwareVersions = [].concat(versions);
+            getdefaultSoftwareVersion($scope.softwareVersions, function(err, defaultSoftwareVersion){
+              if (err){
+                toastr.error (err);
+                return;
+              }
+              $scope.defaultSoftwareVersion = defaultSoftwareVersion;
+            });
+          } else {
+            toastr.error('Software versions not available');
+          }
         })
     }
 
