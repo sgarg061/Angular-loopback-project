@@ -1548,11 +1548,11 @@ module.factory(
          *
          *  - `changes` – `{ReadableStream=}` - 
          */
+         
         "createChangeStream": {
           url: urlBase + "/SoftwareVersions/change-stream",
           method: "POST"
         },
-
         // INTERNAL. Use Cloud.softwareVersion() instead.
         "::get::Cloud::softwareVersion": {
           url: urlBase + "/Clouds/:id/softwareVersion",
@@ -1577,7 +1577,6 @@ module.factory(
           url: urlBase + "/Clouds/:id/softwareVersion",
           method: "PUT"
         },
-
         // INTERNAL. Use Cloud.softwareVersion.destroy() instead.
         "::destroy::Cloud::softwareVersion": {
           url: urlBase + "/Clouds/:id/softwareVersion",
@@ -2343,6 +2342,10 @@ module.factory(
         "createChangeStream": {
           url: urlBase + "/Clouds/change-stream",
           method: "POST"
+        },
+        "prototype$listUsers": {
+          url: urlBase + "/Clouds/:id/listUsers",
+          method: "GET"
         },
 
         // INTERNAL. Use Reseller.cloud() instead.

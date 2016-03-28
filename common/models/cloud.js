@@ -37,6 +37,7 @@ module.exports = function(Cloud) {
         if (context && context.get('jwt')) {
             var cloudId = context.get('jwt').cloudId;
             var customerId = context.get('jwt').tenantId;
+            var userType = context.get('jwt').userType;
             var resellerId = context.get('jwt').resellerId;
             if (context.get('jwt').userType === 'solink') {
                 next();
@@ -107,4 +108,24 @@ module.exports = function(Cloud) {
     }
 
     Cloud.validatesPresenceOf('email', {message: 'Please provide an email address for this cloud account'});
+
+    Cloud.remoteMethod('listUsers', {
+        isStatic: false,
+        http: {
+          verb: 'get',
+          path: '/listUsers',
+          status: 200,
+          errorStatus: 500
+        },
+        accepts: [],
+        returns: {arg: 'users', type: 'Array'}
+    });
+    Cloud.prototype.listUsers = function (cb) {
+        authService.listUsers('cloudId', this.id, function (err, res) {
+            if (err) {
+                logger.error(err);
+            }
+            cb(err, res);
+        });
+    };
 };

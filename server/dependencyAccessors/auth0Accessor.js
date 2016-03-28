@@ -239,6 +239,7 @@ Auth0Accessor.prototype.listUsers = function (type, id, cb) {
       query += ' AND app_metadata.userType:reseller';
       break;
     case 'cloudId':
+      query += ' AND app_metadata.userType:cloud';
       break;
     default:
       break;
