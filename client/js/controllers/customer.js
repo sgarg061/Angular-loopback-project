@@ -159,6 +159,7 @@ angular
           
           for (var i=0; i<$scope.devices.length; i++) {
             var array= [];
+            var oldestDate = 0;
             var device = $scope.devices[i];
             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
              var nowInSeconds = new Date().getTime() / 1000;
@@ -194,14 +195,17 @@ angular
                  }
                }
                if (!_.isEmpty(array)) {
-                 var oldestDate = array.sort(function(greatest, smallest){return greatest-smallest})
-                 .filter(function(index){return index !== null})[0];
+                 var oldestDateArray = array.sort(function(greatest, smallest){return greatest-smallest})
+                 .filter(function(index){return index !== null});
+                 if (oldestDateArray.length !== 0){
+                  oldestDate = oldestDateArray[0];
+                 }
                  var todayDate = new Date().valueOf();
                  var calculation = ((todayDate - oldestDate)/1000);
                  //converting to days
                  device.retentionDays = Math.floor(((calculation/3600)/24));
                }
-               if (lastCheckinTimeInSeconds === 0 && !hasCheckedInOnTime || oldestDate === undefined || _.isEmpty(array)){
+               if (lastCheckinTimeInSeconds === 0 && !hasCheckedInOnTime || !oldestDate || _.isEmpty(array)){
                 device.retentionDays = 'Unknown';
               }
              }
