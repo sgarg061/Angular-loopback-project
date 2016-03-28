@@ -41,7 +41,6 @@ angular
           if (newValue.checkinInterval !== oldValue.checkinInterval) {
             updateCustomer(id, {checkinInterval: newValue.checkinInterval}, 'Check in interval has been updated');
           }
-
           if (newValue.signallingServerUrl !== oldValue.signallingServerUrl) {
             updateCustomer(id, {signallingServerUrl: newValue.signallingServerUrl}, 'Signalling server has been updated');
           }
@@ -111,10 +110,9 @@ angular
           if(!_.isEmpty(customers)){
             $scope.customer = customers[0];
             $scope.numberOfAvailableLicenses = availableLicenses($scope.customer.licenses).length;
-
             $scope.cloud = customers[0].reseller.cloud;
             $scope.reseller = customers[0].reseller;
-
+            $scope.defaultCheckinInterval = $scope.reseller.checkinInterval || $scope.cloud.checkinInterval;
             $scope.devices = customers[0].devices;
             $scope.currentSoftwareVersion = customers[0].softwareVersionId;
 

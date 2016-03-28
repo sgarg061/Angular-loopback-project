@@ -54,7 +54,10 @@
       <div ng-show= "canModifyCheckinInterval(model)" >
         <md-input-container ng-show="type=='cloud'||type=='reseller'||type=='customer'||type=='device'">
           <label>Check-in Interval</label>
-          <input type="number" min="5" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval" ng-model-options="{updateOn: 'blur'}">
+          <input type="number" min="300" class="form-control focus" name="checkinInterval" autocomplete="off" required ng-model="model.checkinInterval" ng-model-options="{updateOn: 'blur'}" placeholder="{{defaultCheckinInterval}}">
+          <div align="right">
+            <button class="md-button md-primary md-hue" ng-hide="model.checkinInterval===null|| type==='cloud'" data-ng-click="model.checkinInterval=null">Reset to Default</button>
+        </div>
         </md-input-container>
       </div>
 
