@@ -7,7 +7,7 @@
     "postinstall": "bower update",
     "prestart": "npm update",
     "pretest": "jshint .",
-    "test": "NODE_ENV=test mocha -R spec server/test",
+    "test": "cross-env NODE_ENV=test mocha -R spec server/test",
     "build": "bower install",
     "console": "$(npm bin)/loopback-console ."
   },
@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "bower": "^1.7.7",
+    "cross-env": "^1.0.7",
     "jshint": "^2.5.6",
     "mocha": "^2.2.5",
     "supertest": "^1.0.1"
