@@ -7,6 +7,7 @@ var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
 var liveDataService = require('../../server/services/liveDataService');
 
+
 module.exports = function(Device) {
     'use strict';
     Device.observe('before save', function addId(ctx, next) {
@@ -484,7 +485,6 @@ module.exports = function(Device) {
     function updateCameras (device, deviceData, cb) {
         logger.debug('updating cameras');
         var cameras = deviceData.cameraInformation;
-        //var array= [];
         if (!cameras) {
             var error = new Error('Cameras not included in checkin');
             error.statusCode = 400;
