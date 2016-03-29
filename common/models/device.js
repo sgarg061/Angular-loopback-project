@@ -496,8 +496,8 @@ module.exports = function(Device) {
             }
             updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
         }
-            removeNonIncludedComponents('Camera', cameras, 'cameraId', device.id);
-            updatePOSDevices(device, deviceData, cb);
+        removeNonIncludedComponents('Camera', cameras, 'cameraId', device.id);
+        updatePOSDevices(device, deviceData, cb);
     }
 
     function updatePOSDevices (device, deviceData, cb) {
