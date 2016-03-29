@@ -37,7 +37,6 @@ module.exports = function(Cloud) {
         if (context && context.get('jwt')) {
             var cloudId = context.get('jwt').cloudId;
             var customerId = context.get('jwt').tenantId;
-            var userType = context.get('jwt').userType;
             var resellerId = context.get('jwt').resellerId;
             if (context.get('jwt').userType === 'solink') {
                 next();
