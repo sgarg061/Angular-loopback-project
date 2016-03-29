@@ -538,7 +538,8 @@ module.exports = function(Device) {
             Device.app.models.Cloud.findOne({where: {id: reseller.cloudId}}, function (err, cloud) {
                 if (err) {
                     return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
-                }      
+                }
+
                 // handle inherited attributes
                 var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
                 var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
