@@ -23,6 +23,7 @@ angular
 
     $scope.currentDate = new Date();
 
+    $scope.NATPageUrl = null;
 
     $scope.checkinReasons = [
       {name: 'all', count: 0},
@@ -197,6 +198,9 @@ angular
           
 
           watchForChanges();
+          var deviceIp = $scope.device.ipAddress || $scope.device.overrideIpAddress;
+          var devicePort = $scope.device.overrideConnectPort || $scope.deviceconnectPort || 8000;
+          $scope.NATPageUrl = "http://" + deviceIp + ":"+ devicePort + "/config/#/list";
 
           var device = $scope.device;
 

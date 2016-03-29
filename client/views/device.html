@@ -168,8 +168,7 @@
                 <md-input-container>
                 <div layout="row" layout-align="space-around center">
                   <div layout="column" layout-align="start start" layout-fill>
-
-                    <div style="margin-bottom: 5px;"><b>Cameras</b></div>
+                    <div style="margin-bottom: 5px;"><b>Cameras</b> <a ng-href="{{NATPageUrl}}" style="text-decoration:none">NAT PAGE</a></div>
                     <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
                       <md-list layout-padding>
                         <md-list-item style="height:26px; min-height:20px !important;" ng-repeat="camera in device.cameras">
@@ -291,6 +290,7 @@
 
               </div>
             </md-tab>
+
           </md-tabs>
         </md-content>
       </div>
