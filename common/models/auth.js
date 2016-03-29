@@ -352,6 +352,7 @@ module.exports = function (Auth) {
               var myCloudId = jwt.cloudId;
               return cb(cloudId === myCloudId);
           }
+          break;
         default:
           return cb(false);
       }
