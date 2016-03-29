@@ -539,9 +539,7 @@ module.exports = function(Device) {
                 if (err) {
                     return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
                 }
-                var devicePort = device.overrideConnectPort || device.connectPort || 8000;
-                var deviceIp = device.ipaddress || device.overrideipaddress
-                var NATPageUrl = "http://" + deviceIp + ":" + devicePort + "/config/#/list"   
+                   
                 // handle inherited attributes
                 var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
                 var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
