@@ -490,13 +490,13 @@ module.exports = function(Device) {
             error.statusCode = 400;
             return cb(error);
         }
-
         for (var i=0; i<cameras.length; i++) {
+            if (!cameras[i].thumbnail){
+                delete cameras[i].thumbnail;
+            }
             updateDeviceComponent('Camera', cameras[i], 'cameraId', device.id);
         }
-
         removeNonIncludedComponents('Camera', cameras, 'cameraId', device.id);
-
         updatePOSDevices(device, deviceData, cb);
     }
 
