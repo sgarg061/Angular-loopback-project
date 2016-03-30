@@ -114,7 +114,6 @@ angular
             $scope.reseller = customers[0].reseller;
             $scope.defaultCheckinInterval = $scope.reseller.checkinInterval || $scope.cloud.checkinInterval;
             $scope.devices = customers[0].devices;
-            console.log($scope.devices)
             $scope.currentSoftwareVersion = customers[0].softwareVersionId;
 
           } else {
