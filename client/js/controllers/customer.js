@@ -114,6 +114,7 @@ angular
             $scope.reseller = customers[0].reseller;
             $scope.defaultCheckinInterval = $scope.reseller.checkinInterval || $scope.cloud.checkinInterval;
             $scope.devices = customers[0].devices;
+            console.log($scope.devices)
             $scope.currentSoftwareVersion = customers[0].softwareVersionId;
 
           } else {
@@ -177,6 +178,10 @@ angular
                device.onlineStatus = 'Offline';
              }
              console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
+             device.currentAppVersion = device.currentSoftwareVersion;
+             if (!device.currentAppVersion) {
+              device.currentAppVersion = 'Unknown Version';
+             }
 
              device.onlineCameraCount = 0;
              var allCamerasOnline = true;

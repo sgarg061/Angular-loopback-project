@@ -57,6 +57,8 @@
               <th></th>
               <th align="left" ng-click="changeSorting('retentionDays')">Days Recorded</th>
               <th align="left"></th>
+               <th align="left" ng-click="changeSorting('currentAppVersion')">Software Version</th>
+              <th align="left"></th>
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
               <td>{{device.name}}</td>
@@ -78,6 +80,8 @@
               </td>
               <td></td>
               <td> {{device.retentionDays}} {{device.retentionDays > 1?'Days':device.retentionDays === 'Unknown'? '':'Day'}}</td>
+              <td></td>
+              <td> {{device.currentAppVersion}}</td>
             </tr>
             </table>
           </md-content>
