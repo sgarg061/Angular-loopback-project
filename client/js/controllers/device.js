@@ -198,7 +198,7 @@ angular
           
 
           watchForChanges();
-          var deviceIp = $scope.device.ipAddress || $scope.device.overrideIpAddress;
+          var deviceIp = $scope.device.overrideIpAddress || $scope.device.ipAddress;
           var devicePort = $scope.device.overrideConnectPort || $scope.deviceconnectPort || 8000;
           $scope.NATPageUrl = "http://" + deviceIp + ":"+ devicePort + "/config/#/list";
 
