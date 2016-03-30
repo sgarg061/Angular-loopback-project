@@ -351,10 +351,10 @@ module.exports = function (Auth) {
               cloudId = user.app_metadata.cloudId;
               var myCloudId = jwt.cloudId;
               return cb(cloudId === myCloudId);
+            default:
+              return cb(false);
           }
           break;
-        default:
-          return cb(false);
       }
     } catch (err) {
       console.log(err);
