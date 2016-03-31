@@ -177,6 +177,10 @@ angular
                device.onlineStatus = 'Offline';
              }
              console.log('hasCheckedInOnTime: ' + hasCheckedInOnTime);
+             device.currentAppVersion = device.currentSoftwareVersion;
+             if (!device.currentAppVersion) {
+              device.currentAppVersion = 'Unknown Version';
+             }
 
              device.onlineCameraCount = 0;
              var allCamerasOnline = true;

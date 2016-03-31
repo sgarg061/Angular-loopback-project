@@ -478,6 +478,7 @@ module.exports = function(Device) {
 
             checkedInProperties.vmsPort = deviceData.deviceInformation.port;
         }
+        checkedInProperties.currentSoftwareVersion = deviceData.appVersion;
 
         return checkedInProperties;
     }
