@@ -51,7 +51,7 @@ Stopping the cluster
 	slc ctl stop call-home-server
 	slc ctl status
 
-Creating sample data
+Creating sample data (if tables werent created yet, run and stop the server once)
 
 	node server/create-sample-data.js
 
