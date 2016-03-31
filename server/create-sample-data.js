@@ -4,6 +4,9 @@ var logger = require('./logger');
 var async = require('async');
 var uuid = require('node-uuid');
 
+var AuthAccessor = require('./dependencyAccessors/fakeAuth0Accessor');
+var authService = require('./services/authService');
+
 module.exports = function(app, doneCallback) {
 
   var datastore = app.dataSources.callHomeDb;
@@ -74,7 +77,7 @@ module.exports = function(app, doneCallback) {
 
   function createSoftwareVersions(cb) {
     logger.debug('creating software versions...');
-    datastore.automigrate('SoftwareVersion', function(err) {
+    datastore.autoupdate('SoftwareVersion', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -95,7 +98,7 @@ module.exports = function(app, doneCallback) {
   function createClouds(cb, results) {
     logger.debug('creating clouds...');
 
-    datastore.automigrate('Cloud', function(err) {
+    datastore.autoupdate('Cloud', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -127,7 +130,7 @@ module.exports = function(app, doneCallback) {
 
   function createResellers(cb, results) {
     logger.debug('creating resellers...');
-    datastore.automigrate('Reseller', function(err) {
+    datastore.autoupdate('Reseller', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -157,7 +160,7 @@ module.exports = function(app, doneCallback) {
 
   function createPOSFilters(cb, results) {
     logger.debug('creating POS filters...');
-    datastore.automigrate('POSFilter', function(err) {
+    datastore.autoupdate('POSFilter', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -193,7 +196,7 @@ module.exports = function(app, doneCallback) {
 
   function createCustomers(cb, results) {
     logger.debug('creating customers...');
-    datastore.automigrate('Customer', function(err) {
+    datastore.autoupdate('Customer', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -217,14 +220,14 @@ module.exports = function(app, doneCallback) {
 
   function createDevices(cb, results) {
     logger.debug('creating device log entries collection...');
-    datastore.automigrate('DeviceLogEntry', function(err) {
+    datastore.autoupdate('DeviceLogEntry', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
       }
     });
     logger.debug('creating devices...');
-    datastore.automigrate('Device', function(err) {
+    datastore.autoupdate('Device', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -239,7 +242,7 @@ module.exports = function(app, doneCallback) {
 
   function createCameras(cb, results) {
     logger.debug('creating cameras...');
-    datastore.automigrate('Camera', function(err) {
+    datastore.autoupdate('Camera', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -254,7 +257,7 @@ module.exports = function(app, doneCallback) {
 
   function createPOSDevices(cb, results) {
     logger.debug('creating POS devices...');
-    datastore.automigrate('POSDevice', function(err) {
+    datastore.autoupdate('POSDevice', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -270,7 +273,7 @@ module.exports = function(app, doneCallback) {
 
   function createLicenses(cb, results) {
     logger.debug('creating licenses...');
-    datastore.automigrate('License', function(err) {
+    datastore.autoupdate('License', function(err) {
       if (err) {
         logger.error(err);
         return cb(err);
@@ -294,6 +297,9 @@ if (require.main === module) {
 
   // start the app in order to get system components like auth, redis and cache accessors started up
   app.start();
+  
+  // overwrite the AuthAccessor set in app.start with FakeAuth0Accessor
+  authService.initialize(new AuthAccessor());
 
   // Run the import
   module.exports(app, function(err) {
@@ -301,8 +307,9 @@ if (require.main === module) {
       logger.error('Cannot import sample data - ', err);
     } else {
       logger.info('Sample data was imported.');
-
     }
+    
+    process.exit();
   });
 }
 
