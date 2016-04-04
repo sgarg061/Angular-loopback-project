@@ -68,6 +68,9 @@ angular
           if (newValue.selectedCheckinReason !== oldValue.selectedCheckinReason) {
             console.log('checkin value selected', selectedCheckinReason);
           }
+          if(newValue.monitorSetting != oldValue.monitorSetting) {
+            updateDevice(id, {monitorSetting:newValue.monitorSetting}, 'Updated monitor setting');
+          }
         }
       }, true);
 
@@ -157,6 +160,10 @@ angular
           if ($scope.device.logEntries.length) {
             $scope.showCheckin($scope.device.logEntries[0]);
 
+            if($scope.device.monitorSetting == null){
+              $scope.device.monitorSetting = true;
+              debugger;
+            }
 
             if ($scope.device.logEntries.length < $scope.logDataLimit) {
               $scope.device.noMoreLogs = true;

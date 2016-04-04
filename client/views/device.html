@@ -61,6 +61,7 @@
                   <div style="margin-right: 10px; text-align:right; position:relative;" flex layout="row" layout-align="end-center">
                     <div><md-progress-circular md-mode="indeterminate" md-diameter="30" ng-if="device.id == sendingCheckin || device.loadingMore"></md-progress-circular></div>
                     <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
+                    <md-checkbox ng-model="device.monitorSetting"></md-checkbox>
                     <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false" style="{{!timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="list"></md-icon>
                     </md-button>

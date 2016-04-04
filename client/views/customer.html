@@ -59,18 +59,21 @@
               <th align="left"></th>
                <th align="left" ng-click="changeSorting('currentAppVersion')">Software Version</th>
               <th align="left"></th>
+              <th align="left">Monitor Setting</th>
+              <th align="left"></th>
             </tr>
-            <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
-              <td>{{device.name}}</td>
-              <td>{{device.address}}</td>
-              <td ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
-              <td>
+            <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter">
+              <div ng-click="selectDevice(device)">
+              <td ng-click="selectDevice(device)">{{device.name}}</td>
+              <td ng-click="selectDevice(device)">{{device.address}}</td>
+              <td ng-click="selectDevice(device)" ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
+              <td ng-click="selectDevice(device)">
                 <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.onlineStatus=='Online'"></md-icon>
                 <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.onlineStatus=='Offline'"></md-icon>
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.onlineStatus=='Unknown'"></md-icon>
               </td>
-              <td ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online </td>
-              <td>
+              <td ng-click="selectDevice(device)" ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online </td>
+              <td ng-click="selectDevice(device)">
                <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.status=='green'"></md-icon>
                  <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.status=='red'"></md-icon>
                  <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.status=='yellow'"></md-icon>
@@ -79,9 +82,12 @@
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.statusIconColor=='yellow'"></md-icon> -->
               </td>
               <td></td>
-              <td> {{device.retentionDays}} {{device.retentionDays > 1?'Days':device.retentionDays === 'Unknown'? '':'Day'}}</td>
+              <td ng-click="selectDevice(device)"> {{device.retentionDays}} {{device.retentionDays > 1?'Days':device.retentionDays === 'Unknown'? '':'Day'}}</td>
               <td></td>
-              <td> {{device.currentAppVersion}}</td>
+              <td ng-click="selectDevice(device)"> {{device.currentAppVersion}}</td>
+            </div>
+              <td></td>
+              <td><md-checkbox ng-model="device.monitorSetting"></md-checkbox></td>
             </tr>
             </table>
           </md-content>

@@ -50,6 +50,12 @@
       "type": "string",
       "required": false
     },
+
+    "monitorSetting": {
+      "type": "boolean",
+      "required": false
+    },
+
     "signallingServerUrl": {
       "type": "string",
       "required": false
