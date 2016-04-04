@@ -43,7 +43,8 @@ List all of the users under a given tenant.
                         "devices":[
                             "7b43b990-c536-11e5-8f73-4bebc88006af",
                             "8edc0d40-c536-11e5-8f73-4bebc88006af"
-                        ]
+                        ],
+                        "hd": "true"
                     },
                     "user_metadata":{
                         "wrtc": "false",
@@ -76,7 +77,8 @@ List all of the users under a given tenant.
                         "userType":"admin",
                         "devices":[
                             "f8ee3f10-c535-11e5-8f73-4bebc88006af"
-                        ]
+                        ],
+                        "hd":"false"
                     },
                     "user_metadata":{
                         "wrtc":"true",
@@ -1037,6 +1039,7 @@ This API endpoint should be moved to a `/users` endpoint in a later migration.
             "id": "auth0|5633b2d0794d1c5a0b72a79d",
             "metadata": {
                 "devices": ["abcdefg", "12345"],
+                "hd": "false",
                 "wrtc": "true"
             }
         }
@@ -1068,7 +1071,8 @@ This API endpoint should be moved to a `/users` endpoint in a later migration.
                     "devices": [
                         "abcdefg",
                         "12345"
-                    ]
+                    ],
+                    "hd": "false"
                 },
                 "user_metadata":{
                     "wrtc": "true",
