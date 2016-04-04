@@ -382,6 +382,9 @@ angular
     if ($scope.device.overrideVmsPort) {
       updatedConfigObject.overrideVmsPort = $scope.device.overrideVmsPort;
     }
+    if ($scope.device.overrideLocalVmsPort) {
+      updatedConfigObject.overrideLocalVmsPort = $scope.device.overrideLocalVmsPort;
+    }
 
     if ($scope.device.overrideConnectPort) {
       updatedConfigObject.overrideConnectPort = $scope.device.overrideConnectPort;
