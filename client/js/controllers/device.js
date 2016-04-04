@@ -147,6 +147,7 @@ angular
         .$promise
         .then(function(devices) {
            if(!_.isEmpty(devices)) {
+            console.log(devices)
 
             $scope.device = devices[0];
             $scope.currentSoftwareVersion = devices[0].softwareVersionId;
