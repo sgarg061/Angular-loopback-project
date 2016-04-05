@@ -87,7 +87,7 @@
               <td ng-click="selectDevice(device)"> {{device.currentAppVersion}}</td>
             </div>
               <td></td>
-              <td><md-checkbox ng-model="device.monitorSetting"></md-checkbox></td>
+              <td><md-checkbox ng-model="device.monitorSetting" ng-click="toggleMonitorSetting(device, !device.monitorSetting)"></md-checkbox></td>
             </tr>
             </table>
           </md-content>
