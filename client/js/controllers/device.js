@@ -150,6 +150,9 @@ angular
             
             $scope.device = devices[0];
             $scope.ipAddress = devices[0].ipAddress;
+            if ($scope.ipAddress.length < 7 || !$scope.ipAddress) {
+              $scope.ipAddress = 'Invalid Ip Address';
+            }
             $scope.currentSoftwareVersion = devices[0].softwareVersionId;
           }
             $scope.device.loadingMore = false;
