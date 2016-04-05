@@ -26,6 +26,19 @@
   },
   "validations": [],
   "relations": {},
-  "acls": [],
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "isSolink",
+      "permission": "ALLOW",
+      "property": "*"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "isOwner",
+      "permission": "ALLOW",
+      "property": "*"
+    }],
   "methods": {}
 }

@@ -28,7 +28,6 @@ module.exports = function (app) {
             return cb(null, (!err && jwt.userType === 'solink'));
         });
     });
-
     Role.registerResolver('isOwner', function (role, context, cb) {
         var ctx = loopback.getCurrentContext();
         var jwt = ctx.get('jwt');
@@ -54,6 +53,8 @@ module.exports = function (app) {
                         return isOwnerOfCustomer(context, jwt, cb);
                     case 'License':
                         return isOwnerOfLicense(context, jwt, cb);
+                    case 'SoftwareVersion':
+                        return isOwnerOfSoftwareVersion(context, jwt, cb);    
                     case 'POSFilter':
                     case 'SearchFilter':
                         return isOwnerOfFilter(context, jwt, cb);
@@ -211,6 +212,42 @@ function isOwnerOfCustomer(context, token, cb) {
             } else {
                 unauthorized(cb);
                 break;
+            }
+            break;
+        default:
+            invalidMethod(cb);
+            break;
+    }
+}
+function isOwnerOfSoftwareVersion(context, token, cb) {
+    switch (context.remotingContext.req.method) {
+        case 'POST':
+            if (token.userType !== 'cloud') {
+                unauthorized(cb);
+            } else {
+                cb();
+            }
+            break;
+        case 'PUT':
+            if (token.userType !== 'cloud') {
+                unauthorized(cb);
+            } else {
+                cb();
+            }
+            break;
+        case 'GET':
+            if (token.userType !== 'cloud' && token.userType !== 'reseller') {
+                unauthorized(cb);
+            } else {
+                console.log(token.userType)
+                cb();
+            }
+            break;  
+        case 'DELETE':
+            if (token.userType !== 'cloud') {
+                unauthorized(cb);
+            } else {
+                cb();
             }
             break;
         default:
