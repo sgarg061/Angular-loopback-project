@@ -59,11 +59,10 @@
               <th align="left"></th>
                <th align="left" ng-click="changeSorting('currentAppVersion')">Software Version</th>
               <th align="left"></th>
-              <th align="left">Monitor Setting</th>
+              <th align="center">Enable Monitoring</th>
               <th align="left"></th>
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter">
-              <div ng-click="selectDevice(device)">
               <td ng-click="selectDevice(device)">{{device.name}}</td>
               <td ng-click="selectDevice(device)">{{device.address}}</td>
               <td ng-click="selectDevice(device)" ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
@@ -85,9 +84,8 @@
               <td ng-click="selectDevice(device)"> {{device.retentionDays}} {{device.retentionDays > 1?'Days':device.retentionDays === 'Unknown'? '':'Day'}}</td>
               <td></td>
               <td ng-click="selectDevice(device)"> {{device.currentAppVersion}}</td>
-            </div>
               <td></td>
-              <td><md-checkbox ng-model="device.monitorSetting" ng-click="toggleMonitorSetting(device, !device.monitorSetting)"></md-checkbox></td>
+              <td align="center"><md-checkbox aria-label="enable monitoring" class="monitor-setting" ng-model="device.enableMonitoring" ng-click="toggleMonitorSetting(device, !device.enableMonitoring); $event.stopPropagation();"></md-checkbox></td>
             </tr>
             </table>
           </md-content>

@@ -76,7 +76,7 @@ angular
 
     function updateDevice(id, changedDictionary, message) {
       Device.prototype$updateAttributes({id: id}, changedDictionary)
-        .$promise.then(function(device) {toastr.info(' ' +  message);}, function (res) {
+        .$promise.then(function(device) {}, function (res) {
           toastr.error(res.statusText, 'Error Invalid Value');
         });
     }
@@ -141,10 +141,9 @@ angular
           $scope.customer.devices.forEach(function (device) {
             device.customerName = $scope.customer.name;
             device.checkinInterval = device.checkinInterval ||
-               $scope.customer.checkinInterval ||
-               $scope.reseller.checkinInterval ||
-               $scope.cloud.checkinInterval;
-
+                                     $scope.customer.checkinInterval ||
+                                     $scope.reseller.checkinInterval ||
+                                     $scope.cloud.checkinInterval;
             $scope.allDevices.push(device);
           });
 
@@ -835,7 +834,7 @@ angular
   };
 
   $scope.toggleMonitorSetting = function(device, value){
-    updateDevice(device.id, {monitorSetting:value}, 'Updated monitor setting');
+    updateDevice(device.id, {enableMonitoring:value}, 'Updated monitor setting');
   }
 
   $scope.showLicense = showLicense;

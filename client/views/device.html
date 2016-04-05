@@ -20,8 +20,9 @@
 
       <div class="child-list col-md-8" layout-margin layout-fill layout-padding style="height:auto">
 
-        <md-content class="card">
 
+        <md-content class="card">
+        <md-checkbox aria-label="enable monitoring" id="monitor-setting" class="monitor-setting" ng-model="device.enableMonitoring">Enable Monitoring</md-checkbox>
           <div layout="row" style="margin-left:10px;margin-right:10px; margin-top:20px; height:40px;" >
             <md-input-container flex style="margin: 5px 0px;">
               <label>License - activated on {{device.license.activationDate | date:'yyyy/MM/dd'}}</label>
@@ -61,7 +62,6 @@
                   <div style="margin-right: 10px; text-align:right; position:relative;" flex layout="row" layout-align="end-center">
                     <div><md-progress-circular md-mode="indeterminate" md-diameter="30" ng-if="device.id == sendingCheckin || device.loadingMore"></md-progress-circular></div>
                     <md-button flex="15" class="md-primary" ng-click="checkin(device)" ng-if="device.id != sendingCheckin">Check-in</md-button>
-                    <md-checkbox ng-model="device.monitorSetting"></md-checkbox>
                     <md-button class="md-icon-button md-primary" aria-label="List" ng-click="timelineView = false" style="{{!timelineView ? 'background-color:#2196F3': ''}}">
                       <md-icon md-svg-icon="list"></md-icon>
                     </md-button>

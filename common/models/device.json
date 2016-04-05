@@ -50,12 +50,11 @@
       "type": "string",
       "required": false
     },
-
-    "monitorSetting": {
+    "enableMonitoring": {
       "type": "boolean",
-      "required": false
+      "required": false,
+      "default":false
     },
-
     "signallingServerUrl": {
       "type": "string",
       "required": false
