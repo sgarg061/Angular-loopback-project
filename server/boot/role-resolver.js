@@ -239,7 +239,6 @@ function isOwnerOfSoftwareVersion(context, token, cb) {
             if (token.userType !== 'cloud' && token.userType !== 'reseller') {
                 unauthorized(cb);
             } else {
-                console.log(token.userType)
                 cb();
             }
             break;  
