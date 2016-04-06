@@ -222,13 +222,8 @@ function isOwnerOfCustomer(context, token, cb) {
 function isOwnerOfSoftwareVersion(context, token, cb) {
     switch (context.remotingContext.req.method) {
         case 'POST':
-            if (token.userType !== 'cloud') {
-                unauthorized(cb);
-            } else {
-                cb();
-            }
-            break;
         case 'PUT':
+        case 'DELETE':
             if (token.userType !== 'cloud') {
                 unauthorized(cb);
             } else {
@@ -242,13 +237,6 @@ function isOwnerOfSoftwareVersion(context, token, cb) {
                 cb();
             }
             break;  
-        case 'DELETE':
-            if (token.userType !== 'cloud') {
-                unauthorized(cb);
-            } else {
-                cb();
-            }
-            break;
         default:
             invalidMethod(cb);
             break;
