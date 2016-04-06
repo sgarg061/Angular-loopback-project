@@ -187,7 +187,7 @@ A device object has the following attributes:
 
 + Parameters
     + id: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
-    + filter%5Binclude%5D: cameras (optional) - Relational data to include with the devices
+
 ### Get Device [GET]
 
 + Response 200 (application/json)
@@ -231,7 +231,19 @@ A device object has the following attributes:
                 "localIP": "10.1.1.2"
             }
 
-+ Response 200 (application/json, body with cameras)
+            
+## Get Device With Camera [/api/devices{id}{?filter%5Binclude%5D}]
+
++ Parameters
+    + id: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+    + filter%5Binclude%5D: cameras (optional) - Relational data to include with the devices
+
+### Get Device With Camera [GET]
+
+
++ Response 200 (application/json)
+    
+    + Body
 
             {
                 "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
@@ -607,6 +619,8 @@ A device object has the following attributes:
                     ]
                 },
             ]
+
+
 
 ## List All Cameras on a Device [/api/devices/{id}/cameras]
 
