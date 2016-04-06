@@ -15,6 +15,7 @@
           can-modify-software-version-function="canModifySoftwareVersion"
           can-modify-checkin-interval-function="canModifyCheckinInterval"
           default-Checkin-Interval="defaultCheckinInterval"
+          ip-Address="ipAddress"
           can-modify-signalling-server-function="canModifySignallingServer"/>
       </div>
 
@@ -26,6 +27,10 @@
             <md-input-container flex style="margin: 5px 0px;">
               <label>License - activated on {{device.license.activationDate | date:'yyyy/MM/dd'}}</label>
                 <input ng-model="device.license.key" disabled>
+              </md-input-container>
+              <md-input-container flex style="margin: 5px 0px;">
+                <label>Device IP Address</label>
+                <input ng-model="ipAddress" disabled>
               </md-input-container>
               <md-input-container flex style="margin: 5px 0px;">
                 <label>Device ID</label>
