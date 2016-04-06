@@ -833,6 +833,11 @@ angular
     });
   };
 
+  $scope.canModifyMonitorSetting = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
   $scope.toggleMonitorSetting = function(device, value){
     updateDevice(device.id, {enableMonitoring:value}, 'Updated monitor setting');
   }

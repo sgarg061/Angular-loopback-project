@@ -59,7 +59,7 @@
               <th align="left"></th>
                <th align="left" ng-click="changeSorting('currentAppVersion')">Software Version</th>
               <th align="left"></th>
-              <th align="center">Enable Monitoring</th>
+              <th align="center" ng-show="canModifyMonitorSetting()">Enable Monitoring</th>
               <th align="left"></th>
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter">
@@ -85,7 +85,7 @@
               <td></td>
               <td ng-click="selectDevice(device)"> {{device.currentAppVersion}}</td>
               <td></td>
-              <td align="center"><md-checkbox aria-label="enable monitoring" class="monitor-setting" ng-model="device.enableMonitoring" ng-click="toggleMonitorSetting(device, !device.enableMonitoring); $event.stopPropagation();"></md-checkbox></td>
+              <td align="center" ng-show="canModifyMonitorSetting()"><md-checkbox aria-label="enable monitoring" class="monitor-setting" ng-model="device.enableMonitoring" ng-click="toggleMonitorSetting(device, !device.enableMonitoring); $event.stopPropagation();"></md-checkbox></td>
             </tr>
             </table>
           </md-content>

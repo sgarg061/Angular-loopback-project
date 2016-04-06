@@ -686,6 +686,12 @@ angular
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
   }
 
+  $scope.canModifyMonitorSetting = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;
   $scope.modifySettings = modifySettings;
