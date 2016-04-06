@@ -160,7 +160,7 @@ angular
             var oldestDate = 0;
             var device = $scope.devices[i];
             device.ipAddress = device.ipAddress;
-            if (device.ipAddress.length < 7 ||!device.ipAddress) {
+            if (!device.ipAddress || device.ipAddress.length < 7) {
               device.ipAddress='Invalid Device Ip';
             }
             var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
