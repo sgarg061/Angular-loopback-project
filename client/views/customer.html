@@ -49,6 +49,7 @@
             <table class="device-table" width="100%" style="margin: 0px;">
             <tr>
               <th align="left" ng-click="changeSorting('name')">Device Name</th>
+              <th align="left" ng-click="changeSorting('ipAddress')">Device Ip</th>
               <th align="left" ng-click="changeSorting('address')">Address</th>
               <th align="left" ng-click="changeSorting('onlineStatus')">Status</th>
               <th align="left"></th>
@@ -64,6 +65,7 @@
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
               <td>{{device.name}}</td>
+              <td> {{device.ipAddress}}</td>
               <td>{{device.address}}</td>
               <td ng-click="selectDevice(device)" ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
               <td>

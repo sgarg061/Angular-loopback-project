@@ -151,6 +151,10 @@ angular
         .then(function(devices) {
           if(!_.isEmpty(devices)) {
             $scope.device = devices[0];
+            $scope.ipAddress = devices[0].ipAddress;
+            if (!$scope.ipAddress|| $scope.ipAddress.length < 7 ) {
+              $scope.ipAddress = 'Invalid Ip Address';
+            }
             $scope.currentSoftwareVersion = devices[0].softwareVersionId;
           }
           
@@ -205,7 +209,7 @@ angular
           $scope.defaultCheckinInterval = $scope.customer.checkinInterval || $scope.reseller.checkinInterval || $scope.cloud.checkinInterval;
           
 
-          watchForChanges();
+          watchForChanges(); 
           var deviceIp = $scope.device.overrideIpAddress || $scope.device.ipAddress;
           var devicePort = $scope.device.overrideConnectPort || $scope.deviceconnectPort || 8000;
           $scope.NATPageUrl = "http://" + deviceIp + ":"+ devicePort + "/config/#/list";
@@ -380,6 +384,7 @@ angular
     if ($scope.device.overrideIpAddress) {
       updatedConfigObject.overrideIpAddress = $scope.device.overrideIpAddress;
       updatedConfigObject.ipAddress = $scope.device.overrideIpAddress;
+      $scope.ipAddress = $scope.device.overrideIpAddress;
     }
 
     if ($scope.device.overrideLocalIP) {
@@ -389,6 +394,9 @@ angular
 
     if ($scope.device.overrideVmsPort) {
       updatedConfigObject.overrideVmsPort = $scope.device.overrideVmsPort;
+    }
+    if ($scope.device.overrideLocalVmsPort) {
+      updatedConfigObject.overrideLocalVmsPort = $scope.device.overrideLocalVmsPort;
     }
 
     if ($scope.device.overrideConnectPort) {

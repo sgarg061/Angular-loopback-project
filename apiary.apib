@@ -1,4 +1,4 @@
-FORMAT: 1A
+ FORMAT: 1A
 HOST: http://polls.apiblueprint.org/
 
 # Call Home
@@ -43,7 +43,8 @@ List all of the users under a given tenant.
                         "devices":[
                             "7b43b990-c536-11e5-8f73-4bebc88006af",
                             "8edc0d40-c536-11e5-8f73-4bebc88006af"
-                        ]
+                        ],
+                        "hd": "true"
                     },
                     "user_metadata":{
                         "wrtc": "false",
@@ -76,7 +77,8 @@ List all of the users under a given tenant.
                         "userType":"admin",
                         "devices":[
                             "f8ee3f10-c535-11e5-8f73-4bebc88006af"
-                        ]
+                        ],
+                        "hd":"false"
                     },
                     "user_metadata":{
                         "wrtc":"true",
@@ -190,9 +192,59 @@ A device object has the following attributes:
 
 ### Get Device [GET]
 
-
 + Response 200 (application/json)
 
+    + Body
+
+            {
+                "id": "b5084250-4b37-11e5-8184-752d1c0476b3",
+                "guid": null,
+                "name": "Store #210",
+                "status": "offline",
+                "address": "St. John's, NL, Canada",
+                "phoneNumber": "2268884444",
+                "organizationPath": "Canada/Ontario/Ottawa",
+                "location": {
+                    "lat": 46.1234586,
+                    "lng": 7.211228
+                },
+                "osVersion": "4.2.0",
+                "currentSoftwareVersion": "4.0.11",
+                "signallingServerUrl": "http://localhost:3000",
+                "model": "TS-X53U",
+                "modelName": "Rackmount Turbo NAS",
+                "deviceCapacity": "832.31",
+                "availableCapacity": "400.01",
+                "checkinInterval": 120,
+                "lastCheckin": "2016-01-25T14:49:19.588Z",
+                "customerId": "b4132x23-8y42-00t1-75y4-b1234u545c3c",
+                "softwareVersionId": "99a1d2f0-be3d-11e5-a6d3-75b5c9a8178b",
+                "username": "solink-local",
+                "password": "__connect__",
+                "ipAddress": "10.126.140.203",
+                "vmsPort": 18080,
+                "overrideIpAddress": "192.168.1.1" ,
+                "overrideConnectPort": 8080,
+                "overrideVmsPort": 8081,
+                "overrideCheckinPort": 8082,
+                "overrideUploaderPort": 8082,
+                "overrideListenerPort": 8083,
+                "overrideConfigForwardPort": 8084,
+                "localIP": "10.1.1.2"
+            }
+
+            
+## Get Device With Camera [/api/devices{id}{?filter%5Binclude%5D}]
+
++ Parameters
+    + id: b5084250-4b37-11e5-8184-752d1c0476b3 (required, string) - The ID of the device
+    + filter%5Binclude%5D: cameras (optional) - Relational data to include with the devices
+
+### Get Device With Camera [GET]
+
+
++ Response 200 (application/json)
+    
     + Body
 
             {
@@ -569,6 +621,8 @@ A device object has the following attributes:
                     ]
                 },
             ]
+
+
 
 ## List All Cameras on a Device [/api/devices/{id}/cameras]
 
@@ -1037,6 +1091,7 @@ This API endpoint should be moved to a `/users` endpoint in a later migration.
             "id": "auth0|5633b2d0794d1c5a0b72a79d",
             "metadata": {
                 "devices": ["abcdefg", "12345"],
+                "hd": "false",
                 "wrtc": "true"
             }
         }
@@ -1068,7 +1123,8 @@ This API endpoint should be moved to a `/users` endpoint in a later migration.
                     "devices": [
                         "abcdefg",
                         "12345"
-                    ]
+                    ],
+                    "hd": "false"
                 },
                 "user_metadata":{
                     "wrtc": "true",

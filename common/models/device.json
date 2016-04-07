@@ -131,6 +131,10 @@
       "type": "number",
       "required": false
     },
+    "overrideLocalVmsPort": {
+      "type": "number",
+      "required": false
+    },
     "overrideCheckinPort": {
       "type": "number",
       "required": false
