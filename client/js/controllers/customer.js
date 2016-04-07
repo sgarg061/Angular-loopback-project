@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
     
     $scope.clouds = [];
     $scope.resellers = [];
@@ -50,6 +50,7 @@ angular
         }
       }, true);
     }
+
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.customer.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
@@ -71,6 +72,13 @@ angular
           toastr.error(res.statusText, 'Error Invalid Value');
         });
 
+    }
+
+    function updateDevice(id, changedDictionary, message) {
+      Device.prototype$updateAttributes({id: id}, changedDictionary)
+        .$promise.then(function(device) {}, function (res) {
+          toastr.error(res.statusText, 'Error Invalid Value');
+        });
     }
     
     function getCustomer(cb) {
@@ -133,10 +141,9 @@ angular
           $scope.customer.devices.forEach(function (device) {
             device.customerName = $scope.customer.name;
             device.checkinInterval = device.checkinInterval ||
-               $scope.customer.checkinInterval ||
-               $scope.reseller.checkinInterval ||
-               $scope.cloud.checkinInterval;
-
+                                     $scope.customer.checkinInterval ||
+                                     $scope.reseller.checkinInterval ||
+                                     $scope.cloud.checkinInterval;
             $scope.allDevices.push(device);
           });
 
@@ -829,6 +836,15 @@ angular
       getReports();
     });
   };
+
+  $scope.canModifyMonitorSetting = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
+  $scope.toggleMonitorSetting = function(device, value){
+    updateDevice(device.id, {enableMonitoring:value}, 'Updated monitor setting');
+  }
 
   $scope.showLicense = showLicense;
   $scope.availableLicenses = availableLicenses;

@@ -68,6 +68,9 @@ angular
           if (newValue.selectedCheckinReason !== oldValue.selectedCheckinReason) {
             console.log('checkin value selected', selectedCheckinReason);
           }
+          if(newValue.enableMonitoring != oldValue.enableMonitoring) {
+            updateDevice(id, {enableMonitoring:newValue.enableMonitoring}, 'Updated monitor setting');
+          }
         }
       }, true);
 
@@ -146,8 +149,7 @@ angular
         })
         .$promise
         .then(function(devices) {
-           if(!_.isEmpty(devices)) {
-            
+          if(!_.isEmpty(devices)) {
             $scope.device = devices[0];
             $scope.ipAddress = devices[0].ipAddress;
             if (!$scope.ipAddress|| $scope.ipAddress.length < 7 ) {
@@ -155,30 +157,36 @@ angular
             }
             $scope.currentSoftwareVersion = devices[0].softwareVersionId;
           }
-            $scope.device.loadingMore = false;
+          
+          $scope.device.loadingMore = false;
+          
           $scope.device.logDataLimit = $scope.logDataLimit;
 
-          if ($scope.device.logEntries.length) {
-            $scope.showCheckin($scope.device.logEntries[0]);
-
+          if($scope.device.enableMonitoring == null){
+            $scope.device.enableMonitoring = false;
+          }
+          
+          if ($scope.device.logEntries.length){
+              $scope.showCheckin($scope.device.logEntries[0]);
 
             if ($scope.device.logEntries.length < $scope.logDataLimit) {
               $scope.device.noMoreLogs = true;
-            }
-            else{
+            } else {
               $scope.device.noMoreLogs = false;
             }
+
             var height = document.body.clientHeight - 370;
             var width = document.body.clientWidth - 725;
+
             if (height < 650) {
               height = 650;
-            };
+            }
 
             $scope.checkinHeight = height;
             $scope.checkinWidth = width;
 
             renderGraph();
-          };
+          }
 
           $scope.device.cameraStatus = function (log) {
             if (log.onlineCameras === log.totalCameras){
@@ -685,6 +693,12 @@ angular
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
   }
+
+  $scope.canModifyMonitorSetting = function() {
+    var userType = userService.getUserType();
+    return ['solink', 'cloud'].indexOf(userType) > -1;
+  };
+
 
   $scope.checkin = checkin;
   $scope.loadMore = loadMore;

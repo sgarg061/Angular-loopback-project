@@ -307,7 +307,7 @@ md-toolbar h1 {
 
 .device-table tr:first-of-type th:last-of-type,
 .device-table tr td:last-of-type{
-  padding-right: 16px;
+  /*padding-right: 16px;*/
 }
 
 .device-table-row:hover{
@@ -831,4 +831,13 @@ md-contact-chips {
 
 .button-on-the-right {
   float: right;
+}
+
+.monitor-setting{
+  margin-top:16px;
+}
+
+#monitor-setting{
+  position:absolute;
+  right:20px;
 }

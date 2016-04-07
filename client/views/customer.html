@@ -60,19 +60,20 @@
               <th align="left"></th>
                <th align="left" ng-click="changeSorting('currentAppVersion')">Software Version</th>
               <th align="left"></th>
-            
+              <th align="center" ng-show="canModifyMonitorSetting()">Enable Monitoring</th>
+              <th align="left"></th>
             </tr>
             <tr class="device-table-row" ng-repeat="device in customer.devices | orderBy: sort.column:sort.descending | filter: searchFilter" ng-click="selectDevice(device)">
               <td>{{device.name}}</td>
               <td> {{device.ipAddress}}</td>
               <td>{{device.address}}</td>
-              <td ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
+              <td ng-click="selectDevice(device)" ng-style="setDeviceStatusStyling(device)">{{device.onlineStatus}}</td>
               <td>
                 <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.onlineStatus=='Online'"></md-icon>
                 <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.onlineStatus=='Offline'"></md-icon>
                 <md-icon md-svg-icon="warning" md-menu-align-target ng-show="device.onlineStatus=='Unknown'"></md-icon>
               </td>
-              <td ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online </td>
+              <td ng-click="selectDevice(device)" ng-style="setCameraStatusStyling(device)">{{device.onlineCameraCount}}/{{device.cameras.length}} Online </td>
               <td>
                <md-icon md-svg-icon="checkmark" md-menu-align-target ng-show="device.status=='green'"></md-icon>
                  <md-icon md-svg-icon="error" md-menu-align-target ng-show="device.status=='red'"></md-icon>
@@ -85,6 +86,8 @@
               <td> {{device.retentionDays}} {{device.retentionDays > 1?'Days':device.retentionDays === 'Unknown'? '':'Day'}}</td>
               <td></td>
               <td> {{device.currentAppVersion}}</td>
+              <td></td>
+              <td align="center" ng-show="canModifyMonitorSetting()"><md-checkbox aria-label="enable monitoring" class="monitor-setting" ng-model="device.enableMonitoring" ng-click="toggleMonitorSetting(device, !device.enableMonitoring); $event.stopPropagation();"></md-checkbox></td>
             </tr>
             </table>
           </md-content>
