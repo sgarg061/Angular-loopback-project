@@ -158,7 +158,7 @@ describe('Software Version', function() {
 		        }
 		        done();
 		      });
-		    })
+		    });
 	    });
 	    it('it should let solink, cloud, and resellers to make get request', function(done) {
 
