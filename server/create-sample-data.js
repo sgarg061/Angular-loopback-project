@@ -83,14 +83,14 @@ module.exports = function(app, doneCallback) {
         return cb(err);
       }
       app.models.SoftwareVersion.create([
-        {name: 'Version 1.0', code: 1, url: 'http://update.solinkcloud.net/version-1.0'},
-        {name: 'Version 1.1 RC1',  code: 2, url: 'http://update.solinkcloud.net/version-1.1-RC1'},
-        {name: 'Version 1.1 RC2',  code: 3, url: 'http://update.solinkcloud.net/version-1.1-RC2'},
-        {name: 'Version 1.2 Test', code: 4, url: 'http://update.solinkcloud.net/version-1.2-Test'},
-        {name: 'Version 2.0',      code: 5,  url: 'http://update.solinkcloud.net/version-2.0'},
-        {name: 'Version 2.1',      code: 6,  url: 'http://update.solinkcloud.net/version-2.1'},
-        {name: 'Version 2.2',      code: 7,  url: 'http://update.solinkcloud.net/version-2.2'},
-        {name: 'Version 2.3',      code: 8,  url: 'http://update.solinkcloud.net/version-2.3'},
+        { name: 'Version 1.0',      code: 1, url: 'http://update.solinkcloud.net/version-1.0'},
+        { name: 'Version 1.1 RC1',  code: 2, url: 'http://update.solinkcloud.net/version-1.1-RC1'},
+        { name: 'Version 1.1 RC2',  code: 3, url: 'http://update.solinkcloud.net/version-1.1-RC2'},
+        { name: 'Version 1.2 Test', code: 4, url: 'http://update.solinkcloud.net/version-1.2-Test'},
+        { name: 'Version 2.0',      code: 5,  url: 'http://update.solinkcloud.net/version-2.0'},
+        { name: 'Version 2.1',      code: 6,  url: 'http://update.solinkcloud.net/version-2.1'},
+        { name: 'Version 2.2',      code: 7,  url: 'http://update.solinkcloud.net/version-2.2'},
+        { name: 'Version 2.3',      code: 8,  url: 'http://update.solinkcloud.net/version-2.3'},
       ], cb);
     });
   }
