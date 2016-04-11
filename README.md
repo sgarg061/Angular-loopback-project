@@ -20,8 +20,6 @@
  	In this case, go add a path called: C:\Users\yourusername\AppData\Roaming\npm
  	and then try again.
 - Redis process (port: 6379) (required for socket clustering for updating the UI dynamically)
-- Redis processes (port: 6380) (able to run without this, but will keep logging error message:
- `WARNING: Unable to create redis connection`)
 - Postgres (port: 5432, password for superuser(postgres): solink, database name: call-home)
 To set up PostgreSQL to run:
 	0. Install version 9.4 or higher from here: http://www.postgresql.org/download/
