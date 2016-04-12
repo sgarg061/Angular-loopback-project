@@ -12,22 +12,22 @@ describe('Software Version', function() {
 	    	async.each(invalidLoginTypes, function loginWithInvalidType(loginType, cb) {
 		        common.login(loginType, function (token) {
 		          	common.json('post', '/api/softwareversions', token)
-		            .send({
-		            	name: 'v0.0.2',
-						code: 2,
-						url: 'http://solink.softwareversion.test.com/test/software-version/v0.0.2/'
-					})
-		            .expect(401)
-		            .end(function (err) {
-		              cb(err);
-		            });
-		        });
-	      	}, function (err) {
+		          	.send({
+		          		name: 'v0.0.2',
+		          		code: 2,
+		          		url: 'http://solink.softwareversion.test.com/test/software-version/v0.0.2/'
+		          	})
+		          	.expect(401)
+		          	.end(function (err) {
+		          		cb(err);
+		          	});
+		          });
+		    }, function (err) {
 	        	if (err) {
 	          	throw err;
-        	}
+	          }
 	        	done();
-      		});
+	        });
 	    });
 	    it('it should let cloud and solink user to make post request', function(done) {
 			var validLoginTypes = ['cloud', 'solink'];
@@ -52,7 +52,7 @@ describe('Software Version', function() {
 	      });
 	    });
 	    it('it should not let users other than cloud and solink to make delete requests', function(done) {
-			app.models.SoftwareVersion.find({}, function (err, res) {
+	    	app.models.SoftwareVersion.find({}, function (err, res) {
 				var softwareVersionId = res[0].id;
       			var inValidLoginTypes = ['reseller', 'user', 'admin'];
 		    	async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
@@ -136,8 +136,7 @@ describe('Software Version', function() {
 		    });
 	    });
 	    it('it should let solink, cloud, and resellers to make get request', function(done) {
-
-	    	var validLoginTypes = ['cloud', 'solink', 'reseller'];
+			var validLoginTypes = ['cloud', 'solink', 'reseller'];
 	    	async.each(validLoginTypes, function loginWithValidType(loginType, cb) {
 		        common.login(loginType, function (token) {
 		         	common.json('get', '/api/softwareversions', token)
@@ -155,9 +154,8 @@ describe('Software Version', function() {
 	      });
 	    });
 	    it('it should not let any other type make get request', function(done) {
-
-	    	var inValidLoginTypes = ['user', 'admin'];
-	    	async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
+			var inValidLoginTypes = ['user', 'admin'];
+			async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
 		        common.login(loginType, function (token) {
 		        	common.json('get', '/api/softwareversions', token)
 		            .send({})
@@ -175,7 +173,7 @@ describe('Software Version', function() {
 	    });
 	    it('it should fail if token is invalid', function(done) {
 			var inValidLoginTypes = ['user', 'admin'];
-	    	async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
+			async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
 		        common.login(loginType, function () {
 		          common.json('get', '/api/softwareversions', 'invalid token')
 		            .send({})
