@@ -19,11 +19,7 @@ describe('Software Version', function() {
 					})
 		            .expect(401)
 		            .end(function (err) {
-		              if (err) {
-		                cb(err);
-		              } else {
-		                cb();
-		              }
+		              cb(err);
 		            });
 		        });
 	      	}, function (err) {
@@ -34,27 +30,22 @@ describe('Software Version', function() {
       		});
 	    });
 	    it('it should let cloud and solink user to make post request', function(done) {
-
-	    	var validLoginTypes = ['cloud', 'solink'];
+			var validLoginTypes = ['cloud', 'solink'];
 	    	async.each(validLoginTypes, function loginWithValidType(loginType, cb) {
-	        common.login(loginType, function (token) {
-	          common.json('post', '/api/softwareversions', token)
-	            .send({
-	            	name: 'v0.0.2',
-					code: 2,
-					url: 'http://solink.softwareversion.test.com/test/software-version/v0.0.2/'
-				})
-	            .expect(200)
-	            .end(function (err) {
-	              if (err) {
-	                cb(err);
-	              } else {
-	                cb();
-	              }
-	            });
-	        });
-	      	}, function (err) {
-	        if (err) {
+		        common.login(loginType, function (token) {
+		          	common.json('post', '/api/softwareversions', token)
+		          	.send({
+		            	name: 'v0.0.2',
+		            	code: 2,
+		            	url: 'http://solink.softwareversion.test.com/test/software-version/v0.0.2/'
+		            })
+		            .expect(200)
+		            .end(function (err) {
+		            	cb(err);
+		            });
+		        });
+		    }, function (err) {
+		    	if (err) {
 	          throw err;
 	        }
 	        done();
@@ -70,11 +61,7 @@ describe('Software Version', function() {
 			            .send({})
 			            .expect(401)
 			            .end(function (err) {
-			              if (err) {
-			                cb(err);
-			              } else {
-			                cb();
-			              }
+			              cb(err);
 			            });
 			        });
 		      	}, function (err) {
@@ -95,11 +82,7 @@ describe('Software Version', function() {
 			            .send({})
 			            .expect(401)
 			            .end(function (err) {
-			              if (err) {
-			                cb(err);
-			              } else {
-			                cb();
-			              }
+			            	cb(err);
 			            });
 			        });
 		      	}, function (err) {
@@ -115,18 +98,14 @@ describe('Software Version', function() {
 				var softwareVersionId = res[0].id;
 	      		var inValidLoginTypes = ['solink', 'cloud'];
 		    	async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
-		        common.login(loginType, function (token) {
-		          common.json('put', '/api/softwareversions/'+ softwareVersionId, token)
-		            .send({})
-		            .expect(200)
-		            .end(function (err) {
-		              if (err) {
-		                cb(err);
-		              } else {
-		                cb();
-		              }
-		            });
-		        });
+			        common.login(loginType, function (token) {
+			          common.json('put', '/api/softwareversions/'+ softwareVersionId, token)
+			            .send({})
+			            .expect(200)
+			            .end(function (err) {
+			              cb(err);
+			            });
+			        });
 		      	}, function (err) {
 		        if (err) {
 		          throw err;
@@ -145,14 +124,10 @@ describe('Software Version', function() {
 		            .send({})
 		            .expect(200)
 		            .end(function (err) {
-		              if (err) {
-		                cb(err);
-		              } else {
-		                cb();
-		              }
+		            	cb(err);
 		            });
 		        });
-		      }, function (err) {
+		      	}, function (err) {
 		        if (err) {
 		          throw err;
 		        }
@@ -164,19 +139,15 @@ describe('Software Version', function() {
 
 	    	var validLoginTypes = ['cloud', 'solink', 'reseller'];
 	    	async.each(validLoginTypes, function loginWithValidType(loginType, cb) {
-	        common.login(loginType, function (token) {
-	          common.json('get', '/api/softwareversions', token)
-	            .send({})
-	            .expect(200)
-	            .end(function (err) {
-	              if (err) {
-	                cb(err);
-	              } else {
-	                cb();
-	              }
-	            });
-	        });
-	      }, function (err) {
+		        common.login(loginType, function (token) {
+		         	common.json('get', '/api/softwareversions', token)
+		            .send({})
+		            .expect(200)
+		            .end(function (err) {
+		            	cb(err);
+		            });
+		        });
+	      	}, function (err) {
 	        if (err) {
 	          throw err;
 	        }
@@ -187,19 +158,15 @@ describe('Software Version', function() {
 
 	    	var inValidLoginTypes = ['user', 'admin'];
 	    	async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
-	        common.login(loginType, function (token) {
-	          common.json('get', '/api/softwareversions', token)
-	            .send({})
-	            .expect(401)
-	            .end(function (err) {
-	              if (err) {
-	                cb(err);
-	              } else {
-	                cb();
-	              }
-	            });
-	        });
-	      }, function (err) {
+		        common.login(loginType, function (token) {
+		        	common.json('get', '/api/softwareversions', token)
+		            .send({})
+		            .expect(401)
+		            .end(function (err) {
+		            	cb(err);
+		            });
+		        });
+	      	}, function (err) {
 	        if (err) {
 	          throw err;
 	        }
@@ -209,19 +176,15 @@ describe('Software Version', function() {
 	    it('it should fail if token is invalid', function(done) {
 			var inValidLoginTypes = ['user', 'admin'];
 	    	async.each(inValidLoginTypes, function loginWithValidType(loginType, cb) {
-	        common.login(loginType, function () {
-	          common.json('get', '/api/softwareversions', 'invalid token')
-	            .send({})
-	            .expect(401)
-	            .end(function (err) {
-	              if (err) {
-	                cb(err);
-	              } else {
-	                cb();
-	              }
-	            });
-	        });
-	      }, function (err) {
+		        common.login(loginType, function () {
+		          common.json('get', '/api/softwareversions', 'invalid token')
+		            .send({})
+		            .expect(401)
+		            .end(function (err) {
+		            	cb(err);
+		            });
+		        });
+	      	}, function (err) {
 	        if (err) {
 	          throw err;
 	        }
