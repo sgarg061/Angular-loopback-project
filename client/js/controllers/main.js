@@ -4,6 +4,16 @@ angular.module('app')
 
     $rootScope.$on("$stateChangeStart", function(event, curr, prev){
       var user = userService.getUser();
+
+      var name;
+      if (user.userType === "cloud")
+        {name = user.cloudId;}
+      else if (user.userType === "reseller")
+        name = user.resellerId;
+      else if (user.userType === "solink")
+        name = "Solink";
+
+
       if (user && user.userType) {
         $http.get('/assets/config.json')
         .then(function (res) {
@@ -12,7 +22,10 @@ angular.module('app')
             app_id: config.intercomId,
             email: user.email,
             created_at: user.createdAt,
-            user_id: user.id
+            user_id: user.id,
+            company:{
+              id: name,
+            },
           });
         })
         .catch(function (err) {
