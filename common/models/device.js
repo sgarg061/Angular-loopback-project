@@ -11,6 +11,42 @@ var liveDataService = require('../../server/services/liveDataService');
 module.exports = function(Device) {
     'use strict';
     Device.observe('before save', function addId(ctx, next) {
+
+        if (loopback.getCurrentContext().get('jwt').userType === 'cloud' || loopback.getCurrentContext().get('jwt').userType === 'solink') {
+            var userId = loopback.getCurrentContext().get('jwt').cloudId;
+            Device.app.models.Cloud.findOne({where: {id:userId}}, function(err, user){
+                if (err){
+                    throw err;
+                }
+                if (ctx.currentInstance.softwareVersionId){
+                    Device.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
+                        console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'
+                            + ' on device '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
+                    });
+                } else {
+                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <null>' 
+                        + ' on device '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
+                }
+            });
+        } else {
+            var userId = loopback.getCurrentContext().get('jwt').resellerId; 
+            Device.app.models.Reseller.findOne({where: {id:userId}}, function(err, user){
+                if (err){
+                    throw err;
+                }
+                Device.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
+                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'
+                        + ' on device '+ ctx.currentInstance.name + 'with device Id: '+ctx.currentInstance.id);
+                });
+            })
+        }
+
+        Device.app.models.Reseller.findOne({where: {id:userId}}, function(err, user){
+            if (err){
+                throw err;
+            }
+            //console.log(user.email)
+        })
         if (ctx.instance && !ctx.instance.id) {
             ctx.instance.id = uuid.v1();
         }
@@ -583,6 +619,9 @@ module.exports = function(Device) {
                 if (Object.keys(ports).length > 0) {
                     result.overridePorts = ports;
                 }
+                if (device.email){
+                    logger.debug(device.email);
+                }
 
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                     if (err) {
@@ -592,7 +631,7 @@ module.exports = function(Device) {
                         result.updateVersion = softwareVersion.name;
                     }
 
-                    logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
+                    //logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
 
 
                     cb(null, result);
