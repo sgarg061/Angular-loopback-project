@@ -1,25 +1,7 @@
-// CommonJS package manager support
-if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports) {
-  // Export the *name* of this Angular module
-  // Sample usage:
-  //
-  //   import lbServices from './lb-services';
-  //   angular.module('app', [lbServices]);
-  //
-  module.exports = "lbServices";
-}
-
 (function(window, angular, undefined) {'use strict';
 
 var urlBase = "/api";
 var authHeader = 'authorization';
-
-function getHost(url) {
-  var m = url.match(/^(?:https?:)?\/\/([^\/]+)/);
-  return m ? m[1] : null;
-}
-
-var urlBaseHost = getHost(urlBase) || location.host;
 
 /**
  * @ngdoc overview
@@ -1566,11 +1548,11 @@ module.factory(
          *
          *  - `changes` – `{ReadableStream=}` - 
          */
+         
         "createChangeStream": {
           url: urlBase + "/SoftwareVersions/change-stream",
           method: "POST"
         },
-
         // INTERNAL. Use Cloud.softwareVersion() instead.
         "::get::Cloud::softwareVersion": {
           url: urlBase + "/Clouds/:id/softwareVersion",
@@ -1595,7 +1577,6 @@ module.factory(
           url: urlBase + "/Clouds/:id/softwareVersion",
           method: "PUT"
         },
-
         // INTERNAL. Use Cloud.softwareVersion.destroy() instead.
         "::destroy::Cloud::softwareVersion": {
           url: urlBase + "/Clouds/:id/softwareVersion",
@@ -2362,37 +2343,6 @@ module.factory(
           url: urlBase + "/Clouds/change-stream",
           method: "POST"
         },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Cloud#prototype$listUsers
-         * @methodOf lbServices.Cloud
-         *
-         * @description
-         *
-         * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `users` – `{Array=}` - 
-         */
         "prototype$listUsers": {
           url: urlBase + "/Clouds/:id/listUsers",
           method: "GET"
@@ -17027,7 +16977,7 @@ module.factory(
 
 module
   .factory('LoopBackAuth', function() {
-    var props = ['accessTokenId', 'currentUserId', 'rememberMe'];
+    var props = ['accessTokenId', 'currentUserId'];
     var propsPrefix = '$LoopBack$';
 
     function LoopBackAuth() {
@@ -17035,6 +16985,7 @@ module
       props.forEach(function(name) {
         self[name] = load(name);
       });
+      this.rememberMe = undefined;
       this.currentUserData = null;
     }
 
@@ -17070,13 +17021,9 @@ module
     // Note: LocalStorage converts the value to string
     // We are using empty string as a marker for null/undefined values.
     function save(storage, name, value) {
-      try {
-        var key = propsPrefix + name;
-        if (value == null) value = '';
-        storage[key] = value;
-      } catch(err) {
-        console.log('Cannot access local/session storage:', err);
-      }
+      var key = propsPrefix + name;
+      if (value == null) value = '';
+      storage[key] = value;
     }
 
     function load(name) {
@@ -17092,9 +17039,8 @@ module
       return {
         'request': function(config) {
 
-          // filter out external requests
-          var host = getHost(config.url);
-          if (host && host !== urlBaseHost) {
+          // filter out non urlBase requests
+          if (config.url.substr(0, urlBase.length) !== urlBase) {
             return config;
           }
 
@@ -17162,19 +17108,6 @@ module
      */
     this.setUrlBase = function(url) {
       urlBase = url;
-      urlBaseHost = getHost(urlBase) || location.host;
-    };
-
-    /**
-     * @ngdoc method
-     * @name lbServices.LoopBackResourceProvider#getUrlBase
-     * @methodOf lbServices.LoopBackResourceProvider
-     * @description
-     * Get the URL of the REST API server. The URL provided
-     * to the code generator (`lb-ng` or `grunt-loopback-sdk-angular`) is used.
-     */
-    this.getUrlBase = function() {
-      return urlBase;
     };
 
     this.$get = ['$resource', function($resource) {
