@@ -25,7 +25,7 @@ module.exports = function(Device) {
                     });
                 } else {
                     console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <null>' 
-                        + ' on device '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
+                    + ' on device '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
                 }
             });
         } else {
@@ -619,10 +619,6 @@ module.exports = function(Device) {
                 if (Object.keys(ports).length > 0) {
                     result.overridePorts = ports;
                 }
-                if (device.email){
-                    logger.debug(device.email);
-                }
-
                 Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                     if (err) {
                         logger.error('Failed to find software version by id: %s', softwareVersionId);
@@ -631,7 +627,7 @@ module.exports = function(Device) {
                         result.updateVersion = softwareVersion.name;
                     }
 
-                    //logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
+                    logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
 
 
                     cb(null, result);
