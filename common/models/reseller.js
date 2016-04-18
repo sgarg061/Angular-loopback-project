@@ -9,31 +9,37 @@ var _ = require('lodash');
 module.exports = function(Reseller) {
 
   Reseller.observe('before save', function addId(ctx, next) {
-    if (loopback.getCurrentContext().get('jwt').userType === 'cloud' ||loopback.getCurrentContext().get('jwt').userType === 'solink') {
-      var userId = loopback.getCurrentContext().get('jwt').cloudId;
-      Reseller.app.models.Cloud.findOne({where: {id:userId}}, function(err, user){
-          if (err){
-              throw err;
-          }
-          Reseller.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
-            if (ctx.currentInstance.softwareVersionId){
-              Reseller.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
-              console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'
-                  + ' on Reseller '+ ctx.currentInstance.name + ' with reseller id: '+ctx.currentInstance.id);
-              });
-            } else {
-              console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <null>' 
-              + ' on Reseller '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
-            }
-          });
-      });
-    }
+
     resellerAccessPermissions(ctx, function permissionsGranted(err) {
+     
       if (err) {
         var error = new Error('Unauthorized');
         error.statusCode = 401;
         next(error);
       } else {
+        if (loopback.getCurrentContext() && ctx.currentInstance){
+          if (loopback.getCurrentContext().get('jwt').userType === 'cloud' ||loopback.getCurrentContext().get('jwt').userType === 'solink') {
+            var userId = loopback.getCurrentContext().get('jwt').cloudId;
+            Reseller.app.models.Cloud.findOne({where: {id:userId}}, function(err, user){
+                if (err){
+                    throw err;
+                }
+                Reseller.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
+                  if (err) {
+                    throw err;
+                  }
+                  if (ctx.currentInstance.softwareVersionId){
+                    Reseller.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
+                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'+ ' on Reseller '+ ctx.currentInstance.name + ' with reseller id: '+ctx.currentInstance.id);
+                    });
+                  } else {
+                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <null>'+' on Reseller '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
+                  }
+                });
+
+            });
+          } 
+      } 
         if (ctx.instance && !ctx.instance.id) {
           ctx.instance.id = uuid.v1();
 
@@ -52,11 +58,13 @@ module.exports = function(Reseller) {
               }
             });
           }
+
         } else {
           next();
         }
       }
     });
+
   });
 
   Reseller.observe('access', function resellerPermissions(ctx, next) {

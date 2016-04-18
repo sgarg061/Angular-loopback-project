@@ -9,41 +9,41 @@ var _ = require('lodash');
 module.exports = function(Customer) {
 
   Customer.observe('before save', function addId(ctx, next) {
-    if (loopback.getCurrentContext().get('jwt').userType === 'cloud' ||loopback.getCurrentContext().get('jwt').userType === 'solink') {
-      var userId = loopback.getCurrentContext().get('jwt').cloudId;
-            Customer.app.models.Cloud.findOne({where: {id:userId}}, function(err, user){
-                if (err){
-                    throw err;
-                }
-                if (ctx.currentInstance.softwareVersionId){
-                  Customer.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
-                      console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'
-                          + ' on Customer '+ ctx.currentInstance.name + ' with customer Id: '+ctx.currentInstance.id);
-                  });
-                } else {
-                  console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <null>' 
-                    + ' on Customer '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
-                }
-            });
     
-    } else {
-      var userId = loopback.getCurrentContext().get('jwt').resellerId; 
-      Device.app.models.Reseller.findOne({where: {id:userId}}, function(err, user){
-          if (err){
-              throw err;
-          }
-          Device.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
-                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'
-                        + ' on device '+ ctx.currentInstance.name + 'with device Id: '+ctx.currentInstance.id);
-                });
-      })
-    }
     customerAccessPermissions(ctx, function permissionsGranted(err) {
       if (err) {
         var error = new Error('Unauthorized');
         error.statusCode = 401;
         next(error);
       } else {
+        if (loopback.getCurrentContext() && ctx.currentInstance){
+          if (loopback.getCurrentContext().get('jwt').userType === 'cloud' ||loopback.getCurrentContext().get('jwt').userType === 'solink') {
+            var userId = loopback.getCurrentContext().get('jwt').cloudId;
+            Customer.app.models.Cloud.findOne({where: {id:userId}}, function(err, user){
+              if (err){
+                  throw err;
+              }
+              if (ctx.currentInstance.softwareVersionId){
+                Customer.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
+                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'+ ' on Customer '+ ctx.currentInstance.name + ' with customer Id: '+ctx.currentInstance.id);
+                });
+              } else {
+                console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <null> on Customer '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
+              }
+            });
+          } else {
+            var userId = loopback.getCurrentContext().get('jwt').resellerId; 
+            Customer.app.models.Reseller.findOne({where: {id:userId}}, function(err, user){
+              if (err){
+                  throw err;
+              }
+              Customer.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
+                console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>'
+                    + ' on device '+ ctx.currentInstance.name + 'with device Id: '+ctx.currentInstance.id);
+              });
+            })
+          }
+        }
         if (ctx.instance && !ctx.instance.id) {
           ctx.instance.id = uuid.v1();
 
