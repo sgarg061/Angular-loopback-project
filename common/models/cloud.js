@@ -8,17 +8,6 @@ var loopback = require('loopback');
 module.exports = function(Cloud) {
 
     Cloud.observe('before save', function addId(ctx, next) {
-        if (loopback.getCurrentContext() && ctx.currentInstance){
-            var userId = loopback.getCurrentContext().get('jwt').cloudId;
-            Cloud.app.models.Cloud.findOne({where: {id:userId}}, function(err, user){
-                if (err){
-                    throw err;
-                }
-                Cloud.app.models.SoftwareVersion.findOne({where:{id:ctx.currentInstance.softwareVersionId}}, function(err, softwareVersion) {
-                    console.log('[Audit]: '+ '<'+ user.email+ '>, '+ 'software version changed to <'+ softwareVersion.name+ '>' + ' on device '+ ctx.currentInstance.name + ' with device Id: '+ctx.currentInstance.id);
-                });
-            });
-        }
         if (ctx.instance && !ctx.instance.id) {
             ctx.instance.id = uuid.v1();
 
