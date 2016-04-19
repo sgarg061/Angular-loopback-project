@@ -55,7 +55,7 @@ angular
       var id = $scope.customer.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
         SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
-          if (!softwareversion) {
+          if (!_.isEmpty(softwareversion)) {
             var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
             if (_.isEmpty(version)) {
               var version = softwareversion.filter(function (index) {return index.id === $scope.defaultSoftwareVersion.id});
