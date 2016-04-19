@@ -1,7 +1,6 @@
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
-var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
@@ -294,19 +293,18 @@ module.exports = function(Device) {
                     error.statusCode = 404;
                     cb(error);
                 } else {
-                    var device = res[0];
-                    checkinDevice(device, data, cb);
+                    checkinDevice(res[0], data, cb);
                 }
             }
         });
     };
 
     Device.prototype.toJSON = function() {
-        var device = this.toObject(false, true, false);
+        let device = this.toObject(false, true, false);
         if(device.logEntries) {
             device.logEntries = device.logEntries.map(function (logEntry) {
                 if(logEntry.checkinData) {
-                    for (var key in logEntry.checkinData) {
+                    for (let key in logEntry.checkinData) {
                         logEntry[key] = logEntry.checkinData[key];
                     }
                     delete logEntry.checkinData;
@@ -318,7 +316,7 @@ module.exports = function(Device) {
     };
 
     function logCheckin(id, data) {
-        var deviceLogEntry = createDeviceLogEntry(id, data);
+        let deviceLogEntry = createDeviceLogEntry(id, data);
         Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err) {
             if (err) {
                 logger.error('Failed to insert logEntry for device checkin: %s', err);
@@ -329,7 +327,7 @@ module.exports = function(Device) {
     }
 
     function createDeviceLogEntry(id, data) {
-        var deviceLogEntry = {checkinData: _.clone(data)};
+        let deviceLogEntry = {checkinData: _.clone(data)};
 
         if (deviceLogEntry.checkinData.appVersion) {
             deviceLogEntry.appVersion = deviceLogEntry.checkinData.appVersion;
@@ -359,7 +357,7 @@ module.exports = function(Device) {
         deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
         delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
-        var cameras = deviceLogEntry.checkinData.cameraInformation;
+        let cameras = deviceLogEntry.checkinData.cameraInformation;
         if (typeof cameras !== undefined && cameras instanceof Array){
             deviceLogEntry.onlineCameras = cameras.filter(function(element){return element.status === 'online';}).length;
             deviceLogEntry.totalCameras = cameras.length;
@@ -383,7 +381,7 @@ module.exports = function(Device) {
 
     function checkinDevice (device, deviceData, cb) {
         // update general metadata about the device
-        var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
+        let checkedInProperties = generateCheckedInPropertiesObject(deviceData);
         checkedInProperties = replacePropertiesWithOverride(checkedInProperties, device);
 
         device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
@@ -426,7 +424,7 @@ module.exports = function(Device) {
     }
 
     function generateCheckedInPropertiesObject(deviceData) {
-        var checkedInProperties = {
+        let checkedInProperties = {
             lastCheckin: new Date()
         };
 
@@ -474,13 +472,13 @@ module.exports = function(Device) {
 
     function updateCameras (device, deviceData, cb) {
         logger.debug('updating cameras');
-        var cameras = deviceData.cameraInformation;
+        let cameras = deviceData.cameraInformation;
         if (!cameras) {
-            var error = new Error('Cameras not included in checkin');
+            let error = new Error('Cameras not included in checkin');
             error.statusCode = 400;
             return cb(error);
         }
-        for (var i=0; i<cameras.length; i++) {
+        for (let i=0; i<cameras.length; i++) {
             if (!cameras[i].thumbnail){
                 delete cameras[i].thumbnail;
             }
@@ -492,14 +490,14 @@ module.exports = function(Device) {
 
     function updatePOSDevices (device, deviceData, cb) {
         logger.debug('updating pos devices');
-        var posDevices = deviceData.posInformation;
+        let posDevices = deviceData.posInformation;
         if (!posDevices) {
-            var error = new Error('POS information not included in checkin');
+            let error = new Error('POS information not included in checkin');
             error.statusCode = 400;
             return cb(error);
         }
 
-        for (var i=0; i<posDevices.length; i++) {
+        for (let i=0; i<posDevices.length; i++) {
             updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
         }
 
@@ -510,7 +508,7 @@ module.exports = function(Device) {
 
 
     function generateConfigurationResponse(device, cb) {
-        var errorPrefix = 'Configuration parameters unavailable:';
+        let errorPrefix = 'Configuration parameters unavailable:';
 
         if (!device.customer()) {
             return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
@@ -522,20 +520,20 @@ module.exports = function(Device) {
             }
 
             // handle inherited attributes
-            var eventServerUrl = reseller.eventServerUrl || reseller.cloud().eventServerUrl;
-            var imageServerUrl = reseller.imageServerUrl || reseller.cloud().imageServerUrl;
-            //var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
-            var softwareVersionId = device.softwareVersionId || device.customer().softwareVersionId || reseller.softwareVersionId || reseller.cloud().softwareVersionId;
-            var checkinInterval = device.checkinInterval || device.customer().checkinInterval || reseller.checkinInterval || reseller.cloud().checkinInterval;
+            const eventServerUrl = reseller.eventServerUrl || reseller.cloud().eventServerUrl;
+            const imageServerUrl = reseller.imageServerUrl || reseller.cloud().imageServerUrl;
+            //const signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
+            const softwareVersionId = device.softwareVersionId || device.customer().softwareVersionId || reseller.softwareVersionId || reseller.cloud().softwareVersionId;
+            const checkinInterval = device.checkinInterval || device.customer().checkinInterval || reseller.checkinInterval || reseller.cloud().checkinInterval;
 
-            var result = {
+            let result = {
                 eventServerUrl: eventServerUrl,
                 imageServerUrl: imageServerUrl,
                 signallingServerUrl: reseller.cloud().signallingServerUrl,
                 checkinInterval: checkinInterval
             };
 
-            var ports = {};
+            let ports = {};
             if (device.overrideConnectPort) {
                 ports.connect = device.overrideConnectPort;
             }
@@ -583,7 +581,7 @@ module.exports = function(Device) {
     // Update a device's attached components. A component can be a Camera or POS.
     function updateDeviceComponent (componentType, component, componentIdName, deviceId) {
 
-        var componentId = component[componentIdName];
+        let componentId = component[componentIdName];
 
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
         if (componentId === undefined) {
@@ -595,7 +593,7 @@ module.exports = function(Device) {
         // set the deviceId on the component before inserting/updating
         component.deviceId = deviceId;
 
-        var where = {deviceId: deviceId};
+        let where = {deviceId: deviceId};
         where[componentIdName] = componentId;
 
         Device.app.models[componentType].find({where: where}, function(err, res) {
@@ -641,10 +639,10 @@ module.exports = function(Device) {
                 return;
             }
 
-            var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
-            for (var i = 0; i < res.length; i++) {
+            let includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
+            for (let i = 0; i < res.length; i++) {
                 if (includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
-                    var removeCondition = {};
+                    let removeCondition = {};
                     removeCondition[componentIdName] = res[i][componentIdName];
                     Device.app.models[componentType].remove(removeCondition);
                 }
