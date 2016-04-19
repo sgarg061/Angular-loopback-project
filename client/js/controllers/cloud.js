@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('CloudController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($window, $scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService) {
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
     $scope.totalResellers = 0;
@@ -61,9 +61,27 @@ angular
 
       var id = $scope.cloud.id;
       softwareService.dialog(id,softwareVersion, '').then(function(result) {
-       updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-       $scope.currentSoftwareVersion = softwareVersion;
+        SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
+           var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
+           updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+           $scope.currentSoftwareVersion = softwareVersion;
+           logToIntercom(version, $scope.currentSoftwareVersion);
+         });
       }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
+    }
+    function logToIntercom (version, softwareVersionId) {
+      SoftwareVersion.findOne({where:{id:softwareVersionId}}, function (softwareversion) {console.log(softwareversion)})
+        if ($window.Intercom) {
+          $window.Intercom('trackEvent', 'software-version-update',  {
+            name: version[0].name,
+            id: softwareVersionId,
+            email: userService.getUser().email,
+            level: 'Cloud',
+            userId: $stateParams.resellerId
+          });
+        }
+      
+      $window.Intercom('shutdown');
     }
 
 

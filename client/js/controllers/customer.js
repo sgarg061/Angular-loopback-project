@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CustomerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('CustomerController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'License', 'POSFilter', 'POSConnector','SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($window, $scope, $state, $stateParams, Cloud, Reseller, Customer, Device, License, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
     
     $scope.clouds = [];
     $scope.resellers = [];
@@ -54,15 +54,34 @@ angular
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.customer.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
-        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
-          updateCustomer(id, {softwareVersionId: null}, 'Software version has been updated to default version');
-          $scope.currentSoftwareVersion = softwareVersion;
-        } else {
-          updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-          $scope.currentSoftwareVersion = softwareVersion;
-        }
+        SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
+          var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
+          if (_.isEmpty(version)) {
+            var version = softwareversion.filter(function (index) {return index.id === $scope.defaultSoftwareVersion.id});
+          }
+          if (result === 'Default: ' + $scope.defaultSoftwareVersion.name){
+            updateCustomer(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+            $scope.currentSoftwareVersion = softwareVersion;
+            logToIntercom(version, softwareVersion);
+          } else {
+            updateCustomer(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+            $scope.currentSoftwareVersion = softwareVersion;
+            logToIntercom(version, softwareVersion);
+          }
+        });
 
       }, function(result){$scope.customer.softwareVersionId = $scope.currentSoftwareVersion;});
+    }
+    function logToIntercom (version, softwareVersionId) {
+      if ($window.Intercom) {
+        $window.Intercom('trackEvent', 'software-version-update',  {
+          name: version[0].name,
+          id: softwareVersionId,
+          email: userService.getUser().email,
+          level: 'Customer',
+          userId: $stateParams.customerId
+        });
+      }
     }
 
     function updateCustomer(id, changedDictionary, message) {

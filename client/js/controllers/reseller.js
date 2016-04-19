@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('ResellerController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
+    function($window, $scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
 
     $scope.reseller = {};
 
@@ -52,15 +52,21 @@ angular
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.reseller.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
-        if (result === 'Default: ' + $scope.defaultSoftwareVersion.name) {
-          updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
-          $scope.currentSoftwareVersion = softwareVersion;
-
-        } else {
-          updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-          $scope.currentSoftwareVersion = softwareVersion;
-        }
-
+        SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
+          var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
+          if (_.isEmpty(version)) {
+            var version = softwareversion.filter(function (index) {return index.id === $scope.defaultSoftwareVersion.id});
+          }
+          if (result === 'Default: ' + $scope.defaultSoftwareVersion.name) {
+            updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+            $scope.currentSoftwareVersion = softwareVersion;
+            logToIntercom(version, $scope.currentSoftwareVersion);
+          } else {
+            updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+            $scope.currentSoftwareVersion = softwareVersion;
+            logToIntercom(version, $scope.currentSoftwareVersion);
+          }
+        });
       }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
@@ -71,7 +77,18 @@ angular
           toastr.error(res.statusText, 'Error Invalid Value');
       });
     }
-
+    function logToIntercom (version, softwareVersionId) {
+      if ($window.Intercom) {
+        $window.Intercom('trackEvent', 'software-version-update',  {
+          name: version[0].name,
+          id: softwareVersionId,
+          email: userService.getUser().email,
+          level: 'Reseller',
+          userId: $stateParams.resellerId
+        });
+      }
+    $window.Intercom('shutdown');
+    }
     function getReseller(cb) {
       Reseller
         .find({
