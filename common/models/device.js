@@ -278,12 +278,8 @@ module.exports = function(Device) {
         data = deviceDataParser.parseDeviceData(data);
         // log the checkin data
         logCheckin(id, data);
-        // TODO: get the customerId from the current jwt token and use it in the device query
-        // tod ensure that you can only update a device that belongs to you.
-        // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
-        // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
-        //Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
-        Device.find({where: {id: id}}, function (err, res) {
+
+        Device.find({where: {id: id}, include: 'customer'}, function (err, res) {
             var error;
 
             if (err) {
@@ -299,14 +295,7 @@ module.exports = function(Device) {
                     cb(error);
                 } else {
                     var device = res[0];
-                    Device.app.models.Customer.findById(device.customerId, function (err, customer) {
-                        if (err) {
-                            cb(new Error('Failed to find customer with id : ' + device.customerId));
-                        } else {
-                            device._customer = customer;
-                            checkinDevice(device, data, cb);
-                        }
-                    });
+                    checkinDevice(device, data, cb);
                 }
             }
         });
@@ -523,80 +512,70 @@ module.exports = function(Device) {
     function generateConfigurationResponse(device, cb) {
         var errorPrefix = 'Configuration parameters unavailable:';
 
-        var customer = device._customer;
-        if (!customer) {
+        if (!device.customer()) {
             return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
         }
 
-        // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
-        // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
-        //Device.app.models['Reseller'].findOne({where: {id: customer.resellerId}, include: 'cloud'}, function(err, reseller) {
-        Device.app.models.Reseller.findOne({where: {id: customer.resellerId}}, function (err, reseller) {
+        Device.app.models.Reseller.findOne({where: {id: device.customer().resellerId}, include: 'cloud'}, function (err, reseller) {
             if (err) {
-                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, customer.id, customer.resellerId));
+                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, device.customer().id, device.customer().resellerId));
             }
 
-            Device.app.models.Cloud.findOne({where: {id: reseller.cloudId}}, function (err, cloud) {
+            // handle inherited attributes
+            var eventServerUrl = reseller.eventServerUrl || reseller.cloud().eventServerUrl;
+            var imageServerUrl = reseller.imageServerUrl || reseller.cloud().imageServerUrl;
+            //var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
+            var softwareVersionId = device.softwareVersionId || device.customer().softwareVersionId || reseller.softwareVersionId || reseller.cloud().softwareVersionId;
+            var checkinInterval = device.checkinInterval || device.customer().checkinInterval || reseller.checkinInterval || reseller.cloud().checkinInterval;
+
+            var result = {
+                eventServerUrl: eventServerUrl,
+                imageServerUrl: imageServerUrl,
+                signallingServerUrl: reseller.cloud().signallingServerUrl,
+                checkinInterval: checkinInterval
+            };
+
+            var ports = {};
+            if (device.overrideConnectPort) {
+                ports.connect = device.overrideConnectPort;
+            }
+
+            if (device.overrideVmsPort) {
+                ports.vms = device.overrideVmsPort;
+            }
+
+            if (device.overrideCheckinPort) {
+                ports.checkin = device.overrideCheckinPort;
+            }
+
+            if (device.overrideUploaderPort) {
+                ports.uploader = device.overrideUploaderPort;
+            }
+
+            if (device.overrideListenerPort) {
+                ports.listener = device.overrideListenerPort;
+            }
+
+            if (device.overrideConfigForwardPort) {
+                ports.configForward = device.overrideConfigForwardPort;
+            }
+
+            if (Object.keys(ports).length > 0) {
+                result.overridePorts = ports;
+            }
+
+            Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                 if (err) {
-                    return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+                    logger.error('Failed to find software version by id: %s', softwareVersionId);
+                } else {
+                    result.updateUrl = softwareVersion.url;
+                    result.updateVersion = softwareVersion.name;
                 }
 
-                // handle inherited attributes
-                var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
-                var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
-                //var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
-                var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
-                var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
-
-                var result = {
-                    eventServerUrl: eventServerUrl,
-                    imageServerUrl: imageServerUrl,
-                    signallingServerUrl: cloud.signallingServerUrl,
-                    checkinInterval: checkinInterval
-                };
-
-                var ports = {};
-                if (device.overrideConnectPort) {
-                    ports.connect = device.overrideConnectPort;
-                }
-
-                if (device.overrideVmsPort) {
-                    ports.vms = device.overrideVmsPort;
-                }
-
-                if (device.overrideCheckinPort) {
-                    ports.checkin = device.overrideCheckinPort;
-                }
-
-                if (device.overrideUploaderPort) {
-                    ports.uploader = device.overrideUploaderPort;
-                }
-
-                if (device.overrideListenerPort) {
-                    ports.listener = device.overrideListenerPort;
-                }
-
-                if (device.overrideConfigForwardPort) {
-                    ports.configForward = device.overrideConfigForwardPort;
-                }
-
-                if (Object.keys(ports).length > 0) {
-                    result.overridePorts = ports;
-                }
-
-                Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
-                    if (err) {
-                        logger.error('Failed to find software version by id: %s', softwareVersionId);
-                    } else {
-                        result.updateUrl = softwareVersion.url;
-                        result.updateVersion = softwareVersion.name;
-                    }
-
-                    logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
+                logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
 
 
-                    cb(null, result);
-                });
+                cb(null, result);
             });
         });
     }
