@@ -58,15 +58,20 @@ angular
       }, true);
     }
     $scope.updateVersion = function (softwareVersion) {
-
       var id = $scope.cloud.id;
       softwareService.dialog(id,softwareVersion, '').then(function(result) {
         SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
-           var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
-           updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-           $scope.currentSoftwareVersion = softwareVersion;
-           logToIntercom(version, $scope.currentSoftwareVersion);
-         });
+          if (!_.isEmpty(softwareversion)) {
+            var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
+          }
+          if (!_.isEmpty(version)){
+            updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+            $scope.currentSoftwareVersion = softwareVersion;
+            logToIntercom(version, $scope.currentSoftwareVersion);
+          } else {
+            toastr.error('no software version available');
+          }
+        });
       }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
     }
     function logToIntercom (version, softwareVersionId) {

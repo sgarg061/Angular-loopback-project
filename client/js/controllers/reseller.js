@@ -53,9 +53,11 @@ angular
       var id = $scope.reseller.id;
       softwareService.dialog(id,softwareVersion, $scope.defaultSoftwareVersion.name).then(function(result) {
         SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
-          var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
-          if (_.isEmpty(version)) {
-            var version = softwareversion.filter(function (index) {return index.id === $scope.defaultSoftwareVersion.id});
+          if (!_.isEmpty(softwareversion)) {
+            var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
+            if (_.isEmpty(version)) {
+              var version = softwareversion.filter(function (index) {return index.id === $scope.defaultSoftwareVersion.id});
+            }
           }
           if (result === 'Default: ' + $scope.defaultSoftwareVersion.name) {
             updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
