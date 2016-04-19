@@ -16,7 +16,8 @@ angular
     'dialogBox',
     'd3',
     'filterService',
-    'google.places'
+    'google.places',
+    'userPersistenceService'
   ])
   .config(['$stateProvider', '$httpProvider', '$urlRouterProvider', '$momentProvider', '$locationProvider', '$mdThemingProvider', '$mdIconProvider', 'blockUIConfig', 'ngClipProvider',
     function($stateProvider, $httpProvider, $urlRouterProvider, $momentProvider, $locationProvider, $mdThemingProvider, $mdIconProvider, blockUIConfig, toastr, ngClipProvider) {
