@@ -67,7 +67,7 @@ angular
           if (!_.isEmpty(version)){
             updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
             $scope.currentSoftwareVersion = softwareVersion;
-            logToIntercom(version, $scope.currentSoftwareVersion);
+            logToIntercom(version, softwareVersion);
           } else {
             toastr.error('no software version available');
           }
@@ -75,7 +75,6 @@ angular
       }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
     }
     function logToIntercom (version, softwareVersionId) {
-      SoftwareVersion.findOne({where:{id:softwareVersionId}}, function (softwareversion) {console.log(softwareversion)})
         if ($window.Intercom) {
           $window.Intercom('trackEvent', 'software-version-update',  {
             name: version[0].name,
@@ -85,8 +84,7 @@ angular
             userId: $stateParams.resellerId
           });
         }
-      
-      $window.Intercom('shutdown');
+      $window.Intercom('update');
     }
 
 

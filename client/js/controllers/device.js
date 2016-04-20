@@ -132,7 +132,7 @@ angular
           userId: $stateParams.deviceId
         });
       }
-      $window.Intercom('shutdown');
+      $window.Intercom('update');
     }
     function updateDevice(id, changedDictionary, message) {
       Device.prototype$updateAttributes({id: id}, changedDictionary)

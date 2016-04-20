@@ -84,6 +84,7 @@ angular
           userId: $stateParams.customerId
         });
       }
+      $window.Intercom('update');
     }
 
     function updateCustomer(id, changedDictionary, message) {

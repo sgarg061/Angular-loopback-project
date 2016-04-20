@@ -66,7 +66,7 @@ angular
           } else {
             updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
             $scope.currentSoftwareVersion = softwareVersion;
-            logToIntercom(version, $scope.currentSoftwareVersion);
+            logToIntercom(version, softwareVersion);
           }
         });
       }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
@@ -89,7 +89,7 @@ angular
           userId: $stateParams.resellerId
         });
       }
-    $window.Intercom('shutdown');
+    $window.Intercom('update');
     }
     function getReseller(cb) {
       Reseller
