@@ -1,7 +1,6 @@
 var logger = require('../../server/logger');
 var loopback = require('loopback');
 var uuid = require('node-uuid');
-var _ = require('underscore');
 var async = require('async');
 var _ = require('lodash');
 var deviceDataParser = require('../utils/deviceDataParser');
@@ -278,12 +277,8 @@ module.exports = function(Device) {
         data = deviceDataParser.parseDeviceData(data);
         // log the checkin data
         logCheckin(id, data);
-        // TODO: get the customerId from the current jwt token and use it in the device query
-        // tod ensure that you can only update a device that belongs to you.
-        // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
-        // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
-        //Device.find({where: {id: id}, include: 'customer'}, function(err, res) {
-        Device.find({where: {id: id}}, function (err, res) {
+
+        Device.find({where: {id: id}, include: 'customer'}, function (err, res) {
             var error;
 
             if (err) {
@@ -298,26 +293,18 @@ module.exports = function(Device) {
                     error.statusCode = 404;
                     cb(error);
                 } else {
-                    var device = res[0];
-                    Device.app.models.Customer.findById(device.customerId, function (err, customer) {
-                        if (err) {
-                            cb(new Error('Failed to find customer with id : ' + device.customerId));
-                        } else {
-                            device._customer = customer;
-                            checkinDevice(device, data, cb);
-                        }
-                    });
+                    checkinDevice(res[0], data, cb);
                 }
             }
         });
     };
 
     Device.prototype.toJSON = function() {
-        var device = this.toObject(false, true, false);
+        let device = this.toObject(false, true, false);
         if(device.logEntries) {
             device.logEntries = device.logEntries.map(function (logEntry) {
                 if(logEntry.checkinData) {
-                    for (var key in logEntry.checkinData) {
+                    for (let key in logEntry.checkinData) {
                         logEntry[key] = logEntry.checkinData[key];
                     }
                     delete logEntry.checkinData;
@@ -329,7 +316,7 @@ module.exports = function(Device) {
     };
 
     function logCheckin(id, data) {
-        var deviceLogEntry = createDeviceLogEntry(id, data);
+        let deviceLogEntry = createDeviceLogEntry(id, data);
         Device.app.models.DeviceLogEntry.create(deviceLogEntry, function(err) {
             if (err) {
                 logger.error('Failed to insert logEntry for device checkin: %s', err);
@@ -340,7 +327,7 @@ module.exports = function(Device) {
     }
 
     function createDeviceLogEntry(id, data) {
-        var deviceLogEntry = {checkinData: _.clone(data)};
+        let deviceLogEntry = {checkinData: _.clone(data)};
 
         if (deviceLogEntry.checkinData.appVersion) {
             deviceLogEntry.appVersion = deviceLogEntry.checkinData.appVersion;
@@ -370,7 +357,7 @@ module.exports = function(Device) {
         deviceLogEntry.reason = deviceLogEntry.checkinData.reason;
         delete deviceLogEntry.checkinData.reason;
         // swap the id for deviceId attribute
-        var cameras = deviceLogEntry.checkinData.cameraInformation;
+        let cameras = deviceLogEntry.checkinData.cameraInformation;
         if (typeof cameras !== undefined && cameras instanceof Array){
             deviceLogEntry.onlineCameras = cameras.filter(function(element){return element.status === 'online';}).length;
             deviceLogEntry.totalCameras = cameras.length;
@@ -394,7 +381,7 @@ module.exports = function(Device) {
 
     function checkinDevice (device, deviceData, cb) {
         // update general metadata about the device
-        var checkedInProperties = generateCheckedInPropertiesObject(deviceData);
+        let checkedInProperties = generateCheckedInPropertiesObject(deviceData);
         checkedInProperties = replacePropertiesWithOverride(checkedInProperties, device);
 
         device.updateAttributes(checkedInProperties, function(err, updatedDevice) {
@@ -437,7 +424,7 @@ module.exports = function(Device) {
     }
 
     function generateCheckedInPropertiesObject(deviceData) {
-        var checkedInProperties = {
+        let checkedInProperties = {
             lastCheckin: new Date()
         };
 
@@ -485,13 +472,13 @@ module.exports = function(Device) {
 
     function updateCameras (device, deviceData, cb) {
         logger.debug('updating cameras');
-        var cameras = deviceData.cameraInformation;
+        let cameras = deviceData.cameraInformation;
         if (!cameras) {
-            var error = new Error('Cameras not included in checkin');
+            let error = new Error('Cameras not included in checkin');
             error.statusCode = 400;
             return cb(error);
         }
-        for (var i=0; i<cameras.length; i++) {
+        for (let i=0; i<cameras.length; i++) {
             if (!cameras[i].thumbnail){
                 delete cameras[i].thumbnail;
             }
@@ -503,14 +490,14 @@ module.exports = function(Device) {
 
     function updatePOSDevices (device, deviceData, cb) {
         logger.debug('updating pos devices');
-        var posDevices = deviceData.posInformation;
+        let posDevices = deviceData.posInformation;
         if (!posDevices) {
-            var error = new Error('POS information not included in checkin');
+            let error = new Error('POS information not included in checkin');
             error.statusCode = 400;
             return cb(error);
         }
 
-        for (var i=0; i<posDevices.length; i++) {
+        for (let i=0; i<posDevices.length; i++) {
             updateDeviceComponent('POSDevice', posDevices[i], 'posId', device.id);
         }
 
@@ -521,82 +508,72 @@ module.exports = function(Device) {
 
 
     function generateConfigurationResponse(device, cb) {
-        var errorPrefix = 'Configuration parameters unavailable:';
+        let errorPrefix = 'Configuration parameters unavailable:';
 
-        var customer = device._customer;
-        if (!customer) {
+        if (!device.customer()) {
             return cb(new Error('%s Failed to find customer for deviceId: %s', device.id));
         }
 
-        // TODO: Use a query like this in a future refactor to reduce the number of round-trips to ES
-        // to make this happen, need to fix the ES connector to allow for include calls on parent-child relationships
-        //Device.app.models['Reseller'].findOne({where: {id: customer.resellerId}, include: 'cloud'}, function(err, reseller) {
-        Device.app.models.Reseller.findOne({where: {id: customer.resellerId}}, function (err, reseller) {
+        Device.app.models.Reseller.findOne({where: {id: device.customer().resellerId}, include: 'cloud'}, function (err, reseller) {
             if (err) {
-                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, customer.id, customer.resellerId));
+                return cb(new Error('%s Failed to find reseller for customerId: %s resellerId: %s', errorPrefix, device.customer().id, device.customer().resellerId));
             }
 
-            Device.app.models.Cloud.findOne({where: {id: reseller.cloudId}}, function (err, cloud) {
+            // handle inherited attributes
+            const eventServerUrl = reseller.eventServerUrl || reseller.cloud().eventServerUrl;
+            const imageServerUrl = reseller.imageServerUrl || reseller.cloud().imageServerUrl;
+            //const signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
+            const softwareVersionId = device.softwareVersionId || device.customer().softwareVersionId || reseller.softwareVersionId || reseller.cloud().softwareVersionId;
+            const checkinInterval = device.checkinInterval || device.customer().checkinInterval || reseller.checkinInterval || reseller.cloud().checkinInterval;
+
+            let result = {
+                eventServerUrl: eventServerUrl,
+                imageServerUrl: imageServerUrl,
+                signallingServerUrl: reseller.cloud().signallingServerUrl,
+                checkinInterval: checkinInterval
+            };
+
+            let ports = {};
+            if (device.overrideConnectPort) {
+                ports.connect = device.overrideConnectPort;
+            }
+
+            if (device.overrideVmsPort) {
+                ports.vms = device.overrideVmsPort;
+            }
+
+            if (device.overrideCheckinPort) {
+                ports.checkin = device.overrideCheckinPort;
+            }
+
+            if (device.overrideUploaderPort) {
+                ports.uploader = device.overrideUploaderPort;
+            }
+
+            if (device.overrideListenerPort) {
+                ports.listener = device.overrideListenerPort;
+            }
+
+            if (device.overrideConfigForwardPort) {
+                ports.configForward = device.overrideConfigForwardPort;
+            }
+
+            if (Object.keys(ports).length > 0) {
+                result.overridePorts = ports;
+            }
+
+            Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
                 if (err) {
-                    return cb(new Error('%s Failed to find cloud for customerId: %s resellerId: %s', errorPrefix, customer.id, reseller.id));
+                    logger.error('Failed to find software version by id: %s', softwareVersionId);
+                } else {
+                    result.updateUrl = softwareVersion.url;
+                    result.updateVersion = softwareVersion.name;
                 }
 
-                // handle inherited attributes
-                var eventServerUrl = reseller.eventServerUrl || cloud.eventServerUrl;
-                var imageServerUrl = reseller.imageServerUrl || cloud.imageServerUrl;
-                //var signallingServerUrl = device.signallingServerUrl || customer.signallingServerUrl || reseller.signallingServerUrl || cloud.signallingServerUrl;
-                var softwareVersionId = device.softwareVersionId || customer.softwareVersionId || reseller.softwareVersionId || cloud.softwareVersionId;
-                var checkinInterval = device.checkinInterval || customer.checkinInterval || reseller.checkinInterval || cloud.checkinInterval;
-
-                var result = {
-                    eventServerUrl: eventServerUrl,
-                    imageServerUrl: imageServerUrl,
-                    signallingServerUrl: cloud.signallingServerUrl,
-                    checkinInterval: checkinInterval
-                };
-
-                var ports = {};
-                if (device.overrideConnectPort) {
-                    ports.connect = device.overrideConnectPort;
-                }
-
-                if (device.overrideVmsPort) {
-                    ports.vms = device.overrideVmsPort;
-                }
-
-                if (device.overrideCheckinPort) {
-                    ports.checkin = device.overrideCheckinPort;
-                }
-
-                if (device.overrideUploaderPort) {
-                    ports.uploader = device.overrideUploaderPort;
-                }
-
-                if (device.overrideListenerPort) {
-                    ports.listener = device.overrideListenerPort;
-                }
-
-                if (device.overrideConfigForwardPort) {
-                    ports.configForward = device.overrideConfigForwardPort;
-                }
-
-                if (Object.keys(ports).length > 0) {
-                    result.overridePorts = ports;
-                }
-
-                Device.app.models.SoftwareVersion.findOne({where: {id: softwareVersionId}}, function(err, softwareVersion) {
-                    if (err) {
-                        logger.error('Failed to find software version by id: %s', softwareVersionId);
-                    } else {
-                        result.updateUrl = softwareVersion.url;
-                        result.updateVersion = softwareVersion.name;
-                    }
-
-                    logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
+                logger.debug('returning configuration: ', result, ' device: ' + JSON.stringify(device));
 
 
-                    cb(null, result);
-                });
+                cb(null, result);
             });
         });
     }
@@ -604,7 +581,7 @@ module.exports = function(Device) {
     // Update a device's attached components. A component can be a Camera or POS.
     function updateDeviceComponent (componentType, component, componentIdName, deviceId) {
 
-        var componentId = component[componentIdName];
+        let componentId = component[componentIdName];
 
         // ensure that there is a unique componentId  (cameraId or posId) that we can use to find the component
         if (componentId === undefined) {
@@ -616,7 +593,7 @@ module.exports = function(Device) {
         // set the deviceId on the component before inserting/updating
         component.deviceId = deviceId;
 
-        var where = {deviceId: deviceId};
+        let where = {deviceId: deviceId};
         where[componentIdName] = componentId;
 
         Device.app.models[componentType].find({where: where}, function(err, res) {
@@ -662,10 +639,10 @@ module.exports = function(Device) {
                 return;
             }
 
-            var includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
-            for (var i = 0; i < res.length; i++) {
+            let includedComponentIds = includedComponents.map(function(c) {return c[componentIdName];});
+            for (let i = 0; i < res.length; i++) {
                 if (includedComponentIds.indexOf(res[i][componentIdName]) < 0) {
-                    var removeCondition = {};
+                    let removeCondition = {};
                     removeCondition[componentIdName] = res[i][componentIdName];
                     Device.app.models[componentType].remove(removeCondition);
                 }
