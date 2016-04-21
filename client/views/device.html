@@ -174,7 +174,10 @@
                 <md-input-container>
                 <div layout="row" layout-align="space-around center">
                   <div layout="column" layout-align="start start" layout-fill>
-                    <div style="margin-bottom: 5px;"><b>Cameras</b></div>
+                    <div style="margin-bottom: 5px;">
+                      <b>Cameras</b>
+                      <a ng-href="{{vmsLink}}" target="_blank" style="color:grey;"><i class="material-icons" id="configure-link-icon-device">build</i></a>
+                    </div>
                     <div style="margin-bottom: 5px;"><a ng-href="{{NATPageUrl}}" style="text-decoration:none; color:grey" target="_blank">Camera Proxy</a></div>
                     <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
                       <md-list layout-padding>
@@ -190,7 +193,10 @@
                     <div flex></div>
                     <br/>
 
-                    <div style="margin-bottom: 5px;"><b>POS Devices</b></div>
+                    <div style="margin-bottom: 5px;">
+                      <b>POS Devices</b>
+                      <a ng-href="{{listenerLink}}" target="_blank" style="color:grey;"><i class="material-icons" id="configure-link-icon-device">build</i></a>
+                    </div>
                     <md-content layout-fill style="height:100px; border: 1px solid rgba(0, 0, 0, 0.117647)">
                       <md-list layout-padding>
                         <md-list-item style="height:20px; min-height:20px !important;" ng-repeat="posDevice in device.posDevices">

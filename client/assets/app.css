@@ -843,6 +843,11 @@ md-contact-chips {
 }
 
 #configure-link-icon{
-  font-size:16px;
+  font-size:18px;
   padding-left:10px;
+}
+
+#configure-link-icon-device{
+  font-size:14px;
+  padding-left:5px;
 }
