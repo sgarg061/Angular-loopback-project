@@ -2,7 +2,7 @@
 	<div layout="row" layout-fill>
 		<div class="camera-info" flex="50">
 			<h2 class="md-title">Cameras</h2>
-			<div><a ng-href="" target="_blank">VMS</a></div>
+			<div><a ng-href="{{vmsLink}}" target="_blank">VMS</a></div>
 			<div layout="row" layout-align="space-between center" ng-repeat="camera in device.currentEntry.cameraInformation">
 				<div class="device-name" style="width: 120px;">{{ camera.name }}</div>
 				<md-icon md-svg-icon='indicator_{{camera.status === "online" ? "green" : camera.status === "offline" ? "red" : "yellow"}}'></md-icon>

@@ -6,6 +6,10 @@ angular
       templateUrl: '/views/devicesStatus.html',
       scope: {
         device: '='
+      },
+      link: function (scope, element, attrs){
+        scope.vmsLink = scope.$parent.vmsLink;
+        scope.listenerLink = scope.$parent.listenerLink;
       }
     }
   });
