@@ -1,8 +1,8 @@
-<div class="sidebar" ng-init="open = true" ng-class="{'close':!open}">
-  <md-button class="side-bar-toggle" aria-label="Toggle Sidebar" ng-click="open = !open">
+<div class="sidebar" ng-class="{'close':!isOpen()}">
+  <md-button class="side-bar-toggle" aria-label="Toggle Sidebar" ng-click="toggleOpen(open)">
       <i style="color:white" class="material-icons">menu</i>
   </md-button>
-  <md-content>
+  <md-content ng-show = "isOpen()">
     <div layout="row" layout-padding layout-align="space-between center" style="padding-left:24px">
         <div layout="column" layout-align="start start">
             <h2 style="margin-bottom:0px">{{model.name}}</h2>
