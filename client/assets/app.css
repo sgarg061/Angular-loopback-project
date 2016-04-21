@@ -841,3 +841,8 @@ md-contact-chips {
   position:absolute;
   right:20px;
 }
+
+#configure-link-icon{
+  font-size:16px;
+  padding-left:10px;
+}
