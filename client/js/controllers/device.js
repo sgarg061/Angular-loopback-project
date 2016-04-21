@@ -299,7 +299,6 @@ angular
                 return;
               }
               $scope.defaultSoftwareVersion = defaultSoftwareVersion;
-              console.log('woot', $scope.defaultSoftwareVersion)
             });
           } else {
             toastr.error('Software versions not available');
