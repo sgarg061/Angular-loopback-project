@@ -217,16 +217,13 @@ angular
           var devicePort = $scope.device.overrideConnectPort || $scope.device.connectPort || 8000;
           var vmsPort = $scope.device.overrideVmsPort || $scope.device.vmsPort || 8080;
           var listenerPort = $scope.device.overrideListenerPort || $scope.device.listenerPort || 3000;
-          console.log("overrideVmsPort: " + $scope.device.overrideVmsPort);
-          console.log("device.vmsPort: " + $scope.device.vmsPort);
-          console.log("vmsPort: " + vmsPort);
           $scope.NATPageUrl = "http://" + deviceIp + ":"+ devicePort + "/config/#/list";
           $scope.vmsLink = "http://" + deviceIp + ":" + vmsPort;
           $scope.listenerLink = "http://" + deviceIp + ":" + listenerPort;
 
           var device = $scope.device;
 
-            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+           var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
            var nowInSeconds = new Date().getTime() / 1000;
 
            var checkinIntervalInSeconds = device.checkinInterval ||
@@ -404,7 +401,6 @@ angular
 
     if ($scope.device.overrideVmsPort) {
       updatedConfigObject.overrideVmsPort = $scope.device.overrideVmsPort;
-      console.log("UPDATED: " + $scope.device.overrideVmsPort);
     }
     if ($scope.device.overrideLocalVmsPort) {
       updatedConfigObject.overrideLocalVmsPort = $scope.device.overrideLocalVmsPort;

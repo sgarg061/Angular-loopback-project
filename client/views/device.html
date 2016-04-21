@@ -23,7 +23,7 @@
 
 
         <md-content class="card">
-          <div style="padding-bottom:16px; padding-top:10px;"><md-checkbox ng-show="canModifyMonitorSetting()" aria-label="enable monitoring" id="monitor-setting" ng-model="device.enableMonitoring">Enable Monitoring</md-checkbox></div>
+        <div style="padding-bottom:16px; padding-top:10px;"><md-checkbox ng-show="canModifyMonitorSetting()" aria-label="enable monitoring" id="monitor-setting" ng-model="device.enableMonitoring">Enable Monitoring</md-checkbox></div>
           <div layout="row" style="margin-left:10px;margin-right:10px; margin-top:20px; height:40px;" >
             <md-input-container flex style="margin: 5px 0px;">
               <label>License - activated on {{device.license.activationDate | date:'yyyy/MM/dd'}}</label>
