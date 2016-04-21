@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('sidebar', ['userPersistenceService', function(userPersistenceService) {
+  .directive('sidebar', ['uiStateService', function(uiStateService) {
     return {
       restrict: 'E',
       templateUrl: "/views/sidebar.html",
@@ -130,10 +130,10 @@ angular
           originatorEv = null;
         }
         scope.toggleOpen = function(){
-          userPersistenceService.toggleOpen();
+          uiStateService.toggleOpen();
         }
         scope.isOpen = function(){
-          return userPersistenceService.isOpen();
+          return uiStateService.isOpen();
         }
       }
     }

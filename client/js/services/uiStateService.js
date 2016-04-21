@@ -1,6 +1,6 @@
 (function(){
-	angular.module('userPersistenceService',[])
-	.factory('userPersistenceService', function(){
+	angular.module('uiStateService',[])
+	.factory('uiStateService', function(){
 		var open;
 
 		return {
