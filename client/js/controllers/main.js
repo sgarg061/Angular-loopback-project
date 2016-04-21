@@ -5,14 +5,20 @@ angular.module('app')
     $rootScope.$on("$stateChangeStart", function(event, curr, prev){
       var user = userService.getUser();
 
-      var name;
-      if (user.userType === "cloud")
-        {name = user.cloudId;}
-      else if (user.userType === "reseller")
-        name = user.resellerId;
-      else if (user.userType === "solink")
-        name = "Solink";
-
+      var id, name;
+      switch (user.userType){
+        case "cloud": 
+          id = user.cloudId;
+          name = userService.getCloudName();
+          break;
+        case "reseller": 
+          id = user.resellerId;
+          name = userService.getResellerName();
+          break;
+        case "solink": 
+          id = "Solink";
+          break;
+      }
 
       if (user && user.userType) {
         $http.get('/assets/config.json')
@@ -23,8 +29,10 @@ angular.module('app')
             email: user.email,
             created_at: user.createdAt,
             user_id: user.id,
+            userType: user.userType;
             company:{
-              id: name,
+              id: id,
+              name: name
             },
           });
         })
