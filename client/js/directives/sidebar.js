@@ -1,6 +1,6 @@
 angular
   .module('app')
-  .directive('sidebar', function() {
+  .directive('sidebar', ['uiStateService', function(uiStateService) {
     return {
       restrict: 'E',
       templateUrl: "/views/sidebar.html",
@@ -118,7 +118,7 @@ angular
         scope.openMenu = function($mdOpenMenu, ev) {
           originatorEv = ev;
           $mdOpenMenu(ev);
-        },
+        }
         scope.announceClick = function(index) {
           $mdDialog.show(
             $mdDialog.alert()
@@ -129,6 +129,12 @@ angular
           );
           originatorEv = null;
         }
+        scope.toggleOpen = function(){
+          uiStateService.toggleOpen();
+        }
+        scope.isOpen = function(){
+          return uiStateService.isOpen();
+        }
       }
     }
-  });
+  }]);

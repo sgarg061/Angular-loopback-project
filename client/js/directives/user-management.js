@@ -17,6 +17,7 @@ angular
         scope.shouldDefaultToHD = false;
         scope.shouldPlayWebRTC = false;
         scope.hdAccess = true;
+        scope.useFlash = false;
         scope.userSort = {
           column: '',
           descending: false
@@ -51,9 +52,12 @@ angular
               }));
             });
           }
+
+
           if (user.user_metadata) {
             scope.shouldPlayWebRTC = user.user_metadata.wrtc === 'true';
             scope.shouldDefaultToHD = user.user_metadata.defaultToHD === 'true';
+            scope.useFlash = user.user_metadata.flash === 'true';
           }
         };
 
@@ -62,6 +66,7 @@ angular
           var userMetadata = {};
           userMetadata.wrtc = scope.shouldPlayWebRTC;
           userMetadata.defaultToHD = scope.shouldDefaultToHD;
+          userMetadata.flash = scope.useFlash;
           appMetadata.devices = scope.selectedDevices.map(function (device) {
             return device.id;
           });

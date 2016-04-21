@@ -20,7 +20,7 @@
     "script": {
       "type": "string",
       "required": true,
-      "length": 10000
+      "length": 50000
     },
     "description": {
       "type": "string",
