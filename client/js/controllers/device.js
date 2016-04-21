@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', 'toastr', '$localStorage', 'softwareService',
-    function($window, $scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, toastr, $localStorage, softwareService) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', 'toastr', '$localStorage', 'softwareService', 'intercomService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, toastr, $localStorage, softwareService, intercomService) {
 
     $scope.customer = {};
 
@@ -104,36 +104,16 @@ angular
     }
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.device.id;
-      SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
-        if (!_.isEmpty(softwareversion)) {
-          var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
-          if (_.isEmpty(version)) {
-            var version = softwareversion.filter(function (index) {return index.id === $scope.defaultSoftwareVersion.id});
-          }
-        }
-          if (softwareVersion === ''){
-            updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version');
-            $scope.currentSoftwareVersion = softwareVersion;
-            logToIntercom(version, softwareVersion);
-          } else {
-            updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-            $scope.currentSoftwareVersion = softwareVersion;
-            logToIntercom(version, softwareVersion);
-          }
-      });
-    }
-    function logToIntercom (version, softwareVersionId) {
-      if ($window.Intercom) {
-        $window.Intercom('trackEvent', 'software-version-update',  {
-          name: version[0].name,
-          id: softwareVersionId,
-          email: userService.getUser().email,
-          level: 'Device',
-          userId: $stateParams.deviceId
-        });
+      if (softwareVersion === ''){
+        updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version');
+        $scope.currentSoftwareVersion = softwareVersion;
+      } else {
+        updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+        $scope.currentSoftwareVersion = softwareVersion;
       }
-      $window.Intercom('update');
+      intercomService.logSoftwareVersion(softwareVersion, $scope.defaultSoftwareVersion, 'Device', $stateParams.deviceId);
     }
+
     function updateDevice(id, changedDictionary, message) {
       Device.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(device) {toastr.info(' ' +  message);}, function (res) {
@@ -319,6 +299,7 @@ angular
                 return;
               }
               $scope.defaultSoftwareVersion = defaultSoftwareVersion;
+              console.log('woot', $scope.defaultSoftwareVersion)
             });
           } else {
             toastr.error('Software versions not available');

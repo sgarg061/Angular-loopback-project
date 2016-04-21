@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($window, $scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('CloudController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService', 'intercomService',
+    function($window, $scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService, intercomService) {
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
     $scope.totalResellers = 0;
@@ -60,34 +60,12 @@ angular
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.cloud.id;
       softwareService.dialog(id,softwareVersion, '').then(function(result) {
-        SoftwareVersion.find({where:{id:softwareVersion}}, function (softwareversion) {
-          if (!_.isEmpty(softwareversion)) {
-            var version = softwareversion.filter(function (index) {return index.id === softwareVersion});
-          }
-          if (!_.isEmpty(version)){
-            updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-            $scope.currentSoftwareVersion = softwareVersion;
-            logToIntercom(version, softwareVersion);
-          } else {
-            toastr.error('no software version available');
-          }
-        });
+        updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+        $scope.currentSoftwareVersion = softwareVersion;
+        intercomService.logSoftwareVersion(softwareVersion, null, 'Cloud', $stateParams.cloudId);
       }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
     }
-    function logToIntercom (version, softwareVersionId) {
-        if ($window.Intercom) {
-          $window.Intercom('trackEvent', 'software-version-update',  {
-            name: version[0].name,
-            id: softwareVersionId,
-            email: userService.getUser().email,
-            level: 'Cloud',
-            userId: $stateParams.resellerId
-          });
-        }
-      $window.Intercom('update');
-    }
-
-
+    
     function updateCloud(id, changedDictionary, message) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(cloud) {toastr.info(' ' + message);},
