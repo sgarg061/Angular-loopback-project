@@ -17,8 +17,6 @@
             };
         };
 
-        var cloudName, resellerName;
-
         return {
             getUserType: function () {
                 var token = $localStorage.token;
@@ -47,19 +45,7 @@
             },
             getUser: function() {
                 return user;
-            },
-            getCloudName: function(){
-                return cloudName;
-            },
-            getResellerName: function(){
-                return resellerName;
-            },
-            setCloudName: function(newName){
-                cloudName = newName;
-            },
-            setResellerName: function(newName){
-                resellerName = newName;
-            } 
+            }
         };
     });
 })();

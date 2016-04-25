@@ -116,9 +116,6 @@ angular
             $scope.cloud.stunServerUrls = clouds[0].stunServerUrl;
             $scope.children = clouds[0].resellers;
 
-            userService.setCloudName($scope.cloud.name);
-            userService.setResellerName($scope.reseller.name);
-
             $scope.cloud.resellers.forEach(function (reseller) {
               reseller.customers.forEach(function (customer) {
                 customer.devices.forEach(function (device) {
