@@ -2,8 +2,7 @@ angular.module('app')
 .controller('MainController', ['$scope', '$rootScope', '$window', '$http', 'userService', 'Cloud', 'Reseller',
   function($scope, $rootScope, $window, $http, userService, Cloud, Reseller) {
 
-    var id, name;
-
+    var id, name, check; //check - to prevent multiple firings
     
     $rootScope.$on("$stateChangeStart", function(event, curr, prev){
       var user = userService.getUser();
@@ -23,39 +22,44 @@ angular.module('app')
                   name: name
                 }
               });
-
-              console.log("---Sent intercom boot.---"); //debug
             })
             .catch(function (err) {
               console.error('no config found', err);
             });
           }
       });
-
     });
 
     function configureData(user, cbSendData){
       switch (user.userType){
 
         case "cloud": 
-          id = user.cloudId;
-          retrieveCloudName(user, function() {
-              cbSendData();
-          });
+          if(user !== check){ //first time logging || diff account same load
+            id = user.cloudId;
+            check = user;
+            retrieveCloudName(user, function() {
+                cbSendData();
+            });
+          }
           break;
 
         case "reseller": 
-          id = user.resellerId;
-          retrieveResellerName(user, function() {
-              console.log("Redirecting");
-              cbSendData();
-          });
+          if(user !== check){ //first time logging || diff account same load
+            id = user.resellerId;
+            check = user;
+            retrieveResellerName(user, function() {
+                cbSendData();
+            });
+          }
           break;
 
         case "solink": 
-          id = "Solink user";
-          name ="Solink";
-          cbSendData();
+          if(user !== check){
+            id = "Solink user";
+            name ="Solink";
+            check = user;
+            cbSendData();
+          }
           break;
 
       }
@@ -72,7 +76,6 @@ angular.module('app')
         .$promise
         .then(function(cloud){
            name = cloud.name;
-           console.log("---Loopback Database Call---");
            if(cb){
               cb();
            }
@@ -90,7 +93,6 @@ angular.module('app')
         .$promise
         .then(function(reseller){
            name = reseller.name;
-           console.log("---Loopback Database Call---");
            if(cb){
               cb();
            }
