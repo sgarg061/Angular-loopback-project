@@ -4,82 +4,11 @@ angular.module('app')
 
     var id, name;
 
-    function retrieveCloudName(user, cb){
-      console.log("id " + id);
-      Cloud
-        .findOne({
-          filter:{
-            where: {id: id}, 
-            fields: {name: true}
-          }
-        })
-        .$promise
-        .then(function(cloud){
-           name = cloud.name;
-           if(cb){
-              cb();
-           }
-        });
-
-        console.log("cloudName: " + name);
-    }
-
-    function retrieveResellerName(user, cb){
-      console.log("id " + id);
-      Reseller
-        .findOne({
-          filter:{
-            where: {id: id}, 
-            fields: {name: true}
-          }
-        })
-        .$promise
-        .then(function(reseller){
-           name = reseller.name;
-           if(cb){
-            cb();
-           }
-        });
-
-        console.log("resellerName: " + name);
-    }
-
-    function configureIntercom(user, cb){
-      switch (user.userType){
-        case "cloud": 
-          id = user.cloudId;
-          retrieveCloudName(user, function(){  
-            name = "cloudName: " + name;
-            console.log("Sent in cloud! name: " + name);
-            cb();
-          });
-          break;
-        case "reseller": 
-          id = user.resellerId;
-          retrieveResellerName(user, function(){
-            name = "resellerName: " + name;
-            console.log("Sent in reseller! name: " + name);
-            cb();
-          });
-          break;
-        case "solink": 
-          id = "Solink user";
-          name ="Solink";
-          cb();
-          break;
-      }
-
-      // if(cb){
-      //   console.log("Initiated cb");
-      //   cb();
-      // }
-
-    }
+    
     $rootScope.$on("$stateChangeStart", function(event, curr, prev){
       var user = userService.getUser();
 
-        configureIntercom(user, function() { 
-        console.log("cb is running");
+        configureData(user, function() { 
           if (user && user.userType && name) {
             $http.get('/assets/config.json')
             .then(function (res) {
@@ -94,6 +23,8 @@ angular.module('app')
                   name: name
                 }
               });
+
+              console.log("---Sent intercom boot.---"); //debug
             })
             .catch(function (err) {
               console.error('no config found', err);
@@ -102,5 +33,68 @@ angular.module('app')
       });
 
     });
+
+    function configureData(user, cbSendData){
+      switch (user.userType){
+
+        case "cloud": 
+          id = user.cloudId;
+          retrieveCloudName(user, function() {
+              cbSendData();
+          });
+          break;
+
+        case "reseller": 
+          id = user.resellerId;
+          retrieveResellerName(user, function() {
+              console.log("Redirecting");
+              cbSendData();
+          });
+          break;
+
+        case "solink": 
+          id = "Solink user";
+          name ="Solink";
+          cbSendData();
+          break;
+
+      }
+    }
+    
+    function retrieveCloudName(user, cb){
+      Cloud
+        .findOne({
+          filter:{
+            where: {id: id}, 
+            fields: {name: true}
+          }
+        })
+        .$promise
+        .then(function(cloud){
+           name = cloud.name;
+           console.log("---Loopback Database Call---");
+           if(cb){
+              cb();
+           }
+        });
+    }
+
+    function retrieveResellerName(user, cb){
+      Reseller
+        .findOne({
+          filter:{
+            where: {id: id}, 
+            fields: {name: true}
+          }
+        })
+        .$promise
+        .then(function(reseller){
+           name = reseller.name;
+           console.log("---Loopback Database Call---");
+           if(cb){
+              cb();
+           }
+        });
+    }
 
   }]);
