@@ -335,6 +335,7 @@ angular
         })
         .$promise
         .then(function(connectors) {
+          
           $scope.reports = [];
           $scope.ownedReports = [];
           $scope.cascadedReports = [];
@@ -510,7 +511,7 @@ angular
       .then(function(result) {
       });
     }
-
+  
   function deleteCustomer(customer) {
     $mdDialog.show({
         controller: function (scope, $mdDialog) {
@@ -765,7 +766,8 @@ angular
       SearchFilterConnector.create({
         assigneeId: $stateParams.customerId,
         filterId: filter.id,
-        assigneeType: 'customer'
+        assigneeType: 'customer',
+        notification: 'none'
       })
       .$promise
       .then(function(data) {
@@ -776,7 +778,6 @@ angular
       });
     }
     else{
-
       if (filter.connectors.length) {
         for(var i in filter.connectors){
           var connector = filter.connectors[i];
@@ -786,6 +787,7 @@ angular
         }
       }
     }
+    getReports();
   };
 
 
@@ -819,6 +821,7 @@ angular
   };
 
   $scope.actionFilter = function(filter) {
+
     filterService.actionFilter(filter, function(){
       getFilters();
     });

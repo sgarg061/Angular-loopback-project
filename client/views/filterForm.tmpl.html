@@ -38,20 +38,31 @@
           <div ng-message="invalid" >Invalid JSON Object!</div>
         </div>
       </md-input-container>
-
+      <md-input-container >
+        <div ng-show="newFilter.$edit && pageType == 'customer'">
+          <label >Notification</label>
+          <md-select ng-model="notificationValue">
+            <md-option ng-repeat="notificationValue in notificationValues" value="{{notificationValue}}" >
+              {{notificationValue}}
+            </md-option>
+          </md-select>
+        </div>
+      </md-input-container>
     </div>
   </md-dialog-content>
-  <div class="md-actions" layout="row" ng-if="newFilter.owner">
 
-    <md-button ng-click="destroy()" class="md-warn" ng-if="newFilter.$edit">
+  <div class="md-actions" layout="row">
+
+    <md-button ng-click="destroy()" class="md-warn" ng-if="newFilter.$edit && newFilter.owner">
      Delete
     </md-button>
     <md-button ng-click="cancel()">
      Cancel
     </md-button>
-    <md-button ng-click="create()" style="margin-right:20px;">
+    <md-button ng-click="create(notificationValue)" style="margin-right:20px;" >
       {{newFilter.$edit ? 'Save' : 'Create'}}
     </md-button>
+    
   </div>
   
 </md-dialog>

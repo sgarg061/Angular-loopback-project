@@ -1,6 +1,6 @@
 (function() {
     angular.module('filterService', ['angular-jwt'])
-    .factory('filterService', function (jwtHelper, $localStorage, $moment, $mdDialog, POSFilter, SearchFilter, toastr) {
+    .factory('filterService', function (jwtHelper, $localStorage, $moment, $mdDialog, POSFilter, SearchFilter, toastr, SearchFilterConnector) {
         var user = {};
 
         return {
@@ -152,14 +152,22 @@
 			},
 
 			actionReport: function  (filter,callback) {
-
-				$mdDialog.show({
+			$mdDialog.show({
 					controller: function DialogController($scope, $mdDialog) {
 						$scope.newFilter = filter
 						$scope.newFilter.$edit = true
 						$scope.newFilter.$title = 'Report'
-						$scope.create = function() {
-
+						$scope.notificationValues = ['none', 'daily', 'weekly'];
+						if (filter.connectors) {
+							var connector = filter.connectors.filter(function(index) {return index.assigneeType === 'customer'});
+							if (connector[0]) {
+								$scope.pageType = connector[0].assigneeType;
+								SearchFilterConnector.find({filter : {where: {id: connector[0].id}}}).$promise
+								.then(function (res) {
+									$scope.notificationValue = res[0].notification});
+							}
+						}
+						$scope.create = function(notificationValue) {
 							try{
 								var script = JSON.parse($scope.newFilter.filter);
 							}
@@ -176,6 +184,7 @@
 								})
 								.$promise
 								.then(function(customer) {
+									$scope.notification(notificationValue);
 									callback();
 								}, function (res) {
 									toastr.error(res.data.error.message, 'Error');
@@ -183,6 +192,22 @@
 								$mdDialog.cancel();
 							}
 						};
+						$scope.notification = function (notificationValue) {
+							if (!_.isEmpty(filter.connectors)) {
+								var filterId = connector[0].id;
+								if (filterId) {
+									SearchFilterConnector.prototype$updateAttributes({id: filterId}, {notification: notificationValue})
+					        		.$promise
+					        		.then (function(res) {
+					        		}, function (err) {
+					        			toastr.error ('Notification did not get set');
+					        		})
+					        	}
+					      } else {
+					        toastr.error('There must be assigned reports to set notifications settings');
+					      }
+
+					    };
 						$scope.cancel = function() {
 							$mdDialog.cancel();
 						};
