@@ -158,10 +158,10 @@
 						$scope.newFilter.$edit = true
 						$scope.newFilter.$title = 'Report'
 						$scope.notificationValues = ['none', 'daily', 'weekly'];
-						if (filter.connectors) {
+						if (!_.isEmpty(filter.connectors)) { //cloud page check
 							var connector = filter.connectors.filter(function(index) {return index.assigneeType === 'customer'});
 							if (connector[0]) {
-								$scope.pageType = connector[0].assigneeType;
+								$scope.pageType = connector[0].assigneeType; //notification option should only appear on customer page
 								SearchFilterConnector.find({filter : {where: {id: connector[0].id}}}).$promise
 								.then(function (res) {
 									$scope.notificationValue = res[0].notification});
@@ -193,14 +193,14 @@
 							}
 						};
 						$scope.notification = function (notificationValue) {
-							if (!_.isEmpty(filter.connectors)) {
+							if (!_.isEmpty(connector)) {
 								var filterId = connector[0].id;
 								if (filterId) {
 									SearchFilterConnector.prototype$updateAttributes({id: filterId}, {notification: notificationValue})
 					        		.$promise
 					        		.then (function(res) {
 					        		}, function (err) {
-					        			toastr.error ('Notification did not get set');
+					        			toastr.error ('Notification frequency did not get set');
 					        		})
 					        	}
 					      	} 
