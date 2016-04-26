@@ -481,6 +481,7 @@ angular
           deletesearchFilterById(filter.connectors[0].id);
         }
       }
+      getReports();
     }
 
     function deletesearchFilterById (id) {

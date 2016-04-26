@@ -158,15 +158,19 @@
 						$scope.newFilter.$edit = true
 						$scope.newFilter.$title = 'Report'
 						$scope.notificationValues = ['none', 'daily', 'weekly'];
+						
 						if (!_.isEmpty(filter.connectors)) { //cloud page check
 							var connector = filter.connectors.filter(function(index) {return index.assigneeType === 'customer'});
-							if (connector[0]) {
+							if (!_.isEmpty(connector)) {
 								$scope.pageType = connector[0].assigneeType; //notification option should only appear on customer page
+								var filterId = connector[0].id;
 								SearchFilterConnector.find({filter : {where: {id: connector[0].id}}}).$promise
 								.then(function (res) {
-									$scope.notificationValue = res[0].notification});
+									$scope.notificationValue = res[0].notification
+								});
 							}
 						}
+						
 						$scope.create = function(notificationValue) {
 							try{
 								var script = JSON.parse($scope.newFilter.filter);
@@ -184,7 +188,7 @@
 								})
 								.$promise
 								.then(function(customer) {
-									$scope.notification(notificationValue);
+									$scope.setNotification(notificationValue);
 									callback();
 								}, function (res) {
 									toastr.error(res.data.error.message, 'Error');
@@ -192,18 +196,15 @@
 								$mdDialog.cancel();
 							}
 						};
-						$scope.notification = function (notificationValue) {
-							if (!_.isEmpty(connector)) {
-								var filterId = connector[0].id;
-								if (filterId) {
-									SearchFilterConnector.prototype$updateAttributes({id: filterId}, {notification: notificationValue})
-					        		.$promise
-					        		.then (function(res) {
-					        		}, function (err) {
-					        			toastr.error ('Notification frequency did not get set');
-					        		})
-					        	}
-					      	} 
+						$scope.setNotification = function (notificationValue) {
+							if (filterId) {
+								SearchFilterConnector.prototype$updateAttributes({id: filterId}, {notification: notificationValue})
+				        		.$promise
+				        		.then (function(res) {
+				        		}, function (err) {
+				        			toastr.error ('Notification frequency did not get set');
+				        		})
+				        	}
 					    };
 						$scope.cancel = function() {
 							$mdDialog.cancel();
