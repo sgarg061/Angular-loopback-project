@@ -2,11 +2,10 @@ angular.module('app')
 .controller('MainController', ['$scope', '$rootScope', '$window', '$http', 'userService', 'Cloud', 'Reseller',
   function($scope, $rootScope, $window, $http, userService, Cloud, Reseller) {
 
-    var id, name, check; //check - to prevent multiple firings
+    var id, name, userType, check; //check - to prevent multiple firings
     
-    $rootScope.$on("$stateChangeStart", function(event, curr, prev){
+    $rootScope.$on('$stateChangeStart', function(event, curr, prev){
       var user = userService.getUser();
-
         configureData(user, function() { 
           if (user && user.userType && name) {
             $http.get('/assets/config.json')
@@ -19,7 +18,8 @@ angular.module('app')
                 user_id: user.id,
                 company:{
                   id: id,
-                  name: name
+                  name: name,
+                  'User Type': userType
                 }
               });
             })
@@ -33,8 +33,9 @@ angular.module('app')
     function configureData(user, cbSendData){
       switch (user.userType){
 
-        case "cloud": 
+        case 'cloud': 
           if(user !== check){ //first time logging || diff account same load
+            userType = 'Cloud';
             id = user.cloudId;
             check = user;
             retrieveCloudName(user, function() {
@@ -43,8 +44,9 @@ angular.module('app')
           }
           break;
 
-        case "reseller": 
+        case 'reseller': 
           if(user !== check){ //first time logging || diff account same load
+            userType = 'Reseller';
             id = user.resellerId;
             check = user;
             retrieveResellerName(user, function() {
@@ -53,15 +55,15 @@ angular.module('app')
           }
           break;
 
-        case "solink": 
+        case 'solink': 
           if(user !== check){
-            id = "Solink user";
-            name ="Solink";
+            userType = 'Solink';
+            id = 'Solink user';
+            name ='Solink';
             check = user;
             cbSendData();
           }
           break;
-
       }
     }
     
