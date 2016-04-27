@@ -219,7 +219,7 @@ angular
           var listenerPort = $scope.device.overrideListenerPort || $scope.device.listenerPort || 3000;
           $scope.NATPageUrl = "http://" + deviceIp + ":"+ devicePort + "/config/#/list";
           $scope.vmsLink = "http://" + deviceIp + ":" + vmsPort;
-          $scope.listenerLink = "http://" + deviceIp + ":" + listenerPort;
+          $scope.listenerLink = "https://" + deviceIp + ":" + listenerPort;
 
           var device = $scope.device;
 
