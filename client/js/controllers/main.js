@@ -4,7 +4,7 @@ angular.module('app')
 
     var id, name, userType, check; //check - to prevent multiple firings
     
-    $rootScope.$on("$stateChangeStart", function(event, curr, prev){
+    $rootScope.$on('$stateChangeStart', function(event, curr, prev){
       var user = userService.getUser();
         configureData(user, function() { 
           if (user && user.userType && name) {
@@ -19,7 +19,7 @@ angular.module('app')
                 company:{
                   id: id,
                   name: name,
-                  "User Type":userType
+                  'User Type': userType
                 }
               });
             })
@@ -33,9 +33,9 @@ angular.module('app')
     function configureData(user, cbSendData){
       switch (user.userType){
 
-        case "cloud": 
+        case 'cloud': 
           if(user !== check){ //first time logging || diff account same load
-            userType = "Cloud";
+            userType = 'Cloud';
             id = user.cloudId;
             check = user;
             retrieveCloudName(user, function() {
@@ -44,9 +44,9 @@ angular.module('app')
           }
           break;
 
-        case "reseller": 
+        case 'reseller': 
           if(user !== check){ //first time logging || diff account same load
-            userType = "Reseller";
+            userType = 'Reseller';
             id = user.resellerId;
             check = user;
             retrieveResellerName(user, function() {
@@ -55,11 +55,11 @@ angular.module('app')
           }
           break;
 
-        case "solink": 
+        case 'solink': 
           if(user !== check){
-            userType = "Solink";
-            id = "Solink user";
-            name ="Solink";
+            userType = 'Solink';
+            id = 'Solink user';
+            name ='Solink';
             check = user;
             cbSendData();
           }
