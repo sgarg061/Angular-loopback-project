@@ -41,7 +41,7 @@
       <md-input-container>
         <div ng-show="newFilter.$edit && pageType == 'customer'">
           <label>Notification</label>
-          <md-select ng-model="notificationValue">
+          <md-select ng-model="notificationValue" style = "margin-top:-5px;">
             <md-option ng-repeat="notificationValue in notificationValues" value="{{notificationValue}}" >
               {{notificationValue}}
             </md-option>
