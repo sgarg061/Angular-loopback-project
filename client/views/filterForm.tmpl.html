@@ -38,9 +38,9 @@
           <div ng-message="invalid" >Invalid JSON Object!</div>
         </div>
       </md-input-container>
-      <md-input-container >
+      <md-input-container>
         <div ng-show="newFilter.$edit && pageType == 'customer'">
-          <label >Notification</label>
+          <label>Notification</label>
           <md-select ng-model="notificationValue">
             <md-option ng-repeat="notificationValue in notificationValues" value="{{notificationValue}}" >
               {{notificationValue}}

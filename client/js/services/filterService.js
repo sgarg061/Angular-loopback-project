@@ -1,6 +1,6 @@
 (function() {
     angular.module('filterService', ['angular-jwt'])
-    .factory('filterService', function (jwtHelper, $localStorage, $moment, $mdDialog, POSFilter, SearchFilter, toastr, SearchFilterConnector) {
+    .factory('filterService', function (jwtHelper, $localStorage, $moment, $mdDialog, POSFilter, SearchFilter, SearchFilterConnector, toastr) {
         var user = {};
 
         return {
@@ -160,7 +160,7 @@
 						$scope.notificationValues = ['none', 'daily', 'weekly'];
 						
 						if (!_.isEmpty(filter.connectors)) { //cloud page check
-							var connector = filter.connectors.filter(function(index) {return index.assigneeType === 'customer'});
+							var connector = filter.connectors.filter(function(index) {return index.assigneeType === 'customer';});
 							if (!_.isEmpty(connector)) {
 								$scope.pageType = connector[0].assigneeType; //notification option should only appear on customer page
 								var filterId = connector[0].id;
@@ -188,24 +188,30 @@
 								})
 								.$promise
 								.then(function(customer) {
-									$scope.setNotification(notificationValue);
-									callback();
+									$scope.setNotification(notificationValue, function () {
+										callback();
+									});
 								}, function (res) {
 									toastr.error(res.data.error.message, 'Error');
 								});
 								$mdDialog.cancel();
 							}
 						};
-						$scope.setNotification = function (notificationValue) {
+						$scope.setNotification = function (notificationValue, cb) {
 							if (filterId) {
 								SearchFilterConnector.prototype$updateAttributes({id: filterId}, {notification: notificationValue})
 				        		.$promise
 				        		.then (function(res) {
+				        			if (connector[0].notification !== notificationValue){
+				        				toastr.info('Notification frequency set to ' + notificationValue);
+				        			}
+				        			cb();
 				        		}, function (err) {
 				        			toastr.error ('Notification frequency did not get set');
+				        			cb();
 				        		})
 				        	}
-					    };
+				        };
 						$scope.cancel = function() {
 							$mdDialog.cancel();
 						};

@@ -835,7 +835,7 @@ angular
   };
 
   $scope.actionReport = function(filter) {
-    filterService.actionReport(filter, function(){
+    filterService.actionReport(filter, function (){
       getReports();
     });
   };
