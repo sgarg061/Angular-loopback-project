@@ -687,13 +687,13 @@ angular
   $scope.loadNextDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()+1);
-    $scope.currentDate= new Date($scope.currentDate.toLocaleDateString());
+    $scope.currentDate = new Date($scope.currentDate.toLocaleDateString());
   }
 
   $scope.loadPrevDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
-    $scope.currentDate= new Date($scope.currentDate.toLocaleDateString());
+    $scope.currentDate = new Date($scope.currentDate.toLocaleDateString());
   }
 
   $scope.canModifyMonitorSetting = function() {
