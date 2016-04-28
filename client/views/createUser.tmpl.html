@@ -19,7 +19,7 @@
         </md-input-container>
         <md-input-container style="width: 100%;">
           <label>Password</label>
-          <input type="password" class="form-control" name="password" autocomplete="off" required ng-model="newUser.password">
+          <input type="password" class="form-control" name="password" autocomplete="off" ng-required="!newUser.sendSetPasswordEmail" ng-model="newUser.password">
         </md-input-container>
         <md-input-container style="width: 100%;">
           <label>User Type</label>
@@ -27,6 +27,7 @@
             <md-option ng-repeat="userType in userTypes" value="{{userType}}">{{userType}}</md-option>
           </md-select>
         </md-input-container>
+        <md-checkbox ng-model="newUser.sendSetPasswordEmail">Send set password email</md-checkbox>
     </md-dialog-content>
   </div>
   <div class="md-actions">

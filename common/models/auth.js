@@ -178,7 +178,7 @@ module.exports = function (Auth) {
     }
   };
 
-  Auth.createUser = function(email, password, userType, orgId, cb) {
+  Auth.createUser = function(email, password, userType, orgId, sendSetPasswordEmail, cb) {
     logger.info('Create user request for ' + email);
 
     var unauthorizedError = new Error('Unauthorized');
@@ -194,7 +194,7 @@ module.exports = function (Auth) {
     };
     var userData = {
       userType: userType,
-      email_verified: true
+      email_verified: !sendSetPasswordEmail
     };
     var orgKey = '';
     // map type -> orgid to get an object
@@ -455,7 +455,8 @@ module.exports = function (Auth) {
       {arg: 'email', type: 'string'},
       {arg: 'password', type: 'string'},
       {arg: 'userType', type: 'string'},
-      {arg: 'orgId', type: 'string'}
+      {arg: 'orgId', type: 'string'},
+      {arg: 'sendSetPasswordEmail', type: 'boolean'}
     ],
     http: {verb: 'post', status: 201, errorStatus: 500},
     returns: {arg: 'response', type: 'object'}

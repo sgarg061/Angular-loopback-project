@@ -195,7 +195,8 @@ angular
                   email: scope.newUser.email,
                   password: scope.newUser.password,
                   userType: scope.newUser.userType,
-                  orgId: userValue
+                  orgId: userValue,
+                  sendSetPasswordEmail: scope.newUser.sendSetPasswordEmail
                 })
                   .$promise
                   .then(function (res) {
