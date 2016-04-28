@@ -113,7 +113,6 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
     } else {
       userCreationForm.email_verified = false;
       userCreationForm.password = generatePassword();
-      console.log(userCreationForm.password);
     }
 
     request({
