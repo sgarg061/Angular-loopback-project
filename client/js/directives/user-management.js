@@ -187,7 +187,8 @@ angular
             controller: function (scope, $mdDialog) {
               scope.userTypes = userTypes;
               scope.newUser = {
-                userType: userTypes[0]
+                userType: userTypes[0],
+                sendSetPasswordEmail: true
               };
 
               scope._createUser = function () {

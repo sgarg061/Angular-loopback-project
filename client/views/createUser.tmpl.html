@@ -1,4 +1,4 @@
-<md-dialog aria-label="Set Password">
+<md-dialog style="width:60%" aria-label="Set Password">
 
   <md-toolbar>
       <div class="md-toolbar-tools">
@@ -9,29 +9,38 @@
       </md-button>
     </div>
   </md-toolbar>
-
   <div layout-padding layout-margin>
-    <md-dialog-content>
+    <md-dialog-content style="width:100%">
       <p>Create a new user for this customer</p>
-      <md-input-container style="width: 100%;">
-          <label>Email</label>
-          <input required type="text" class="form-control focus" name="email" autocomplete="off" required ng-model="newUser.email">
-        </md-input-container>
-        <md-input-container style="width: 100%;">
-          <label>Password</label>
-          <input type="password" class="form-control" name="password" autocomplete="off" ng-required="!newUser.sendSetPasswordEmail" ng-model="newUser.password">
-        </md-input-container>
-        <md-input-container style="width: 100%;">
-          <label>User Type</label>
-          <md-select ng-model="newUser.userType" class="form-control">
-            <md-option ng-repeat="userType in userTypes" value="{{userType}}">{{userType}}</md-option>
-          </md-select>
-        </md-input-container>
-        <md-checkbox ng-model="newUser.sendSetPasswordEmail">Send set password email</md-checkbox>
+      <div>
+        <div>
+          <md-input-container style="width:100%">
+            <label>Email</label>
+            <input required type="text" class="form-control focus" name="email" autocomplete="off" required ng-model="newUser.email">
+          </md-input-container>
+        </div>
+        <div>
+          <md-checkbox ng-model="newUser.sendSetPasswordEmail">Set password through email</md-checkbox>
+        </div>
+        <div>
+          <md-input-container style="width:100%">
+            <label>Password</label>
+            <input  ng-disabled="newUser.sendSetPasswordEmail" type="password" class="form-control" name="password" autocomplete="off" ng-required="!newUser.sendSetPasswordEmail" ng-model="newUser.password">
+          </md-input-container>
+        </div>
+        <div>
+          <md-input-container style="width:100%">
+            <label>User Type</label>
+            <md-select ng-model="newUser.userType" class="form-control">
+              <md-option ng-repeat="userType in userTypes" value="{{userType}}">{{userType}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
     </md-dialog-content>
   </div>
   <div class="md-actions">
     <md-button ng-click="closeCreateUser()" class="md-primary">Cancel</md-button>
-    <md-button ng-click="_createUser()" class="md-primary">Create user</md-button>
+    <md-button ng-click="_createUser()" class="md-primary" ng-disabled="">Create user</md-button>
   </div>
 </md-dialog>
