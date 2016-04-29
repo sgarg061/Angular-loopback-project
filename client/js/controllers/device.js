@@ -5,6 +5,9 @@ angular
 
     $scope.customer = {};
 
+    $scope.vmsLink = null;
+    $scope.listenerLink = null;
+
     $scope.cloudId = null;
     $scope.resellerId = null;
     $scope.customerId = null;
@@ -212,12 +215,16 @@ angular
 
           watchForChanges(); 
           var deviceIp = $scope.device.overrideIpAddress || $scope.device.ipAddress;
-          var devicePort = $scope.device.overrideConnectPort || $scope.deviceconnectPort || 8000;
+          var devicePort = $scope.device.overrideConnectPort || $scope.device.connectPort || 8000;
+          var vmsPort = $scope.device.overrideVmsPort || $scope.device.vmsPort || 8080;
+          var listenerPort = $scope.device.overrideListenerPort || $scope.device.listenerPort || 3000;
           $scope.NATPageUrl = "http://" + deviceIp + ":"+ devicePort + "/config/#/list";
+          $scope.vmsLink = "http://" + deviceIp + ":" + vmsPort;
+          $scope.listenerLink = "https://" + deviceIp + ":" + listenerPort;
 
           var device = $scope.device;
 
-            var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
+           var lastCheckinTimeInSeconds = new Date(device.lastCheckin).getTime() / 1000;
            var nowInSeconds = new Date().getTime() / 1000;
 
            var checkinIntervalInSeconds = device.checkinInterval ||

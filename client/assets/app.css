@@ -841,3 +841,13 @@ md-contact-chips {
   position:absolute;
   right:20px;
 }
+
+#configure-link-icon{
+  font-size:18px;
+  padding-left:10px;
+}
+
+#configure-link-icon-device{
+  font-size:14px;
+  padding-left:5px;
+}

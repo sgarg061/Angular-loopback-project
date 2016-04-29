@@ -5,7 +5,9 @@ angular
       restrict: 'E',
       templateUrl: '/views/devicesStatus.html',
       scope: {
-        device: '='
+        device: '=',
+        listenerLink: '=',
+        vmsLink: '='
       }
     }
   });
