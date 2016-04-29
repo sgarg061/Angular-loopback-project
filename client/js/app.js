@@ -14,6 +14,7 @@ angular
     'socket',
     'angular-momentjs',
     'dialogBox',
+    'intercom',
     'd3',
     'filterService',
     'google.places',

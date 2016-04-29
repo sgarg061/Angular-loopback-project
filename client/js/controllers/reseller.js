@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('ResellerController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'POSFilter', 'POSConnector', 'SearchFilter', 'SearchFilterConnector', 'SoftwareVersion', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService', 'intercomService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, POSFilter, POSConnector, SearchFilter, SearchFilterConnector, SoftwareVersion, $mdDialog, toastr, userService, filterService, softwareService, intercomService) {
 
     $scope.reseller = {};
 
@@ -55,12 +55,11 @@ angular
         if (result === 'Default: ' + $scope.defaultSoftwareVersion.name) {
           updateReseller(id, {softwareVersionId: null}, 'Software version has been updated to default version');
           $scope.currentSoftwareVersion = softwareVersion;
-
         } else {
           updateReseller(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
           $scope.currentSoftwareVersion = softwareVersion;
         }
-
+        intercomService.logSoftwareVersion(softwareVersion, $scope.defaultSoftwareVersion, 'Reseller', $stateParams.resellerId);
       }, function(result){$scope.reseller.softwareVersionId = $scope.currentSoftwareVersion;});
     }
 
@@ -71,7 +70,7 @@ angular
           toastr.error(res.statusText, 'Error Invalid Value');
       });
     }
-
+    
     function getReseller(cb) {
       Reseller
         .find({

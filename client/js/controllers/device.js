@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', 'toastr', '$localStorage', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, toastr, $localStorage, softwareService) {
+  .controller('DeviceController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'Customer', 'Device', 'SoftwareVersion', 'DeviceLogEntry', 'userService', '$mdDialog', 'toastr', '$localStorage', 'softwareService', 'intercomService',
+    function($scope, $state, $stateParams, Cloud, Reseller, Customer, Device, SoftwareVersion, DeviceLogEntry, userService, $mdDialog, toastr, $localStorage, softwareService, intercomService) {
 
     $scope.customer = {};
 
@@ -104,13 +104,14 @@ angular
     }
     $scope.updateVersion = function (softwareVersion) {
       var id = $scope.device.id;
-     if (softwareVersion === ''){
+      if (softwareVersion === ''){
         updateDevice(id, {softwareVersionId: null}, 'Software version has been updated to default version');
         $scope.currentSoftwareVersion = softwareVersion;
       } else {
         updateDevice(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
         $scope.currentSoftwareVersion = softwareVersion;
       }
+      intercomService.logSoftwareVersion(softwareVersion, $scope.defaultSoftwareVersion, 'Device', $stateParams.deviceId);
     }
 
     function updateDevice(id, changedDictionary, message) {

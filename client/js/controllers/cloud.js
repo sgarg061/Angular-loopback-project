@@ -1,7 +1,7 @@
 angular
   .module('app')
-  .controller('CloudController', ['$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService',
-    function($scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService) {
+  .controller('CloudController', ['$window','$scope', '$state', '$stateParams', 'Cloud', 'Reseller', 'SoftwareVersion', 'POSFilter', 'SearchFilter', '$mdDialog', 'toastr', 'userService', 'filterService', 'softwareService', 'intercomService',
+    function($window, $scope, $state, $stateParams, Cloud, Reseller, SoftwareVersion, POSFilter, SearchFilter, $mdDialog, toastr, userService, filterService, softwareService, intercomService) {
     $scope.currentResellerPage = 0;
     $scope.resellersPerPage = 1000; // FIXME
     $scope.totalResellers = 0;
@@ -58,15 +58,14 @@ angular
       }, true);
     }
     $scope.updateVersion = function (softwareVersion) {
-
       var id = $scope.cloud.id;
       softwareService.dialog(id,softwareVersion, '').then(function(result) {
-       updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
-       $scope.currentSoftwareVersion = softwareVersion;
+        updateCloud(id, {softwareVersionId: softwareVersion}, 'Software version has been updated');
+        $scope.currentSoftwareVersion = softwareVersion;
+        intercomService.logSoftwareVersion(softwareVersion, null, 'Cloud', $stateParams.cloudId);
       }, function(result){$scope.cloud.softwareVersionId = $scope.currentSoftwareVersion;});
     }
-
-
+    
     function updateCloud(id, changedDictionary, message) {
       Cloud.prototype$updateAttributes({id: id}, changedDictionary)
         .$promise.then(function(cloud) {toastr.info(' ' + message);},
