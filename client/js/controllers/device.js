@@ -93,7 +93,7 @@ angular
       }, true);
 
       // watch device for updates and save them when they're found
-      $scope.$watch("currentDate", function(newValue, oldValue) {
+      $scope.$watch('currentDate', function(newValue, oldValue) {
         if (newValue) {
           if (newValue !== oldValue) {
             renderGraph();
@@ -687,11 +687,13 @@ angular
   $scope.loadNextDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()+1);
+    $scope.currentDate = new Date($scope.currentDate.toLocaleDateString());
   }
 
   $scope.loadPrevDay = function () {
     document.getElementById('timeline-detail').classList.remove('open');
     $scope.currentDate.setDate($scope.currentDate.getDate()-1);
+    $scope.currentDate = new Date($scope.currentDate.toLocaleDateString());
   }
 
   $scope.canModifyMonitorSetting = function() {
