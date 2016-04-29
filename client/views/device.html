@@ -86,7 +86,7 @@
 
                     <md-tab label="devices status">
                       <md-content style="height:{{checkinHeight-250}}px;">
-                        <devices-status device="device" />
+                        <devices-status device="device" listener-link="listenerLink" vms-link="vmsLink" />
                       </md-content>
                     </md-tab>
 
@@ -152,7 +152,7 @@
                     <md-tabs md-dynamic-height md-border-bottom>
                       <md-tab label="devices status">
                         <md-content style="height:{{checkinHeight-51}}px;">
-                          <devices-status device="device" />
+                          <devices-status device="device" vms-link="vmsLink" listener-link="listenerLink" />
                         </md-content>
                       </md-tab>
 
