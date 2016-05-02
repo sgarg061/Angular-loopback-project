@@ -83,6 +83,16 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
     }
   };
 
+  function generatePassword() {
+      var length = 10,
+          charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~',
+          retVal = '';
+      for (var i = 0, n = charset.length; i < length; ++i) {
+          retVal += charset.charAt(Math.floor(Math.random() * n));
+      }
+      return retVal;
+  }
+
   Auth0Accessor.prototype.createUser = function (email, password, userData, cb) {
     var config = new Config();
 
@@ -102,6 +112,7 @@ Auth0Accessor.prototype.refresh = function (refreshToken, jwtToken, cb) {
       userCreationForm.email_verified = true;
     } else {
       userCreationForm.email_verified = false;
+      userCreationForm.password = generatePassword();
     }
 
     request({

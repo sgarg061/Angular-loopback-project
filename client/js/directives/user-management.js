@@ -187,7 +187,8 @@ angular
             controller: function (scope, $mdDialog) {
               scope.userTypes = userTypes;
               scope.newUser = {
-                userType: userTypes[0]
+                userType: userTypes[0],
+                sendSetPasswordEmail: true
               };
 
               scope._createUser = function () {
@@ -195,7 +196,8 @@ angular
                   email: scope.newUser.email,
                   password: scope.newUser.password,
                   userType: scope.newUser.userType,
-                  orgId: userValue
+                  orgId: userValue,
+                  sendSetPasswordEmail: scope.newUser.sendSetPasswordEmail
                 })
                   .$promise
                   .then(function (res) {
