@@ -29,7 +29,6 @@
 							}, function (res) {
 								toastr.error(res.data.error.message, 'Error');
 							});
-							//$mdDialog.cancel();
 						};
 						$scope.cancel = function() {
 							$mdDialog.cancel();
@@ -137,7 +136,7 @@
 								}, function (res) {
 									toastr.error(res.data.error.message, 'Error');
 								});
-								$mdDialog.cancel();
+								
 							}
 						};
 						$scope.cancel = function() {
