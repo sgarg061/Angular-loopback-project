@@ -29,7 +29,7 @@
 							}, function (res) {
 								toastr.error(res.data.error.message, 'Error');
 							});
-							$mdDialog.cancel();
+							//$mdDialog.cancel();
 						};
 						$scope.cancel = function() {
 							$mdDialog.cancel();
