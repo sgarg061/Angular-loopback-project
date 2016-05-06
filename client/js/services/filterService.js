@@ -25,7 +25,9 @@
 							})
 							.$promise
 							.then(function(data) {
+								$mdDialog.cancel();
 								callback();
+
 							}, function (res) {
 								toastr.error(res.data.error.message, 'Error');
 							});
@@ -132,6 +134,7 @@
 								})
 								.$promise
 								.then(function(customer) {
+									$mdDialog.cancel();
 									callback();
 								}, function (res) {
 									toastr.error(res.data.error.message, 'Error');
