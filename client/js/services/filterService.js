@@ -159,7 +159,7 @@
 						$scope.newFilter = filter
 						$scope.newFilter.$edit = true
 						$scope.newFilter.$title = 'Report'
-						$scope.notificationValues = ['none', 'daily', 'weekly'];
+						$scope.notificationValues = ['none', 'daily'];
 						
 						if (!_.isEmpty(filter.connectors)) { //cloud page check
 							var connector = filter.connectors.filter(function(index) {return index.assigneeType === 'customer';});
