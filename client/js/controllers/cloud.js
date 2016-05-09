@@ -350,11 +350,12 @@ angular
                       SoftwareVersion.create($scope.newSoftwareVersion)
                       .$promise
                       .then(function(softwareVersion) {
+                        $mdDialog.cancel();
                         getSoftwareVersions();
                       }, function (res) {
                         toastr.error(res.data.error.message, 'Error');
                       });
-                      $mdDialog.cancel();
+                      
                     };
                     $scope.cancel = function() {
                       $mdDialog.cancel();
